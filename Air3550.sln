@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 16.0.31005.135
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Air3550", "Air3550\Air3550.csproj", "{DBAB60BC-4BA2-4D91-B4DB-F2F9A7544B0A}"
+	ProjectSection(ProjectDependencies) = postProject
+		{F314BD68-583E-478F-AF69-67461FF9512C} = {F314BD68-583E-478F-AF69-67461FF9512C}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClassLibrary", "ClassLibrary\ClassLibrary.csproj", "{F314BD68-583E-478F-AF69-67461FF9512C}"
 EndProject
