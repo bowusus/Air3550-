@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31005.135
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Air3550", "Air3550\Air3550.csproj", "{DBAB60BC-4BA2-4D91-B4DB-F2F9A7544B0A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClassLibrary", "ClassLibrary\ClassLibrary.csproj", "{F314BD68-583E-478F-AF69-67461FF9512C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DBAB60BC-4BA2-4D91-B4DB-F2F9A7544B0A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DBAB60BC-4BA2-4D91-B4DB-F2F9A7544B0A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DBAB60BC-4BA2-4D91-B4DB-F2F9A7544B0A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DBAB60BC-4BA2-4D91-B4DB-F2F9A7544B0A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F314BD68-583E-478F-AF69-67461FF9512C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F314BD68-583E-478F-AF69-67461FF9512C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F314BD68-583E-478F-AF69-67461FF9512C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F314BD68-583E-478F-AF69-67461FF9512C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {76C60F9C-84B5-4027-8D38-75C1D1FC3C7A}
+	EndGlobalSection
+EndGlobal

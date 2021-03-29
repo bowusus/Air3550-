@@ -1,0 +1,11 @@
+C:\Users\linds\source\repos\Air3550\Air3550\bin\Debug\Air3550.db
+C:\Users\linds\source\repos\Air3550\Air3550\bin\Debug\Air3550.exe.config
+C:\Users\linds\source\repos\Air3550\Air3550\bin\Debug\Air3550.exe
+C:\Users\linds\source\repos\Air3550\Air3550\bin\Debug\Air3550.pdb
+C:\Users\linds\source\repos\Air3550\Air3550\obj\Debug\Air3550.csprojAssemblyReference.cache
+C:\Users\linds\source\repos\Air3550\Air3550\obj\Debug\Air3550.Form1.resources
+C:\Users\linds\source\repos\Air3550\Air3550\obj\Debug\Air3550.Properties.Resources.resources
+C:\Users\linds\source\repos\Air3550\Air3550\obj\Debug\Air3550.csproj.GenerateResource.cache
+C:\Users\linds\source\repos\Air3550\Air3550\obj\Debug\Air3550.csproj.CoreCompileInputs.cache
+C:\Users\linds\source\repos\Air3550\Air3550\obj\Debug\Air3550.exe
+C:\Users\linds\source\repos\Air3550\Air3550\obj\Debug\Air3550.pdb
