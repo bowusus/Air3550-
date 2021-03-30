@@ -50,9 +50,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="customerModel.cs" />
+    <Compile Include="CustomerModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SqliteDataAccess.cs" />
+    <Compile Include="SystemAction.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

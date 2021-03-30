@@ -6,8 +6,13 @@ using System.Threading.Tasks;
 
 namespace ClassLibrary
 {
-    public class customerModel
+    public class CustomerModel
 	{
+		// This class file is the CustomerModel class. There are 
+		// the attributes associated with the Customer included, 
+		// the constructor to create an instance of the CustomerModel,
+		// and methods to describe the actions the customer does.
+
 		// auto-implemented properties for trivial get and set
 		public int userID { get; set; }
 		public string password { get; set; }
@@ -22,7 +27,7 @@ namespace ClassLibrary
 		public string email { get; set; }
 
 		// customer constructor
-		public customerModel(int tempUserID, string pass, string first, string last, string street1, string city1, string state1, string zip, string creditCardNumber1, int age1, string email1)
+		public CustomerModel(int tempUserID, string pass, string first, string last, string street1, string city1, string state1, string zip, string creditCardNumber1, int age1, string email1)
         {
 			userID = tempUserID;
 			password = pass;
@@ -36,10 +41,5 @@ namespace ClassLibrary
 			age = age1;
 			email = email1;
         }
-
-		/*int getUserID()
-        {
-
-        }*/
     }
 }

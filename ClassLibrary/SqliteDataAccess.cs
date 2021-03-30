@@ -12,19 +12,30 @@ namespace Air3550
 {
     public class SqliteDataAccess
     {
-        public static void getRand()
+        // This class file will include any methods that touch the database, 
+        // For example, the method to get a random user id is included in this file.
+        public static int GetRandUserID()
         {
-            SQLiteConnection con = new SQLiteConnection(LoadConnectionString());
-            con.Open();
-            SQLiteCommand cmd = new SQLiteCommand();
-            cmd.CommandType = CommandType.Text;
-            cmd.CommandText = "SELECT * FROM userIDTable ORDER BY RANDOM() LIMIT 1";
-            cmd.Connection = con;
-            SQLiteDataReader rdr = cmd.ExecuteReader();
-
-            while(rdr.Read())
+            // This method goes into the database, specifically the userID table, 
+            // and random picks one userID then deletes that record, so it is a unique id
+            // for every user. It returns this unique userID
+            using (SQLiteConnection con = new SQLiteConnection(LoadConnectionString())) 
+            // closes the connection when there is an error or it is done executing
             {
-                Console.WriteLine($"{rdr.GetInt32(0)}");
+                con.Open(); // open the connection
+                SQLiteCommand cmd = new SQLiteCommand(); 
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = "SELECT * FROM userIDTable ORDER BY RANDOM() LIMIT 1"; // write the sql command // remember to delete value
+                cmd.Connection = con;
+                // execute the command with the reader, which only reads the database rather than updating it in anyway
+                SQLiteDataReader rdr = cmd.ExecuteReader(); 
+                int currUserID = 0; // used to return id
+
+                while (rdr.Read())
+                {
+                    currUserID = rdr.GetInt32(0);
+                }
+                return currUserID; // return user id
             }
         }
         private static string LoadConnectionString(string id = "Default")

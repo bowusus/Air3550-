@@ -12,6 +12,7 @@ namespace Air3550
 {
     public partial class CustomerHomePage : Form
     {
+        // This form file is to document the actions done on the Customer Home Page specifically
         public CustomerHomePage()
         {
             InitializeComponent();
