@@ -100,7 +100,7 @@ namespace Air3550
                         // add the customer to the database aka create account
                         SqliteDataAccess.CreateAccount(customer.userID, customer.password, customer.firstName, customer.lastName, customer.street, customer.city, customer.state, customer.zipCode, customer.phoneNumber, customer.creditCardNumber, customer.age, customer.email);
                         // provide a pop up with the user's userID
-                        DialogResult result = MessageBox.Show("Your account has been successfully created. Your USERID is "+ userID, "SUCCESS: New Account Created", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        DialogResult result = MessageBox.Show("Your account has been successfully created. Your USERID is "+ userID, "SUCCESS: New Account Created", MessageBoxButtons.OK, MessageBoxIcon.None);
                         if (result == DialogResult.OK)
                             this.Close(); // close the create customer page
                     }
