@@ -29,7 +29,6 @@ namespace Air3550
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             this.StreetButton = new System.Windows.Forms.Button();
             this.FirstNameText = new System.Windows.Forms.TextBox();
             this.LastNameText = new System.Windows.Forms.TextBox();
@@ -49,7 +48,6 @@ namespace Air3550
             this.StateComboBox = new System.Windows.Forms.ComboBox();
             this.AgeComboBox = new System.Windows.Forms.ComboBox();
             this.PhoneButton = new System.Windows.Forms.Button();
-            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.PasswordButton = new System.Windows.Forms.Button();
             this.CreditCardNumButton = new System.Windows.Forms.Button();
             this.PasswordRestraintButton = new System.Windows.Forms.Button();
@@ -416,12 +414,6 @@ namespace Air3550
             this.PhoneButton.Text = "Phone Number";
             this.PhoneButton.UseVisualStyleBackColor = false;
             // 
-            // contextMenuStrip1
-            // 
-            this.contextMenuStrip1.ImageScalingSize = new System.Drawing.Size(32, 32);
-            this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(61, 4);
-            // 
             // PasswordButton
             // 
             this.PasswordButton.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
@@ -529,6 +521,7 @@ namespace Air3550
             this.Controls.Add(this.FirstNameText);
             this.Controls.Add(this.StreetButton);
             this.Name = "CreateCustomerPage";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Air3550";
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -555,7 +548,6 @@ namespace Air3550
         private System.Windows.Forms.ComboBox StateComboBox;
         private System.Windows.Forms.ComboBox AgeComboBox;
         private System.Windows.Forms.Button PhoneButton;
-        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.Button PasswordButton;
         private System.Windows.Forms.Button CreditCardNumButton;
         private System.Windows.Forms.Button PasswordRestraintButton;

@@ -14,6 +14,8 @@ namespace Air3550
     public partial class CreateCustomerPage : Form
     {
         // This form file is to document the actions done on the Log In Page specifically
+        public bool IsLoggedIn { get; set; } // used to switch the main page to the home page
+
         public CreateCustomerPage()
         {
             InitializeComponent();
@@ -102,7 +104,12 @@ namespace Air3550
                         // provide a pop up with the user's userID
                         DialogResult result = MessageBox.Show("Your account has been successfully created. Your USERID is "+ userID, "SUCCESS: New Account Created", MessageBoxButtons.OK, MessageBoxIcon.None);
                         if (result == DialogResult.OK)
-                            this.Close(); // close the create customer page
+                        {
+                            this.Close(); // close current page
+                            IsLoggedIn = true; // show that we are logged in now
+                            CustomerHomePage customerHome = new CustomerHomePage(); // create customer home page
+                            customerHome.Show(); // show the customer home page to prevent the need to remember your userID
+                        }
                     }
                     else
                         MessageBox.Show("There is already an account linked with this email.", "ERROR: Account Already Exists", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -132,6 +139,5 @@ namespace Air3550
             // This method was required to get the combo box cursor to start on the left side automatically
             CreditCardNumText.SelectionStart = 0;
         }
-
     }
 }
