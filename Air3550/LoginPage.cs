@@ -26,5 +26,11 @@ namespace Air3550
             //string pass = "apple";
             //Console.WriteLine(SystemAction.EncryptPassword(pass));
         }
+
+        private void CreateCustomerAccountButton_Click(object sender, EventArgs e)
+        {
+            CreateCustomerPage createCustomer = new CreateCustomerPage(); 
+            createCustomer.Show();
+        }
     }
 }

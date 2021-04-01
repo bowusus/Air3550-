@@ -65,7 +65,7 @@ namespace Air3550
             // 
             this.button3.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.button3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button3.Font = new System.Drawing.Font("Rockwell", 10F);
+            this.button3.Font = new System.Drawing.Font("Rockwell", 9F);
             this.button3.Location = new System.Drawing.Point(429, 428);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(288, 79);

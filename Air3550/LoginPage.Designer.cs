@@ -46,7 +46,7 @@ namespace Air3550
             this.button2.Font = new System.Drawing.Font("Rockwell", 18F);
             this.button2.Location = new System.Drawing.Point(278, 372);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(288, 64);
+            this.button2.Size = new System.Drawing.Size(289, 72);
             this.button2.TabIndex = 1;
             this.button2.Text = "Username";
             this.button2.UseVisualStyleBackColor = false;
@@ -58,7 +58,7 @@ namespace Air3550
             this.button4.Font = new System.Drawing.Font("Rockwell", 18F);
             this.button4.Location = new System.Drawing.Point(278, 480);
             this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(288, 64);
+            this.button4.Size = new System.Drawing.Size(289, 72);
             this.button4.TabIndex = 3;
             this.button4.Text = "Password";
             this.button4.UseVisualStyleBackColor = false;
@@ -126,8 +126,9 @@ namespace Air3550
             this.button3.TabIndex = 9;
             this.button3.Text = "Don\'t have an Account? Create One Here";
             this.button3.UseVisualStyleBackColor = false;
+            this.button3.Click += new System.EventHandler(this.CreateCustomerAccountButton_Click);
             // 
-            // LoginPage
+            // LogInPage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -141,7 +142,7 @@ namespace Air3550
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.button4);
             this.Controls.Add(this.button2);
-            this.Name = "LoginPage";
+            this.Name = "LogInPage";
             this.Text = "Air3550";
             this.ResumeLayout(false);
             this.PerformLayout();

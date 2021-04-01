@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ClassLibrary
 {
-    public class CustomerModel
+	public class CustomerModel
 	{
 		// This class file is the CustomerModel class. There are 
 		// the attributes associated with the Customer included, 
@@ -22,13 +22,14 @@ namespace ClassLibrary
 		public string city { get; set; }
 		public string state { get; set; }
 		public string zipCode { get; set; }
+		public string phoneNumber { get; set; }
 		public string creditCardNumber { get; set; }
 		public int age { get; set; }
 		public string email { get; set; }
 
 		// customer constructor
-		public CustomerModel(int tempUserID, string pass, string first, string last, string street1, string city1, string state1, string zip, string creditCardNumber1, int age1, string email1)
-        {
+		public CustomerModel(int tempUserID, string pass, string first, string last, string street1, string city1, string state1, string zip, string phone, string creditCardNumber1, int age1, string email1)
+		{
 			userID = tempUserID;
 			password = pass;
 			firstName = first;
@@ -37,9 +38,10 @@ namespace ClassLibrary
 			city = city1;
 			state = state1;
 			zipCode = zip;
+			phoneNumber = phone;
 			creditCardNumber = creditCardNumber1;
 			age = age1;
 			email = email1;
-        }
-    }
+		}
+	}
 }
