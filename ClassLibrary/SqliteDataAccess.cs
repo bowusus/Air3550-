@@ -58,7 +58,7 @@ namespace Air3550
 
                 while (rdr.Read())
                 {
-                    currUserID = rdr.GetInt32(0);
+                    currUserID = rdr.GetInt32(0); 
                 }
                 return currUserID; // return user id
             }
@@ -91,13 +91,47 @@ namespace Air3550
                 cmd.ExecuteNonQuery();
                 con.Close();
             }
-        }/*
-        public static string GetPassword(string userID)
+        }
+        public static int GetPassword(int userID, string currPass)
         {
+            // This method goes into the database, specifically the customer table
+            // and gets the current (encrypted) password asssociated with the UserID provided
+            // When the provided password is encrypted, if they are the same string, then
+            // the userID and password are correct. Return 1
+            // If the provided password and password in the database are not the same string,
+            // then the password is incorrect. Return 0
+            // If the UserID is not in the database, the user is not a current user. Return -1
+            using (SQLiteConnection con = new SQLiteConnection(LoadConnectionString()))
+            // closes the connection when there is an error or it is done executing
+            {
+                con.Open(); // open the connection
+                SQLiteCommand cmd = new SQLiteCommand();
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = "SELECT customer.password FROM customer where customer.userID = @userID";
+                cmd.Parameters.AddWithValue("@userID", userID);
+                cmd.Connection = con;
+                // execute the command with the reader, which only reads the database rather than updating it in anyway
+                SQLiteDataReader rdr = cmd.ExecuteReader();
+                string pass = null; // used to return id
 
-        }*/
+                while (rdr.Read())
+                {
+                    pass = rdr.GetString(0); // get the password from the database
+                }
+                if (pass == null) // if there is no password in the database, that means the userID is not in the database and the user is not a customer
+                    return -1;
+                string encryptPass = ClassLibrary.SystemAction.EncryptPassword(currPass);
+                // if the encryption of the provided password is the same as the encrypted password in the database, the user is logged. Return 1
+                // if they are different, the wrong password was provided. Return 0
+                if (encryptPass.Equals(pass))
+                    return 1;
+                else
+                    return 0;
+            }
+        }
         private static string LoadConnectionString(string id = "Default")
         {
+            // This method helps connect to the database
             return ConfigurationManager.ConnectionStrings[id].ConnectionString;
         }
     }

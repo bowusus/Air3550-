@@ -22,8 +22,7 @@ namespace Air3550
             Application.Run(login); // start with the login page as the main page
             if (login.StartAccountCreation) // create customer page is the main page
                 Application.Run(createCustomer);
-            //if (login.IsLoggedIn || createCustomer.IsLoggedIn)
-            if (createCustomer.IsLoggedIn) // now the home page is the main page which closes when this page is closed
+            if (login.IsLoggedIn || createCustomer.IsLoggedIn) // now the home page is the main page which closes when this page is closed
                 Application.Run(home);
         }
     }

@@ -28,10 +28,6 @@ namespace ClassLibrary
                 result.Append(hash[i].ToString("x2")); // turn the hash into a string
             return result.ToString(); // return the string and exit
         }
-        /*public static string CheckLogInCredentials(string tempUserID, string pass)
-        {
-
-        }*/
         public static string ValidateAccountFormat(string city, string zip, string phone, string creditCard, string email)
         {
             // This method checks the format provided for the city, zip code, phone number, credit card number, and email

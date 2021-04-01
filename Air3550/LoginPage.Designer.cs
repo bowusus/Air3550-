@@ -29,104 +29,107 @@ namespace Air3550
         /// </summary>
         private void InitializeComponent()
         {
-            this.button2 = new System.Windows.Forms.Button();
-            this.button4 = new System.Windows.Forms.Button();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
+            this.UserIDButton = new System.Windows.Forms.Button();
+            this.PasswordButton = new System.Windows.Forms.Button();
+            this.PasswordText = new System.Windows.Forms.TextBox();
+            this.WelcomeLabel = new System.Windows.Forms.Label();
+            this.LogInLabel = new System.Windows.Forms.Label();
+            this.LogInButton = new System.Windows.Forms.Button();
+            this.CreateCustomerAccountButton = new System.Windows.Forms.Button();
+            this.UserIDText = new System.Windows.Forms.MaskedTextBox();
             this.SuspendLayout();
             // 
-            // button2
+            // UserIDButton
             // 
-            this.button2.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
-            this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button2.Font = new System.Drawing.Font("Rockwell", 18F);
-            this.button2.Location = new System.Drawing.Point(278, 372);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(289, 72);
-            this.button2.TabIndex = 1;
-            this.button2.Text = "Username";
-            this.button2.UseVisualStyleBackColor = false;
+            this.UserIDButton.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
+            this.UserIDButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.UserIDButton.Font = new System.Drawing.Font("Rockwell", 18F);
+            this.UserIDButton.Location = new System.Drawing.Point(278, 372);
+            this.UserIDButton.Name = "UserIDButton";
+            this.UserIDButton.Size = new System.Drawing.Size(289, 72);
+            this.UserIDButton.TabIndex = 1;
+            this.UserIDButton.Text = "UserID";
+            this.UserIDButton.UseVisualStyleBackColor = false;
             // 
-            // button4
+            // PasswordButton
             // 
-            this.button4.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
-            this.button4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button4.Font = new System.Drawing.Font("Rockwell", 18F);
-            this.button4.Location = new System.Drawing.Point(278, 480);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(289, 72);
-            this.button4.TabIndex = 3;
-            this.button4.Text = "Password";
-            this.button4.UseVisualStyleBackColor = false;
+            this.PasswordButton.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
+            this.PasswordButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.PasswordButton.Font = new System.Drawing.Font("Rockwell", 18F);
+            this.PasswordButton.Location = new System.Drawing.Point(278, 480);
+            this.PasswordButton.Name = "PasswordButton";
+            this.PasswordButton.Size = new System.Drawing.Size(289, 72);
+            this.PasswordButton.TabIndex = 3;
+            this.PasswordButton.Text = "Password";
+            this.PasswordButton.UseVisualStyleBackColor = false;
             // 
-            // textBox1
+            // PasswordText
             // 
-            this.textBox1.Font = new System.Drawing.Font("Rockwell", 18F);
-            this.textBox1.Location = new System.Drawing.Point(592, 372);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(289, 64);
-            this.textBox1.TabIndex = 4;
+            this.PasswordText.Font = new System.Drawing.Font("Rockwell", 18F);
+            this.PasswordText.Location = new System.Drawing.Point(592, 480);
+            this.PasswordText.Name = "PasswordText";
+            this.PasswordText.Size = new System.Drawing.Size(289, 64);
+            this.PasswordText.TabIndex = 5;
             // 
-            // textBox2
+            // WelcomeLabel
             // 
-            this.textBox2.Font = new System.Drawing.Font("Rockwell", 18F);
-            this.textBox2.Location = new System.Drawing.Point(592, 480);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(289, 64);
-            this.textBox2.TabIndex = 5;
+            this.WelcomeLabel.AutoSize = true;
+            this.WelcomeLabel.Font = new System.Drawing.Font("Rockwell", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.WelcomeLabel.Location = new System.Drawing.Point(95, 119);
+            this.WelcomeLabel.Name = "WelcomeLabel";
+            this.WelcomeLabel.Size = new System.Drawing.Size(994, 106);
+            this.WelcomeLabel.TabIndex = 6;
+            this.WelcomeLabel.Text = "Welcome to Air3550! ";
+            this.WelcomeLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // label1
+            // LogInLabel
             // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Rockwell", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(95, 119);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(994, 106);
-            this.label1.TabIndex = 6;
-            this.label1.Text = "Welcome to Air3550! ";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.LogInLabel.AutoSize = true;
+            this.LogInLabel.Font = new System.Drawing.Font("Rockwell", 24F);
+            this.LogInLabel.Location = new System.Drawing.Point(277, 254);
+            this.LogInLabel.Name = "LogInLabel";
+            this.LogInLabel.Size = new System.Drawing.Size(617, 72);
+            this.LogInLabel.TabIndex = 7;
+            this.LogInLabel.Text = "Please Log In Below";
+            this.LogInLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // label2
+            // LogInButton
             // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Rockwell", 24F);
-            this.label2.Location = new System.Drawing.Point(277, 254);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(617, 72);
-            this.label2.TabIndex = 7;
-            this.label2.Text = "Please Log In Below";
-            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.LogInButton.BackColor = System.Drawing.SystemColors.HotTrack;
+            this.LogInButton.Font = new System.Drawing.Font("Rockwell", 18F);
+            this.LogInButton.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.LogInButton.Location = new System.Drawing.Point(451, 592);
+            this.LogInButton.Name = "LogInButton";
+            this.LogInButton.Size = new System.Drawing.Size(253, 72);
+            this.LogInButton.TabIndex = 8;
+            this.LogInButton.Text = "Log In";
+            this.LogInButton.UseVisualStyleBackColor = false;
+            this.LogInButton.Click += new System.EventHandler(this.LogInButton_Click);
             // 
-            // button1
+            // CreateCustomerAccountButton
             // 
-            this.button1.BackColor = System.Drawing.SystemColors.HotTrack;
-            this.button1.Font = new System.Drawing.Font("Rockwell", 18F);
-            this.button1.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.button1.Location = new System.Drawing.Point(451, 592);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(253, 72);
-            this.button1.TabIndex = 8;
-            this.button1.Text = "Log In";
-            this.button1.UseVisualStyleBackColor = false;
-            this.button1.Click += new System.EventHandler(this.LogInButton_Click);
+            this.CreateCustomerAccountButton.BackColor = System.Drawing.Color.Transparent;
+            this.CreateCustomerAccountButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.CreateCustomerAccountButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.CreateCustomerAccountButton.Font = new System.Drawing.Font("Rockwell", 8F);
+            this.CreateCustomerAccountButton.Location = new System.Drawing.Point(334, 691);
+            this.CreateCustomerAccountButton.Name = "CreateCustomerAccountButton";
+            this.CreateCustomerAccountButton.Size = new System.Drawing.Size(496, 43);
+            this.CreateCustomerAccountButton.TabIndex = 9;
+            this.CreateCustomerAccountButton.Text = "Don\'t have an Account? Create One Here";
+            this.CreateCustomerAccountButton.UseVisualStyleBackColor = false;
+            this.CreateCustomerAccountButton.Click += new System.EventHandler(this.CreateCustomerAccountButton_Click);
             // 
-            // button3
+            // UserIDText
             // 
-            this.button3.BackColor = System.Drawing.Color.Transparent;
-            this.button3.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.button3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button3.Font = new System.Drawing.Font("Rockwell", 8F);
-            this.button3.Location = new System.Drawing.Point(334, 691);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(496, 43);
-            this.button3.TabIndex = 9;
-            this.button3.Text = "Don\'t have an Account? Create One Here";
-            this.button3.UseVisualStyleBackColor = false;
-            this.button3.Click += new System.EventHandler(this.CreateCustomerAccountButton_Click);
+            this.UserIDText.Font = new System.Drawing.Font("Rockwell", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.UserIDText.Location = new System.Drawing.Point(593, 378);
+            this.UserIDText.Mask = "000000";
+            this.UserIDText.Name = "UserIDText";
+            this.UserIDText.Size = new System.Drawing.Size(287, 64);
+            this.UserIDText.TabIndex = 11;
+            this.UserIDText.MouseClick += new System.Windows.Forms.MouseEventHandler(this.UserIDText_MouseClick);
+            this.UserIDText.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.UserIDText_MouseDoubleClick);
             // 
             // LogInPage
             // 
@@ -134,14 +137,14 @@ namespace Air3550
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.HighlightText;
             this.ClientSize = new System.Drawing.Size(1173, 938);
-            this.Controls.Add(this.button3);
-            this.Controls.Add(this.button1);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.textBox2);
-            this.Controls.Add(this.textBox1);
-            this.Controls.Add(this.button4);
-            this.Controls.Add(this.button2);
+            this.Controls.Add(this.UserIDText);
+            this.Controls.Add(this.CreateCustomerAccountButton);
+            this.Controls.Add(this.LogInButton);
+            this.Controls.Add(this.LogInLabel);
+            this.Controls.Add(this.WelcomeLabel);
+            this.Controls.Add(this.PasswordText);
+            this.Controls.Add(this.PasswordButton);
+            this.Controls.Add(this.UserIDButton);
             this.Name = "LogInPage";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Air3550";
@@ -151,14 +154,14 @@ namespace Air3550
         }
 
         #endregion
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button4;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.TextBox textBox2;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Button UserIDButton;
+        private System.Windows.Forms.Button PasswordButton;
+        private System.Windows.Forms.TextBox PasswordText;
+        private System.Windows.Forms.Label WelcomeLabel;
+        private System.Windows.Forms.Label LogInLabel;
+        private System.Windows.Forms.Button LogInButton;
+        private System.Windows.Forms.Button CreateCustomerAccountButton;
+        private System.Windows.Forms.MaskedTextBox UserIDText;
     }
 }
 
