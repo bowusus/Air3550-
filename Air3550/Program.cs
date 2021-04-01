@@ -17,13 +17,11 @@ namespace Air3550
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             LogInPage login = new LogInPage();
-            CreateCustomerPage createCustomer = new CreateCustomerPage();
             CustomerHomePage home = new CustomerHomePage();
             Application.Run(login); // start with the login page as the main page
-            if (login.StartAccountCreation) // create customer page is the main page
-                Application.Run(createCustomer);
-            if (login.IsLoggedIn || createCustomer.IsLoggedIn) // now the home page is the main page which closes when this page is closed
+            if (login.IsDisposed && login.IsAccessible == true) // check if the log in form is disposed and accessible to change the main form to the customer home page
                 Application.Run(home);
+            Application.Exit(); // exit
         }
     }
 }

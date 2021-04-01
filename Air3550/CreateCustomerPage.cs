@@ -14,8 +14,6 @@ namespace Air3550
     public partial class CreateCustomerPage : Form
     {
         // This form file is to document the actions done on the Log In Page specifically
-        public bool IsLoggedIn { get; set; } // used to switch the main page to the home page
-
         public CreateCustomerPage()
         {
             InitializeComponent();
@@ -98,21 +96,34 @@ namespace Air3550
                         // encrypt the password
                         string pass = SystemAction.EncryptPassword(password);
                         // create a customer object
-                        CustomerModel customer = new CustomerModel(userID, pass, firstName, lastName, street, city, state, zip, phone, creditCardNum, age, email); 
+                        CustomerModel customer = new CustomerModel(userID, pass, firstName, lastName, street, city, state, zip, phone, creditCardNum, age, email);
                         // add the customer to the database aka create account
                         SqliteDataAccess.CreateAccount(customer.userID, customer.password, customer.firstName, customer.lastName, customer.street, customer.city, customer.state, customer.zipCode, customer.phoneNumber, customer.creditCardNumber, customer.age, customer.email);
                         // provide a pop up with the user's userID
-                        DialogResult result = MessageBox.Show("Your account has been successfully created. Your USERID is "+ userID, "SUCCESS: New Account Created", MessageBoxButtons.OK, MessageBoxIcon.None);
+                        DialogResult result = MessageBox.Show("Your account has been successfully created. Your USERID is " + userID, "SUCCESS: New Account Created", MessageBoxButtons.OK, MessageBoxIcon.None);
                         if (result == DialogResult.OK)
                         {
-                            this.Close(); // close current page
-                            IsLoggedIn = true; // show that we are logged in now
                             CustomerHomePage customerHome = new CustomerHomePage(); // create customer home page
+                            int i = 0;
+                            // close the log in form and the create customer form
+                            while (i < Application.OpenForms.Count) // look at what forms are open
+                            {
+                                if (Application.OpenForms[i].Name != "CustomerHomePage") // close everything that isn't the customer home page
+                                {
+                                    if (Application.OpenForms[i].Name == "LogInPage")
+                                        Application.OpenForms[i].IsAccessible = true; // if the current form is the log in form, make it accessible to change the main form to the home page
+                                    Application.OpenForms[i].Close();
+                                }
+                            }
                             customerHome.Show(); // show the customer home page to prevent the need to remember your userID
                         }
                     }
                     else
-                        MessageBox.Show("There is already an account linked with this email.", "ERROR: Account Already Exists", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    {
+                        DialogResult result = MessageBox.Show("There is already an account linked with this email.\nPress OK to return to the Log In Page to use your previously created account.\nPress CANCEL to modify the email your provided when creating a new account.\n", "ERROR: Account Already Exists", MessageBoxButtons.OKCancel, MessageBoxIcon.Error);
+                        if (result == DialogResult.OK) // return 
+                            this.Close(); // close current page
+                    }
                 }
             }
         }
