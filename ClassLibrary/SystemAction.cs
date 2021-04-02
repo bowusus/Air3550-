@@ -27,11 +27,13 @@ namespace ClassLibrary
             for (int i = 0; i < hash.Length; i++)
                 result.Append(hash[i].ToString("x2")); // turn the hash into a string
             return result.ToString(); // return the string and exit
-        }
+        }/*
         public static string ValidateAccountFormat(string city, string zip, string phone, string creditCard, string email)
         {
             // This method checks the format provided for the city, zip code, phone number, credit card number, and email
             // If any of the formats are invalid, it is added to an errorMessage string that is returned
+
+            string errorMessage = null; // used to check if invalid information was provided
 
             // set the formats for the city, zip code, phone number, credit card number, and email
             Regex cityReg = new Regex(@"^[a-zA-Z]+(?:[\s-][a-zA-Z]+)*$");
@@ -44,23 +46,47 @@ namespace ClassLibrary
             Match cityMatch = cityReg.Match(city);
             Match zipMatch = zipReg.Match(zip);
             Match phoneMatch = phoneReg.Match(phone);
-            Match creditCardMatch = creditCardReg.Match(creditCard);
+            Match creditCardMatch = creditCardReg.Match(creditCardNum);
             Match emailMatch = emailReg.Match(email);
 
-            string errorMessage = null; // used to create an error message for the user
-
-            // check if any of the matches were unsuccessful and add that format error to the error Message that is returned
-            if (!cityMatch.Success)
+            // check if any of the text or combo boxes are empty 
+            // and check if the password is of the correct length
+            // add any of the invalid information errors to the errorMessage string
+            if (String.IsNullOrEmpty(FirstNameText.Text))
+                errorMessage += "FIRST NAME is Blank\n";
+            if (String.IsNullOrEmpty(LastNameText.Text))
+                errorMessage += "LAST NAME is Blank\n";
+            if (PasswordText.Text.Length < 6)
+                errorMessage += "The PASSWORD needs to be 6 or more characters long\n";
+            if (String.IsNullOrEmpty(PasswordText.Text))
+                errorMessage += "PASSWORD is Blank\n";
+            if (String.IsNullOrEmpty(StreetText.Text))
+                errorMessage += "STREET is Blank\n";
+            if (String.IsNullOrEmpty(CityText.Text))
+                errorMessage += "CITY is Blank\n";
+            else if (!cityMatch.Success)
                 errorMessage += "The provided CITY is invalid\n";
-            if (!zipMatch.Success)
+            if (StateComboBox.SelectedItem == null)
+                errorMessage += "STATE is Blank\n";
+            if (String.IsNullOrEmpty(ZipText.Text))
+                errorMessage += "ZIP CODE is Blank\n";
+            else if (!zipMatch.Success)
                 errorMessage += "The provided ZIP CODE is invalid. Provide an email that is of the format: XXXXX-XXXX or XXXXX where X's are numbers\n";
-            if (!phoneMatch.Success)
+            if (String.IsNullOrEmpty(PhoneText.Text))
+                errorMessage += "PHONE NUMBER is Blank\n";
+            else if (!phoneMatch.Success)
                 errorMessage += "The provided PHONE NUMBER is invalid. Provide an email that is of the format shown on the form\n";
-            if (!creditCardMatch.Success)
+            if (String.IsNullOrEmpty(CreditCardNumText.Text))
+                errorMessage += "CREDIT CARD NUMBER is Blank\n";
+            else if (!creditCardMatch.Success)
                 errorMessage += "The provided CREDIT CARD NUMBER is invalid. Provide an email that is of the format shown on the form\n";
-            if (!emailMatch.Success)
+            if (String.IsNullOrEmpty(EmailText.Text))
+                errorMessage += "EMAIL is Blank\n";
+            else if (!emailMatch.Success)
                 errorMessage += "The provided EMAIL is invalid";
-            return errorMessage; // return any errors
-        }
+            if (AgeComboBox.SelectedItem == null)
+                errorMessage += "AGE is Blank";
+            return errorMessage
+        }*/
     }
 }

@@ -16,3 +16,4 @@ C:\Users\linds\source\repos\Air3550\Air3550\obj\Debug\Air3550.CustomerHomePage.r
 C:\Users\linds\source\repos\Air3550\Air3550\obj\Debug\Air3550.csproj.CopyComplete
 C:\Users\linds\source\repos\Air3550\Air3550\obj\Debug\Air3550.LoginPage.resources
 C:\Users\linds\source\repos\Air3550\Air3550\obj\Debug\Air3550.CreateCustomerPage.resources
+C:\Users\linds\source\repos\Air3550\Air3550\obj\Debug\Air3550.AccountInformation.resources

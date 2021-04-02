@@ -59,6 +59,7 @@ namespace Air3550
             // 
             // StreetButton
             // 
+            this.StreetButton.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.StreetButton.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.StreetButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.StreetButton.Font = new System.Drawing.Font("Rockwell", 10F);
@@ -71,6 +72,7 @@ namespace Air3550
             // 
             // FirstNameText
             // 
+            this.FirstNameText.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.FirstNameText.Font = new System.Drawing.Font("Rockwell", 18F);
             this.FirstNameText.Location = new System.Drawing.Point(328, 127);
             this.FirstNameText.Name = "FirstNameText";
@@ -79,6 +81,7 @@ namespace Air3550
             // 
             // LastNameText
             // 
+            this.LastNameText.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.LastNameText.Font = new System.Drawing.Font("Rockwell", 18F);
             this.LastNameText.Location = new System.Drawing.Point(328, 213);
             this.LastNameText.Name = "LastNameText";
@@ -87,6 +90,7 @@ namespace Air3550
             // 
             // ProvideInfoLabel
             // 
+            this.ProvideInfoLabel.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.ProvideInfoLabel.AutoSize = true;
             this.ProvideInfoLabel.Font = new System.Drawing.Font("Rockwell", 24F);
             this.ProvideInfoLabel.Location = new System.Drawing.Point(108, 36);
@@ -98,6 +102,7 @@ namespace Air3550
             // 
             // CreateAccountButton
             // 
+            this.CreateAccountButton.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.CreateAccountButton.BackColor = System.Drawing.SystemColors.HotTrack;
             this.CreateAccountButton.Font = new System.Drawing.Font("Rockwell", 10F);
             this.CreateAccountButton.ForeColor = System.Drawing.SystemColors.ControlLightLight;
@@ -111,6 +116,7 @@ namespace Air3550
             // 
             // LastNameButton
             // 
+            this.LastNameButton.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.LastNameButton.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.LastNameButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.LastNameButton.Font = new System.Drawing.Font("Rockwell", 10F);
@@ -123,6 +129,7 @@ namespace Air3550
             // 
             // FirstNameButton
             // 
+            this.FirstNameButton.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.FirstNameButton.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.FirstNameButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.FirstNameButton.Font = new System.Drawing.Font("Rockwell", 10F);
@@ -135,6 +142,7 @@ namespace Air3550
             // 
             // CityButton
             // 
+            this.CityButton.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.CityButton.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.CityButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.CityButton.Font = new System.Drawing.Font("Rockwell", 10F);
@@ -147,6 +155,7 @@ namespace Air3550
             // 
             // StateButton
             // 
+            this.StateButton.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.StateButton.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.StateButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.StateButton.Font = new System.Drawing.Font("Rockwell", 10F);
@@ -159,6 +168,7 @@ namespace Air3550
             // 
             // EmailButton
             // 
+            this.EmailButton.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.EmailButton.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.EmailButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.EmailButton.Font = new System.Drawing.Font("Rockwell", 10F);
@@ -171,6 +181,7 @@ namespace Air3550
             // 
             // CreditCardNumRestraintButton
             // 
+            this.CreditCardNumRestraintButton.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.CreditCardNumRestraintButton.BackColor = System.Drawing.Color.Transparent;
             this.CreditCardNumRestraintButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.CreditCardNumRestraintButton.Font = new System.Drawing.Font("Rockwell", 8F);
@@ -183,6 +194,7 @@ namespace Air3550
             // 
             // ZipButton
             // 
+            this.ZipButton.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.ZipButton.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.ZipButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.ZipButton.Font = new System.Drawing.Font("Rockwell", 10F);
@@ -195,6 +207,7 @@ namespace Air3550
             // 
             // AgeButton
             // 
+            this.AgeButton.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.AgeButton.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.AgeButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.AgeButton.Font = new System.Drawing.Font("Rockwell", 10F);
@@ -207,6 +220,7 @@ namespace Air3550
             // 
             // PasswordText
             // 
+            this.PasswordText.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.PasswordText.Font = new System.Drawing.Font("Rockwell", 18F);
             this.PasswordText.Location = new System.Drawing.Point(468, 301);
             this.PasswordText.Name = "PasswordText";
@@ -215,6 +229,7 @@ namespace Air3550
             // 
             // StreetText
             // 
+            this.StreetText.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.StreetText.Font = new System.Drawing.Font("Rockwell", 18F);
             this.StreetText.Location = new System.Drawing.Point(328, 392);
             this.StreetText.Name = "StreetText";
@@ -223,6 +238,7 @@ namespace Air3550
             // 
             // CityText
             // 
+            this.CityText.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.CityText.Font = new System.Drawing.Font("Rockwell", 18F);
             this.CityText.Location = new System.Drawing.Point(167, 474);
             this.CityText.Name = "CityText";
@@ -231,6 +247,7 @@ namespace Air3550
             // 
             // StateComboBox
             // 
+            this.StateComboBox.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.StateComboBox.DropDownHeight = 64;
             this.StateComboBox.FormattingEnabled = true;
             this.StateComboBox.IntegralHeight = false;
@@ -292,6 +309,7 @@ namespace Air3550
             // 
             // AgeComboBox
             // 
+            this.AgeComboBox.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.AgeComboBox.DropDownHeight = 64;
             this.AgeComboBox.FormattingEnabled = true;
             this.AgeComboBox.IntegralHeight = false;
@@ -404,6 +422,7 @@ namespace Air3550
             // 
             // PhoneButton
             // 
+            this.PhoneButton.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.PhoneButton.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.PhoneButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.PhoneButton.Font = new System.Drawing.Font("Rockwell", 10F);
@@ -416,6 +435,7 @@ namespace Air3550
             // 
             // PasswordButton
             // 
+            this.PasswordButton.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.PasswordButton.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.PasswordButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.PasswordButton.Font = new System.Drawing.Font("Rockwell", 10F);
@@ -428,6 +448,7 @@ namespace Air3550
             // 
             // CreditCardNumButton
             // 
+            this.CreditCardNumButton.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.CreditCardNumButton.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.CreditCardNumButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.CreditCardNumButton.Font = new System.Drawing.Font("Rockwell", 10F);
@@ -440,6 +461,7 @@ namespace Air3550
             // 
             // PasswordRestraintButton
             // 
+            this.PasswordRestraintButton.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.PasswordRestraintButton.BackColor = System.Drawing.Color.Transparent;
             this.PasswordRestraintButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.PasswordRestraintButton.Font = new System.Drawing.Font("Rockwell", 8F);
@@ -452,6 +474,7 @@ namespace Air3550
             // 
             // PhoneText
             // 
+            this.PhoneText.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.PhoneText.Font = new System.Drawing.Font("Rockwell", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.PhoneText.Location = new System.Drawing.Point(323, 566);
             this.PhoneText.Mask = "(999)000-0000";
@@ -464,6 +487,7 @@ namespace Air3550
             // 
             // CreditCardNumText
             // 
+            this.CreditCardNumText.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.CreditCardNumText.Font = new System.Drawing.Font("Rockwell", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.CreditCardNumText.Location = new System.Drawing.Point(602, 652);
             this.CreditCardNumText.Mask = "0000-0000-0000-0000";
@@ -474,6 +498,7 @@ namespace Air3550
             // 
             // EmailText
             // 
+            this.EmailText.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.EmailText.Font = new System.Drawing.Font("Rockwell", 18F);
             this.EmailText.Location = new System.Drawing.Point(328, 736);
             this.EmailText.Name = "EmailText";
@@ -482,6 +507,7 @@ namespace Air3550
             // 
             // ZipText
             // 
+            this.ZipText.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.ZipText.Font = new System.Drawing.Font("Rockwell", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ZipText.Location = new System.Drawing.Point(926, 474);
             this.ZipText.Name = "ZipText";

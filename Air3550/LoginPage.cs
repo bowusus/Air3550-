@@ -18,7 +18,6 @@ namespace Air3550
         {
             InitializeComponent();
         }
-
         private void LogInButton_Click(object sender, EventArgs e)
         {
             // This method checks the provided information against the database
@@ -27,8 +26,12 @@ namespace Air3550
             string errorMessage = null;
             if (String.IsNullOrEmpty(UserIDText.Text))
                 errorMessage += "USERID is Blank\n";
+            else if (UserIDText.Text.Length < 6)
+                errorMessage += "USERID is too short\n";
             if (String.IsNullOrEmpty(PasswordText.Text))
                 errorMessage += "PASSWORD is Blank\n";
+            else if (PasswordText.Text.Length < 6)
+                errorMessage += "PASSWORD is too short\n";
             if (errorMessage != null)
                 MessageBox.Show(errorMessage, "ERROR: Invalid Log In", MessageBoxButtons.OK, MessageBoxIcon.Error);
             else
@@ -49,7 +52,6 @@ namespace Air3550
                 }
             }
         }
-
         private void CreateCustomerAccountButton_Click(object sender, EventArgs e)
         {
             // This method transitions the displayed page from the log in page to the create customer account page
@@ -57,19 +59,16 @@ namespace Air3550
             CreateCustomerPage createCustomer = new CreateCustomerPage(); // create the next form
             createCustomer.Show(); // show the next form
         }
-
         private void UserIDText_MouseClick(object sender, MouseEventArgs e)
         {
             // This method was required to get the combo box cursor to start on the left side automatically
             UserIDText.SelectionStart = 0;
         }
-
         private void UserIDText_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             // This method was required to get the combo box cursor to start on the left side automatically
             UserIDText.SelectionStart = 0;
         }
-
         private void PasswordText_TextChanged(object sender, EventArgs e)
         {
             // This method was required to show the password as asterisks when the user types

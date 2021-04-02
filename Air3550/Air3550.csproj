@@ -55,6 +55,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccountInformation.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AccountInformation.Designer.cs">
+      <DependentUpon>AccountInformation.cs</DependentUpon>
+    </Compile>
     <Compile Include="CreateCustomerPage.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -75,6 +81,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="AccountInformation.resx">
+      <DependentUpon>AccountInformation.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="CreateCustomerPage.resx">
       <DependentUpon>CreateCustomerPage.cs</DependentUpon>
     </EmbeddedResource>

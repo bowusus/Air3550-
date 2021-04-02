@@ -41,6 +41,7 @@ namespace Air3550
             // 
             // UserIDButton
             // 
+            this.UserIDButton.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.UserIDButton.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.UserIDButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.UserIDButton.Font = new System.Drawing.Font("Rockwell", 18F);
@@ -53,6 +54,7 @@ namespace Air3550
             // 
             // PasswordButton
             // 
+            this.PasswordButton.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.PasswordButton.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.PasswordButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.PasswordButton.Font = new System.Drawing.Font("Rockwell", 18F);
@@ -65,6 +67,7 @@ namespace Air3550
             // 
             // PasswordText
             // 
+            this.PasswordText.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.PasswordText.Font = new System.Drawing.Font("Rockwell", 18F);
             this.PasswordText.Location = new System.Drawing.Point(592, 480);
             this.PasswordText.Name = "PasswordText";
@@ -74,6 +77,7 @@ namespace Air3550
             // 
             // WelcomeLabel
             // 
+            this.WelcomeLabel.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.WelcomeLabel.AutoSize = true;
             this.WelcomeLabel.Font = new System.Drawing.Font("Rockwell", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.WelcomeLabel.Location = new System.Drawing.Point(95, 119);
@@ -85,6 +89,7 @@ namespace Air3550
             // 
             // LogInLabel
             // 
+            this.LogInLabel.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.LogInLabel.AutoSize = true;
             this.LogInLabel.Font = new System.Drawing.Font("Rockwell", 24F);
             this.LogInLabel.Location = new System.Drawing.Point(277, 254);
@@ -96,6 +101,7 @@ namespace Air3550
             // 
             // LogInButton
             // 
+            this.LogInButton.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.LogInButton.BackColor = System.Drawing.SystemColors.HotTrack;
             this.LogInButton.Font = new System.Drawing.Font("Rockwell", 18F);
             this.LogInButton.ForeColor = System.Drawing.SystemColors.ControlLightLight;
@@ -109,6 +115,7 @@ namespace Air3550
             // 
             // CreateCustomerAccountButton
             // 
+            this.CreateCustomerAccountButton.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.CreateCustomerAccountButton.BackColor = System.Drawing.Color.Transparent;
             this.CreateCustomerAccountButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.CreateCustomerAccountButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -123,6 +130,7 @@ namespace Air3550
             // 
             // UserIDText
             // 
+            this.UserIDText.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.UserIDText.Font = new System.Drawing.Font("Rockwell", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.UserIDText.Location = new System.Drawing.Point(593, 378);
             this.UserIDText.Mask = "000000";

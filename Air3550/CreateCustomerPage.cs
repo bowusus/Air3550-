@@ -6,6 +6,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -18,7 +19,6 @@ namespace Air3550
         {
             InitializeComponent();
         }
-
         private void CreateAccountButton_Click(object sender, EventArgs e)
         {
             // This method includes validating the data provided on the Create Account Form
@@ -39,6 +39,20 @@ namespace Air3550
             int age;
             string errorMessage = null; // used to check if invalid information was provided
 
+            // set the formats for the city, zip code, phone number, credit card number, and email
+            Regex cityReg = new Regex(@"^[a-zA-Z]+(?:[\s-][a-zA-Z]+)*$");
+            Regex zipReg = new Regex(@"^\d{5}(?:[-]\d{4})?$");
+            Regex phoneReg = new Regex(@"^\(?([0-9]{3})\)?[-.]?([0-9]{3})[-.]?([0-9]{4})$");
+            Regex creditCardReg = new Regex(@"^?\d{4}-?\d{4}-?\d{4}-?\d{4}$");
+            Regex emailReg = new Regex(@"^[a-zA-Z][\w\.-]*[a-zA-Z0-9]@[a-zA-Z0-9][\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]$");
+
+            // match the provided string with the format
+            Match cityMatch = cityReg.Match(city);
+            Match zipMatch = zipReg.Match(zip);
+            Match phoneMatch = phoneReg.Match(phone);
+            Match creditCardMatch = creditCardReg.Match(creditCardNum);
+            Match emailMatch = emailReg.Match(email);
+
             // check if any of the text or combo boxes are empty 
             // and check if the password is of the correct length
             // add any of the invalid information errors to the errorMessage string
@@ -54,19 +68,29 @@ namespace Air3550
                 errorMessage += "STREET is Blank\n";
             if (String.IsNullOrEmpty(CityText.Text))
                 errorMessage += "CITY is Blank\n";
+            else if (!cityMatch.Success)
+                    errorMessage += "The provided CITY is invalid\n";
             if (StateComboBox.SelectedItem == null)
                 errorMessage += "STATE is Blank\n";
             if (String.IsNullOrEmpty(ZipText.Text))
                 errorMessage += "ZIP CODE is Blank\n";
+            else if (!zipMatch.Success)
+                errorMessage += "The provided ZIP CODE is invalid. Provide an email that is of the format: XXXXX-XXXX or XXXXX where X's are numbers\n";
             if (String.IsNullOrEmpty(PhoneText.Text))
                 errorMessage += "PHONE NUMBER is Blank\n";
+            else if (!phoneMatch.Success)
+                errorMessage += "The provided PHONE NUMBER is invalid. Provide an email that is of the format shown on the form\n";
             if (String.IsNullOrEmpty(CreditCardNumText.Text))
                 errorMessage += "CREDIT CARD NUMBER is Blank\n";
+            else if (!creditCardMatch.Success)
+                errorMessage += "The provided CREDIT CARD NUMBER is invalid. Provide an email that is of the format shown on the form\n";
             if (String.IsNullOrEmpty(EmailText.Text))
                 errorMessage += "EMAIL is Blank\n";
+            else if (!emailMatch.Success)
+                errorMessage += "The provided EMAIL is invalid";
             if (AgeComboBox.SelectedItem == null)
                 errorMessage += "AGE is Blank";
-            
+
             // if the errorMessage created is not empty, then something went wrong
             // so a message box will be shown to the user with an explanation of all errors
             // if it is empty, then everything was inputted correctly
@@ -78,14 +102,14 @@ namespace Air3550
                 age = int.Parse(AgeComboBox.SelectedItem.ToString()); // get the value from the age combo box and turn it into an int
 
                 // validate the information provided against specifc formats and return any errors as a string
-                string formatErrorMessage = SystemAction.ValidateAccountFormat(city, zip, phone, creditCardNum, email);
+                //string formatErrorMessage = SystemAction.ValidateAccountFormat(city, zip, phone, creditCardNum, email);
                 // if the returned string is not empty, then an invalid format was provided, 
                 // so a message box will be shown to the user with an explanation of all errors
                 // else check the email in the database and see if a new account can be created
-                if (formatErrorMessage != null)
+                /*if (formatErrorMessage != null)
                     MessageBox.Show(formatErrorMessage, "ERROR: Invalid Format of Account Information Provided", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 else
-                {
+                {*/
                     int existingCustomer = SqliteDataAccess.CheckIfNewCustomer(email); // check if this email exists in the database
                     // if the email exists, create a new account
                     // else an error will display to the customer
@@ -124,22 +148,19 @@ namespace Air3550
                         if (result == DialogResult.OK) // return 
                             this.Close(); // close current page
                     }
-                }
+                //}
             }
         }
-
         private void PhoneText_MouseClick(object sender, MouseEventArgs e)
         {
             // This method was required to get the combo box cursor to start on the left side automatically
             PhoneText.SelectionStart = 0;
         }
-
         private void PhoneText_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             // This method was required to get the combo box cursor to start on the left side automatically
             PhoneText.SelectionStart = 0;
         }
-
         private void CreditCardNumText_MouseClick(object sender, MouseEventArgs e)
         {
             // This method was required to get the combo box cursor to start on the left side automatically
