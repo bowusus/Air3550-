@@ -45,7 +45,7 @@ namespace Air3550
             this.UserIDButton.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.UserIDButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.UserIDButton.Font = new System.Drawing.Font("Rockwell", 18F);
-            this.UserIDButton.Location = new System.Drawing.Point(278, 372);
+            this.UserIDButton.Location = new System.Drawing.Point(272, 415);
             this.UserIDButton.Name = "UserIDButton";
             this.UserIDButton.Size = new System.Drawing.Size(289, 72);
             this.UserIDButton.TabIndex = 1;
@@ -58,7 +58,7 @@ namespace Air3550
             this.PasswordButton.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.PasswordButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.PasswordButton.Font = new System.Drawing.Font("Rockwell", 18F);
-            this.PasswordButton.Location = new System.Drawing.Point(278, 480);
+            this.PasswordButton.Location = new System.Drawing.Point(272, 523);
             this.PasswordButton.Name = "PasswordButton";
             this.PasswordButton.Size = new System.Drawing.Size(289, 72);
             this.PasswordButton.TabIndex = 3;
@@ -69,7 +69,7 @@ namespace Air3550
             // 
             this.PasswordText.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.PasswordText.Font = new System.Drawing.Font("Rockwell", 18F);
-            this.PasswordText.Location = new System.Drawing.Point(592, 480);
+            this.PasswordText.Location = new System.Drawing.Point(586, 523);
             this.PasswordText.Name = "PasswordText";
             this.PasswordText.Size = new System.Drawing.Size(289, 64);
             this.PasswordText.TabIndex = 5;
@@ -80,7 +80,7 @@ namespace Air3550
             this.WelcomeLabel.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.WelcomeLabel.AutoSize = true;
             this.WelcomeLabel.Font = new System.Drawing.Font("Rockwell", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.WelcomeLabel.Location = new System.Drawing.Point(95, 119);
+            this.WelcomeLabel.Location = new System.Drawing.Point(89, 162);
             this.WelcomeLabel.Name = "WelcomeLabel";
             this.WelcomeLabel.Size = new System.Drawing.Size(994, 106);
             this.WelcomeLabel.TabIndex = 6;
@@ -92,7 +92,7 @@ namespace Air3550
             this.LogInLabel.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.LogInLabel.AutoSize = true;
             this.LogInLabel.Font = new System.Drawing.Font("Rockwell", 24F);
-            this.LogInLabel.Location = new System.Drawing.Point(277, 254);
+            this.LogInLabel.Location = new System.Drawing.Point(271, 297);
             this.LogInLabel.Name = "LogInLabel";
             this.LogInLabel.Size = new System.Drawing.Size(617, 72);
             this.LogInLabel.TabIndex = 7;
@@ -105,7 +105,7 @@ namespace Air3550
             this.LogInButton.BackColor = System.Drawing.SystemColors.HotTrack;
             this.LogInButton.Font = new System.Drawing.Font("Rockwell", 18F);
             this.LogInButton.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.LogInButton.Location = new System.Drawing.Point(451, 592);
+            this.LogInButton.Location = new System.Drawing.Point(445, 635);
             this.LogInButton.Name = "LogInButton";
             this.LogInButton.Size = new System.Drawing.Size(253, 72);
             this.LogInButton.TabIndex = 8;
@@ -120,7 +120,7 @@ namespace Air3550
             this.CreateCustomerAccountButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.CreateCustomerAccountButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.CreateCustomerAccountButton.Font = new System.Drawing.Font("Rockwell", 8F);
-            this.CreateCustomerAccountButton.Location = new System.Drawing.Point(334, 691);
+            this.CreateCustomerAccountButton.Location = new System.Drawing.Point(328, 734);
             this.CreateCustomerAccountButton.Name = "CreateCustomerAccountButton";
             this.CreateCustomerAccountButton.Size = new System.Drawing.Size(496, 43);
             this.CreateCustomerAccountButton.TabIndex = 9;
@@ -132,7 +132,7 @@ namespace Air3550
             // 
             this.UserIDText.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.UserIDText.Font = new System.Drawing.Font("Rockwell", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.UserIDText.Location = new System.Drawing.Point(593, 378);
+            this.UserIDText.Location = new System.Drawing.Point(587, 421);
             this.UserIDText.Mask = "000000";
             this.UserIDText.Name = "UserIDText";
             this.UserIDText.Size = new System.Drawing.Size(287, 64);

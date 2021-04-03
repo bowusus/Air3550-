@@ -63,7 +63,7 @@ namespace Air3550
             this.StreetButton.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.StreetButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.StreetButton.Font = new System.Drawing.Font("Rockwell", 10F);
-            this.StreetButton.Location = new System.Drawing.Point(19, 390);
+            this.StreetButton.Location = new System.Drawing.Point(17, 393);
             this.StreetButton.Name = "StreetButton";
             this.StreetButton.Size = new System.Drawing.Size(288, 72);
             this.StreetButton.TabIndex = 3;
@@ -74,7 +74,7 @@ namespace Air3550
             // 
             this.FirstNameText.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.FirstNameText.Font = new System.Drawing.Font("Rockwell", 18F);
-            this.FirstNameText.Location = new System.Drawing.Point(328, 127);
+            this.FirstNameText.Location = new System.Drawing.Point(326, 130);
             this.FirstNameText.Name = "FirstNameText";
             this.FirstNameText.Size = new System.Drawing.Size(829, 64);
             this.FirstNameText.TabIndex = 4;
@@ -83,7 +83,7 @@ namespace Air3550
             // 
             this.LastNameText.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.LastNameText.Font = new System.Drawing.Font("Rockwell", 18F);
-            this.LastNameText.Location = new System.Drawing.Point(328, 213);
+            this.LastNameText.Location = new System.Drawing.Point(326, 216);
             this.LastNameText.Name = "LastNameText";
             this.LastNameText.Size = new System.Drawing.Size(829, 64);
             this.LastNameText.TabIndex = 5;
@@ -93,7 +93,7 @@ namespace Air3550
             this.ProvideInfoLabel.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.ProvideInfoLabel.AutoSize = true;
             this.ProvideInfoLabel.Font = new System.Drawing.Font("Rockwell", 24F);
-            this.ProvideInfoLabel.Location = new System.Drawing.Point(108, 36);
+            this.ProvideInfoLabel.Location = new System.Drawing.Point(106, 39);
             this.ProvideInfoLabel.Name = "ProvideInfoLabel";
             this.ProvideInfoLabel.Size = new System.Drawing.Size(971, 72);
             this.ProvideInfoLabel.TabIndex = 7;
@@ -106,7 +106,7 @@ namespace Air3550
             this.CreateAccountButton.BackColor = System.Drawing.SystemColors.HotTrack;
             this.CreateAccountButton.Font = new System.Drawing.Font("Rockwell", 10F);
             this.CreateAccountButton.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.CreateAccountButton.Location = new System.Drawing.Point(881, 824);
+            this.CreateAccountButton.Location = new System.Drawing.Point(879, 827);
             this.CreateAccountButton.Name = "CreateAccountButton";
             this.CreateAccountButton.Size = new System.Drawing.Size(276, 72);
             this.CreateAccountButton.TabIndex = 8;
@@ -120,7 +120,7 @@ namespace Air3550
             this.LastNameButton.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.LastNameButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.LastNameButton.Font = new System.Drawing.Font("Rockwell", 10F);
-            this.LastNameButton.Location = new System.Drawing.Point(19, 213);
+            this.LastNameButton.Location = new System.Drawing.Point(17, 216);
             this.LastNameButton.Name = "LastNameButton";
             this.LastNameButton.Size = new System.Drawing.Size(288, 72);
             this.LastNameButton.TabIndex = 10;
@@ -133,7 +133,7 @@ namespace Air3550
             this.FirstNameButton.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.FirstNameButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.FirstNameButton.Font = new System.Drawing.Font("Rockwell", 10F);
-            this.FirstNameButton.Location = new System.Drawing.Point(19, 127);
+            this.FirstNameButton.Location = new System.Drawing.Point(17, 130);
             this.FirstNameButton.Name = "FirstNameButton";
             this.FirstNameButton.Size = new System.Drawing.Size(288, 72);
             this.FirstNameButton.TabIndex = 11;
@@ -146,7 +146,7 @@ namespace Air3550
             this.CityButton.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.CityButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.CityButton.Font = new System.Drawing.Font("Rockwell", 10F);
-            this.CityButton.Location = new System.Drawing.Point(19, 474);
+            this.CityButton.Location = new System.Drawing.Point(17, 477);
             this.CityButton.Name = "CityButton";
             this.CityButton.Size = new System.Drawing.Size(129, 72);
             this.CityButton.TabIndex = 12;
@@ -159,7 +159,7 @@ namespace Air3550
             this.StateButton.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.StateButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.StateButton.Font = new System.Drawing.Font("Rockwell", 10F);
-            this.StateButton.Location = new System.Drawing.Point(419, 474);
+            this.StateButton.Location = new System.Drawing.Point(417, 477);
             this.StateButton.Name = "StateButton";
             this.StateButton.Size = new System.Drawing.Size(121, 72);
             this.StateButton.TabIndex = 13;
@@ -172,7 +172,7 @@ namespace Air3550
             this.EmailButton.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.EmailButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.EmailButton.Font = new System.Drawing.Font("Rockwell", 10F);
-            this.EmailButton.Location = new System.Drawing.Point(19, 736);
+            this.EmailButton.Location = new System.Drawing.Point(17, 739);
             this.EmailButton.Name = "EmailButton";
             this.EmailButton.Size = new System.Drawing.Size(288, 72);
             this.EmailButton.TabIndex = 14;
@@ -185,7 +185,7 @@ namespace Air3550
             this.CreditCardNumRestraintButton.BackColor = System.Drawing.Color.Transparent;
             this.CreditCardNumRestraintButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.CreditCardNumRestraintButton.Font = new System.Drawing.Font("Rockwell", 8F);
-            this.CreditCardNumRestraintButton.Location = new System.Drawing.Point(246, 649);
+            this.CreditCardNumRestraintButton.Location = new System.Drawing.Point(244, 652);
             this.CreditCardNumRestraintButton.Name = "CreditCardNumRestraintButton";
             this.CreditCardNumRestraintButton.Size = new System.Drawing.Size(340, 73);
             this.CreditCardNumRestraintButton.TabIndex = 15;
@@ -198,7 +198,7 @@ namespace Air3550
             this.ZipButton.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.ZipButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.ZipButton.Font = new System.Drawing.Font("Rockwell", 10F);
-            this.ZipButton.Location = new System.Drawing.Point(758, 474);
+            this.ZipButton.Location = new System.Drawing.Point(756, 477);
             this.ZipButton.Name = "ZipButton";
             this.ZipButton.Size = new System.Drawing.Size(155, 72);
             this.ZipButton.TabIndex = 16;
@@ -211,7 +211,7 @@ namespace Air3550
             this.AgeButton.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.AgeButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.AgeButton.Font = new System.Drawing.Font("Rockwell", 10F);
-            this.AgeButton.Location = new System.Drawing.Point(19, 824);
+            this.AgeButton.Location = new System.Drawing.Point(17, 827);
             this.AgeButton.Name = "AgeButton";
             this.AgeButton.Size = new System.Drawing.Size(288, 72);
             this.AgeButton.TabIndex = 17;
@@ -222,7 +222,7 @@ namespace Air3550
             // 
             this.PasswordText.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.PasswordText.Font = new System.Drawing.Font("Rockwell", 18F);
-            this.PasswordText.Location = new System.Drawing.Point(468, 301);
+            this.PasswordText.Location = new System.Drawing.Point(466, 304);
             this.PasswordText.Name = "PasswordText";
             this.PasswordText.Size = new System.Drawing.Size(689, 64);
             this.PasswordText.TabIndex = 18;
@@ -231,7 +231,7 @@ namespace Air3550
             // 
             this.StreetText.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.StreetText.Font = new System.Drawing.Font("Rockwell", 18F);
-            this.StreetText.Location = new System.Drawing.Point(328, 392);
+            this.StreetText.Location = new System.Drawing.Point(326, 395);
             this.StreetText.Name = "StreetText";
             this.StreetText.Size = new System.Drawing.Size(829, 64);
             this.StreetText.TabIndex = 19;
@@ -240,7 +240,7 @@ namespace Air3550
             // 
             this.CityText.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.CityText.Font = new System.Drawing.Font("Rockwell", 18F);
-            this.CityText.Location = new System.Drawing.Point(167, 474);
+            this.CityText.Location = new System.Drawing.Point(165, 477);
             this.CityText.Name = "CityText";
             this.CityText.Size = new System.Drawing.Size(235, 64);
             this.CityText.TabIndex = 20;
@@ -302,7 +302,7 @@ namespace Air3550
             "West Virginia",
             "Wisconsin",
             "Wyoming"});
-            this.StateComboBox.Location = new System.Drawing.Point(562, 497);
+            this.StateComboBox.Location = new System.Drawing.Point(560, 500);
             this.StateComboBox.Name = "StateComboBox";
             this.StateComboBox.Size = new System.Drawing.Size(180, 33);
             this.StateComboBox.TabIndex = 26;
@@ -415,7 +415,7 @@ namespace Air3550
             "98",
             "99",
             "100+"});
-            this.AgeComboBox.Location = new System.Drawing.Point(328, 833);
+            this.AgeComboBox.Location = new System.Drawing.Point(326, 836);
             this.AgeComboBox.Name = "AgeComboBox";
             this.AgeComboBox.Size = new System.Drawing.Size(212, 33);
             this.AgeComboBox.TabIndex = 27;
@@ -426,7 +426,7 @@ namespace Air3550
             this.PhoneButton.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.PhoneButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.PhoneButton.Font = new System.Drawing.Font("Rockwell", 10F);
-            this.PhoneButton.Location = new System.Drawing.Point(19, 561);
+            this.PhoneButton.Location = new System.Drawing.Point(17, 564);
             this.PhoneButton.Name = "PhoneButton";
             this.PhoneButton.Size = new System.Drawing.Size(288, 72);
             this.PhoneButton.TabIndex = 28;
@@ -439,7 +439,7 @@ namespace Air3550
             this.PasswordButton.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.PasswordButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.PasswordButton.Font = new System.Drawing.Font("Rockwell", 10F);
-            this.PasswordButton.Location = new System.Drawing.Point(19, 301);
+            this.PasswordButton.Location = new System.Drawing.Point(17, 304);
             this.PasswordButton.Name = "PasswordButton";
             this.PasswordButton.Size = new System.Drawing.Size(221, 72);
             this.PasswordButton.TabIndex = 31;
@@ -452,7 +452,7 @@ namespace Air3550
             this.CreditCardNumButton.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.CreditCardNumButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.CreditCardNumButton.Font = new System.Drawing.Font("Rockwell", 10F);
-            this.CreditCardNumButton.Location = new System.Drawing.Point(19, 649);
+            this.CreditCardNumButton.Location = new System.Drawing.Point(17, 652);
             this.CreditCardNumButton.Name = "CreditCardNumButton";
             this.CreditCardNumButton.Size = new System.Drawing.Size(221, 72);
             this.CreditCardNumButton.TabIndex = 32;
@@ -465,7 +465,7 @@ namespace Air3550
             this.PasswordRestraintButton.BackColor = System.Drawing.Color.Transparent;
             this.PasswordRestraintButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.PasswordRestraintButton.Font = new System.Drawing.Font("Rockwell", 8F);
-            this.PasswordRestraintButton.Location = new System.Drawing.Point(246, 300);
+            this.PasswordRestraintButton.Location = new System.Drawing.Point(244, 303);
             this.PasswordRestraintButton.Name = "PasswordRestraintButton";
             this.PasswordRestraintButton.Size = new System.Drawing.Size(203, 73);
             this.PasswordRestraintButton.TabIndex = 33;
@@ -476,7 +476,7 @@ namespace Air3550
             // 
             this.PhoneText.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.PhoneText.Font = new System.Drawing.Font("Rockwell", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.PhoneText.Location = new System.Drawing.Point(323, 566);
+            this.PhoneText.Location = new System.Drawing.Point(321, 569);
             this.PhoneText.Mask = "(999)000-0000";
             this.PhoneText.Name = "PhoneText";
             this.PhoneText.ResetOnSpace = false;
@@ -489,7 +489,7 @@ namespace Air3550
             // 
             this.CreditCardNumText.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.CreditCardNumText.Font = new System.Drawing.Font("Rockwell", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.CreditCardNumText.Location = new System.Drawing.Point(602, 652);
+            this.CreditCardNumText.Location = new System.Drawing.Point(600, 655);
             this.CreditCardNumText.Mask = "0000-0000-0000-0000";
             this.CreditCardNumText.Name = "CreditCardNumText";
             this.CreditCardNumText.Size = new System.Drawing.Size(555, 64);
@@ -500,7 +500,7 @@ namespace Air3550
             // 
             this.EmailText.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.EmailText.Font = new System.Drawing.Font("Rockwell", 18F);
-            this.EmailText.Location = new System.Drawing.Point(328, 736);
+            this.EmailText.Location = new System.Drawing.Point(326, 739);
             this.EmailText.Name = "EmailText";
             this.EmailText.Size = new System.Drawing.Size(829, 64);
             this.EmailText.TabIndex = 36;
@@ -509,7 +509,7 @@ namespace Air3550
             // 
             this.ZipText.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.ZipText.Font = new System.Drawing.Font("Rockwell", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ZipText.Location = new System.Drawing.Point(926, 474);
+            this.ZipText.Location = new System.Drawing.Point(924, 477);
             this.ZipText.Name = "ZipText";
             this.ZipText.Size = new System.Drawing.Size(231, 64);
             this.ZipText.TabIndex = 37;

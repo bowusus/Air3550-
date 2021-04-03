@@ -9,3 +9,14 @@ C:\Users\linds\source\repos\Air3550\ClassLibrary\obj\Debug\ClassLibrary.csproj.C
 C:\Users\linds\source\repos\Air3550\ClassLibrary\obj\Debug\ClassLibrary.csproj.CopyComplete
 C:\Users\linds\source\repos\Air3550\ClassLibrary\obj\Debug\ClassLibrary.dll
 C:\Users\linds\source\repos\Air3550\ClassLibrary\obj\Debug\ClassLibrary.pdb
+C:\Users\linds\OneDrive\Documents\GitHub\Air3550\ClassLibrary\bin\Debug\ClassLibrary.dll
+C:\Users\linds\OneDrive\Documents\GitHub\Air3550\ClassLibrary\bin\Debug\ClassLibrary.pdb
+C:\Users\linds\OneDrive\Documents\GitHub\Air3550\ClassLibrary\bin\Debug\Dapper.dll
+C:\Users\linds\OneDrive\Documents\GitHub\Air3550\ClassLibrary\bin\Debug\System.Data.SQLite.dll
+C:\Users\linds\OneDrive\Documents\GitHub\Air3550\ClassLibrary\bin\Debug\Dapper.xml
+C:\Users\linds\OneDrive\Documents\GitHub\Air3550\ClassLibrary\bin\Debug\System.Data.SQLite.xml
+C:\Users\linds\OneDrive\Documents\GitHub\Air3550\ClassLibrary\obj\Debug\ClassLibrary.csprojAssemblyReference.cache
+C:\Users\linds\OneDrive\Documents\GitHub\Air3550\ClassLibrary\obj\Debug\ClassLibrary.csproj.CoreCompileInputs.cache
+C:\Users\linds\OneDrive\Documents\GitHub\Air3550\ClassLibrary\obj\Debug\ClassLibrary.csproj.CopyComplete
+C:\Users\linds\OneDrive\Documents\GitHub\Air3550\ClassLibrary\obj\Debug\ClassLibrary.dll
+C:\Users\linds\OneDrive\Documents\GitHub\Air3550\ClassLibrary\obj\Debug\ClassLibrary.pdb

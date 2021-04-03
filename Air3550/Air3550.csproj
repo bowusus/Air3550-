@@ -55,17 +55,65 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AccountInformation.cs">
+    <Compile Include="AccountInformationPage.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AccountInformation.Designer.cs">
-      <DependentUpon>AccountInformation.cs</DependentUpon>
+    <Compile Include="AccountInformationPage.Designer.cs">
+      <DependentUpon>AccountInformationPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FlightManagerHomePage.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FlightManagerHomePage.Designer.cs">
+      <DependentUpon>FlightManagerHomePage.cs</DependentUpon>
     </Compile>
     <Compile Include="CreateCustomerPage.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="CreateCustomerPage.Designer.cs">
       <DependentUpon>CreateCustomerPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AccountingManagerHomePage.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AccountingManagerHomePage.Designer.cs">
+      <DependentUpon>AccountingManagerHomePage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CancelFlightPage.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CancelFlightPage.Designer.cs">
+      <DependentUpon>CancelFlightPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="BookFlightPage.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BookFlightPage.Designer.cs">
+      <DependentUpon>BookFlightPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AccountHistoryPage.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AccountHistoryPage.Designer.cs">
+      <DependentUpon>AccountHistoryPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PrintBoardingPassPage.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PrintBoardingPassPage.Designer.cs">
+      <DependentUpon>PrintBoardingPassPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MarketingManagerHomePage.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MarketingManagerHomePage.Designer.cs">
+      <DependentUpon>MarketingManagerHomePage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="LoadEngineerHomePage.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LoadEngineerHomePage.Designer.cs">
+      <DependentUpon>LoadEngineerHomePage.cs</DependentUpon>
     </Compile>
     <Compile Include="LogInPage.cs">
       <SubType>Form</SubType>
@@ -81,11 +129,35 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="AccountInformation.resx">
-      <DependentUpon>AccountInformation.cs</DependentUpon>
+    <EmbeddedResource Include="AccountInformationPage.resx">
+      <DependentUpon>AccountInformationPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FlightManagerHomePage.resx">
+      <DependentUpon>FlightManagerHomePage.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="CreateCustomerPage.resx">
       <DependentUpon>CreateCustomerPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AccountingManagerHomePage.resx">
+      <DependentUpon>AccountingManagerHomePage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CancelFlightPage.resx">
+      <DependentUpon>CancelFlightPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BookFlightPage.resx">
+      <DependentUpon>BookFlightPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AccountHistoryPage.resx">
+      <DependentUpon>AccountHistoryPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PrintBoardingPassPage.resx">
+      <DependentUpon>PrintBoardingPassPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MarketingManagerHomePage.resx">
+      <DependentUpon>MarketingManagerHomePage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LoadEngineerHomePage.resx">
+      <DependentUpon>LoadEngineerHomePage.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="LogInPage.resx">
       <DependentUpon>LogInPage.cs</DependentUpon>

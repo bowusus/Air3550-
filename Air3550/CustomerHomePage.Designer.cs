@@ -43,7 +43,7 @@ namespace Air3550
             this.button1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button1.Font = new System.Drawing.Font("Rockwell", 10F);
-            this.button1.Location = new System.Drawing.Point(429, 197);
+            this.button1.Location = new System.Drawing.Point(442, 197);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(288, 79);
             this.button1.TabIndex = 0;
@@ -56,7 +56,7 @@ namespace Air3550
             this.button2.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button2.Font = new System.Drawing.Font("Rockwell", 10F);
-            this.button2.Location = new System.Drawing.Point(429, 308);
+            this.button2.Location = new System.Drawing.Point(442, 313);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(288, 79);
             this.button2.TabIndex = 1;
@@ -69,7 +69,7 @@ namespace Air3550
             this.button3.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.button3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button3.Font = new System.Drawing.Font("Rockwell", 9F);
-            this.button3.Location = new System.Drawing.Point(429, 428);
+            this.button3.Location = new System.Drawing.Point(442, 429);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(288, 79);
             this.button3.TabIndex = 2;
@@ -82,7 +82,7 @@ namespace Air3550
             this.button4.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.button4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button4.Font = new System.Drawing.Font("Rockwell", 10F);
-            this.button4.Location = new System.Drawing.Point(429, 545);
+            this.button4.Location = new System.Drawing.Point(442, 545);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(288, 79);
             this.button4.TabIndex = 3;
@@ -95,7 +95,7 @@ namespace Air3550
             this.button5.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.button5.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button5.Font = new System.Drawing.Font("Rockwell", 10F);
-            this.button5.Location = new System.Drawing.Point(429, 663);
+            this.button5.Location = new System.Drawing.Point(442, 661);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(288, 79);
             this.button5.TabIndex = 4;
