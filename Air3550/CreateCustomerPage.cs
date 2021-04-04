@@ -127,7 +127,7 @@ namespace Air3550
                         DialogResult result = MessageBox.Show("Your account has been successfully created. Your USERID is " + userID, "SUCCESS: New Account Created", MessageBoxButtons.OK, MessageBoxIcon.None);
                         if (result == DialogResult.OK)
                         {
-                            Console.WriteLine(customer.firstName);
+                            //Console.WriteLine(customer.firstName);
                             CustomerHomePage customerHome = new CustomerHomePage(ref customer); // create customer home page
                             int i = 0;
                             // close the log in form and the create customer form

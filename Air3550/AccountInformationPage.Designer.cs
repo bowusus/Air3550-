@@ -91,11 +91,11 @@ namespace Air3550
             // 
             this.EditAccountLabel.AutoSize = true;
             this.EditAccountLabel.Font = new System.Drawing.Font("Rockwell", 24F);
-            this.EditAccountLabel.Location = new System.Drawing.Point(153, 34);
+            this.EditAccountLabel.Location = new System.Drawing.Point(273, 34);
             this.EditAccountLabel.Name = "EditAccountLabel";
-            this.EditAccountLabel.Size = new System.Drawing.Size(857, 72);
+            this.EditAccountLabel.Size = new System.Drawing.Size(627, 72);
             this.EditAccountLabel.TabIndex = 21;
-            this.EditAccountLabel.Text = "Edit Your Information Below";
+            this.EditAccountLabel.Text = "Account Information";
             this.EditAccountLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // SaveAccountButton
@@ -198,9 +198,9 @@ namespace Air3550
             // PasswordText
             // 
             this.PasswordText.Font = new System.Drawing.Font("Rockwell", 18F);
-            this.PasswordText.Location = new System.Drawing.Point(466, 310);
+            this.PasswordText.Location = new System.Drawing.Point(583, 310);
             this.PasswordText.Name = "PasswordText";
-            this.PasswordText.Size = new System.Drawing.Size(689, 64);
+            this.PasswordText.Size = new System.Drawing.Size(572, 64);
             this.PasswordText.TabIndex = 2;
             // 
             // StreetText
@@ -473,9 +473,9 @@ namespace Air3550
             this.PasswordRestraintButton.Font = new System.Drawing.Font("Rockwell", 8F);
             this.PasswordRestraintButton.Location = new System.Drawing.Point(244, 309);
             this.PasswordRestraintButton.Name = "PasswordRestraintButton";
-            this.PasswordRestraintButton.Size = new System.Drawing.Size(203, 73);
+            this.PasswordRestraintButton.Size = new System.Drawing.Size(333, 73);
             this.PasswordRestraintButton.TabIndex = 33;
-            this.PasswordRestraintButton.Text = "*At least 6 characters long";
+            this.PasswordRestraintButton.Text = "*At least 6 characters long\r\n*Change your password here";
             this.PasswordRestraintButton.UseVisualStyleBackColor = false;
             // 
             // CreditCardNumRestraintButton

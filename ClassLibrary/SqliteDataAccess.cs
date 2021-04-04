@@ -129,6 +129,37 @@ namespace Air3550
                     return 0;
             }
         }
+        public static void UpdateUser(int tempUserID, string pass, string first, string last, string street1, string city1, string state1, string zip, string phone, string creditCardNumber1, int age1, string email1)
+        {
+            using (SQLiteConnection con = new SQLiteConnection(LoadConnectionString()))
+            // closes the connection when there is an error or it is done executing
+            {
+                con.Open(); // open the connection
+                SQLiteCommand cmd = new SQLiteCommand();
+                cmd.CommandType = CommandType.Text;
+                if (String.IsNullOrEmpty(pass))
+                    cmd.CommandText = "UPDATE customer set firstName = @firstName, lastName = @lastName, street = @street, city = @city, state = @state, zipCode = @zipCode, phoneNumber = @phoneNumber, creditCardNumber = @creditCardNumber, age = @age, email = @email where customer.userID = @userID";
+                else
+                {
+                    cmd.CommandText = "UPDATE customer set firstName = @firstName, lastName = @lastName, password = @password, street = @street, city = @city, state = @state, zipCode = @zipCode, phoneNumber = @phoneNumber, creditCardNumber = @creditCardNumber, age = @age, email = @email where customer.userID = @userID";
+                    cmd.Parameters.AddWithValue("@password", pass);
+                }
+                cmd.Parameters.AddWithValue("@userID", tempUserID);
+                cmd.Parameters.AddWithValue("@firstName", first);
+                cmd.Parameters.AddWithValue("@lastName", last);
+                cmd.Parameters.AddWithValue("@street", street1);
+                cmd.Parameters.AddWithValue("@city", city1);
+                cmd.Parameters.AddWithValue("@state", state1);
+                cmd.Parameters.AddWithValue("@zipCode", zip);
+                cmd.Parameters.AddWithValue("@phoneNumber", phone);
+                cmd.Parameters.AddWithValue("@creditCardNumber", creditCardNumber1);
+                cmd.Parameters.AddWithValue("@age", age1);
+                cmd.Parameters.AddWithValue("@email", email1);
+                cmd.Connection = con;
+                cmd.ExecuteNonQuery();
+                con.Close();
+            }
+        }
         private static string LoadConnectionString(string id = "Default")
         {
             // This method helps connect to the database

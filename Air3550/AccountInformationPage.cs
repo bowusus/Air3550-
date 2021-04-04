@@ -30,13 +30,29 @@ namespace Air3550
             StateComboBox.Text = customer.state;
             ZipText.Text = customer.zipCode;
             PhoneText.Text = customer.phoneNumber;
+            CreditCardNumText.Text = customer.creditCardNumber;
             EmailText.Text = customer.email;
             AgeComboBox.Text = customer.age.ToString();
-            //PasswordText.Text = customer.password;
         }
         private void SaveChangesButton_Click(object sender, EventArgs e)
         {
-            
+            string first = FirstNameText.Text;
+            string last = LastNameText.Text;
+            string password = PasswordText.Text;
+            string pass = null;
+            string street = StreetText.Text;
+            string city = CityText.Text;
+            string state = StateComboBox.Text;
+            string zip = ZipText.Text;
+            string phone = PhoneText.Text;
+            string creditCard = CreditCardNumText.Text;
+            string email = EmailText.Text;
+            int age = int.Parse(AgeComboBox.Text);
+
+            if (!String.IsNullOrEmpty(password))
+                pass = SystemAction.EncryptPassword(password);
+            SqliteDataAccess.UpdateUser(currCustomer.userID, pass, first, last, street, city, state, zip, phone, creditCard, age, email);
+            MessageBox.Show("Your Information has been successfully updated and saved", "Account Information Updated and Saved", MessageBoxButtons.OK, MessageBoxIcon.None);
         }
         private void ReturnHomeButton_Click(object sender, EventArgs e)
         {
@@ -73,11 +89,14 @@ namespace Air3550
         {
             Console.WriteLine(e.CloseReason);
             Console.WriteLine(ActiveControl.Text);
-            if (String.IsNullOrEmpty(ActiveControl.Text) && e.CloseReason != CloseReason.ApplicationExitCall)
+            Console.WriteLine(currCustomer.firstName);
+            if (ActiveControl.Text == currCustomer.firstName && e.CloseReason != CloseReason.ApplicationExitCall)
             {
                 DialogResult result = MessageBox.Show("Are you sure that you want to exit?\nAny changes not saved will not be updated.", "Exit Air3550", MessageBoxButtons.YesNo, MessageBoxIcon.Hand);
                 if (result == DialogResult.Yes)
-                    Application.Exit();
+                    Application.Exit(); // close the application
+                else
+                    e.Cancel = true; // cancel the closing of the form
             }
         }
         private void PhoneText_MouseClick(object sender, MouseEventArgs e)
