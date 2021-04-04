@@ -131,12 +131,16 @@ namespace Air3550
         }
         public static void UpdateUser(int tempUserID, string pass, string first, string last, string street1, string city1, string state1, string zip, string phone, string creditCardNumber1, int age1, string email1)
         {
+            // This method goes into the database, specifically the customer table, 
+            // and updates the specified customer in the table with the provided information
             using (SQLiteConnection con = new SQLiteConnection(LoadConnectionString()))
             // closes the connection when there is an error or it is done executing
             {
                 con.Open(); // open the connection
                 SQLiteCommand cmd = new SQLiteCommand();
                 cmd.CommandType = CommandType.Text;
+                // if the password is not updated then do not change the password. Everything is else is included in the update
+                // if the password is updated, include the password in the sql script and update the password (that was already hashed)
                 if (String.IsNullOrEmpty(pass))
                     cmd.CommandText = "UPDATE customer set firstName = @firstName, lastName = @lastName, street = @street, city = @city, state = @state, zipCode = @zipCode, phoneNumber = @phoneNumber, creditCardNumber = @creditCardNumber, age = @age, email = @email where customer.userID = @userID";
                 else

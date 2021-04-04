@@ -27,14 +27,11 @@ namespace ClassLibrary
             for (int i = 0; i < hash.Length; i++)
                 result.Append(hash[i].ToString("x2")); // turn the hash into a string
             return result.ToString(); // return the string and exit
-        }/*
-        public static string ValidateAccountFormat(string city, string zip, string phone, string creditCard, string email)
+        }
+        public static string ValidateAccountFormat(string password, string firstName, string lastName, string street, string city, string zip, string phone, string creditCardNum, string email)
         {
-            // This method checks the format provided for the city, zip code, phone number, credit card number, and email
-            // If any of the formats are invalid, it is added to an errorMessage string that is returned
-
-            string errorMessage = null; // used to check if invalid information was provided
-
+            // This method checks the format of the account information
+            // If any of the formats are invalid or the information is blank (besides the password), it is added to an errorMessage string that is returned
             // set the formats for the city, zip code, phone number, credit card number, and email
             Regex cityReg = new Regex(@"^[a-zA-Z]+(?:[\s-][a-zA-Z]+)*$");
             Regex zipReg = new Regex(@"^\d{5}(?:[-]\d{4})?$");
@@ -49,44 +46,41 @@ namespace ClassLibrary
             Match creditCardMatch = creditCardReg.Match(creditCardNum);
             Match emailMatch = emailReg.Match(email);
 
-            // check if any of the text or combo boxes are empty 
+            string errorMessage = null;
+
+            // check if any of the text boxes are empty 
             // and check if the password is of the correct length
             // add any of the invalid information errors to the errorMessage string
-            if (String.IsNullOrEmpty(FirstNameText.Text))
+            if (String.IsNullOrEmpty(firstName))
                 errorMessage += "FIRST NAME is Blank\n";
-            if (String.IsNullOrEmpty(LastNameText.Text))
+            if (String.IsNullOrEmpty(lastName))
                 errorMessage += "LAST NAME is Blank\n";
-            if (PasswordText.Text.Length < 6)
+            if (password.Length < 6)
                 errorMessage += "The PASSWORD needs to be 6 or more characters long\n";
-            if (String.IsNullOrEmpty(PasswordText.Text))
-                errorMessage += "PASSWORD is Blank\n";
-            if (String.IsNullOrEmpty(StreetText.Text))
+            if (String.IsNullOrEmpty(street))
                 errorMessage += "STREET is Blank\n";
-            if (String.IsNullOrEmpty(CityText.Text))
+            if (String.IsNullOrEmpty(city))
                 errorMessage += "CITY is Blank\n";
             else if (!cityMatch.Success)
                 errorMessage += "The provided CITY is invalid\n";
-            if (StateComboBox.SelectedItem == null)
-                errorMessage += "STATE is Blank\n";
-            if (String.IsNullOrEmpty(ZipText.Text))
+            if (String.IsNullOrEmpty(zip))
                 errorMessage += "ZIP CODE is Blank\n";
             else if (!zipMatch.Success)
                 errorMessage += "The provided ZIP CODE is invalid. Provide an email that is of the format: XXXXX-XXXX or XXXXX where X's are numbers\n";
-            if (String.IsNullOrEmpty(PhoneText.Text))
+            if (String.IsNullOrEmpty(phone))
                 errorMessage += "PHONE NUMBER is Blank\n";
             else if (!phoneMatch.Success)
                 errorMessage += "The provided PHONE NUMBER is invalid. Provide an email that is of the format shown on the form\n";
-            if (String.IsNullOrEmpty(CreditCardNumText.Text))
+            if (String.IsNullOrEmpty(creditCardNum))
                 errorMessage += "CREDIT CARD NUMBER is Blank\n";
             else if (!creditCardMatch.Success)
                 errorMessage += "The provided CREDIT CARD NUMBER is invalid. Provide an email that is of the format shown on the form\n";
-            if (String.IsNullOrEmpty(EmailText.Text))
+            if (String.IsNullOrEmpty(email))
                 errorMessage += "EMAIL is Blank\n";
             else if (!emailMatch.Success)
-                errorMessage += "The provided EMAIL is invalid";
-            if (AgeComboBox.SelectedItem == null)
-                errorMessage += "AGE is Blank";
-            return errorMessage
-        }*/
+                errorMessage += "The provided EMAIL is invalid\n";
+
+            return errorMessage;
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ClassLibrary;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -13,13 +14,14 @@ namespace Air3550
     public partial class CustomerHomePage : Form
     {
         // This form file is to document the actions done on the Customer Home Page specifically
-        public static ClassLibrary.CustomerModel currCustomer;
+        public static CustomerModel currCustomer; // make a local object that can be read in the current context
         public CustomerHomePage()
         {
             InitializeComponent();
         }
-        public CustomerHomePage(ref ClassLibrary.CustomerModel customer) 
+        public CustomerHomePage(ref CustomerModel customer) 
         {
+            // This constructor allows for the object to be accessed in this form
             InitializeComponent();
             currCustomer = customer;
         }
@@ -27,10 +29,9 @@ namespace Air3550
         {
             // This method transitions the displayed page from the customer home page to the 
             // account information page
-            //Console.WriteLine(currCustomer.firstName);
             AccountInformationPage accountInformation = new AccountInformationPage(ref currCustomer); // create the next form
             accountInformation.Show(); // show the next form
-            this.Hide();
+            this.Hide(); // hide the main form, so it can be accessed again
         }
     }
 }
