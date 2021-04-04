@@ -122,12 +122,13 @@ namespace Air3550
                         // create a customer object
                         CustomerModel customer = new CustomerModel(userID, pass, firstName, lastName, street, city, state, zip, phone, creditCardNum, age, email);
                         // add the customer to the database aka create account
-                        SqliteDataAccess.CreateAccount(customer.userID, customer.password, customer.firstName, customer.lastName, customer.street, customer.city, customer.state, customer.zipCode, customer.phoneNumber, customer.creditCardNumber, customer.age, customer.email);
+                        SqliteDataAccess.CreateAccount(userID, pass, firstName, lastName, street, city, state, zip, phone, creditCardNum, age, email);
                         // provide a pop up with the user's userID
                         DialogResult result = MessageBox.Show("Your account has been successfully created. Your USERID is " + userID, "SUCCESS: New Account Created", MessageBoxButtons.OK, MessageBoxIcon.None);
                         if (result == DialogResult.OK)
                         {
-                            CustomerHomePage customerHome = new CustomerHomePage(); // create customer home page
+                            Console.WriteLine(customer.firstName);
+                            CustomerHomePage customerHome = new CustomerHomePage(ref customer); // create customer home page
                             int i = 0;
                             // close the log in form and the create customer form
                             while (i < Application.OpenForms.Count) // look at what forms are open
@@ -135,9 +136,12 @@ namespace Air3550
                                 if (Application.OpenForms[i].Name != "CustomerHomePage") // close everything that isn't the customer home page
                                 {
                                     if (Application.OpenForms[i].Name == "LogInPage")
-                                        Application.OpenForms[i].IsAccessible = true; // if the current form is the log in form, make it accessible to change the main form to the home page
-                                    Application.OpenForms[i].Close();
+                                        //Application.OpenForms[i].IsAccessible = true; // if the current form is the log in form, make it accessible to change the main form to the home page
+                                        Application.OpenForms[i].Hide();
+                                    else
+                                        Application.OpenForms[i].Close();
                                 }
+                                i += 1;
                             }
                             customerHome.Show(); // show the customer home page to prevent the need to remember your userID
                         }

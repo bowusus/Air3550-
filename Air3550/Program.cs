@@ -17,12 +17,15 @@ namespace Air3550
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             LogInPage login = new LogInPage();
-            CustomerHomePage home = new CustomerHomePage();
+            //LogInPage login2 = new LogInPage();
+            //CustomerHomePage home = new CustomerHomePage();
             Application.Run(login); // start with the login page as the main page
-            if (login.IsDisposed && login.IsAccessible == true) // check if the log in form is disposed and accessible to change the main form to the customer home page
+            /*if (login1.IsDisposed && login1.IsAccessible == true) // check if the log in form is disposed and accessible to change the main form to the customer home page
                 Application.Run(home);
+            if (home.IsDisposed)
+                Application.Run(login2);*/
             //Application.Run(new AccountingManagerHomePage());
-            Application.Exit(); // exit
+            //Application.Exit(); // exit
         }
     }
 }

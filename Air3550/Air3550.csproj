@@ -61,6 +61,12 @@
     <Compile Include="AccountInformationPage.Designer.cs">
       <DependentUpon>AccountInformationPage.cs</DependentUpon>
     </Compile>
+    <Compile Include="PaymentPage.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PaymentPage.Designer.cs">
+      <DependentUpon>PaymentPage.cs</DependentUpon>
+    </Compile>
     <Compile Include="FlightManagerHomePage.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -131,6 +137,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="AccountInformationPage.resx">
       <DependentUpon>AccountInformationPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PaymentPage.resx">
+      <DependentUpon>PaymentPage.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FlightManagerHomePage.resx">
       <DependentUpon>FlightManagerHomePage.cs</DependentUpon>

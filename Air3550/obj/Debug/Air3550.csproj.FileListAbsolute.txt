@@ -26,7 +26,6 @@ C:\Users\linds\OneDrive\Documents\GitHub\Air3550\Air3550\bin\Debug\System.Data.S
 C:\Users\linds\OneDrive\Documents\GitHub\Air3550\Air3550\bin\Debug\ClassLibrary.pdb
 C:\Users\linds\OneDrive\Documents\GitHub\Air3550\Air3550\bin\Debug\System.Data.SQLite.xml
 C:\Users\linds\OneDrive\Documents\GitHub\Air3550\Air3550\obj\Debug\Air3550.csprojAssemblyReference.cache
-C:\Users\linds\OneDrive\Documents\GitHub\Air3550\Air3550\obj\Debug\Air3550.AccountInformation.resources
 C:\Users\linds\OneDrive\Documents\GitHub\Air3550\Air3550\obj\Debug\Air3550.CreateCustomerPage.resources
 C:\Users\linds\OneDrive\Documents\GitHub\Air3550\Air3550\obj\Debug\Air3550.LogInPage.resources
 C:\Users\linds\OneDrive\Documents\GitHub\Air3550\Air3550\obj\Debug\Air3550.CustomerHomePage.resources
@@ -40,3 +39,9 @@ C:\Users\linds\OneDrive\Documents\GitHub\Air3550\Air3550\obj\Debug\Air3550.Accou
 C:\Users\linds\OneDrive\Documents\GitHub\Air3550\Air3550\obj\Debug\Air3550.MarketingManagerHomePage.resources
 C:\Users\linds\OneDrive\Documents\GitHub\Air3550\Air3550\obj\Debug\Air3550.LoadEngineerHomePage.resources
 C:\Users\linds\OneDrive\Documents\GitHub\Air3550\Air3550\obj\Debug\Air3550.FlightManagerHomePage.resources
+C:\Users\linds\OneDrive\Documents\GitHub\Air3550\Air3550\obj\Debug\Air3550.AccountInformationPage.resources
+C:\Users\linds\OneDrive\Documents\GitHub\Air3550\Air3550\obj\Debug\Air3550.PaymentPage.resources
+C:\Users\linds\OneDrive\Documents\GitHub\Air3550\Air3550\obj\Debug\Air3550.CancelFlightPage.resources
+C:\Users\linds\OneDrive\Documents\GitHub\Air3550\Air3550\obj\Debug\Air3550.BookFlightPage.resources
+C:\Users\linds\OneDrive\Documents\GitHub\Air3550\Air3550\obj\Debug\Air3550.AccountHistoryPage.resources
+C:\Users\linds\OneDrive\Documents\GitHub\Air3550\Air3550\obj\Debug\Air3550.PrintBoardingPassPage.resources

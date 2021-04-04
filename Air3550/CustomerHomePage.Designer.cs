@@ -75,6 +75,7 @@ namespace Air3550
             this.button3.TabIndex = 2;
             this.button3.Text = "Account Information";
             this.button3.UseVisualStyleBackColor = false;
+            this.button3.Click += new System.EventHandler(this.AccountInformationButton_Click);
             // 
             // button4
             // 

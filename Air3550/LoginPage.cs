@@ -45,10 +45,12 @@ namespace Air3550
                     MessageBox.Show("The provided UserID is not in the system. Click below to create a new account.", "ERROR: Invalid UserID", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 else
                 {
+                    UserIDText.Text = null;
+                    PasswordText.Text = null;
                     CustomerHomePage home = new CustomerHomePage(); // create the next form
                     home.Show(); // show the next form
-                    this.Close(); // close log in form
-                    this.IsAccessible = true; // make the form accessible to reference it in program.cs to change the main form
+                    this.Hide(); // close log in form
+                    //this.IsAccessible = true; // make the form accessible to reference it in program.cs to change the main form
                 }
             }
         }

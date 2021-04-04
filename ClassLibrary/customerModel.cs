@@ -42,7 +42,6 @@ namespace ClassLibrary
 			creditCardNumber = creditCardNumber1;
 			age = age1;
 			email = email1;
-			// add points and balance?
 		}
 	}
 }

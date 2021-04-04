@@ -66,7 +66,7 @@ namespace Air3550
             this.StreetButton.Location = new System.Drawing.Point(17, 393);
             this.StreetButton.Name = "StreetButton";
             this.StreetButton.Size = new System.Drawing.Size(288, 72);
-            this.StreetButton.TabIndex = 3;
+            this.StreetButton.TabIndex = 19;
             this.StreetButton.Text = "Street Address";
             this.StreetButton.UseVisualStyleBackColor = false;
             // 
@@ -77,7 +77,7 @@ namespace Air3550
             this.FirstNameText.Location = new System.Drawing.Point(326, 130);
             this.FirstNameText.Name = "FirstNameText";
             this.FirstNameText.Size = new System.Drawing.Size(829, 64);
-            this.FirstNameText.TabIndex = 4;
+            this.FirstNameText.TabIndex = 0;
             // 
             // LastNameText
             // 
@@ -86,7 +86,7 @@ namespace Air3550
             this.LastNameText.Location = new System.Drawing.Point(326, 216);
             this.LastNameText.Name = "LastNameText";
             this.LastNameText.Size = new System.Drawing.Size(829, 64);
-            this.LastNameText.TabIndex = 5;
+            this.LastNameText.TabIndex = 1;
             // 
             // ProvideInfoLabel
             // 
@@ -96,7 +96,7 @@ namespace Air3550
             this.ProvideInfoLabel.Location = new System.Drawing.Point(106, 39);
             this.ProvideInfoLabel.Name = "ProvideInfoLabel";
             this.ProvideInfoLabel.Size = new System.Drawing.Size(971, 72);
-            this.ProvideInfoLabel.TabIndex = 7;
+            this.ProvideInfoLabel.TabIndex = 23;
             this.ProvideInfoLabel.Text = "Provide Your Information Below";
             this.ProvideInfoLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
@@ -109,7 +109,7 @@ namespace Air3550
             this.CreateAccountButton.Location = new System.Drawing.Point(879, 827);
             this.CreateAccountButton.Name = "CreateAccountButton";
             this.CreateAccountButton.Size = new System.Drawing.Size(276, 72);
-            this.CreateAccountButton.TabIndex = 8;
+            this.CreateAccountButton.TabIndex = 11;
             this.CreateAccountButton.Text = "Create Account";
             this.CreateAccountButton.UseVisualStyleBackColor = false;
             this.CreateAccountButton.Click += new System.EventHandler(this.CreateAccountButton_Click);
@@ -123,7 +123,7 @@ namespace Air3550
             this.LastNameButton.Location = new System.Drawing.Point(17, 216);
             this.LastNameButton.Name = "LastNameButton";
             this.LastNameButton.Size = new System.Drawing.Size(288, 72);
-            this.LastNameButton.TabIndex = 10;
+            this.LastNameButton.TabIndex = 13;
             this.LastNameButton.Text = "Last Name";
             this.LastNameButton.UseVisualStyleBackColor = false;
             // 
@@ -136,7 +136,7 @@ namespace Air3550
             this.FirstNameButton.Location = new System.Drawing.Point(17, 130);
             this.FirstNameButton.Name = "FirstNameButton";
             this.FirstNameButton.Size = new System.Drawing.Size(288, 72);
-            this.FirstNameButton.TabIndex = 11;
+            this.FirstNameButton.TabIndex = 12;
             this.FirstNameButton.Text = "First Name";
             this.FirstNameButton.UseVisualStyleBackColor = false;
             // 
@@ -149,7 +149,7 @@ namespace Air3550
             this.CityButton.Location = new System.Drawing.Point(17, 477);
             this.CityButton.Name = "CityButton";
             this.CityButton.Size = new System.Drawing.Size(129, 72);
-            this.CityButton.TabIndex = 12;
+            this.CityButton.TabIndex = 15;
             this.CityButton.Text = "City";
             this.CityButton.UseVisualStyleBackColor = false;
             // 
@@ -162,7 +162,7 @@ namespace Air3550
             this.StateButton.Location = new System.Drawing.Point(417, 477);
             this.StateButton.Name = "StateButton";
             this.StateButton.Size = new System.Drawing.Size(121, 72);
-            this.StateButton.TabIndex = 13;
+            this.StateButton.TabIndex = 18;
             this.StateButton.Text = "State";
             this.StateButton.UseVisualStyleBackColor = false;
             // 
@@ -175,7 +175,7 @@ namespace Air3550
             this.EmailButton.Location = new System.Drawing.Point(17, 739);
             this.EmailButton.Name = "EmailButton";
             this.EmailButton.Size = new System.Drawing.Size(288, 72);
-            this.EmailButton.TabIndex = 14;
+            this.EmailButton.TabIndex = 16;
             this.EmailButton.Text = "Email";
             this.EmailButton.UseVisualStyleBackColor = false;
             // 
@@ -188,7 +188,7 @@ namespace Air3550
             this.CreditCardNumRestraintButton.Location = new System.Drawing.Point(244, 652);
             this.CreditCardNumRestraintButton.Name = "CreditCardNumRestraintButton";
             this.CreditCardNumRestraintButton.Size = new System.Drawing.Size(340, 73);
-            this.CreditCardNumRestraintButton.TabIndex = 15;
+            this.CreditCardNumRestraintButton.TabIndex = 21;
             this.CreditCardNumRestraintButton.Text = "*Visa, Mastercard, and Discover Accepted (16 digits)\r\n";
             this.CreditCardNumRestraintButton.UseVisualStyleBackColor = false;
             // 
@@ -201,7 +201,7 @@ namespace Air3550
             this.ZipButton.Location = new System.Drawing.Point(756, 477);
             this.ZipButton.Name = "ZipButton";
             this.ZipButton.Size = new System.Drawing.Size(155, 72);
-            this.ZipButton.TabIndex = 16;
+            this.ZipButton.TabIndex = 20;
             this.ZipButton.Text = "Zip Code";
             this.ZipButton.UseVisualStyleBackColor = false;
             // 
@@ -214,7 +214,7 @@ namespace Air3550
             this.AgeButton.Location = new System.Drawing.Point(17, 827);
             this.AgeButton.Name = "AgeButton";
             this.AgeButton.Size = new System.Drawing.Size(288, 72);
-            this.AgeButton.TabIndex = 17;
+            this.AgeButton.TabIndex = 22;
             this.AgeButton.Text = "Age";
             this.AgeButton.UseVisualStyleBackColor = false;
             // 
@@ -225,7 +225,7 @@ namespace Air3550
             this.PasswordText.Location = new System.Drawing.Point(466, 304);
             this.PasswordText.Name = "PasswordText";
             this.PasswordText.Size = new System.Drawing.Size(689, 64);
-            this.PasswordText.TabIndex = 18;
+            this.PasswordText.TabIndex = 2;
             // 
             // StreetText
             // 
@@ -234,7 +234,7 @@ namespace Air3550
             this.StreetText.Location = new System.Drawing.Point(326, 395);
             this.StreetText.Name = "StreetText";
             this.StreetText.Size = new System.Drawing.Size(829, 64);
-            this.StreetText.TabIndex = 19;
+            this.StreetText.TabIndex = 3;
             // 
             // CityText
             // 
@@ -243,7 +243,7 @@ namespace Air3550
             this.CityText.Location = new System.Drawing.Point(165, 477);
             this.CityText.Name = "CityText";
             this.CityText.Size = new System.Drawing.Size(235, 64);
-            this.CityText.TabIndex = 20;
+            this.CityText.TabIndex = 4;
             // 
             // StateComboBox
             // 
@@ -305,7 +305,7 @@ namespace Air3550
             this.StateComboBox.Location = new System.Drawing.Point(560, 500);
             this.StateComboBox.Name = "StateComboBox";
             this.StateComboBox.Size = new System.Drawing.Size(180, 33);
-            this.StateComboBox.TabIndex = 26;
+            this.StateComboBox.TabIndex = 5;
             // 
             // AgeComboBox
             // 
@@ -418,7 +418,7 @@ namespace Air3550
             this.AgeComboBox.Location = new System.Drawing.Point(326, 836);
             this.AgeComboBox.Name = "AgeComboBox";
             this.AgeComboBox.Size = new System.Drawing.Size(212, 33);
-            this.AgeComboBox.TabIndex = 27;
+            this.AgeComboBox.TabIndex = 10;
             // 
             // PhoneButton
             // 
@@ -481,7 +481,7 @@ namespace Air3550
             this.PhoneText.Name = "PhoneText";
             this.PhoneText.ResetOnSpace = false;
             this.PhoneText.Size = new System.Drawing.Size(834, 64);
-            this.PhoneText.TabIndex = 34;
+            this.PhoneText.TabIndex = 7;
             this.PhoneText.MouseClick += new System.Windows.Forms.MouseEventHandler(this.PhoneText_MouseClick);
             this.PhoneText.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.PhoneText_MouseDoubleClick);
             // 
@@ -493,7 +493,7 @@ namespace Air3550
             this.CreditCardNumText.Mask = "0000-0000-0000-0000";
             this.CreditCardNumText.Name = "CreditCardNumText";
             this.CreditCardNumText.Size = new System.Drawing.Size(555, 64);
-            this.CreditCardNumText.TabIndex = 35;
+            this.CreditCardNumText.TabIndex = 8;
             this.CreditCardNumText.MouseClick += new System.Windows.Forms.MouseEventHandler(this.CreditCardNumText_MouseClick);
             // 
             // EmailText
@@ -503,7 +503,7 @@ namespace Air3550
             this.EmailText.Location = new System.Drawing.Point(326, 739);
             this.EmailText.Name = "EmailText";
             this.EmailText.Size = new System.Drawing.Size(829, 64);
-            this.EmailText.TabIndex = 36;
+            this.EmailText.TabIndex = 9;
             // 
             // ZipText
             // 
@@ -512,7 +512,7 @@ namespace Air3550
             this.ZipText.Location = new System.Drawing.Point(924, 477);
             this.ZipText.Name = "ZipText";
             this.ZipText.Size = new System.Drawing.Size(231, 64);
-            this.ZipText.TabIndex = 37;
+            this.ZipText.TabIndex = 6;
             // 
             // CreateCustomerPage
             // 

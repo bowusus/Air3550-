@@ -48,7 +48,7 @@ namespace Air3550
             this.UserIDButton.Location = new System.Drawing.Point(272, 415);
             this.UserIDButton.Name = "UserIDButton";
             this.UserIDButton.Size = new System.Drawing.Size(289, 72);
-            this.UserIDButton.TabIndex = 1;
+            this.UserIDButton.TabIndex = 4;
             this.UserIDButton.Text = "UserID";
             this.UserIDButton.UseVisualStyleBackColor = false;
             // 
@@ -61,7 +61,7 @@ namespace Air3550
             this.PasswordButton.Location = new System.Drawing.Point(272, 523);
             this.PasswordButton.Name = "PasswordButton";
             this.PasswordButton.Size = new System.Drawing.Size(289, 72);
-            this.PasswordButton.TabIndex = 3;
+            this.PasswordButton.TabIndex = 5;
             this.PasswordButton.Text = "Password";
             this.PasswordButton.UseVisualStyleBackColor = false;
             // 
@@ -72,7 +72,7 @@ namespace Air3550
             this.PasswordText.Location = new System.Drawing.Point(586, 523);
             this.PasswordText.Name = "PasswordText";
             this.PasswordText.Size = new System.Drawing.Size(289, 64);
-            this.PasswordText.TabIndex = 5;
+            this.PasswordText.TabIndex = 1;
             this.PasswordText.TextChanged += new System.EventHandler(this.PasswordText_TextChanged);
             // 
             // WelcomeLabel
@@ -108,7 +108,7 @@ namespace Air3550
             this.LogInButton.Location = new System.Drawing.Point(445, 635);
             this.LogInButton.Name = "LogInButton";
             this.LogInButton.Size = new System.Drawing.Size(253, 72);
-            this.LogInButton.TabIndex = 8;
+            this.LogInButton.TabIndex = 2;
             this.LogInButton.Text = "Log In";
             this.LogInButton.UseVisualStyleBackColor = false;
             this.LogInButton.Click += new System.EventHandler(this.LogInButton_Click);
@@ -123,7 +123,7 @@ namespace Air3550
             this.CreateCustomerAccountButton.Location = new System.Drawing.Point(328, 734);
             this.CreateCustomerAccountButton.Name = "CreateCustomerAccountButton";
             this.CreateCustomerAccountButton.Size = new System.Drawing.Size(496, 43);
-            this.CreateCustomerAccountButton.TabIndex = 9;
+            this.CreateCustomerAccountButton.TabIndex = 3;
             this.CreateCustomerAccountButton.Text = "Don\'t have an Account? Create One Here";
             this.CreateCustomerAccountButton.UseVisualStyleBackColor = false;
             this.CreateCustomerAccountButton.Click += new System.EventHandler(this.CreateCustomerAccountButton_Click);
@@ -136,7 +136,7 @@ namespace Air3550
             this.UserIDText.Mask = "000000";
             this.UserIDText.Name = "UserIDText";
             this.UserIDText.Size = new System.Drawing.Size(287, 64);
-            this.UserIDText.TabIndex = 11;
+            this.UserIDText.TabIndex = 0;
             this.UserIDText.MouseClick += new System.Windows.Forms.MouseEventHandler(this.UserIDText_MouseClick);
             this.UserIDText.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.UserIDText_MouseDoubleClick);
             // 
