@@ -55,7 +55,7 @@ namespace Air3550
             this.ZipText = new System.Windows.Forms.MaskedTextBox();
             this.PasswordRestraintButton = new System.Windows.Forms.Button();
             this.CreditCardNumRestraintButton = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
+            this.BackButton = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
@@ -490,27 +490,27 @@ namespace Air3550
             this.CreditCardNumRestraintButton.Text = "*Visa, Mastercard, and Discover Accepted (16 digits)\r\n";
             this.CreditCardNumRestraintButton.UseVisualStyleBackColor = false;
             // 
-            // button1
+            // BackButton
             // 
-            this.button1.BackColor = System.Drawing.SystemColors.HotTrack;
-            this.button1.Font = new System.Drawing.Font("Rockwell", 10F);
-            this.button1.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.button1.Location = new System.Drawing.Point(583, 833);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(276, 72);
-            this.button1.TabIndex = 34;
-            this.button1.Text = "Return Home";
-            this.button1.UseVisualStyleBackColor = false;
-            this.button1.Click += new System.EventHandler(this.ReturnHomeButton_Click);
+            this.BackButton.BackColor = System.Drawing.SystemColors.HotTrack;
+            this.BackButton.Font = new System.Drawing.Font("Rockwell", 10F);
+            this.BackButton.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.BackButton.Location = new System.Drawing.Point(583, 833);
+            this.BackButton.Name = "BackButton";
+            this.BackButton.Size = new System.Drawing.Size(276, 72);
+            this.BackButton.TabIndex = 34;
+            this.BackButton.Text = "Back";
+            this.BackButton.UseVisualStyleBackColor = false;
+            this.BackButton.Click += new System.EventHandler(this.BackButton_Click);
             // 
             // button2
             // 
             this.button2.BackColor = System.Drawing.SystemColors.HotTrack;
             this.button2.Font = new System.Drawing.Font("Rockwell", 10F);
             this.button2.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.button2.Location = new System.Drawing.Point(1023, 34);
+            this.button2.Location = new System.Drawing.Point(959, 34);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(132, 72);
+            this.button2.Size = new System.Drawing.Size(196, 72);
             this.button2.TabIndex = 35;
             this.button2.Text = "Log Out";
             this.button2.UseVisualStyleBackColor = false;
@@ -523,7 +523,7 @@ namespace Air3550
             this.BackColor = System.Drawing.SystemColors.HighlightText;
             this.ClientSize = new System.Drawing.Size(1173, 938);
             this.Controls.Add(this.button2);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.BackButton);
             this.Controls.Add(this.ZipText);
             this.Controls.Add(this.EmailText);
             this.Controls.Add(this.CreditCardNumText);
@@ -586,7 +586,7 @@ namespace Air3550
         private System.Windows.Forms.MaskedTextBox ZipText;
         private System.Windows.Forms.Button PasswordRestraintButton;
         private System.Windows.Forms.Button CreditCardNumRestraintButton;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button BackButton;
         private System.Windows.Forms.Button button2;
     }
 }

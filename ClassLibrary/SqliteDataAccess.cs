@@ -92,7 +92,7 @@ namespace Air3550
                 con.Close();
             }
         }
-        public static int GetPassword(int userID, string currPass)
+        public static int CheckPassword(int userID, string currPass)
         {
             // This method goes into the database, specifically the customer table
             // and gets the current (encrypted) password asssociated with the UserID provided
@@ -127,6 +127,65 @@ namespace Air3550
                     return 1;
                 else
                     return 0;
+            }
+        }
+        public static string GetFirstName(int userID)
+        {
+            // This method goes into the database, specifically the userID table, 
+            // and random picks one userID then deletes that record, so it is a unique id
+            // for every user. It returns this unique userID
+            using (SQLiteConnection con = new SQLiteConnection(LoadConnectionString()))
+            // closes the connection when there is an error or it is done executing
+            {
+                con.Open(); // open the connection
+                SQLiteCommand cmd = new SQLiteCommand();
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = "SELECT customer.firstName from customer where customer.userID = @userID"; // remember to delete value
+                cmd.Parameters.AddWithValue("@userID", userID);
+                cmd.Connection = con;
+                // execute the command with the reader, which only reads the database rather than updating it in anyway
+                SQLiteDataReader rdr = cmd.ExecuteReader();
+                string firstName = null; // used to return id
+
+                while (rdr.Read())
+                {
+                    firstName = rdr.GetString(0);
+                }
+                return firstName; // return user id
+            }
+        }
+        public static List<string> GetUserData(int userID)
+        {
+            // This method goes into the database, specifically the customer table, 
+            // and retrieves all of the user data and returns it as a list of strings
+            using (SQLiteConnection con = new SQLiteConnection(LoadConnectionString()))
+            // closes the connection when there is an error or it is done executing
+            {
+                con.Open(); // open the connection
+                SQLiteCommand cmd = new SQLiteCommand();
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = "SELECT * from customer where customer.userID = @userID"; // remember to delete value
+                cmd.Parameters.AddWithValue("@userID", userID);
+                cmd.Connection = con;
+                List<string> data = new List<string>();
+                // execute the command with the reader, which only reads the database rather than updating it in anyway
+                using (SQLiteDataReader reader = cmd.ExecuteReader())
+                {
+                    reader.Read();
+                    data.Add(reader[0].ToString());
+                    data.Add(reader[1].ToString());
+                    data.Add(reader[2].ToString());
+                    data.Add(reader[3].ToString());
+                    data.Add(reader[4].ToString());
+                    data.Add(reader[5].ToString());
+                    data.Add(reader[6].ToString());
+                    data.Add(reader[7].ToString());
+                    data.Add(reader[8].ToString());
+                    data.Add(reader[9].ToString());
+                    data.Add(reader[10].ToString());
+                    data.Add(reader[11].ToString());
+                }
+                return data; // return user data
             }
         }
         public static void UpdateUser(int tempUserID, string pass, string first, string last, string street1, string city1, string state1, string zip, string phone, string creditCardNumber1, int age1, string email1)

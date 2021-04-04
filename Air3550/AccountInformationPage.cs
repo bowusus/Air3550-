@@ -74,7 +74,7 @@ namespace Air3550
             // if the errorMessage created is not empty, then something went wrong
             // so a message box will be shown to the user with an explanation of all errors
             // if it is empty, then everything was inputted correctly
-            if (totalErrorMessage != null)
+            if (!String.IsNullOrEmpty(totalErrorMessage))
                 MessageBox.Show(totalErrorMessage, "ERROR: Invalid Account Information Provided", MessageBoxButtons.OK, MessageBoxIcon.Error);
             else
             {
@@ -86,7 +86,7 @@ namespace Air3550
                 MessageBox.Show("Your Information has been successfully updated and saved", "Account Information Updated and Saved", MessageBoxButtons.OK, MessageBoxIcon.None);
             }
         }
-        private void ReturnHomeButton_Click(object sender, EventArgs e)
+        private void BackButton_Click(object sender, EventArgs e)
         {
             // This methods allows the user to return to the home page
             // It's basically a back button

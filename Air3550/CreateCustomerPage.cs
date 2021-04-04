@@ -42,10 +42,12 @@ namespace Air3550
             string totalErrorMessage = null;
 
             // check if the combo boxes are empty 
-            // and check if the password is blank
+            // and check if the password is blank or less than 6 characters
             // add any of the invalid information errors to the errorMessage string
             if (String.IsNullOrEmpty(password))
                 errorMessage1 += "PASSWORD is Blank\n";
+            if (password.Length < 6)
+                errorMessage1 += "The PASSWORD needs to be 6 or more characters long\n";
             if (StateComboBox.SelectedItem == null)
                 errorMessage1 += "STATE is Blank\n";
             if (AgeComboBox.SelectedItem == null)
@@ -56,7 +58,7 @@ namespace Air3550
             // if the errorMessage created is not empty, then something went wrong
             // so a message box will be shown to the user with an explanation of all errors
             // if it is empty, then everything was inputted correctly
-            if (totalErrorMessage != null)
+            if (!String.IsNullOrEmpty(totalErrorMessage))
                 MessageBox.Show(totalErrorMessage, "ERROR: Invalid Account Information Provided", MessageBoxButtons.OK, MessageBoxIcon.Error);
             else
             {

@@ -38,7 +38,7 @@ namespace Air3550
             {
                 int userID = int.Parse(UserIDText.Text); // turn value from the UserID combo box into an int
                 string currPass = PasswordText.Text; // get the provided password
-                int passCheck = SqliteDataAccess.GetPassword(userID, currPass); // compare the provided userID and password with the database
+                int passCheck = SqliteDataAccess.CheckPassword(userID, currPass); // compare the provided userID and password with the database
                 if (passCheck == 0)
                     MessageBox.Show("This password does not match the provided UserID", "ERROR: Invalid Password", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 else if (passCheck == -1)
@@ -47,7 +47,9 @@ namespace Air3550
                 {
                     UserIDText.Text = null;
                     PasswordText.Text = null;
-                    CustomerHomePage home = new CustomerHomePage(); // create the next form
+                    List<string> userData = SqliteDataAccess.GetUserData(userID);
+                    CustomerModel customer = new CustomerModel(userID, userData[1], userData[2], userData[3], userData[4], userData[5], userData[6], userData[7], userData[8], userData[9], int.Parse(userData[10]), userData[11]);
+                    CustomerHomePage home = new CustomerHomePage(ref customer); // create the next form
                     home.Show(); // show the next form
                     this.Hide(); // close log in form
                     //this.IsAccessible = true; // make the form accessible to reference it in program.cs to change the main form

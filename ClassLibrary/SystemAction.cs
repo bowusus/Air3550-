@@ -49,14 +49,11 @@ namespace ClassLibrary
             string errorMessage = null;
 
             // check if any of the text boxes are empty 
-            // and check if the password is of the correct length
             // add any of the invalid information errors to the errorMessage string
             if (String.IsNullOrEmpty(firstName))
                 errorMessage += "FIRST NAME is Blank\n";
             if (String.IsNullOrEmpty(lastName))
                 errorMessage += "LAST NAME is Blank\n";
-            if (password.Length < 6)
-                errorMessage += "The PASSWORD needs to be 6 or more characters long\n";
             if (String.IsNullOrEmpty(street))
                 errorMessage += "STREET is Blank\n";
             if (String.IsNullOrEmpty(city))
