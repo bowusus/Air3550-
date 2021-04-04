@@ -87,9 +87,6 @@ namespace Air3550
         }
         private void AccountInformationPage_FormClosing(object sender, FormClosingEventArgs e)
         {
-            Console.WriteLine(e.CloseReason);
-            Console.WriteLine(ActiveControl.Text);
-            Console.WriteLine(currCustomer.firstName);
             if (ActiveControl.Text == currCustomer.firstName && e.CloseReason != CloseReason.ApplicationExitCall)
             {
                 DialogResult result = MessageBox.Show("Are you sure that you want to exit?\nAny changes not saved will not be updated.", "Exit Air3550", MessageBoxButtons.YesNo, MessageBoxIcon.Hand);
