@@ -34,6 +34,7 @@ namespace Air3550
             this.AccountInformationButton = new System.Windows.Forms.Button();
             this.AccountHistoryButton = new System.Windows.Forms.Button();
             this.PrintBoardingPassButton = new System.Windows.Forms.Button();
+            this.LogOutButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // BookFlightButton
@@ -104,12 +105,26 @@ namespace Air3550
             this.PrintBoardingPassButton.Text = "Print Boarding Pass";
             this.PrintBoardingPassButton.UseVisualStyleBackColor = false;
             // 
+            // LogOutButton
+            // 
+            this.LogOutButton.BackColor = System.Drawing.SystemColors.HotTrack;
+            this.LogOutButton.Font = new System.Drawing.Font("Rockwell", 10F);
+            this.LogOutButton.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.LogOutButton.Location = new System.Drawing.Point(959, 34);
+            this.LogOutButton.Name = "LogOutButton";
+            this.LogOutButton.Size = new System.Drawing.Size(196, 72);
+            this.LogOutButton.TabIndex = 36;
+            this.LogOutButton.Text = "Log Out";
+            this.LogOutButton.UseVisualStyleBackColor = false;
+            this.LogOutButton.Click += new System.EventHandler(this.LogOutButton_Click);
+            // 
             // CustomerHomePage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.HighlightText;
             this.ClientSize = new System.Drawing.Size(1173, 938);
+            this.Controls.Add(this.LogOutButton);
             this.Controls.Add(this.PrintBoardingPassButton);
             this.Controls.Add(this.AccountHistoryButton);
             this.Controls.Add(this.AccountInformationButton);
@@ -118,6 +133,7 @@ namespace Air3550
             this.Name = "CustomerHomePage";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Air3550";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.CustomerHomePage_FormClosing);
             this.ResumeLayout(false);
 
         }
@@ -129,6 +145,7 @@ namespace Air3550
         private System.Windows.Forms.Button AccountInformationButton;
         private System.Windows.Forms.Button AccountHistoryButton;
         private System.Windows.Forms.Button PrintBoardingPassButton;
+        private System.Windows.Forms.Button LogOutButton;
     }
 }
 

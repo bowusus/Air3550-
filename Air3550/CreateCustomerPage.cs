@@ -90,7 +90,6 @@ namespace Air3550
                             if (Application.OpenForms[i].Name != "CustomerHomePage") // close everything that isn't the customer home page
                             {
                                 if (Application.OpenForms[i].Name == "LogInPage")
-                                    //Application.OpenForms[i].IsAccessible = true; // if the current form is the log in form, make it accessible to change the main form to the home page
                                     Application.OpenForms[i].Hide(); // hide the log in page, so it can be referenced later
                                 else
                                     Application.OpenForms[i].Close(); // close everything else
