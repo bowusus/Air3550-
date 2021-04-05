@@ -497,6 +497,7 @@ namespace ClassLibrary
                 con.Close();
             }
         }
+
         public static List<Airport> GetAirports()
         {
             using (SQLiteConnection con = new SQLiteConnection(LoadConnectionString()))
@@ -517,6 +518,7 @@ namespace ClassLibrary
                 return airports;
             }
         }
+
         public static List<FlightModel> GetDirectFlights()
         {
             using (SQLiteConnection con = new SQLiteConnection(LoadConnectionString()))
