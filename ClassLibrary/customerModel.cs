@@ -26,7 +26,6 @@ namespace ClassLibrary
 		public string creditCardNumber { get; set; }
 		public int age { get; set; }
 		public string email { get; set; }
-
 		// customer constructor
 		public CustomerModel(int tempUserID, string pass, string first, string last, string street1, string city1, string state1, string zip, string phone, string creditCardNumber1, int age1, string email1)
 		{

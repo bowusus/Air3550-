@@ -45,9 +45,10 @@ namespace Air3550
                     MessageBox.Show("The provided UserID is not in the system. Click below to create a new account.", "ERROR: Invalid UserID", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 else
                 {
-                    UserIDText.Text = null;
+                    // resets textboxes to allow for multiple log ins and prevents anyone else from seeing the previous log in information
+                    UserIDText.Text = null; 
                     PasswordText.Text = null;
-                    List<string> userData = SqliteDataAccess.GetUserData(userID);
+                    List<string> userData = SqliteDataAccess.GetUserData(userID); 
                     CustomerModel customer = new CustomerModel(userID, userData[1], userData[2], userData[3], userData[4], userData[5], userData[6], userData[7], userData[8], userData[9], int.Parse(userData[10]), userData[11]);
                     CustomerHomePage home = new CustomerHomePage(ref customer); // create the next form
                     home.Show(); // show the next form

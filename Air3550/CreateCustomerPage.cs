@@ -14,7 +14,7 @@ namespace Air3550
 {
     public partial class CreateCustomerPage : Form
     {
-        // This form file is to document the actions done on the Log In Page specifically
+        // This form file is to document the actions done on the Create Customer Page specifically
         public CreateCustomerPage()
         {
             InitializeComponent();

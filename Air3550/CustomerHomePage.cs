@@ -25,6 +25,14 @@ namespace Air3550
             InitializeComponent();
             currCustomer = customer;
         }
+        private void CancelFlightButton_Click(object sender, EventArgs e)
+        {
+            // This method transitions the displayed page from the customer home page to the 
+            // account information page
+            CancelFlightPage cancelFlight = new CancelFlightPage(ref currCustomer); // create the next form
+            cancelFlight.Show(); // show the next form
+            this.Hide(); // hide the main form, so it can be accessed again
+        }
         public void AccountInformationButton_Click(object sender, EventArgs e)
         {
             // This method transitions the displayed page from the customer home page to the 

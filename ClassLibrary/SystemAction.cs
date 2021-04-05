@@ -79,5 +79,26 @@ namespace ClassLibrary
 
             return errorMessage;
         }
+        public static List<FlightModel> GetCurrentFlights(int userID)
+        {
+            // This method creates a list of Flights that allows this page to access that flights details without going back to the database
+            // After every cancellation, the current flights are repopulated and updates the datagridview with the most current information
+            // A list of the current flights are returned
+            List<int> flightIDs;
+            List<FlightModel> flights = new List<FlightModel>();
+            flightIDs = SqliteDataAccess.GetCurrentFlightIDs(userID); // get the flight ids of the customer's current flights 
+            // for each of these ids, get the flight information (origin, destination, etc.)
+            // Then get the name of the airports
+            // Finally create a FlightModel object with that information and add it to a list of booked flights to be displayed to the customer
+            foreach (int id in flightIDs)
+            {
+                List<string> flightsBookedData = SqliteDataAccess.GetFlightData(id);
+                string originName = SqliteDataAccess.GetFlightNames(flightsBookedData[1]);
+                string destinationName = SqliteDataAccess.GetFlightNames(flightsBookedData[2]);
+                FlightModel flight = new FlightModel(int.Parse(flightsBookedData[0]), flightsBookedData[1], originName, flightsBookedData[2], destinationName, int.Parse(flightsBookedData[3]), DateTime.Parse(flightsBookedData[4]), Convert.ToDouble(flightsBookedData[5]), flightsBookedData[6], DateTime.Parse(flightsBookedData[7]), Convert.ToDouble(flightsBookedData[8]), int.Parse(flightsBookedData[9]), int.Parse(flightsBookedData[10]), Convert.ToDouble(flightsBookedData[11]));
+                flights.Add(flight);
+            }
+            return flights;
+        }
     }
 }

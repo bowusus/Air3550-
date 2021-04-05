@@ -13,7 +13,7 @@ namespace Air3550
 {
     public partial class AccountInformationPage : Form
     {
-        // This form file is to document the actions done on the Log In Page specifically
+        // This form file is to document the actions done on the Account Information Page specifically
         public static CustomerModel currCustomer; // make a local object that can be read in the current context
         public AccountInformationPage()
         {
@@ -89,7 +89,6 @@ namespace Air3550
         private void BackButton_Click(object sender, EventArgs e)
         {
             // This methods allows the user to return to the home page
-            // It's basically a back button
             // The current form will close
             // The home page will open
             DialogResult result = MessageBox.Show("Are you sure that you want to return home?\nAny changes not saved will not be updated.", "Account Information", MessageBoxButtons.YesNo, MessageBoxIcon.Hand);

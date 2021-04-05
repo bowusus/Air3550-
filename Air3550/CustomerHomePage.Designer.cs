@@ -29,79 +29,80 @@ namespace Air3550
         /// </summary>
         private void InitializeComponent()
         {
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
-            this.button4 = new System.Windows.Forms.Button();
-            this.button5 = new System.Windows.Forms.Button();
+            this.BookFlightButton = new System.Windows.Forms.Button();
+            this.CancelFlightButton = new System.Windows.Forms.Button();
+            this.AccountInformationButton = new System.Windows.Forms.Button();
+            this.AccountHistoryButton = new System.Windows.Forms.Button();
+            this.PrintBoardingPassButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
-            // button1
+            // BookFlightButton
             // 
-            this.button1.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.button1.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
-            this.button1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button1.Font = new System.Drawing.Font("Rockwell", 10F);
-            this.button1.Location = new System.Drawing.Point(442, 197);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(288, 79);
-            this.button1.TabIndex = 0;
-            this.button1.Text = "Book Flight";
-            this.button1.UseVisualStyleBackColor = false;
+            this.BookFlightButton.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.BookFlightButton.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
+            this.BookFlightButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.BookFlightButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.BookFlightButton.Font = new System.Drawing.Font("Rockwell", 10F);
+            this.BookFlightButton.Location = new System.Drawing.Point(442, 197);
+            this.BookFlightButton.Name = "BookFlightButton";
+            this.BookFlightButton.Size = new System.Drawing.Size(288, 79);
+            this.BookFlightButton.TabIndex = 0;
+            this.BookFlightButton.Text = "Book Flight";
+            this.BookFlightButton.UseVisualStyleBackColor = false;
             // 
-            // button2
+            // CancelFlightButton
             // 
-            this.button2.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.button2.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
-            this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button2.Font = new System.Drawing.Font("Rockwell", 10F);
-            this.button2.Location = new System.Drawing.Point(442, 313);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(288, 79);
-            this.button2.TabIndex = 1;
-            this.button2.Text = "Cancel Flight";
-            this.button2.UseVisualStyleBackColor = false;
+            this.CancelFlightButton.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.CancelFlightButton.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
+            this.CancelFlightButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.CancelFlightButton.Font = new System.Drawing.Font("Rockwell", 10F);
+            this.CancelFlightButton.Location = new System.Drawing.Point(442, 313);
+            this.CancelFlightButton.Name = "CancelFlightButton";
+            this.CancelFlightButton.Size = new System.Drawing.Size(288, 79);
+            this.CancelFlightButton.TabIndex = 1;
+            this.CancelFlightButton.Text = "Cancel Flight";
+            this.CancelFlightButton.UseVisualStyleBackColor = false;
+            this.CancelFlightButton.Click += new System.EventHandler(this.CancelFlightButton_Click);
             // 
-            // button3
+            // AccountInformationButton
             // 
-            this.button3.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.button3.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
-            this.button3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button3.Font = new System.Drawing.Font("Rockwell", 9F);
-            this.button3.Location = new System.Drawing.Point(442, 429);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(288, 79);
-            this.button3.TabIndex = 2;
-            this.button3.Text = "Account Information";
-            this.button3.UseVisualStyleBackColor = false;
-            this.button3.Click += new System.EventHandler(this.AccountInformationButton_Click);
+            this.AccountInformationButton.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.AccountInformationButton.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
+            this.AccountInformationButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.AccountInformationButton.Font = new System.Drawing.Font("Rockwell", 9F);
+            this.AccountInformationButton.Location = new System.Drawing.Point(442, 429);
+            this.AccountInformationButton.Name = "AccountInformationButton";
+            this.AccountInformationButton.Size = new System.Drawing.Size(288, 79);
+            this.AccountInformationButton.TabIndex = 2;
+            this.AccountInformationButton.Text = "Account Information";
+            this.AccountInformationButton.UseVisualStyleBackColor = false;
+            this.AccountInformationButton.Click += new System.EventHandler(this.AccountInformationButton_Click);
             // 
-            // button4
+            // AccountHistoryButton
             // 
-            this.button4.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.button4.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
-            this.button4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button4.Font = new System.Drawing.Font("Rockwell", 10F);
-            this.button4.Location = new System.Drawing.Point(442, 545);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(288, 79);
-            this.button4.TabIndex = 3;
-            this.button4.Text = "Account History";
-            this.button4.UseVisualStyleBackColor = false;
+            this.AccountHistoryButton.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.AccountHistoryButton.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
+            this.AccountHistoryButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.AccountHistoryButton.Font = new System.Drawing.Font("Rockwell", 10F);
+            this.AccountHistoryButton.Location = new System.Drawing.Point(442, 545);
+            this.AccountHistoryButton.Name = "AccountHistoryButton";
+            this.AccountHistoryButton.Size = new System.Drawing.Size(288, 79);
+            this.AccountHistoryButton.TabIndex = 3;
+            this.AccountHistoryButton.Text = "Account History";
+            this.AccountHistoryButton.UseVisualStyleBackColor = false;
             // 
-            // button5
+            // PrintBoardingPassButton
             // 
-            this.button5.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.button5.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
-            this.button5.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button5.Font = new System.Drawing.Font("Rockwell", 10F);
-            this.button5.Location = new System.Drawing.Point(442, 661);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(288, 79);
-            this.button5.TabIndex = 4;
-            this.button5.Text = "Print Boarding Pass";
-            this.button5.UseVisualStyleBackColor = false;
+            this.PrintBoardingPassButton.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.PrintBoardingPassButton.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
+            this.PrintBoardingPassButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.PrintBoardingPassButton.Font = new System.Drawing.Font("Rockwell", 10F);
+            this.PrintBoardingPassButton.Location = new System.Drawing.Point(442, 661);
+            this.PrintBoardingPassButton.Name = "PrintBoardingPassButton";
+            this.PrintBoardingPassButton.Size = new System.Drawing.Size(288, 79);
+            this.PrintBoardingPassButton.TabIndex = 4;
+            this.PrintBoardingPassButton.Text = "Print Boarding Pass";
+            this.PrintBoardingPassButton.UseVisualStyleBackColor = false;
             // 
             // CustomerHomePage
             // 
@@ -109,11 +110,11 @@ namespace Air3550
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.HighlightText;
             this.ClientSize = new System.Drawing.Size(1173, 938);
-            this.Controls.Add(this.button5);
-            this.Controls.Add(this.button4);
-            this.Controls.Add(this.button3);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.PrintBoardingPassButton);
+            this.Controls.Add(this.AccountHistoryButton);
+            this.Controls.Add(this.AccountInformationButton);
+            this.Controls.Add(this.CancelFlightButton);
+            this.Controls.Add(this.BookFlightButton);
             this.Name = "CustomerHomePage";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Air3550";
@@ -123,11 +124,11 @@ namespace Air3550
 
         #endregion
 
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.Button button4;
-        private System.Windows.Forms.Button button5;
+        private System.Windows.Forms.Button BookFlightButton;
+        private System.Windows.Forms.Button CancelFlightButton;
+        private System.Windows.Forms.Button AccountInformationButton;
+        private System.Windows.Forms.Button AccountHistoryButton;
+        private System.Windows.Forms.Button PrintBoardingPassButton;
     }
 }
 
