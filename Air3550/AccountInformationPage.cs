@@ -15,9 +15,6 @@ namespace Air3550
     {
         // This form file is to document the actions done on the Account Information Page specifically
         public static CustomerModel currCustomer; // make a local object that can be read in the current context
-        public static bool saveChangesButtonClicked = false;
-        public static bool logOutButtonClicked = false;
-        public static bool backButtonClicked = false;
         public AccountInformationPage()
         {
             InitializeComponent();
@@ -28,9 +25,6 @@ namespace Air3550
             InitializeComponent();
             // get the current customer and pass that information to the textboxes
             currCustomer = customer;
-            saveChangesButtonClicked = false;
-            logOutButtonClicked = false;
-            backButtonClicked = false;
             FirstNameText.Text = customer.firstName;
             LastNameText.Text = customer.lastName;
             StreetText.Text = customer.street;
@@ -90,7 +84,6 @@ namespace Air3550
                     pass = SystemAction.EncryptPassword(password);
                 SqliteDataAccess.UpdateUser(currCustomer.userID, pass, first, last, street, city, state, zip, phone, creditCard, age, email); // update the database
                 MessageBox.Show("Your Information has been successfully updated and saved", "Account Information Updated and Saved", MessageBoxButtons.OK, MessageBoxIcon.None);
-                saveChangesButtonClicked = true;
             }
         }
         private void BackButton_Click(object sender, EventArgs e)
@@ -101,7 +94,6 @@ namespace Air3550
             DialogResult result = MessageBox.Show("Are you sure that you want to return home?\nAny changes not saved will not be updated.", "Account Information", MessageBoxButtons.YesNo, MessageBoxIcon.Hand);
             if (result == DialogResult.Yes)
             {
-                backButtonClicked = true;
                 this.Close(); // close the current form if the customer confirms that they would like to log out
                 int i = 0;
                 // close the log in form and the create customer form
@@ -122,22 +114,15 @@ namespace Air3550
             DialogResult result = MessageBox.Show("Are you sure that you want to log out?\nAny changes not saved will not be updated.", "Log Out", MessageBoxButtons.YesNo, MessageBoxIcon.Hand);
             if (result == DialogResult.Yes)
             {
-                logOutButtonClicked = true; // used to access red x later
-                CustomerHomePage.logOutButtonClicked = false;
                 int i = 0;
-                int indexAccount = 0;
-                int indexLogIn = 0;
-                this.Close();
                 while (i < Application.OpenForms.Count) // look at what forms are open
                 {
-                    if (Application.OpenForms[i].Name != "LogInPage") // get location of other form
-                        indexAccount = i;
+                    if (Application.OpenForms[i].Name != "LogInPage") 
+                        Application.OpenForms[i].Close(); // close everything that isn't the log in page
                     else
-                        indexLogIn = i;
-                    i += 1;
+                        i += 1;
                 }
-                Application.OpenForms[indexAccount].Close(); // close other form open
-                Application.OpenForms[indexLogIn].Show(); // show the log in page that was hiding
+                Application.OpenForms[0].Show(); // show the log in page that was hiding
             }
         }
         private void AccountInformationPage_FormClosing(object sender, FormClosingEventArgs e)
@@ -145,14 +130,14 @@ namespace Air3550
             // This method allows the red X to be used to end the application
             // If the red X is clicked, a message will make sure the customer wants to leave
             // then the application ends or the customer cancels
-            /*if (CustomerHomePage.logOutButtonClicked == false && AccountInformationPage.backButtonClicked == false && AccountInformationPage.logOutButtonClicked == false && AccountInformationPage.saveChangesButtonClicked == false && e.CloseReason != CloseReason.ApplicationExitCall)
+            if (ActiveControl.Text == currCustomer.firstName && e.CloseReason != CloseReason.ApplicationExitCall)
             {
-                DialogResult result = MessageBox.Show("Are you sure that you want to exit?\nAny changes not saved will not be updated.", "Exit Air3550 1", MessageBoxButtons.YesNo, MessageBoxIcon.Hand);
+                DialogResult result = MessageBox.Show("Are you sure that you want to exit?\nAny changes not saved will not be updated.", "Exit Air3550", MessageBoxButtons.YesNo, MessageBoxIcon.Hand);
                 if (result == DialogResult.Yes)
                     Application.Exit(); // close the application
                 else
                     e.Cancel = true; // cancel the closing of the form
-            }*/
+            }
         }
         private void PhoneText_MouseClick(object sender, MouseEventArgs e)
         {

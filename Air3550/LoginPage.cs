@@ -48,12 +48,12 @@ namespace Air3550
                     // resets textboxes to allow for multiple log ins and prevents anyone else from seeing the previous log in information
                     UserIDText.Text = null; 
                     PasswordText.Text = null;
-                    UserIDText.Select(); // used to put cursor back in userID box
                     List<string> userData = SqliteDataAccess.GetUserData(userID); 
                     CustomerModel customer = new CustomerModel(userID, userData[1], userData[2], userData[3], userData[4], userData[5], userData[6], userData[7], userData[8], userData[9], int.Parse(userData[10]), userData[11]);
                     CustomerHomePage home = new CustomerHomePage(ref customer); // create the next form
                     home.Show(); // show the next form
                     this.Hide(); // close log in form
+                    //this.IsAccessible = true; // make the form accessible to reference it in program.cs to change the main form
                 }
             }
         }
@@ -73,6 +73,11 @@ namespace Air3550
         {
             // This method was required to get the combo box cursor to start on the left side automatically
             UserIDText.SelectionStart = 0;
+        }
+        private void PasswordText_TextChanged(object sender, EventArgs e)
+        {
+            // This method was required to show the password as asterisks when the user types
+            PasswordText.PasswordChar = '*';
         }
     }
 }

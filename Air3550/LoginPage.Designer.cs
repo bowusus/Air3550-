@@ -71,9 +71,9 @@ namespace Air3550
             this.PasswordText.Font = new System.Drawing.Font("Rockwell", 18F);
             this.PasswordText.Location = new System.Drawing.Point(586, 523);
             this.PasswordText.Name = "PasswordText";
-            this.PasswordText.PasswordChar = '*';
             this.PasswordText.Size = new System.Drawing.Size(289, 64);
             this.PasswordText.TabIndex = 1;
+            this.PasswordText.TextChanged += new System.EventHandler(this.PasswordText_TextChanged);
             // 
             // WelcomeLabel
             // 
@@ -142,7 +142,6 @@ namespace Air3550
             // 
             // LogInPage
             // 
-            this.AcceptButton = this.LogInButton;
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.HighlightText;
