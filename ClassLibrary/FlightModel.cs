@@ -46,12 +46,5 @@ namespace ClassLibrary
 			numberOfVacantSeats = seats;
 			flightIncome = income;
 		}
-
-		public FlightModel(string originCode, string destinationCode, int distance)
-        {
-			this.originCode = originCode;
-			this.destinationCode = destinationCode;
-			this.distance = distance;
-        }
 	}
 }
