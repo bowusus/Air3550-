@@ -19,5 +19,9 @@ namespace Air3550
             InitializeComponent();
         }
 
+        private void LoadEngineerHomePage_Load(object sender, EventArgs e)
+        {
+            flightGrid.DataSource = SqliteDataAccess.GetMasterFlightDT();
+        }
     }
 }

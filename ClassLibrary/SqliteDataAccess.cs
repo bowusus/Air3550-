@@ -538,6 +538,27 @@ namespace ClassLibrary
                 return directFlights;
             }
         }
+
+        public static DataTable GetMasterFlightDT()
+        {
+            using (SQLiteConnection con = new SQLiteConnection(LoadConnectionString()))
+            // closes the connection when there is an error or it is done executing
+            {
+                con.Open(); // open the connection
+                SQLiteCommand cmd = new SQLiteCommand();
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = "SELECT * FROM masterFlight";
+                cmd.Connection = con;
+                SQLiteDataReader rdr = cmd.ExecuteReader();
+
+                DataTable dt = new DataTable();
+                dt.Load(rdr);
+                rdr.Close();
+                con.Close();
+                return dt;
+            }
+        }
+
         private static string LoadConnectionString(string id = "Default")
         {
             // This method helps connect to the database

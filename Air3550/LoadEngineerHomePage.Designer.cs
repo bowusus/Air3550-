@@ -29,17 +29,20 @@ namespace Air3550
         /// </summary>
         private void InitializeComponent()
         {
-            this.listView1 = new System.Windows.Forms.ListView();
+            this.flightGrid = new System.Windows.Forms.DataGridView();
+            ((System.ComponentModel.ISupportInitialize)(this.flightGrid)).BeginInit();
             this.SuspendLayout();
             // 
-            // listView1
+            // flightGrid
             // 
-            this.listView1.HideSelection = false;
-            this.listView1.Location = new System.Drawing.Point(12, 12);
-            this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(428, 493);
-            this.listView1.TabIndex = 0;
-            this.listView1.UseCompatibleStateImageBehavior = false;
+            this.flightGrid.AllowUserToAddRows = false;
+            this.flightGrid.AllowUserToDeleteRows = false;
+            this.flightGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.flightGrid.Location = new System.Drawing.Point(12, 12);
+            this.flightGrid.Name = "flightGrid";
+            this.flightGrid.ReadOnly = true;
+            this.flightGrid.Size = new System.Drawing.Size(533, 493);
+            this.flightGrid.TabIndex = 0;
             // 
             // LoadEngineerHomePage
             // 
@@ -47,18 +50,20 @@ namespace Air3550
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.HighlightText;
             this.ClientSize = new System.Drawing.Size(696, 517);
-            this.Controls.Add(this.listView1);
+            this.Controls.Add(this.flightGrid);
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "LoadEngineerHomePage";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Air3550";
+            this.Load += new System.EventHandler(this.LoadEngineerHomePage_Load);
+            ((System.ComponentModel.ISupportInitialize)(this.flightGrid)).EndInit();
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private System.Windows.Forms.ListView listView1;
+        private System.Windows.Forms.DataGridView flightGrid;
     }
 }
 
