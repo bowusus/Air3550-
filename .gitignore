@@ -120,6 +120,8 @@ AppPackages/
 
 # Others
 *.Cache
+*.cache
+*.suo
 ClientBin/
 [Ss]tyle[Cc]op.*
 ~$*
