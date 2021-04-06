@@ -497,6 +497,47 @@ namespace ClassLibrary
                 con.Close();
             }
         }
+
+        public static List<Airport> GetAirports()
+        {
+            using (SQLiteConnection con = new SQLiteConnection(LoadConnectionString()))
+            // closes the connection when there is an error or it is done executing
+            {
+                List<Airport> airports = new List<Airport>();
+                con.Open(); // open the connection
+                SQLiteCommand cmd = new SQLiteCommand();
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = "SELECT airportCode, airportName FROM airport";
+                cmd.Connection = con;
+                SQLiteDataReader rdr = cmd.ExecuteReader();
+
+                while (rdr.Read())
+                {
+                    airports.Add(new Airport(rdr.GetString(0), rdr.GetString(1)));
+                }
+                return airports;
+            }
+        }
+        public static List<FlightModel> GetDirectFlights()
+        {
+            using (SQLiteConnection con = new SQLiteConnection(LoadConnectionString()))
+            // closes the connection when there is an error or it is done executing
+            {
+                List<FlightModel> directFlights = new List<FlightModel>();
+                con.Open(); // open the connection
+                SQLiteCommand cmd = new SQLiteCommand();
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = "SELECT originCode_fk, destinationCode_fk, distance FROM directFlight";
+                cmd.Connection = con;
+                SQLiteDataReader rdr = cmd.ExecuteReader();
+
+                while (rdr.Read())
+                {
+                    directFlights.Add(new FlightModel(rdr.GetString(0), rdr.GetString(1), rdr.GetInt32(2)));
+                }
+                return directFlights;
+            }
+        }
         private static string LoadConnectionString(string id = "Default")
         {
             // This method helps connect to the database
