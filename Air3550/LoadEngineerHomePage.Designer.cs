@@ -29,14 +29,26 @@ namespace Air3550
         /// </summary>
         private void InitializeComponent()
         {
+            this.listView1 = new System.Windows.Forms.ListView();
             this.SuspendLayout();
+            // 
+            // listView1
+            // 
+            this.listView1.HideSelection = false;
+            this.listView1.Location = new System.Drawing.Point(12, 12);
+            this.listView1.Name = "listView1";
+            this.listView1.Size = new System.Drawing.Size(428, 493);
+            this.listView1.TabIndex = 0;
+            this.listView1.UseCompatibleStateImageBehavior = false;
             // 
             // LoadEngineerHomePage
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.HighlightText;
-            this.ClientSize = new System.Drawing.Size(1173, 938);
+            this.ClientSize = new System.Drawing.Size(696, 517);
+            this.Controls.Add(this.listView1);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "LoadEngineerHomePage";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Air3550";
@@ -45,6 +57,8 @@ namespace Air3550
         }
 
         #endregion
+
+        private System.Windows.Forms.ListView listView1;
     }
 }
 
