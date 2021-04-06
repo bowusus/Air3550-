@@ -559,6 +559,27 @@ namespace ClassLibrary
             }
         }
 
+        public static List<String> GetAirportCodes()
+        {
+            using (SQLiteConnection con = new SQLiteConnection(LoadConnectionString()))
+            // closes the connection when there is an error or it is done executing
+            {
+                List<string> airportCodes = new List<string>();
+                con.Open(); // open the connection
+                SQLiteCommand cmd = new SQLiteCommand();
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = "SELECT airportCode FROM airport";
+                cmd.Connection = con;
+                SQLiteDataReader rdr = cmd.ExecuteReader();
+
+                while (rdr.Read())
+                {
+                    airportCodes.Add(rdr.GetString(0));
+                }
+                return airportCodes;
+            }
+        }
+
         private static string LoadConnectionString(string id = "Default")
         {
             // This method helps connect to the database

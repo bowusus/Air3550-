@@ -30,6 +30,7 @@ namespace Air3550
         private void InitializeComponent()
         {
             this.flightGrid = new System.Windows.Forms.DataGridView();
+            this.addFlight = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.flightGrid)).BeginInit();
             this.SuspendLayout();
             // 
@@ -44,12 +45,23 @@ namespace Air3550
             this.flightGrid.Size = new System.Drawing.Size(533, 493);
             this.flightGrid.TabIndex = 0;
             // 
+            // addFlight
+            // 
+            this.addFlight.Location = new System.Drawing.Point(551, 44);
+            this.addFlight.Name = "addFlight";
+            this.addFlight.Size = new System.Drawing.Size(133, 47);
+            this.addFlight.TabIndex = 1;
+            this.addFlight.Text = "Add Flight";
+            this.addFlight.UseVisualStyleBackColor = true;
+            this.addFlight.Click += new System.EventHandler(this.AddFlight_Click);
+            // 
             // LoadEngineerHomePage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.HighlightText;
             this.ClientSize = new System.Drawing.Size(696, 517);
+            this.Controls.Add(this.addFlight);
             this.Controls.Add(this.flightGrid);
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "LoadEngineerHomePage";
@@ -64,6 +76,7 @@ namespace Air3550
         #endregion
 
         private System.Windows.Forms.DataGridView flightGrid;
+        private System.Windows.Forms.Button addFlight;
     }
 }
 
