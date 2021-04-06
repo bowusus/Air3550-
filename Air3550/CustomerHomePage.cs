@@ -26,11 +26,20 @@ namespace Air3550
             InitializeComponent();
             currCustomer = customer;
             logOutButtonClicked = false;
-    }
+        }
+        private void BookFlightButton_Click(object sender, EventArgs e)
+        {
+            // This method transitions the displayed page from the customer home page to the 
+            // cancel flight page
+            BookFlightPage bookFlight = new BookFlightPage(ref currCustomer); // create the next form
+            bookFlight.Show(); // show the next form
+            logOutButtonClicked = false;
+            this.Hide(); // hide the main form, so it can be accessed again
+        }
         private void CancelFlightButton_Click(object sender, EventArgs e)
         {
             // This method transitions the displayed page from the customer home page to the 
-            // account information page
+            // cancel flight page
             CancelFlightPage cancelFlight = new CancelFlightPage(ref currCustomer); // create the next form
             cancelFlight.Show(); // show the next form
             logOutButtonClicked = false;
@@ -42,6 +51,24 @@ namespace Air3550
             // account information page
             AccountInformationPage accountInformation = new AccountInformationPage(ref currCustomer); // create the next form
             accountInformation.Show(); // show the next form
+            logOutButtonClicked = false;
+            this.Hide(); // hide the main form, so it can be accessed again
+        }
+        private void AccountHistoryButton_Click(object sender, EventArgs e)
+        {
+            // This method transitions the displayed page from the customer home page to the 
+            // account history page
+            AccountHistoryPage accountHistory = new AccountHistoryPage(ref currCustomer); // create the next form
+            accountHistory.Show(); // show the next form
+            logOutButtonClicked = false;
+            this.Hide(); // hide the main form, so it can be accessed again
+        }
+        private void PrintBoardingPassButton_Click(object sender, EventArgs e)
+        {
+            // This method transitions the displayed page from the customer home page to the 
+            // print boarding pass page
+            PrintBoardingPassPage printBoardingPass = new PrintBoardingPassPage(ref currCustomer); // create the next form
+            printBoardingPass.Show(); // show the next form
             logOutButtonClicked = false;
             this.Hide(); // hide the main form, so it can be accessed again
         }

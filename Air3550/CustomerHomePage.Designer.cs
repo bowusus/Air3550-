@@ -50,6 +50,7 @@ namespace Air3550
             this.BookFlightButton.TabIndex = 0;
             this.BookFlightButton.Text = "Book Flight";
             this.BookFlightButton.UseVisualStyleBackColor = false;
+            this.BookFlightButton.Click += new System.EventHandler(this.BookFlightButton_Click);
             // 
             // CancelFlightButton
             // 
@@ -91,6 +92,7 @@ namespace Air3550
             this.AccountHistoryButton.TabIndex = 3;
             this.AccountHistoryButton.Text = "Account History";
             this.AccountHistoryButton.UseVisualStyleBackColor = false;
+            this.AccountHistoryButton.Click += new System.EventHandler(this.AccountHistoryButton_Click);
             // 
             // PrintBoardingPassButton
             // 
@@ -104,6 +106,7 @@ namespace Air3550
             this.PrintBoardingPassButton.TabIndex = 4;
             this.PrintBoardingPassButton.Text = "Print Boarding Pass";
             this.PrintBoardingPassButton.UseVisualStyleBackColor = false;
+            this.PrintBoardingPassButton.Click += new System.EventHandler(this.PrintBoardingPassButton_Click);
             // 
             // LogOutButton
             // 
