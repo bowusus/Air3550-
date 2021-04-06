@@ -516,6 +516,7 @@ namespace Air3550
             // 
             // CreateCustomerPage
             // 
+            this.AcceptButton = this.CreateAccountButton;
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.HighlightText;
