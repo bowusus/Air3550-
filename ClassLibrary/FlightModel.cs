@@ -47,11 +47,19 @@ namespace ClassLibrary
 			flightIncome = income;
 		}
 
-		public FlightModel(string originCode, string destinationCode, int distance)
+		public FlightModel(string originCode, string destinationCode, int distance, DateTime departureDateTime)
         {
 			this.originCode = originCode;
 			this.destinationCode = destinationCode;
 			this.distance = distance;
-        }
+			this.departureDateTime = departureDateTime;
+		}
+
+		public FlightModel(string originCode, string destinationCode, int distance)
+		{
+			this.originCode = originCode;
+			this.destinationCode = destinationCode;
+			this.distance = distance;
+		}
 	}
 }

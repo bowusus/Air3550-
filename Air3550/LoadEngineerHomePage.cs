@@ -13,10 +13,22 @@ namespace Air3550
 {
     public partial class LoadEngineerHomePage : Form
     {
-        // This form file is to document the actions done on the Customer Home Page specifically
+        private static LoadEngineerHomePage instance;
         public LoadEngineerHomePage()
         {
             InitializeComponent();
+        }
+
+        public static LoadEngineerHomePage GetInstance
+        {
+            get
+            {
+                if (instance == null || instance.IsDisposed)
+                {
+                    instance = new LoadEngineerHomePage();
+                }
+                return instance;
+            }
         }
 
         private void LoadEngineerHomePage_Load(object sender, EventArgs e)

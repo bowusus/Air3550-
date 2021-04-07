@@ -30,12 +30,13 @@ namespace Air3550
         private void InitializeComponent()
         {
             this.routesGridView = new System.Windows.Forms.DataGridView();
+            this.submitButton = new System.Windows.Forms.Button();
+            this.pathID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.numberOfLayoversColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.originColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.layoverOneColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.layoverTwoColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.destinationColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.submitButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.routesGridView)).BeginInit();
             this.SuspendLayout();
             // 
@@ -45,6 +46,7 @@ namespace Air3550
             this.routesGridView.AllowUserToDeleteRows = false;
             this.routesGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.routesGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.pathID,
             this.numberOfLayoversColumn,
             this.originColumn,
             this.layoverOneColumn,
@@ -55,8 +57,24 @@ namespace Air3550
             this.routesGridView.Name = "routesGridView";
             this.routesGridView.ReadOnly = true;
             this.routesGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.routesGridView.Size = new System.Drawing.Size(556, 492);
+            this.routesGridView.Size = new System.Drawing.Size(621, 492);
             this.routesGridView.TabIndex = 0;
+            // 
+            // submitButton
+            // 
+            this.submitButton.Location = new System.Drawing.Point(640, 221);
+            this.submitButton.Name = "submitButton";
+            this.submitButton.Size = new System.Drawing.Size(81, 43);
+            this.submitButton.TabIndex = 1;
+            this.submitButton.Text = "Submit";
+            this.submitButton.UseVisualStyleBackColor = true;
+            this.submitButton.Click += new System.EventHandler(this.submitButton_Click);
+            // 
+            // pathID
+            // 
+            this.pathID.HeaderText = "Path ID";
+            this.pathID.Name = "pathID";
+            this.pathID.ReadOnly = true;
             // 
             // numberOfLayoversColumn
             // 
@@ -88,20 +106,11 @@ namespace Air3550
             this.destinationColumn.Name = "destinationColumn";
             this.destinationColumn.ReadOnly = true;
             // 
-            // submitButton
-            // 
-            this.submitButton.Location = new System.Drawing.Point(603, 211);
-            this.submitButton.Name = "submitButton";
-            this.submitButton.Size = new System.Drawing.Size(81, 43);
-            this.submitButton.TabIndex = 1;
-            this.submitButton.Text = "Submit";
-            this.submitButton.UseVisualStyleBackColor = true;
-            // 
             // LoadEngineerFlightSelectPage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(696, 517);
+            this.ClientSize = new System.Drawing.Size(733, 517);
             this.Controls.Add(this.submitButton);
             this.Controls.Add(this.routesGridView);
             this.Name = "LoadEngineerFlightSelectPage";
@@ -115,11 +124,12 @@ namespace Air3550
         #endregion
 
         private System.Windows.Forms.DataGridView routesGridView;
+        private System.Windows.Forms.Button submitButton;
+        private System.Windows.Forms.DataGridViewTextBoxColumn pathID;
         private System.Windows.Forms.DataGridViewTextBoxColumn numberOfLayoversColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn originColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn layoverOneColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn layoverTwoColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn destinationColumn;
-        private System.Windows.Forms.Button submitButton;
     }
 }

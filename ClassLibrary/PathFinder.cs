@@ -24,6 +24,7 @@ namespace ClassLibrary
         */
         public List<Path> BFS()
         {
+            int currentPathID = 1;
             Queue<List<Airport>> queue = new Queue<List<Airport>>();
             List<Airport> path = new List<Airport>();
             List<Path> allPaths = new List<Path>();
@@ -37,7 +38,8 @@ namespace ClassLibrary
 
                 if (last == destination)
                 {
-                    allPaths.Add(new Path(path.Count - 2, path.ToArray()));
+                    allPaths.Add(new Path(currentPathID, path.Count - 2, path.ToArray()));
+                    currentPathID++;
                 }
 
                 if (path.Count < 4)
