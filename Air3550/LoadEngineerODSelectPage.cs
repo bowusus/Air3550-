@@ -13,6 +13,8 @@ namespace Air3550
 {
     public partial class LoadEngineerODSelectPage : Form
     {
+        public static string originCode = "";
+        public static string destinationCode = "";
         public LoadEngineerODSelectPage()
         {
             InitializeComponent();
@@ -22,6 +24,20 @@ namespace Air3550
         {
             originDropDown.DataSource = SqliteDataAccess.GetAirportCodes();
             destinationDropDown.DataSource = SqliteDataAccess.GetAirportCodes();
+        }
+
+        private void submitButton_Click(object sender, EventArgs e)
+        {
+            originCode = originDropDown.Text;
+            destinationCode = destinationDropDown.Text;
+
+            LoadEngineerFlightSelectPage newForm = new LoadEngineerFlightSelectPage();
+            newForm.Location = this.Location;
+            newForm.Size = this.Size;
+            newForm.StartPosition = FormStartPosition.Manual;
+            newForm.FormClosing += delegate { this.Show(); };
+            newForm.Show();
+            this.Hide();
         }
     }
 }

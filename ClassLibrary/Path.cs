@@ -18,6 +18,6 @@ namespace ClassLibrary
         }
 
         public int NumberOfLayovers { get => numberOfLayovers; set => numberOfLayovers = value; }
-        internal Airport[] Airports { get => airports; set => airports = value; }
+        public Airport[] Airports { get => airports; set => airports = value; }
     }
 }

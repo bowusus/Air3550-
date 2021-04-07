@@ -61,6 +61,12 @@
     <Compile Include="AccountInformationPage.Designer.cs">
       <DependentUpon>AccountInformationPage.cs</DependentUpon>
     </Compile>
+    <Compile Include="LoadEngineerFlightSelectPage.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LoadEngineerFlightSelectPage.Designer.cs">
+      <DependentUpon>LoadEngineerFlightSelectPage.cs</DependentUpon>
+    </Compile>
     <Compile Include="LoadEngineerODSelectPage.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -144,6 +150,9 @@
     <EmbeddedResource Include="AccountInformationPage.resx">
       <DependentUpon>AccountInformationPage.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="LoadEngineerFlightSelectPage.resx">
+      <DependentUpon>LoadEngineerFlightSelectPage.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="LoadEngineerODSelectPage.resx">
       <DependentUpon>LoadEngineerODSelectPage.cs</DependentUpon>
     </EmbeddedResource>
@@ -196,6 +205,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="packages.config" />
+    <None Include="Properties\DataSources\ClassLibrary.Path.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
