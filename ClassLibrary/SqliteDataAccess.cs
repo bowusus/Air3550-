@@ -7,7 +7,6 @@ using System.Data;
 using System.Data.SQLite;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace ClassLibrary
 {
@@ -515,6 +514,8 @@ namespace ClassLibrary
                 {
                     airports.Add(new Airport(rdr.GetString(0), rdr.GetString(1)));
                 }
+                rdr.Close();
+                con.Close();
                 return airports;
             }
         }
@@ -535,6 +536,8 @@ namespace ClassLibrary
                 {
                     directFlights.Add(new FlightModel(rdr.GetString(0), rdr.GetString(1), rdr.GetInt32(2)));
                 }
+                rdr.Close();
+                con.Close();
                 return directFlights;
             }
         }
@@ -576,7 +579,119 @@ namespace ClassLibrary
                 {
                     airportCodes.Add(rdr.GetString(0));
                 }
+                rdr.Close();
+                con.Close();
                 return airportCodes;
+            }
+        }
+
+        public static void AddFlightToMaster(FlightModel[] flightModels)
+        {
+            using (SQLiteConnection con = new SQLiteConnection(LoadConnectionString()))
+            {
+                con.Open(); // open the connection
+                SQLiteCommand cmd = new SQLiteCommand();
+                cmd.CommandType = CommandType.Text;
+                if (flightModels.Length == 1)
+                {
+                    cmd.CommandText = "INSERT INTO masterFlight VALUES (@flightID, @originCode_fk, @destinationCode_fk, @distance, @departureTime)";
+                    cmd.Parameters.AddWithValue("@flightID", flightModels[0].flightID);
+                    cmd.Parameters.AddWithValue("@originCode_fk", flightModels[0].originCode);
+                    cmd.Parameters.AddWithValue("@destinationCode_fk", flightModels[0].destinationCode);
+                    cmd.Parameters.AddWithValue("@distance", flightModels[0].distance);
+                    cmd.Parameters.AddWithValue("@departureTime", flightModels[0].departureDateTime.ToShortTimeString());
+                }
+                else if (flightModels.Length == 2)
+                {
+                    cmd.CommandText = @"BEGIN TRANSACTION;
+                                        INSERT INTO masterFlight 
+                                        VALUES (@flightID1, @originCode_fk1, @destinationCode_fk1, @distance1, @departureTime1);
+                                        INSERT INTO masterFlight 
+                                        VALUES (@flightID2, @originCode_fk2, @destinationCode_fk2, @distance2, @departureTime2);
+                                        COMMIT";
+                    cmd.Parameters.AddWithValue("@flightID1", flightModels[0].flightID);
+                    cmd.Parameters.AddWithValue("@originCode_fk1", flightModels[0].originCode);
+                    cmd.Parameters.AddWithValue("@destinationCode_fk1", flightModels[0].destinationCode);
+                    cmd.Parameters.AddWithValue("@distance1", flightModels[0].distance);
+                    cmd.Parameters.AddWithValue("@departureTime1", flightModels[0].departureDateTime.ToShortTimeString());
+                    cmd.Parameters.AddWithValue("@flightID2", flightModels[1].flightID);
+                    cmd.Parameters.AddWithValue("@originCode_fk2", flightModels[1].originCode);
+                    cmd.Parameters.AddWithValue("@destinationCode_fk2", flightModels[1].destinationCode);
+                    cmd.Parameters.AddWithValue("@distance2", flightModels[1].distance);
+                    cmd.Parameters.AddWithValue("@departureTime2", flightModels[1].departureDateTime.ToShortTimeString());
+                }
+                else if (flightModels.Length == 3)
+                {
+                    cmd.CommandText = @"BEGIN TRANSACTION;
+                                        INSERT INTO masterFlight 
+                                        VALUES (@flightID1, @originCode_fk1, @destinationCode_fk1, @distance1, @departureTime1);
+                                        INSERT INTO masterFlight 
+                                        VALUES (@flightID2, @originCode_fk2, @destinationCode_fk2, @distance2, @departureTime2);
+                                        INSERT INTO masterFlight
+                                        VALUES (@flightID3, @originCode_fk3, @destinationCode_fk3, @distance3, @departureTime3);
+                                        COMMIT";
+                    cmd.Parameters.AddWithValue("@flightID1", flightModels[0].flightID);
+                    cmd.Parameters.AddWithValue("@originCode_fk1", flightModels[0].originCode);
+                    cmd.Parameters.AddWithValue("@destinationCode_fk1", flightModels[0].destinationCode);
+                    cmd.Parameters.AddWithValue("@distance1", flightModels[0].distance);
+                    cmd.Parameters.AddWithValue("@departureTime1", flightModels[0].departureDateTime.ToShortTimeString());
+                    cmd.Parameters.AddWithValue("@flightID2", flightModels[1].flightID);
+                    cmd.Parameters.AddWithValue("@originCode_fk2", flightModels[1].originCode);
+                    cmd.Parameters.AddWithValue("@destinationCode_fk2", flightModels[1].destinationCode);
+                    cmd.Parameters.AddWithValue("@distance2", flightModels[1].distance);
+                    cmd.Parameters.AddWithValue("@departureTime2", flightModels[1].departureDateTime.ToShortTimeString());
+                    cmd.Parameters.AddWithValue("@flightID3", flightModels[2].flightID);
+                    cmd.Parameters.AddWithValue("@originCode_fk3", flightModels[2].originCode);
+                    cmd.Parameters.AddWithValue("@destinationCode_fk3", flightModels[2].destinationCode);
+                    cmd.Parameters.AddWithValue("@distance3", flightModels[2].distance);
+                    cmd.Parameters.AddWithValue("@departureTime3", flightModels[2].departureDateTime.ToShortTimeString());
+                }
+                cmd.Connection = con;
+                cmd.ExecuteNonQuery();
+                con.Close();
+            }
+        }
+
+        public static int GetLastMasterFlightID()
+        {
+            int newID = 1;
+            using (SQLiteConnection con = new SQLiteConnection(LoadConnectionString()))
+            // closes the connection when there is an error or it is done executing
+            {
+                con.Open(); // open the connection
+                SQLiteCommand cmd = new SQLiteCommand();
+                cmd.CommandType = CommandType.Text;
+
+                cmd.CommandText = "SELECT flightID FROM masterFlight WHERE flightID=(SELECT max(flightID) FROM masterFlight)";
+                cmd.Connection = con;
+                SQLiteDataReader rdr = cmd.ExecuteReader();
+                if (rdr.Read()) newID = rdr.GetInt32(0);
+                newID++;
+                rdr.Close();
+                con.Close();
+            }
+            return newID;
+        }
+
+        public static int GetDirectFlightDistance(string originCode, string destinationCode)
+        {
+            using (SQLiteConnection con = new SQLiteConnection(LoadConnectionString()))
+            // closes the connection when there is an error or it is done executing
+            {
+                int distance = 0;
+                con.Open(); // open the connection
+                SQLiteCommand cmd = new SQLiteCommand();
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = "SELECT distance FROM directFlight WHERE directFlight.originCode_fk = @originCode_fk AND directFlight.destinationCode_fk = @destinationCode_fk";
+                cmd.Parameters.AddWithValue("@originCode_fk", originCode);
+                cmd.Parameters.AddWithValue("@destinationCode_fk", destinationCode);
+                cmd.Connection = con;
+
+                SQLiteDataReader rdr = cmd.ExecuteReader();
+                if (rdr.Read()) distance = rdr.GetInt32(0);
+                rdr.Close();
+                con.Close();
+                return distance;
             }
         }
 

@@ -41,7 +41,6 @@ namespace Air3550
             this.routeTimePicker.Name = "routeTimePicker";
             this.routeTimePicker.Size = new System.Drawing.Size(138, 31);
             this.routeTimePicker.TabIndex = 0;
-            this.routeTimePicker.ValueChanged += new System.EventHandler(this.routeTimePicker_ValueChanged);
             // 
             // addButton
             // 

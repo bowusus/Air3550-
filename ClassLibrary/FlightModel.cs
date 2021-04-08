@@ -47,8 +47,9 @@ namespace ClassLibrary
 			flightIncome = income;
 		}
 
-		public FlightModel(string originCode, string destinationCode, int distance, DateTime departureDateTime)
+		public FlightModel(int flightID, string originCode, string destinationCode, int distance, DateTime departureDateTime)
         {
+			this.flightID = flightID;
 			this.originCode = originCode;
 			this.destinationCode = destinationCode;
 			this.distance = distance;

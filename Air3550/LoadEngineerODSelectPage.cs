@@ -33,7 +33,6 @@ namespace Air3550
 
             LoadEngineerFlightSelectPage newForm = new LoadEngineerFlightSelectPage();
             newForm.Location = this.Location;
-            newForm.Size = this.Size;
             newForm.StartPosition = FormStartPosition.Manual;
             newForm.FormClosing += delegate { this.Show(); };
             newForm.Show();
