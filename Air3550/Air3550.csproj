@@ -61,23 +61,11 @@
     <Compile Include="AccountInformationPage.Designer.cs">
       <DependentUpon>AccountInformationPage.cs</DependentUpon>
     </Compile>
-    <Compile Include="LoadEngineerFlightSelectPage.cs">
+    <Compile Include="LoadEngineerAddFlightPage.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="LoadEngineerFlightSelectPage.Designer.cs">
-      <DependentUpon>LoadEngineerFlightSelectPage.cs</DependentUpon>
-    </Compile>
-    <Compile Include="LoadEngineerODSelectPage.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="LoadEngineerODSelectPage.Designer.cs">
-      <DependentUpon>LoadEngineerODSelectPage.cs</DependentUpon>
-    </Compile>
-    <Compile Include="LoadEngineerTimeSelectPage.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="LoadEngineerTimeSelectPage.Designer.cs">
-      <DependentUpon>LoadEngineerTimeSelectPage.cs</DependentUpon>
+    <Compile Include="LoadEngineerAddFlightPage.Designer.cs">
+      <DependentUpon>LoadEngineerAddFlightPage.cs</DependentUpon>
     </Compile>
     <Compile Include="PaymentPage.cs">
       <SubType>Form</SubType>
@@ -156,14 +144,8 @@
     <EmbeddedResource Include="AccountInformationPage.resx">
       <DependentUpon>AccountInformationPage.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="LoadEngineerFlightSelectPage.resx">
-      <DependentUpon>LoadEngineerFlightSelectPage.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="LoadEngineerODSelectPage.resx">
-      <DependentUpon>LoadEngineerODSelectPage.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="LoadEngineerTimeSelectPage.resx">
-      <DependentUpon>LoadEngineerTimeSelectPage.cs</DependentUpon>
+    <EmbeddedResource Include="LoadEngineerAddFlightPage.resx">
+      <DependentUpon>LoadEngineerAddFlightPage.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="PaymentPage.resx">
       <DependentUpon>PaymentPage.cs</DependentUpon>

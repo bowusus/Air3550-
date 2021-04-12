@@ -38,12 +38,15 @@ namespace Air3550
 
         private void AddFlight_Click(object sender, EventArgs e)
         {
-            LoadEngineerODSelectPage newForm = new LoadEngineerODSelectPage();
-            newForm.Location = this.Location;
-            newForm.Size = this.Size;
-            newForm.StartPosition = FormStartPosition.Manual;
-            newForm.FormClosing += delegate { this.Show(); };
-            newForm.Show();
+            //LoadEngineerODSelectPage newForm = new LoadEngineerODSelectPage();
+            //newForm.Location = this.Location;
+            //newForm.Size = this.Size;
+            //newForm.StartPosition = FormStartPosition.Manual;
+            //newForm.FormClosing += delegate { this.Show(); };
+            //newForm.Show();
+            //this.Hide();
+
+            LoadEngineerAddFlightPage.GetInstance.Show();
             this.Hide();
         }
     }
