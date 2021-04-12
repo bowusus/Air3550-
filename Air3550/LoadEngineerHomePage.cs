@@ -33,7 +33,7 @@ namespace Air3550
 
         private void LoadEngineerHomePage_Load(object sender, EventArgs e)
         {
-            flightGrid.DataSource = SqliteDataAccess.GetMasterFlightDT();
+            LoadFlightGrid();
         }
 
         private void AddFlight_Click(object sender, EventArgs e)
@@ -48,6 +48,21 @@ namespace Air3550
 
             LoadEngineerAddFlightPage.GetInstance.Show();
             this.Hide();
+        }
+
+        private void removeFlight_Click(object sender, EventArgs e)
+        {
+            if (flightGrid.SelectedRows.Count > 0)
+            {
+                int flightID = Convert.ToInt32(flightGrid.SelectedRows[0].Cells["flightID"].Value.ToString());
+                SqliteDataAccess.RemoveMasterFlight(flightID);
+                LoadFlightGrid();
+            }
+        }
+
+        public void LoadFlightGrid()
+        {
+            flightGrid.DataSource = SqliteDataAccess.GetMasterFlightDT();
         }
     }
 }

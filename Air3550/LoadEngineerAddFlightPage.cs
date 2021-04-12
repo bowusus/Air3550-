@@ -93,6 +93,9 @@ namespace Air3550
                 DateTime departureTime = routeTimePicker.Value;
                 FlightModel[] flightModels = new FlightModel[selectedPath.NumberOfLayovers + 1];
                 int currentFlightID = SqliteDataAccess.GetLastMasterFlightID();
+                
+                // Double-Check to see if table is empty so currentFlightID is set to 1 rather than 2
+                if (currentFlightID == 2) currentFlightID = (SqliteDataAccess.CheckMasterFlightEmpty() == 0) ? 1 : 2;
                 for (int i = 0; i < selectedPath.NumberOfLayovers + 1; i++)
                 {
                     if (i != 0)
@@ -108,7 +111,6 @@ namespace Air3550
                         decimal hours = (decimal)(distance / 500.0) + .5M + (40 / 60.0M);
                         decimal minutes = (decimal)(hours - Math.Floor(hours)) * 60.0M;
                         departureTime.AddHours((double)Math.Floor(hours)).AddMinutes((double)(Math.Ceiling(minutes * 5) * 5));
-
                     }
 
                     // Constructing a new flight model for each flight in the path
@@ -123,8 +125,9 @@ namespace Air3550
                     currentFlightID++;
                 }
                 SqliteDataAccess.AddFlightToMaster(flightModels);
+                LoadEngineerHomePage.GetInstance.LoadFlightGrid();
                 LoadEngineerHomePage.GetInstance.Show();
-                this.Hide();
+                this.Dispose();
             }
         }
 

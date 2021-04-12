@@ -31,6 +31,7 @@ namespace Air3550
         {
             this.flightGrid = new System.Windows.Forms.DataGridView();
             this.addFlight = new System.Windows.Forms.Button();
+            this.removeFlight = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.flightGrid)).BeginInit();
             this.SuspendLayout();
             // 
@@ -42,6 +43,7 @@ namespace Air3550
             this.flightGrid.Location = new System.Drawing.Point(12, 12);
             this.flightGrid.Name = "flightGrid";
             this.flightGrid.ReadOnly = true;
+            this.flightGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.flightGrid.Size = new System.Drawing.Size(533, 493);
             this.flightGrid.TabIndex = 0;
             // 
@@ -55,12 +57,23 @@ namespace Air3550
             this.addFlight.UseVisualStyleBackColor = true;
             this.addFlight.Click += new System.EventHandler(this.AddFlight_Click);
             // 
+            // removeFlight
+            // 
+            this.removeFlight.Location = new System.Drawing.Point(551, 97);
+            this.removeFlight.Name = "removeFlight";
+            this.removeFlight.Size = new System.Drawing.Size(133, 47);
+            this.removeFlight.TabIndex = 2;
+            this.removeFlight.Text = "Remove Flight";
+            this.removeFlight.UseVisualStyleBackColor = true;
+            this.removeFlight.Click += new System.EventHandler(this.removeFlight_Click);
+            // 
             // LoadEngineerHomePage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.HighlightText;
             this.ClientSize = new System.Drawing.Size(696, 517);
+            this.Controls.Add(this.removeFlight);
             this.Controls.Add(this.addFlight);
             this.Controls.Add(this.flightGrid);
             this.Margin = new System.Windows.Forms.Padding(2);
@@ -77,6 +90,7 @@ namespace Air3550
 
         private System.Windows.Forms.DataGridView flightGrid;
         private System.Windows.Forms.Button addFlight;
+        private System.Windows.Forms.Button removeFlight;
     }
 }
 

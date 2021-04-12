@@ -695,6 +695,39 @@ namespace ClassLibrary
             }
         }
 
+        public static void RemoveMasterFlight(int flightID)
+        {
+            using (SQLiteConnection con = new SQLiteConnection(LoadConnectionString()))
+            {
+                con.Open(); // open the connection
+                SQLiteCommand cmd = new SQLiteCommand();
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = "DELETE FROM masterFlight WHERE masterFlight.flightID = @flightID";
+                cmd.Parameters.AddWithValue("@flightID", flightID);
+                cmd.Connection = con;
+                cmd.ExecuteNonQuery();
+                con.Close();
+            }
+        }
+
+        public static int CheckMasterFlightEmpty()
+        {
+            int numOfRows = 0;
+            using (SQLiteConnection con = new SQLiteConnection(LoadConnectionString()))
+            {
+                con.Open(); // open the connection
+                SQLiteCommand cmd = new SQLiteCommand();
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = "SELECT COUNT(*) AS RowCnt FROM masterFlight";
+                cmd.Connection = con;
+                SQLiteDataReader rdr = cmd.ExecuteReader();
+                if (rdr.Read()) numOfRows = rdr.GetInt32(0);
+                rdr.Close();
+                con.Close();
+            }
+            return numOfRows;
+        }
+
         private static string LoadConnectionString(string id = "Default")
         {
             // This method helps connect to the database
