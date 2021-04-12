@@ -15,6 +15,35 @@ namespace ClassLibrary
     {
         // This class file will include any methods that touch the database, 
         // For example, the method to get a random user id is included in this file.
+        public static string CheckIfEmployee(int userID, string pass)
+        {
+            // This method goes into the database, specifically the employee table, 
+            // and checks if there are any rows that currently contain the userID and password that 
+            // the user is logging in with
+            using (SQLiteConnection con = new SQLiteConnection(LoadConnectionString()))
+            // closes the connection when there is an error or it is done executing
+            {
+                con.Open(); // open the connection
+                SQLiteCommand cmd = new SQLiteCommand();
+                cmd.CommandType = CommandType.Text;
+                string password = SystemAction.EncryptPassword(pass);
+                cmd.CommandText = "select employee.role from employee where employee.userID = @userID and employee.password = @password";
+                cmd.Parameters.AddWithValue("@userID", userID);
+                cmd.Parameters.AddWithValue("@password", password);
+                cmd.Connection = con;
+                // execute the command with the reader, which only reads the database rather than updating it in anyway
+                SQLiteDataReader rdr = cmd.ExecuteReader();
+                string role = null;
+                // execute the command with the reader, which only reads the database rather than updating it in anyway
+                while (rdr.Read())
+                {
+                    role = rdr.GetString(0); // get the airport name from the database
+                }
+                if (String.IsNullOrEmpty(role))
+                    role = "employee";
+                return role; // return airport name
+            }
+        }
         public static int CheckIfNewCustomer(string tempEmail)
         {
             // This method goes into the database, specifically the customer table, 

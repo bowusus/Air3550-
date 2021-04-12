@@ -28,7 +28,7 @@ namespace ClassLibrary
                 result.Append(hash[i].ToString("x2")); // turn the hash into a string
             return result.ToString(); // return the string and exit
         }
-        public static string ValidateAccountFormat(string password, string firstName, string lastName, string street, string city, string zip, string phone, string creditCardNum, string email)
+        public static int[] ValidateAccountFormat(string password, string firstName, string lastName, string street, string city, string zip, string phone, string email)
         {
             // This method checks the format of the account information
             // If any of the formats are invalid or the information is blank (besides the password), it is added to an errorMessage string that is returned
@@ -36,46 +36,32 @@ namespace ClassLibrary
             Regex cityReg = new Regex(@"^[a-zA-Z]+(?:[\s-][a-zA-Z]+)*$");
             Regex zipReg = new Regex(@"^\d{5}(?:[-]\d{4})?$");
             Regex phoneReg = new Regex(@"^\(?([0-9]{3})\)?[-.]?([0-9]{3})[-.]?([0-9]{4})$");
-            Regex creditCardReg = new Regex(@"^?\d{4}-?\d{4}-?\d{4}-?\d{4}$");
             Regex emailReg = new Regex(@"^[a-zA-Z][\w\.-]*[a-zA-Z0-9]@[a-zA-Z0-9][\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]$");
 
             // match the provided string with the format
             Match cityMatch = cityReg.Match(city);
             Match zipMatch = zipReg.Match(zip);
             Match phoneMatch = phoneReg.Match(phone);
-            Match creditCardMatch = creditCardReg.Match(creditCardNum);
             Match emailMatch = emailReg.Match(email);
 
-            string errorMessage = null;
+            int[] errorMessage = new int[12];
 
             // check if any of the text boxes are empty 
-            // add any of the invalid information errors to the errorMessage string
+            // add any of the invalid information errors to the errorMessage[]
             if (String.IsNullOrEmpty(firstName))
-                errorMessage += "FIRST NAME is Blank\n";
+                errorMessage[0] = 1;
             if (String.IsNullOrEmpty(lastName))
-                errorMessage += "LAST NAME is Blank\n";
+                errorMessage[1] = 1;
             if (String.IsNullOrEmpty(street))
-                errorMessage += "STREET is Blank\n";
-            if (String.IsNullOrEmpty(city))
-                errorMessage += "CITY is Blank\n";
-            else if (!cityMatch.Success)
-                errorMessage += "The provided CITY is invalid\n";
-            if (String.IsNullOrEmpty(zip))
-                errorMessage += "ZIP CODE is Blank\n";
-            else if (!zipMatch.Success)
-                errorMessage += "The provided ZIP CODE is invalid. Provide an email that is of the format: XXXXX-XXXX or XXXXX where X's are numbers\n";
-            if (String.IsNullOrEmpty(phone))
-                errorMessage += "PHONE NUMBER is Blank\n";
-            else if (!phoneMatch.Success)
-                errorMessage += "The provided PHONE NUMBER is invalid. Provide an email that is of the format shown on the form\n";
-            if (String.IsNullOrEmpty(creditCardNum))
-                errorMessage += "CREDIT CARD NUMBER is Blank\n";
-            else if (!creditCardMatch.Success)
-                errorMessage += "The provided CREDIT CARD NUMBER is invalid. Provide an email that is of the format shown on the form\n";
-            if (String.IsNullOrEmpty(email))
-                errorMessage += "EMAIL is Blank\n";
-            else if (!emailMatch.Success)
-                errorMessage += "The provided EMAIL is invalid\n";
+                errorMessage[2] = 1;
+            if (String.IsNullOrEmpty(city) || !cityMatch.Success)
+                errorMessage[3] = 1;
+            if (String.IsNullOrEmpty(zip) || !zipMatch.Success)
+                errorMessage[4] = 1;
+            if (String.IsNullOrEmpty(phone) || !phoneMatch.Success)
+                errorMessage[5] = 1;
+            if (String.IsNullOrEmpty(email) || !emailMatch.Success)
+                errorMessage[7] = 1;
 
             return errorMessage;
         }

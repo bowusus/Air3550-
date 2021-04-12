@@ -23,22 +23,18 @@ namespace Air3550
             // This method checks the provided information against the database
             // and throws an error if the information is not in the database or
             // loggs the user in and transistions to the customer home page
-            string errorMessage = null;
-            if (String.IsNullOrEmpty(UserIDText.Text))
-                errorMessage += "USERID is Blank\n";
-            else if (UserIDText.Text.Length < 6)
-                errorMessage += "USERID is too short\n";
-            if (String.IsNullOrEmpty(PasswordText.Text))
-                errorMessage += "PASSWORD is Blank\n";
-            else if (PasswordText.Text.Length < 6)
-                errorMessage += "PASSWORD is too short\n";
-            if (errorMessage != null)
-                MessageBox.Show(errorMessage, "ERROR: Invalid Log In", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            UserIDError.Visible = false;
+            PasswordError.Visible = false;
+            if (String.IsNullOrEmpty(UserIDText.Text) || UserIDText.Text.Length < 6)
+                UserIDError.Visible = true;
+            if (String.IsNullOrEmpty(PasswordText.Text) || PasswordText.Text.Length < 6)
+                PasswordError.Visible = true;
             else
             {
                 int userID = int.Parse(UserIDText.Text); // turn value from the UserID combo box into an int
                 string currPass = PasswordText.Text; // get the provided password
-                if (userID == 111111 && currPass.Equals("accounting"))
+                string user = SqliteDataAccess.CheckIfEmployee(userID, currPass);
+                if (SqliteDataAccess.CheckIfEmployee(userID, currPass).Equals("AccountingManager"))
                 {
                     // log in as accounting manager
                     UserIDText.Text = null;
@@ -48,7 +44,7 @@ namespace Air3550
                     accountingHome.Show(); // show the next form
                     this.Hide(); // close log in form
                 }
-                else if (userID == 222222 && currPass.Equals("flight"))
+                else if (SqliteDataAccess.CheckIfEmployee(userID, currPass).Equals("FlightManager"))
                 {
                     // log in as flight manager
                     UserIDText.Text = null;
@@ -58,7 +54,7 @@ namespace Air3550
                     flightHome.Show(); // show the next form
                     this.Hide(); // close log in form
                 }
-                else if (userID == 333333 && currPass.Equals("loadengineer"))
+                else if (SqliteDataAccess.CheckIfEmployee(userID, currPass).Equals("LoadEngineer"))
                 {
                     // log in as load engineer
                     UserIDText.Text = null;
@@ -68,7 +64,7 @@ namespace Air3550
                     loadEngineerHome.Show(); // show the next form
                     this.Hide(); // close log in form
                 }
-                else if (userID == 444444 && currPass.Equals("marketing"))
+                else if (SqliteDataAccess.CheckIfEmployee(userID, currPass).Equals("MarketingManager"))
                 {
                     // log in as marketing manager
                     UserIDText.Text = null;
@@ -82,7 +78,7 @@ namespace Air3550
                 {
                     int passCheck = SqliteDataAccess.CheckPassword(userID, currPass); // compare the provided userID and password with the database
                     if (passCheck == 0)
-                        MessageBox.Show("This password does not match the provided UserID", "ERROR: Invalid Password", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        PasswordError.Visible = true;
                     else if (passCheck == -1)
                         MessageBox.Show("The provided UserID is not in the system. Click below to create a new account.", "ERROR: Invalid UserID", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     else
@@ -106,6 +102,7 @@ namespace Air3550
             // after the button is clicked
             CreateCustomerPage createCustomer = new CreateCustomerPage(); // create the next form
             createCustomer.Show(); // show the next form
+            this.Hide(); // close log in form
         }
         private void UserIDText_MouseClick(object sender, MouseEventArgs e)
         {

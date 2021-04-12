@@ -58,6 +58,8 @@ namespace Air3550
             // This list of FlightModel objects will be the data source of the datagridview table
             CancelFlightTable.DataSource = bookedFlights;
             FormatDataGrid();
+            if (bookedFlights.Count == 0)
+                NoFlightLabel.Visible = true;
         }
         public void FormatDataGrid()
         {
@@ -91,9 +93,10 @@ namespace Air3550
             // If there are flights to be cancelled, go through and change the database tables
             // else produce a pop up saying nothing can be cancelled
             if (bookedFlights.Count == 0)
-                MessageBox.Show("You do not have any flights to be cancelled at the moment.\nReturn to the home page and book a flight.", "Error: Cancel Flight", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                NoFlightLabel.Visible = true;
             else
             {
+                NoFlightLabel.Visible = false;
                 foreach (FlightModel flight in bookedFlights)
                 {
                     DialogResult result = MessageBox.Show("Are you sure that you would like to cancel your scheduled flight(s)?\nAll flights will be cancelled, and you will get a refund in the way you paid.", "Cancel Flight", MessageBoxButtons.YesNo, MessageBoxIcon.None);

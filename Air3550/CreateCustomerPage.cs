@@ -28,38 +28,62 @@ namespace Air3550
             string firstName = FirstNameText.Text;
             string lastName = LastNameText.Text;
             string password = PasswordText.Text;
+            string passwordMatch = ConfirmPasswordText.Text;
             string street = StreetText.Text;
             string city = CityText.Text;
             string state;
             string zip = ZipText.Text;
             string phone = PhoneText.Text;
             string creditCardNum = CreditCardNumText.Text;
+            Regex creditCardReg = new Regex(@"^?\d{4}-?\d{4}-?\d{4}-?\d{4}$");
+            Match creditCardMatch = creditCardReg.Match(creditCardNum);
             string email = EmailText.Text;
             int age;
 
-            string errorMessage1 = null; // used to check if invalid information was provided
-            string errorMessage2 = SystemAction.ValidateAccountFormat(password, firstName, lastName, street, city, zip, phone, creditCardNum, email);
-            string totalErrorMessage = null;
+            // hide error labels initally
+            FirstNameError.Visible = false;
+            LastNameError.Visible = false;
+            PasswordLengthError.Visible = false;
+            ConfirmPasswordMatchError.Visible = false;
+            PhoneError.Visible = false;
+            CreditError.Visible = false;
+            StreetError.Visible = false;
+            CityError.Visible = false;
+            StateError.Visible = false;
+            ZipError.Visible = false;
+            EmailError.Visible = false;
+            AgeError.Visible = false;
+
+            // make label array to access each label when there is an error
+            Label[] errorArray = new Label[12] { FirstNameError, LastNameError, StreetError, CityError, ZipError, PhoneError, CreditError, EmailError, PasswordLengthError, ConfirmPasswordMatchError, StateError, AgeError};
+            // get any errors from format
+            int[] errors = SystemAction.ValidateAccountFormat(password, firstName, lastName, street, city, zip, phone, email);
 
             // check if the combo boxes are empty 
-            // and check if the password is blank or less than 6 characters
-            // add any of the invalid information errors to the errorMessage string
-            if (String.IsNullOrEmpty(password))
-                errorMessage1 += "PASSWORD is Blank\n";
+            // and check if the password is less than 6 characters and if the two passwords match
+            // add any of the invalid information errors to the errors[]
+            if (!creditCardMatch.Success)
+                errors[6] = 1;
             if (password.Length < 6)
-                errorMessage1 += "The PASSWORD needs to be 6 or more characters long\n";
+                errors[8] = 1;
+            if (!password.Equals(passwordMatch))
+                errors[9] = 1;
             if (StateComboBox.SelectedItem == null)
-                errorMessage1 += "STATE is Blank\n";
+                errors[10] = 1;
             if (AgeComboBox.SelectedItem == null)
-                errorMessage1 += "AGE is Blank";
+                errors[11] = 1;
 
-            totalErrorMessage += errorMessage1 + errorMessage2;
-
-            // if the errorMessage created is not empty, then something went wrong
-            // so a message box will be shown to the user with an explanation of all errors
-            // if it is empty, then everything was inputted correctly
-            if (!String.IsNullOrEmpty(totalErrorMessage))
-                MessageBox.Show(totalErrorMessage, "ERROR: Invalid Account Information Provided", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            // go through the errors[] and make those error labels visible and remove the error from the errors[]
+            // if there are no errors, create the array
+            if (errors.Contains(1))
+            {
+                for (int i = 0; i < 12; i++)
+                {
+                    if (errors[i] == 1)
+                        errorArray[i].Visible = true;
+                    errors[i] = 0;
+                }
+            }
             else
             {
                 state = StateComboBox.SelectedItem.ToString(); // get the value from the state combo box and turn it into a string
@@ -74,6 +98,7 @@ namespace Air3550
                     int userID = SqliteDataAccess.GetRandUserID();
                     // encrypt the password
                     string pass = SystemAction.EncryptPassword(password);
+
                     // create a customer object
                     CustomerModel customer = new CustomerModel(userID, pass, firstName, lastName, street, city, state, zip, phone, creditCardNum, age, email);
                     // add the customer to the database aka create account
@@ -104,6 +129,25 @@ namespace Air3550
                     DialogResult result = MessageBox.Show("There is already an account linked with this email.\nPress OK to return to the Log In Page to use your previously created account.\nPress CANCEL to modify the email your provided when creating a new account.\n", "ERROR: Account Already Exists", MessageBoxButtons.OKCancel, MessageBoxIcon.Error);
                     if (result == DialogResult.OK) // return 
                         this.Close(); // close current page
+                }
+            }
+        }
+        private void BackButton_Click(object sender, EventArgs e)
+        {
+            // This methods allows the user to return to the Log In page
+            // The current form will close
+            // The Log In page will open
+            DialogResult result = MessageBox.Show("Are you sure that you want to return to the Log In Page?\nAny changes not saved will not be updated.", "Account Information", MessageBoxButtons.YesNo, MessageBoxIcon.Hand);
+            if (result == DialogResult.Yes)
+            {
+                this.Close(); // close the current form if the customer confirms that they would like to log out
+                int i = 0;
+                // close the log in form and the create customer form
+                while (i < Application.OpenForms.Count) // look at what forms are open
+                {
+                    if (Application.OpenForms[i].Name == "LogInPage")
+                        Application.OpenForms[i].Show();// if the current form is the customer home page, show it
+                    i += 1;
                 }
             }
         }

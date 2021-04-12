@@ -6,6 +6,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -38,7 +39,6 @@ namespace Air3550
             StateComboBox.Text = customer.state;
             ZipText.Text = customer.zipCode;
             PhoneText.Text = customer.phoneNumber;
-            CreditCardNumText.Text = customer.creditCardNumber;
             EmailText.Text = customer.email;
             AgeComboBox.Text = customer.age.ToString();
         }
@@ -54,6 +54,7 @@ namespace Air3550
             string first = FirstNameText.Text;
             string last = LastNameText.Text;
             string password = PasswordText.Text;
+            string passwordMatch = ConfirmPasswordText.Text;
             string pass = null;
             string street = StreetText.Text;
             string city = CityText.Text;
@@ -61,27 +62,56 @@ namespace Air3550
             string zip = ZipText.Text;
             string phone = PhoneText.Text;
             string creditCard = CreditCardNumText.Text;
+            Regex creditCardReg = new Regex(@"^?\d{4}-?\d{4}-?\d{4}-?\d{4}$");
+            Match creditCardMatch = creditCardReg.Match(creditCard);
             string email = EmailText.Text;
             int age;
-            // see if anything has an invalid format or is blank
-            string errorMessage1 = null; // used to check if invalid information was provided
-            string errorMessage2 = SystemAction.ValidateAccountFormat(password, first, last, street, city, zip, phone, creditCard, email); // validate the formats
-            string totalErrorMessage = null;
+
+            // hide error labels initally
+            FirstNameError.Visible = false;
+            LastNameError.Visible = false;
+            PasswordLengthError.Visible = false;
+            ConfirmPasswordMatchError.Visible = false;
+            PhoneError.Visible = false;
+            CreditError.Visible = false;
+            StreetError.Visible = false;
+            CityError.Visible = false;
+            StateError.Visible = false;
+            ZipError.Visible = false;
+            EmailError.Visible = false;
+            AgeError.Visible = false;
+
+            // make label array to access each label when there is an error
+            Label[] errorArray = new Label[12] { FirstNameError, LastNameError, StreetError, CityError, ZipError, PhoneError, CreditError, EmailError, PasswordLengthError, ConfirmPasswordMatchError, StateError, AgeError };
+            // get any errors from format
+            int[] errors = SystemAction.ValidateAccountFormat(password, first, last, street, city, zip, phone, email);
 
             // check if the combo boxes are empty 
-            // add any of the invalid information errors to the errorMessage string
+            // and check if the password is less than 6 characters if not blank and if the two passwords match
+            // and check if the credit card is in the correct format
+            // add any of the invalid information errors to the errors[]
+            if (!creditCard.Equals("    -    -    -") && !creditCardMatch.Success)
+                errors[6] = 1;
+            if (!String.IsNullOrEmpty(password) && password.Length < 6)
+                errors[8] = 1;
+            if (!password.Equals(passwordMatch))
+                errors[9] = 1;
             if (StateComboBox.SelectedItem == null)
-                errorMessage1 += "STATE is Blank\n";
+                errors[10] = 1;
             if (AgeComboBox.SelectedItem == null)
-                errorMessage1 += "AGE is Blank";
+                errors[11] = 1;
 
-            totalErrorMessage += errorMessage1 + errorMessage2;
-
-            // if the errorMessage created is not empty, then something went wrong
-            // so a message box will be shown to the user with an explanation of all errors
-            // if it is empty, then everything was inputted correctly
-            if (!String.IsNullOrEmpty(totalErrorMessage))
-                MessageBox.Show(totalErrorMessage, "ERROR: Invalid Account Information Provided", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            // go through the errors[] and make those error labels visible and remove the error from the errors[]
+            // if there are no errors, create the array
+            if (errors.Contains(1))
+            {
+                for (int i = 0; i < 12; i++)
+                {
+                    if (errors[i] == 1)
+                        errorArray[i].Visible = true;
+                    errors[i] = 0;
+                }
+            }
             else
             {
                 state = StateComboBox.Text.ToString(); // get the state

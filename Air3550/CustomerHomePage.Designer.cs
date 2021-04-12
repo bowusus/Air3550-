@@ -133,9 +133,11 @@ namespace Air3550
             this.Controls.Add(this.AccountInformationButton);
             this.Controls.Add(this.CancelFlightButton);
             this.Controls.Add(this.BookFlightButton);
+            this.MaximumSize = new System.Drawing.Size(1199, 1009);
             this.Name = "CustomerHomePage";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Air3550";
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.CustomerHomePage_FormClosing);
             this.ResumeLayout(false);
 
