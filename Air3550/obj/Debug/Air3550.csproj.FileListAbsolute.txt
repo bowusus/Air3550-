@@ -18,11 +18,10 @@ C:\Users\linds\source\repos\Air3550\Air3550\obj\Debug\Air3550.LoginPage.resource
 C:\Users\linds\source\repos\Air3550\Air3550\obj\Debug\Air3550.CreateCustomerPage.resources
 C:\Users\linds\source\repos\Air3550\Air3550\obj\Debug\Air3550.AccountInformation.resources
 C:\Users\linds\OneDrive\Documents\GitHub\Air3550\Air3550\bin\Debug\Air3550.db
-C:\Users\linds\OneDrive\Documents\GitHub\Air3550\Air3550\bin\Debug\Air3550.exe.config
 C:\Users\linds\OneDrive\Documents\GitHub\Air3550\Air3550\bin\Debug\Air3550.exe
-C:\Users\linds\OneDrive\Documents\GitHub\Air3550\Air3550\bin\Debug\Air3550.pdb
-C:\Users\linds\OneDrive\Documents\GitHub\Air3550\Air3550\bin\Debug\ClassLibrary.dll
 C:\Users\linds\OneDrive\Documents\GitHub\Air3550\Air3550\bin\Debug\System.Data.SQLite.dll
+C:\Users\linds\OneDrive\Documents\GitHub\Air3550\Air3550\bin\Debug\Air3550.exe.config
+C:\Users\linds\OneDrive\Documents\GitHub\Air3550\Air3550\bin\Debug\ClassLibrary.dll
 C:\Users\linds\OneDrive\Documents\GitHub\Air3550\Air3550\bin\Debug\ClassLibrary.pdb
 C:\Users\linds\OneDrive\Documents\GitHub\Air3550\Air3550\bin\Debug\System.Data.SQLite.xml
 C:\Users\linds\OneDrive\Documents\GitHub\Air3550\Air3550\obj\Debug\Air3550.csprojAssemblyReference.cache
