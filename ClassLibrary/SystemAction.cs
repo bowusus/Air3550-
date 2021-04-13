@@ -81,7 +81,7 @@ namespace ClassLibrary
                 List<string> flightsBookedData = SqliteDataAccess.GetFlightData(id);
                 string originName = SqliteDataAccess.GetFlightNames(flightsBookedData[1]);
                 string destinationName = SqliteDataAccess.GetFlightNames(flightsBookedData[2]);
-                FlightModel flight = new FlightModel(int.Parse(flightsBookedData[0]), flightsBookedData[1], originName, flightsBookedData[2], destinationName, int.Parse(flightsBookedData[3]), DateTime.Parse(flightsBookedData[4]), Convert.ToDouble(flightsBookedData[5]), flightsBookedData[6], DateTime.Parse(flightsBookedData[7]), Convert.ToDouble(flightsBookedData[8]), int.Parse(flightsBookedData[9]), int.Parse(flightsBookedData[10]), Convert.ToDouble(flightsBookedData[11]));
+                FlightModel flight = new FlightModel(int.Parse(flightsBookedData[0]), int.Parse(flightsBookedData[1]), flightsBookedData[2], originName, flightsBookedData[3], destinationName, int.Parse(flightsBookedData[4]), DateTime.Parse(flightsBookedData[5]), Convert.ToDouble(flightsBookedData[6]), flightsBookedData[7], DateTime.Parse(flightsBookedData[8]), Convert.ToDouble(flightsBookedData[9]), int.Parse(flightsBookedData[10]), int.Parse(flightsBookedData[11]), Convert.ToDouble(flightsBookedData[12]));
                 flights.Add(flight);
             }
             return flights;
