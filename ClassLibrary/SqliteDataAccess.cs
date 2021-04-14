@@ -728,6 +728,22 @@ namespace ClassLibrary
             return numOfRows;
         }
 
+        public static void ChangeTimeMaster(int flightID, DateTime departureTime)
+        {
+            using (SQLiteConnection con = new SQLiteConnection(LoadConnectionString()))
+            {
+                con.Open(); // open the connection
+                SQLiteCommand cmd = new SQLiteCommand();
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = "UPDATE masterFlight SET departureTime = @departureTime WHERE flightID = @flightID";
+                cmd.Parameters.AddWithValue("@flightID", flightID);
+                cmd.Parameters.AddWithValue("@departureTime", departureTime.ToShortTimeString());
+                cmd.Connection = con;
+                cmd.ExecuteNonQuery();
+                con.Close();
+            }
+        }
+
         private static string LoadConnectionString(string id = "Default")
         {
             // This method helps connect to the database

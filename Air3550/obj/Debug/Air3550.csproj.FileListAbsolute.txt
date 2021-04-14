@@ -74,3 +74,4 @@ C:\Users\Thomas\Repositories\Air3550\Air3550\obj\Debug\Air3550.csproj.CopyComple
 C:\Users\Thomas\Repositories\Air3550\Air3550\obj\Debug\Air3550.exe
 C:\Users\Thomas\Repositories\Air3550\Air3550\obj\Debug\Air3550.pdb
 C:\Users\Thomas\Repositories\Air3550\Air3550\obj\Debug\Air3550.LoadEngineerAddFlightPage.resources
+C:\Users\Thomas\Repositories\Air3550\Air3550\obj\Debug\Air3550.LoadEngineerEditFlightPage.resources

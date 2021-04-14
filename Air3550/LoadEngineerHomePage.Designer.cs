@@ -76,6 +76,7 @@ namespace Air3550
             this.editFlight.TabIndex = 3;
             this.editFlight.Text = "Edit Flight";
             this.editFlight.UseVisualStyleBackColor = true;
+            this.editFlight.Click += new System.EventHandler(this.editFlight_Click);
             // 
             // LoadEngineerHomePage
             // 

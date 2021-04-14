@@ -110,18 +110,34 @@ namespace Air3550
                          */
                         decimal hours = (decimal)(distance / 500.0) + .5M + (40 / 60.0M);
                         decimal minutes = (decimal)(hours - Math.Floor(hours)) * 60.0M;
-                        departureTime.AddHours((double)Math.Floor(hours)).AddMinutes((double)(Math.Ceiling(minutes * 5) * 5));
-                    }
+                        decimal adjustment = minutes % 5;
+                        hours = Math.Floor(hours);
+                        if (adjustment != 0) minutes = (minutes - adjustment) + 5;
+                        DateTime newDepartureTime = departureTime.AddHours((double)hours).AddMinutes((double)minutes);
 
-                    // Constructing a new flight model for each flight in the path
-                    flightModels[i] = new FlightModel(
-                        currentFlightID,
-                        selectedPath.Airports[i].Code,
-                        selectedPath.Airports[i + 1].Code,
-                        SqliteDataAccess.GetDirectFlightDistance(
+                        // Constructing a new flight model for each flight in the path
+                        flightModels[i] = new FlightModel(
+                            currentFlightID,
                             selectedPath.Airports[i].Code,
-                            selectedPath.Airports[i + 1].Code),
-                        departureTime);
+                            selectedPath.Airports[i + 1].Code,
+                            SqliteDataAccess.GetDirectFlightDistance(
+                                selectedPath.Airports[i].Code,
+                                selectedPath.Airports[i + 1].Code),
+                            newDepartureTime);
+                        departureTime = newDepartureTime;
+                    }
+                    else
+                    {
+                        // Constructing a new flight model for each flight in the path
+                        flightModels[i] = new FlightModel(
+                            currentFlightID,
+                            selectedPath.Airports[i].Code,
+                            selectedPath.Airports[i + 1].Code,
+                            SqliteDataAccess.GetDirectFlightDistance(
+                                selectedPath.Airports[i].Code,
+                                selectedPath.Airports[i + 1].Code),
+                            departureTime);
+                    }
                     currentFlightID++;
                 }
                 SqliteDataAccess.AddFlightToMaster(flightModels);

@@ -14,6 +14,8 @@ namespace Air3550
     public partial class LoadEngineerHomePage : Form
     {
         private static LoadEngineerHomePage instance;
+        private string originCode, destinationCode, time;
+        private int flightID;
         public LoadEngineerHomePage()
         {
             InitializeComponent();
@@ -31,6 +33,11 @@ namespace Air3550
             }
         }
 
+        public string OriginCode { get => originCode; set => originCode = value; }
+        public string DestinationCode { get => destinationCode; set => destinationCode = value; }
+        public string Time { get => time; set => time = value; }
+        public int FlightID { get => flightID; set => flightID = value; }
+
         private void LoadEngineerHomePage_Load(object sender, EventArgs e)
         {
             LoadFlightGrid();
@@ -38,14 +45,6 @@ namespace Air3550
 
         private void AddFlight_Click(object sender, EventArgs e)
         {
-            //LoadEngineerODSelectPage newForm = new LoadEngineerODSelectPage();
-            //newForm.Location = this.Location;
-            //newForm.Size = this.Size;
-            //newForm.StartPosition = FormStartPosition.Manual;
-            //newForm.FormClosing += delegate { this.Show(); };
-            //newForm.Show();
-            //this.Hide();
-
             LoadEngineerAddFlightPage.GetInstance.Show();
             this.Hide();
         }
@@ -60,9 +59,23 @@ namespace Air3550
             }
         }
 
+        private void editFlight_Click(object sender, EventArgs e)
+        {
+            if (flightGrid.SelectedRows.Count > 0)
+            {
+                this.originCode = flightGrid.SelectedRows[0].Cells["originCode_fk"].Value.ToString();
+                this.destinationCode = flightGrid.SelectedRows[0].Cells["destinationCode_fk"].Value.ToString();
+                this.time = string.Format("1-1-2021 {0}", flightGrid.SelectedRows[0].Cells["departureTime"].Value.ToString());
+                this.flightID = Convert.ToInt32(flightGrid.SelectedRows[0].Cells["flightID"].Value.ToString());
+                this.Hide();
+                LoadEngineerEditFlightPage.GetInstance.Show();
+            }
+        }
+
         public void LoadFlightGrid()
         {
             flightGrid.DataSource = SqliteDataAccess.GetMasterFlightDT();
         }
+
     }
 }

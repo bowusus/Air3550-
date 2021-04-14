@@ -19,8 +19,7 @@ namespace Air3550
             //LogInPage login = new LogInPage();
 
             /* Just for testing LE home page uncomment it later */
-            LoadEngineerHomePage leHomePage = new LoadEngineerHomePage();
-            Application.Run(leHomePage);
+            Application.Run(LoadEngineerHomePage.GetInstance);
 
             //LogInPage login2 = new LogInPage();
             //CustomerHomePage home = new CustomerHomePage();
