@@ -32,6 +32,7 @@ namespace Air3550
             this.flightGrid = new System.Windows.Forms.DataGridView();
             this.addFlight = new System.Windows.Forms.Button();
             this.removeFlight = new System.Windows.Forms.Button();
+            this.editFlight = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.flightGrid)).BeginInit();
             this.SuspendLayout();
             // 
@@ -67,12 +68,22 @@ namespace Air3550
             this.removeFlight.UseVisualStyleBackColor = true;
             this.removeFlight.Click += new System.EventHandler(this.removeFlight_Click);
             // 
+            // editFlight
+            // 
+            this.editFlight.Location = new System.Drawing.Point(551, 150);
+            this.editFlight.Name = "editFlight";
+            this.editFlight.Size = new System.Drawing.Size(133, 47);
+            this.editFlight.TabIndex = 3;
+            this.editFlight.Text = "Edit Flight";
+            this.editFlight.UseVisualStyleBackColor = true;
+            // 
             // LoadEngineerHomePage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.HighlightText;
             this.ClientSize = new System.Drawing.Size(696, 517);
+            this.Controls.Add(this.editFlight);
             this.Controls.Add(this.removeFlight);
             this.Controls.Add(this.addFlight);
             this.Controls.Add(this.flightGrid);
@@ -91,6 +102,7 @@ namespace Air3550
         private System.Windows.Forms.DataGridView flightGrid;
         private System.Windows.Forms.Button addFlight;
         private System.Windows.Forms.Button removeFlight;
+        private System.Windows.Forms.Button editFlight;
     }
 }
 
