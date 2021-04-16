@@ -14,12 +14,15 @@ namespace Air3550
     public partial class LoadEngineerAddFlightPage : Form
     {
         private List<Path> paths;
-        private static LoadEngineerAddFlightPage instance;
+        private static LoadEngineerAddFlightPage instance; //Singleton Pattern Instance
         public LoadEngineerAddFlightPage()
         {
             InitializeComponent();
         }
 
+        /*Method to get the forms instance if one does not exist then
+         * create a new form and return the form
+         */
         public static LoadEngineerAddFlightPage GetInstance
         {
             get

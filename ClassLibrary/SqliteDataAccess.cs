@@ -686,6 +686,7 @@ namespace ClassLibrary
                 cmd.CommandType = CommandType.Text;
                 if (flightModels.Length == 1)
                 {
+
                     cmd.CommandText = "INSERT INTO masterFlight VALUES (@flightID, @originCode_fk, @destinationCode_fk, @distance, @departureTime, @planeType, @numberOfVacantSeats)";
                     cmd.Parameters.AddWithValue("@flightID", flightModels[0].flightID);
                     cmd.Parameters.AddWithValue("@originCode_fk", flightModels[0].originCode);
