@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using ClassLibrary;
 
 namespace Air3550
 {
@@ -16,10 +17,16 @@ namespace Air3550
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            LogInPage login = new LogInPage();
+            //LogInPage login = new LogInPage();
+
+            /* Just for testing LE home page uncomment it later */
+            List<FlightModel> masterFlights = new List<FlightModel>();
+            masterFlights = SqliteDataAccess.GetAllMasterFlights();
+            Application.Run(LoadEngineerHomePage.GetInstance);
+
             //LogInPage login2 = new LogInPage();
             //CustomerHomePage home = new CustomerHomePage();
-            Application.Run(login); // start with the login page as the main page
+            //Application.Run(login); // start with the login page as the main page
             /*if (login1.IsDisposed && login1.IsAccessible == true) // check if the log in form is disposed and accessible to change the main form to the customer home page
                 Application.Run(home);
             if (home.IsDisposed)

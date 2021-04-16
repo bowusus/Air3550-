@@ -29,6 +29,7 @@ namespace ClassLibrary
 		public int amountOfPoints { get; set; }
 		public int numberOfVacantSeats { get; set; }
 		public double flightIncome { get; set; }
+
 		// customer constructor
 		public FlightModel(int fID, int rID, string origin, string oName, string destination, string dName, int dist, DateTime departure, double time, string plane, DateTime date, double baseCost, int points, int seats, double income)
 		{
@@ -49,11 +50,22 @@ namespace ClassLibrary
 			flightIncome = income;
 		}
 
-		public FlightModel(string originCode, string destinationCode, int distance)
+		public FlightModel(int flightID, string originCode, string destinationCode, int distance, DateTime departureDateTime, string planeType)
         {
+			this.flightID = flightID;
 			this.originCode = originCode;
 			this.destinationCode = destinationCode;
 			this.distance = distance;
-        }
+			this.departureDateTime = departureDateTime;
+			this.planeType = planeType;
+			this.numberOfVacantSeats = SqliteDataAccess.GetPlaneCapacity(this.planeType);
+		}
+
+		public FlightModel(string originCode, string destinationCode, int distance)
+		{
+			this.originCode = originCode;
+			this.destinationCode = destinationCode;
+			this.distance = distance;
+		}
 	}
 }

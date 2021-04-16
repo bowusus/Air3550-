@@ -29,22 +29,81 @@ namespace Air3550
         /// </summary>
         private void InitializeComponent()
         {
+            this.flightGrid = new System.Windows.Forms.DataGridView();
+            this.addFlight = new System.Windows.Forms.Button();
+            this.removeFlight = new System.Windows.Forms.Button();
+            this.editFlight = new System.Windows.Forms.Button();
+            ((System.ComponentModel.ISupportInitialize)(this.flightGrid)).BeginInit();
             this.SuspendLayout();
+            // 
+            // flightGrid
+            // 
+            this.flightGrid.AllowUserToAddRows = false;
+            this.flightGrid.AllowUserToDeleteRows = false;
+            this.flightGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.flightGrid.Location = new System.Drawing.Point(12, 12);
+            this.flightGrid.Name = "flightGrid";
+            this.flightGrid.ReadOnly = true;
+            this.flightGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.flightGrid.Size = new System.Drawing.Size(533, 493);
+            this.flightGrid.TabIndex = 0;
+            // 
+            // addFlight
+            // 
+            this.addFlight.Location = new System.Drawing.Point(551, 44);
+            this.addFlight.Name = "addFlight";
+            this.addFlight.Size = new System.Drawing.Size(133, 47);
+            this.addFlight.TabIndex = 1;
+            this.addFlight.Text = "Add Flight";
+            this.addFlight.UseVisualStyleBackColor = true;
+            this.addFlight.Click += new System.EventHandler(this.AddFlight_Click);
+            // 
+            // removeFlight
+            // 
+            this.removeFlight.Location = new System.Drawing.Point(551, 97);
+            this.removeFlight.Name = "removeFlight";
+            this.removeFlight.Size = new System.Drawing.Size(133, 47);
+            this.removeFlight.TabIndex = 2;
+            this.removeFlight.Text = "Remove Flight";
+            this.removeFlight.UseVisualStyleBackColor = true;
+            this.removeFlight.Click += new System.EventHandler(this.removeFlight_Click);
+            // 
+            // editFlight
+            // 
+            this.editFlight.Location = new System.Drawing.Point(551, 150);
+            this.editFlight.Name = "editFlight";
+            this.editFlight.Size = new System.Drawing.Size(133, 47);
+            this.editFlight.TabIndex = 3;
+            this.editFlight.Text = "Edit Flight";
+            this.editFlight.UseVisualStyleBackColor = true;
+            this.editFlight.Click += new System.EventHandler(this.editFlight_Click);
             // 
             // LoadEngineerHomePage
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.HighlightText;
-            this.ClientSize = new System.Drawing.Size(1173, 938);
+            this.ClientSize = new System.Drawing.Size(696, 517);
+            this.Controls.Add(this.editFlight);
+            this.Controls.Add(this.removeFlight);
+            this.Controls.Add(this.addFlight);
+            this.Controls.Add(this.flightGrid);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "LoadEngineerHomePage";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Air3550";
+            this.Load += new System.EventHandler(this.LoadEngineerHomePage_Load);
+            ((System.ComponentModel.ISupportInitialize)(this.flightGrid)).EndInit();
             this.ResumeLayout(false);
 
         }
 
         #endregion
+
+        private System.Windows.Forms.DataGridView flightGrid;
+        private System.Windows.Forms.Button addFlight;
+        private System.Windows.Forms.Button removeFlight;
+        private System.Windows.Forms.Button editFlight;
     }
 }
 

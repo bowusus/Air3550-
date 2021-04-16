@@ -51,8 +51,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Airport.cs" />
+    <Compile Include="Path.cs" />
+    <Compile Include="PathFinder.cs" />
     <Compile Include="FlightModel.cs" />
     <Compile Include="CustomerModel.cs" />
+    <Compile Include="Plane.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SqliteDataAccess.cs" />
     <Compile Include="SystemAction.cs" />

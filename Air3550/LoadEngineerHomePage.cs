@@ -13,10 +13,72 @@ namespace Air3550
 {
     public partial class LoadEngineerHomePage : Form
     {
-        // This form file is to document the actions done on the Customer Home Page specifically
+        private static LoadEngineerHomePage instance;
+        private string originCode, destinationCode, time;
+        private int flightID;
         public LoadEngineerHomePage()
         {
             InitializeComponent();
         }
+
+        public static LoadEngineerHomePage GetInstance
+        {
+            get
+            {
+                if (instance == null || instance.IsDisposed)
+                {
+                    instance = new LoadEngineerHomePage();
+                }
+                return instance;
+            }
+        }
+
+        public string OriginCode { get => originCode; set => originCode = value; }
+        public string DestinationCode { get => destinationCode; set => destinationCode = value; }
+        public string Time { get => time; set => time = value; }
+        public int FlightID { get => flightID; set => flightID = value; }
+
+        private void LoadEngineerHomePage_Load(object sender, EventArgs e)
+        {
+            LoadFlightGrid();
+        }
+
+        private void AddFlight_Click(object sender, EventArgs e)
+        {
+            LoadEngineerAddFlightPage.GetInstance.Show();
+            LoadEngineerAddFlightPage.GetInstance.Location = this.Location;
+            this.Hide();
+        }
+
+        private void removeFlight_Click(object sender, EventArgs e)
+        {
+            if (flightGrid.SelectedRows.Count > 0)
+            {
+                int flightID = Convert.ToInt32(flightGrid.SelectedRows[0].Cells["flightID"].Value.ToString());
+                SqliteDataAccess.RemoveMasterFlight(flightID);
+                LoadFlightGrid();
+            }
+        }
+
+        private void editFlight_Click(object sender, EventArgs e)
+        {
+            if (flightGrid.SelectedRows.Count > 0)
+            {
+                this.originCode = flightGrid.SelectedRows[0].Cells["originCode_fk"].Value.ToString();
+                this.destinationCode = flightGrid.SelectedRows[0].Cells["destinationCode_fk"].Value.ToString();
+                this.time = string.Format("1-1-2021 {0}", flightGrid.SelectedRows[0].Cells["departureTime"].Value.ToString());
+                this.flightID = Convert.ToInt32(flightGrid.SelectedRows[0].Cells["flightID"].Value.ToString());
+                LoadEngineerEditFlightPage.GetInstance.Show();
+                LoadEngineerEditFlightPage.GetInstance.Location = this.Location;
+                this.Hide();
+
+            }
+        }
+
+        public void LoadFlightGrid()
+        {
+            flightGrid.DataSource = SqliteDataAccess.GetMasterFlightDT();
+        }
+
     }
 }
