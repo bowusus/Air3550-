@@ -187,5 +187,12 @@ namespace Air3550
                 this.routeTimePicker.Value = this.routeTimePicker.Value.AddMinutes(-4);
         }
 
+        private void LoadEngineerAddFlightPage_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            //Add message box to ask user if they want to exit program
+            //yes than close LogInPage
+            //no cancel form close
+            LoadEngineerHomePage.GetInstance.Close();
+        }
     }
 }

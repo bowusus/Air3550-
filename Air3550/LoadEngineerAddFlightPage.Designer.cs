@@ -199,6 +199,7 @@ namespace Air3550
             this.Controls.Add(this.originDropDown);
             this.Name = "LoadEngineerAddFlightPage";
             this.Text = "LoadEngineerAddFlightPage";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.LoadEngineerAddFlightPage_FormClosing);
             this.Load += new System.EventHandler(this.LoadEngineerAddFlightPage_Load);
             ((System.ComponentModel.ISupportInitialize)(this.routesGridView)).EndInit();
             this.ResumeLayout(false);
