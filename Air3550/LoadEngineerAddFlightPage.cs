@@ -44,6 +44,7 @@ namespace Air3550
             routeTimePicker.CustomFormat = "hh:mm tt";
             routeTimePicker.ShowUpDown = true;
             routeTimePicker.Visible = false;
+            routeTimePicker.Value = Convert.ToDateTime("12:00 AM");
             addButton.Visible = false;
         }
 
@@ -90,6 +91,17 @@ namespace Air3550
                 pathID = Convert.ToInt32(routesGridView.SelectedRows[0].Cells["pathID"].Value.ToString());
                 selectedPath = paths.Find(path => path.PathID == pathID);
 
+                for (int i = 0; i < selectedPath.NumberOfLayovers + 1; i++)
+                {
+                    if (SqliteDataAccess.MasterFlightExists(selectedPath.Airports[i].Code,
+                        selectedPath.Airports[i+1].Code,
+                        routeTimePicker.Value.ToShortTimeString()))
+                    {
+                        MessageBox.Show("Cannot create flight as it already exists.", "Error: Flight Exists", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                }
+
                 DateTime departureTime = routeTimePicker.Value;
                 FlightModel[] flightModels = new FlightModel[selectedPath.NumberOfLayovers + 1];
                 int currentFlightID = SqliteDataAccess.GetLastMasterFlightID();
@@ -123,7 +135,7 @@ namespace Air3550
                             SqliteDataAccess.GetDirectFlightDistance(
                                 selectedPath.Airports[i].Code,
                                 selectedPath.Airports[i + 1].Code),
-                            newDepartureTime);
+                                newDepartureTime, "Boeing 737 MAX 7");
                         departureTime = newDepartureTime;
                     }
                     else
@@ -136,7 +148,7 @@ namespace Air3550
                             SqliteDataAccess.GetDirectFlightDistance(
                                 selectedPath.Airports[i].Code,
                                 selectedPath.Airports[i + 1].Code),
-                            departureTime);
+                                departureTime, "Boeing 737 MAX 7");
                     }
                     currentFlightID++;
                 }
@@ -154,5 +166,26 @@ namespace Air3550
             airportCodes.Remove(originDropDown.Text);
             destinationDropDown.DataSource = airportCodes;
         }
+        private void destinationDropDown_SelectedIndexChanged(object sender, EventArgs e)
+        {
+        }
+
+        private void backButton_Click(object sender, EventArgs e)
+        {
+            LoadEngineerHomePage.GetInstance.LoadFlightGrid();
+            LoadEngineerHomePage.GetInstance.Show();
+            this.Dispose();
+        }
+
+        private void routeTimePicker_ValueChanged(object sender, EventArgs e)
+        {
+            if (this.routeTimePicker.Value.Minute % 5 == 0) 
+                return;
+            else if (this.routeTimePicker.Value.Minute % 5 == 1)
+                this.routeTimePicker.Value = this.routeTimePicker.Value.AddMinutes(4);
+            else if (this.routeTimePicker.Value.Minute % 5 == 4)
+                this.routeTimePicker.Value = this.routeTimePicker.Value.AddMinutes(-4);
+        }
+
     }
 }

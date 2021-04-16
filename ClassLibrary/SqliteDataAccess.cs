@@ -594,57 +594,69 @@ namespace ClassLibrary
                 cmd.CommandType = CommandType.Text;
                 if (flightModels.Length == 1)
                 {
-                    cmd.CommandText = "INSERT INTO masterFlight VALUES (@flightID, @originCode_fk, @destinationCode_fk, @distance, @departureTime)";
+                    cmd.CommandText = "INSERT INTO masterFlight VALUES (@flightID, @originCode_fk, @destinationCode_fk, @distance, @departureTime, @planeType, @numberOfVacantSeats)";
                     cmd.Parameters.AddWithValue("@flightID", flightModels[0].flightID);
                     cmd.Parameters.AddWithValue("@originCode_fk", flightModels[0].originCode);
                     cmd.Parameters.AddWithValue("@destinationCode_fk", flightModels[0].destinationCode);
                     cmd.Parameters.AddWithValue("@distance", flightModels[0].distance);
                     cmd.Parameters.AddWithValue("@departureTime", flightModels[0].departureDateTime.ToShortTimeString());
+                    cmd.Parameters.AddWithValue("@planeType", flightModels[0].planeType);
+                    cmd.Parameters.AddWithValue("@numberOfVacantSeats", flightModels[0].numberOfVacantSeats);
                 }
                 else if (flightModels.Length == 2)
                 {
                     cmd.CommandText = @"BEGIN TRANSACTION;
                                         INSERT INTO masterFlight 
-                                        VALUES (@flightID1, @originCode_fk1, @destinationCode_fk1, @distance1, @departureTime1);
+                                        VALUES (@flightID1, @originCode_fk1, @destinationCode_fk1, @distance1, @departureTime1, @planeType1, @numberOfVacantSeats1);
                                         INSERT INTO masterFlight 
-                                        VALUES (@flightID2, @originCode_fk2, @destinationCode_fk2, @distance2, @departureTime2);
+                                        VALUES (@flightID2, @originCode_fk2, @destinationCode_fk2, @distance2, @departureTime2, @planeType2, @numberOfVacantSeats2);
                                         COMMIT";
                     cmd.Parameters.AddWithValue("@flightID1", flightModels[0].flightID);
                     cmd.Parameters.AddWithValue("@originCode_fk1", flightModels[0].originCode);
                     cmd.Parameters.AddWithValue("@destinationCode_fk1", flightModels[0].destinationCode);
                     cmd.Parameters.AddWithValue("@distance1", flightModels[0].distance);
                     cmd.Parameters.AddWithValue("@departureTime1", flightModels[0].departureDateTime.ToShortTimeString());
+                    cmd.Parameters.AddWithValue("@planeType1", flightModels[0].planeType);
+                    cmd.Parameters.AddWithValue("@numberOfVacantSeats1", flightModels[0].numberOfVacantSeats);
                     cmd.Parameters.AddWithValue("@flightID2", flightModels[1].flightID);
                     cmd.Parameters.AddWithValue("@originCode_fk2", flightModels[1].originCode);
                     cmd.Parameters.AddWithValue("@destinationCode_fk2", flightModels[1].destinationCode);
                     cmd.Parameters.AddWithValue("@distance2", flightModels[1].distance);
                     cmd.Parameters.AddWithValue("@departureTime2", flightModels[1].departureDateTime.ToShortTimeString());
+                    cmd.Parameters.AddWithValue("@planeType2", flightModels[1].planeType);
+                    cmd.Parameters.AddWithValue("@numberOfVacantSeats2", flightModels[1].numberOfVacantSeats);
                 }
                 else if (flightModels.Length == 3)
                 {
                     cmd.CommandText = @"BEGIN TRANSACTION;
                                         INSERT INTO masterFlight 
-                                        VALUES (@flightID1, @originCode_fk1, @destinationCode_fk1, @distance1, @departureTime1);
+                                        VALUES (@flightID1, @originCode_fk1, @destinationCode_fk1, @distance1, @departureTime1, @planeType1, @numberOfVacantSeats1);
                                         INSERT INTO masterFlight 
-                                        VALUES (@flightID2, @originCode_fk2, @destinationCode_fk2, @distance2, @departureTime2);
+                                        VALUES (@flightID2, @originCode_fk2, @destinationCode_fk2, @distance2, @departureTime2, @planeType2, @numberOfVacantSeats2);
                                         INSERT INTO masterFlight
-                                        VALUES (@flightID3, @originCode_fk3, @destinationCode_fk3, @distance3, @departureTime3);
+                                        VALUES (@flightID3, @originCode_fk3, @destinationCode_fk3, @distance3, @departureTime3, @planeType3, @numberOfVacantSeats3);
                                         COMMIT";
                     cmd.Parameters.AddWithValue("@flightID1", flightModels[0].flightID);
                     cmd.Parameters.AddWithValue("@originCode_fk1", flightModels[0].originCode);
                     cmd.Parameters.AddWithValue("@destinationCode_fk1", flightModels[0].destinationCode);
                     cmd.Parameters.AddWithValue("@distance1", flightModels[0].distance);
                     cmd.Parameters.AddWithValue("@departureTime1", flightModels[0].departureDateTime.ToShortTimeString());
+                    cmd.Parameters.AddWithValue("@planeType1", flightModels[0].planeType);
+                    cmd.Parameters.AddWithValue("@numberOfVacantSeats1", flightModels[0].numberOfVacantSeats);
                     cmd.Parameters.AddWithValue("@flightID2", flightModels[1].flightID);
                     cmd.Parameters.AddWithValue("@originCode_fk2", flightModels[1].originCode);
                     cmd.Parameters.AddWithValue("@destinationCode_fk2", flightModels[1].destinationCode);
                     cmd.Parameters.AddWithValue("@distance2", flightModels[1].distance);
                     cmd.Parameters.AddWithValue("@departureTime2", flightModels[1].departureDateTime.ToShortTimeString());
+                    cmd.Parameters.AddWithValue("@planeType2", flightModels[1].planeType);
+                    cmd.Parameters.AddWithValue("@numberOfVacantSeats2", flightModels[1].numberOfVacantSeats);
                     cmd.Parameters.AddWithValue("@flightID3", flightModels[2].flightID);
                     cmd.Parameters.AddWithValue("@originCode_fk3", flightModels[2].originCode);
                     cmd.Parameters.AddWithValue("@destinationCode_fk3", flightModels[2].destinationCode);
                     cmd.Parameters.AddWithValue("@distance3", flightModels[2].distance);
                     cmd.Parameters.AddWithValue("@departureTime3", flightModels[2].departureDateTime.ToShortTimeString());
+                    cmd.Parameters.AddWithValue("@planeType3", flightModels[2].planeType);
+                    cmd.Parameters.AddWithValue("@numberOfVacantSeats3", flightModels[2].numberOfVacantSeats);
                 }
                 cmd.Connection = con;
                 cmd.ExecuteNonQuery();
@@ -741,6 +753,85 @@ namespace ClassLibrary
                 cmd.Connection = con;
                 cmd.ExecuteNonQuery();
                 con.Close();
+            }
+        }
+
+        public static List<FlightModel> GetAllMasterFlights()
+        {
+            List<FlightModel> masterFlights = new List<FlightModel>();
+
+            using (SQLiteConnection con = new SQLiteConnection(LoadConnectionString()))
+            // closes the connection when there is an error or it is done executing
+            {
+                con.Open(); // open the connection
+                SQLiteCommand cmd = new SQLiteCommand();
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = "SELECT * FROM masterFlight";
+                cmd.Connection = con;
+                SQLiteDataReader rdr = cmd.ExecuteReader();
+
+                while (rdr.Read())
+                {
+                    masterFlights.Add(new FlightModel(rdr.GetInt32(0), rdr.GetString(1), 
+                        rdr.GetString(2), rdr.GetInt32(3), Convert.ToDateTime(rdr.GetString(4)),
+                        rdr.GetString(5)));
+                }
+            }
+                return masterFlights;
+        }
+
+        public static Boolean MasterFlightExists(string originCode, string destinationCode, string departureTime)
+        {
+
+            using (SQLiteConnection con = new SQLiteConnection(LoadConnectionString()))
+            // closes the connection when there is an error or it is done executing
+            {
+                con.Open(); // open the connection
+                SQLiteCommand cmd = new SQLiteCommand();
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = "SELECT 1 FROM masterFlight " +
+                                  "WHERE masterFlight.originCode_fk = @originCode_fk " +
+                                  "AND masterFlight.destinationCode_fk = @destinationCode_fk " +
+                                  "AND masterFlight.departureTime = @departureTime";
+                cmd.Parameters.AddWithValue("@originCode_fk", originCode);
+                cmd.Parameters.AddWithValue("@destinationCode_fk", destinationCode);
+                cmd.Parameters.AddWithValue("@departureTime", departureTime);
+                cmd.Connection = con;
+
+                SQLiteDataReader rdr = cmd.ExecuteReader();
+                if (rdr.Read())
+                {
+                    rdr.Close();
+                    con.Close();
+                    return true;
+                }
+                else
+                {
+                    rdr.Close();
+                    con.Close();
+                    return false;
+                }
+            }
+        }
+
+        public static int GetPlaneCapacity(string planeType)
+        {
+            using (SQLiteConnection con = new SQLiteConnection(LoadConnectionString()))
+            // closes the connection when there is an error or it is done executing
+            {
+                int capacity = 0;
+                con.Open(); // open the connection
+                SQLiteCommand cmd = new SQLiteCommand();
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = "SELECT capacity FROM plane WHERE plane.planeType = @planeType";
+                cmd.Parameters.AddWithValue("@planeType", planeType);
+                cmd.Connection = con;
+
+                SQLiteDataReader rdr = cmd.ExecuteReader();
+                if (rdr.Read()) capacity = rdr.GetInt32(0);
+                rdr.Close();
+                con.Close();
+                return capacity;
             }
         }
 

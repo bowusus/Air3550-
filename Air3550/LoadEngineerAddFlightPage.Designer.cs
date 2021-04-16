@@ -43,6 +43,7 @@ namespace Air3550
             this.addButton = new System.Windows.Forms.Button();
             this.routeTimePicker = new System.Windows.Forms.DateTimePicker();
             this.searchButton = new System.Windows.Forms.Button();
+            this.backButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.routesGridView)).BeginInit();
             this.SuspendLayout();
             // 
@@ -73,6 +74,7 @@ namespace Air3550
             this.destinationDropDown.Name = "destinationDropDown";
             this.destinationDropDown.Size = new System.Drawing.Size(121, 21);
             this.destinationDropDown.TabIndex = 5;
+            this.destinationDropDown.SelectedIndexChanged += new System.EventHandler(this.destinationDropDown_SelectedIndexChanged);
             // 
             // originDropDown
             // 
@@ -143,7 +145,7 @@ namespace Air3550
             // 
             // addButton
             // 
-            this.addButton.Location = new System.Drawing.Point(639, 206);
+            this.addButton.Location = new System.Drawing.Point(639, 190);
             this.addButton.Name = "addButton";
             this.addButton.Size = new System.Drawing.Size(111, 49);
             this.addButton.TabIndex = 10;
@@ -159,6 +161,7 @@ namespace Air3550
             this.routeTimePicker.Name = "routeTimePicker";
             this.routeTimePicker.Size = new System.Drawing.Size(111, 31);
             this.routeTimePicker.TabIndex = 9;
+            this.routeTimePicker.ValueChanged += new System.EventHandler(this.routeTimePicker_ValueChanged);
             // 
             // searchButton
             // 
@@ -170,11 +173,22 @@ namespace Air3550
             this.searchButton.UseVisualStyleBackColor = true;
             this.searchButton.Click += new System.EventHandler(this.searchButton_Click);
             // 
+            // backButton
+            // 
+            this.backButton.Location = new System.Drawing.Point(639, 245);
+            this.backButton.Name = "backButton";
+            this.backButton.Size = new System.Drawing.Size(111, 49);
+            this.backButton.TabIndex = 12;
+            this.backButton.Text = "Back";
+            this.backButton.UseVisualStyleBackColor = true;
+            this.backButton.Click += new System.EventHandler(this.backButton_Click);
+            // 
             // LoadEngineerAddFlightPage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(762, 448);
+            this.Controls.Add(this.backButton);
             this.Controls.Add(this.searchButton);
             this.Controls.Add(this.addButton);
             this.Controls.Add(this.routeTimePicker);
@@ -208,5 +222,6 @@ namespace Air3550
         private System.Windows.Forms.Button addButton;
         private System.Windows.Forms.DateTimePicker routeTimePicker;
         private System.Windows.Forms.Button searchButton;
+        private System.Windows.Forms.Button backButton;
     }
 }

@@ -102,7 +102,7 @@ namespace Air3550
                                 SqliteDataAccess.GetDirectFlightDistance(
                                     selectedPath.Airports[i].Code,
                                     selectedPath.Airports[i + 1].Code),
-                                newDepartureTime);
+                                    newDepartureTime, "Boeing 737 MAX 7");
                             departureTime = newDepartureTime;
                         }
                         else
@@ -115,7 +115,7 @@ namespace Air3550
                                 SqliteDataAccess.GetDirectFlightDistance(
                                     selectedPath.Airports[i].Code,
                                     selectedPath.Airports[i + 1].Code),
-                                departureTime);
+                                    departureTime, "Boeing 737 MAX 7");
                         }
                         currentFlightID++;
                     }
@@ -160,6 +160,23 @@ namespace Air3550
                         path.PathID, path.NumberOfLayovers, path.Airports[0].Code,
                         path.Airports[1].Code, path.Airports[2].Code, path.Airports[3].Code);
             }
+        }
+
+        private void backButton_Click(object sender, EventArgs e)
+        {
+            LoadEngineerHomePage.GetInstance.LoadFlightGrid();
+            LoadEngineerHomePage.GetInstance.Show();
+            this.Dispose();
+        }
+
+        private void routeTimePicker_ValueChanged(object sender, EventArgs e)
+        {
+            if (this.routeTimePicker.Value.Minute % 5 == 0)
+                return;
+            else if (this.routeTimePicker.Value.Minute % 5 == 1)
+                this.routeTimePicker.Value = this.routeTimePicker.Value.AddMinutes(4);
+            else if (this.routeTimePicker.Value.Minute % 5 == 4)
+                this.routeTimePicker.Value = this.routeTimePicker.Value.AddMinutes(-4);
         }
     }
 }

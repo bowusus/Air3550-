@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using ClassLibrary;
 
 namespace Air3550
 {
@@ -19,6 +20,8 @@ namespace Air3550
             //LogInPage login = new LogInPage();
 
             /* Just for testing LE home page uncomment it later */
+            List<FlightModel> masterFlights = new List<FlightModel>();
+            masterFlights = SqliteDataAccess.GetAllMasterFlights();
             Application.Run(LoadEngineerHomePage.GetInstance);
 
             //LogInPage login2 = new LogInPage();

@@ -43,6 +43,7 @@ namespace Air3550
             this.originCodeLabel = new System.Windows.Forms.Label();
             this.destinationDropDown = new System.Windows.Forms.ComboBox();
             this.originDropDown = new System.Windows.Forms.ComboBox();
+            this.backButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.routesGridView)).BeginInit();
             this.SuspendLayout();
             // 
@@ -74,6 +75,7 @@ namespace Air3550
             this.routeTimePicker.Name = "routeTimePicker";
             this.routeTimePicker.Size = new System.Drawing.Size(111, 31);
             this.routeTimePicker.TabIndex = 17;
+            this.routeTimePicker.ValueChanged += new System.EventHandler(this.routeTimePicker_ValueChanged);
             // 
             // routesGridView
             // 
@@ -169,11 +171,22 @@ namespace Air3550
             this.originDropDown.TabIndex = 12;
             this.originDropDown.SelectedIndexChanged += new System.EventHandler(this.originDropDown_SelectedIndexChanged);
             // 
+            // backButton
+            // 
+            this.backButton.Location = new System.Drawing.Point(660, 247);
+            this.backButton.Name = "backButton";
+            this.backButton.Size = new System.Drawing.Size(111, 49);
+            this.backButton.TabIndex = 22;
+            this.backButton.Text = "Back";
+            this.backButton.UseVisualStyleBackColor = true;
+            this.backButton.Click += new System.EventHandler(this.backButton_Click);
+            // 
             // LoadEngineerEditFlightPage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.backButton);
             this.Controls.Add(this.searchButton);
             this.Controls.Add(this.saveButton);
             this.Controls.Add(this.routeTimePicker);
@@ -207,5 +220,6 @@ namespace Air3550
         private System.Windows.Forms.Label originCodeLabel;
         private System.Windows.Forms.ComboBox destinationDropDown;
         private System.Windows.Forms.ComboBox originDropDown;
+        private System.Windows.Forms.Button backButton;
     }
 }

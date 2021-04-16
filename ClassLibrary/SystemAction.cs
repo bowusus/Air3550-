@@ -100,5 +100,10 @@ namespace ClassLibrary
             }
             return flights;
         }
+
+        public static void GenerateFlights()
+        {
+
+        }
     }
 }

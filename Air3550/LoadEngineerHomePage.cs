@@ -46,6 +46,7 @@ namespace Air3550
         private void AddFlight_Click(object sender, EventArgs e)
         {
             LoadEngineerAddFlightPage.GetInstance.Show();
+            LoadEngineerAddFlightPage.GetInstance.Location = this.Location;
             this.Hide();
         }
 
@@ -67,8 +68,10 @@ namespace Air3550
                 this.destinationCode = flightGrid.SelectedRows[0].Cells["destinationCode_fk"].Value.ToString();
                 this.time = string.Format("1-1-2021 {0}", flightGrid.SelectedRows[0].Cells["departureTime"].Value.ToString());
                 this.flightID = Convert.ToInt32(flightGrid.SelectedRows[0].Cells["flightID"].Value.ToString());
-                this.Hide();
                 LoadEngineerEditFlightPage.GetInstance.Show();
+                LoadEngineerEditFlightPage.GetInstance.Location = this.Location;
+                this.Hide();
+
             }
         }
 
