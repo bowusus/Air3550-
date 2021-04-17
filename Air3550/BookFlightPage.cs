@@ -17,6 +17,7 @@ namespace Air3550
         public static CustomerModel currCustomer; // make a local object that can be read in the current context
         public static bool logOutButtonClicked = false;
         public static bool backButtonClicked = false;
+        public static List<string> airportsShown;
         public BookFlightPage()
         {
             InitializeComponent();
@@ -27,10 +28,87 @@ namespace Air3550
             InitializeComponent();
             // get the current customer and pass that information to the textboxes
             currCustomer = customer;
+            // create a new list for the airports that will be displayed
+            airportsShown = new List<string>();
+            // make the various error labels initially not visible
+            DifferentLocationError.Visible = false;
+            DepartDateError.Visible = false;
+        }
+        private void BookFlightPage_Load(object sender, EventArgs e)
+        {
+            // This method gets the available airports/locations that the customer can depart/arrive at
+            // It fills the combo boxes with the airport data, sets the default trip to a round trip,
+            // and makes the table that shows the available flights initially not visible
+            List<Airport> airportList;
+            airportList = SqliteDataAccess.GetAirports();
+            foreach (Airport airport in airportList)
+            {
+                string currAir = airport.Code + " (" + airport.Name + ")";
+                airportsShown.Add(currAir);
+            }
+            DepartComboBox.DataSource = airportsShown;
+            DepartComboBox.SelectedItem = null;
+            DepartComboBox.SelectedText = "--Select Location--";
+            ArriveComboBox.DataSource = airportsShown;
+            ArriveComboBox.SelectedItem = null;
+            ArriveComboBox.SelectedText = "--Select Location--";
+            RoundTripButton.Checked = true;
+            OneWayButton.Checked = false;
+            AvailableFlightTable.Visible = false;
+        }
+        private void RoundTripButton_Click(object sender, EventArgs e)
+        {
+            // This method checks if the round trip button is clicked (or it is left as the default),
+            // then it makes the return date label and picker visible to the customer
+            ReturnDateLabel.Visible = true;
+            ReturnDatePicker.Visible = true;
+        }
+        private void OneWayButton_Click(object sender, EventArgs e)
+        {
+            // This method checks if the one way button is clicked, then it makes the return date label
+            // and picker no longer visible to the customer
+            ReturnDateLabel.Visible = false;
+            ReturnDatePicker.Visible = false;
+        }
+        private void DepartDatePicker_ValueChanged(object sender, EventArgs e)
+        {
+            // When the depart date is changed, this method checks if the entered date is 
+            // within 6 months. If it is within 6 months, then the depart date error stays 
+            // not visible to the customer. Otherwise, the depart date error is visible
+            // to the customer
+            DepartDateError.Visible = false;
+            DateTime date = DateTime.Today; // get the current time that the customer wants to depart
+            var delta = DepartDatePicker.Value.Subtract(date.AddMonths(6)); // get the difference in times between 6 months from now and the depart date
+            if (delta.TotalMinutes > 0)
+                DepartDateError.Visible = true;
+        }
+        private void ReturnDatePicker_ValueChanged(object sender, EventArgs e)
+        {
+            // When the return date is changed, this method checks if the entered date is 
+            // within 6 months. If it is within 6 months, then the return date error stays 
+            // not visible to the customer. Otherwise, the return date error is visible
+            // to the customer
+            ReturnDateError.Visible = false;
+            DateTime date = DateTime.Today; // get the current time that the customer wants to return
+            var delta = ReturnDatePicker.Value.Subtract(date.AddMonths(6)); // get the difference in times between 6 months from now and the return date
+            if (delta.TotalMinutes > 0)
+                ReturnDateError.Visible = true;
+        }
+        private void SearchButton_Click(object sender, EventArgs e)
+        {
+            // This method first checks if the depart and arrive locations are the same or null.
+            // if they are, then errors appear. Otherwise, the available flights appear.
+            DifferentLocationError.Visible = false;
+            if (DepartComboBox.SelectedValue == ArriveComboBox.SelectedValue)
+                DifferentLocationError.Visible = true;
+            else if (String.IsNullOrEmpty(DepartComboBox.SelectedValue.ToString()) || String.IsNullOrEmpty(ArriveComboBox.SelectedValue.ToString()))
+                DifferentLocationError.Visible = true;
+            else
+                AvailableFlightTable.Visible = true;
         }
         private void BackButton_Click(object sender, EventArgs e)
         {
-            // This methods allows the user to return to the home page
+            // This method allows the user to return to the home page
             // The current form will close
             // The home page will open
             DialogResult result = MessageBox.Show("Are you sure that you want to return home?\nAny changes not saved will not be updated.", "Account Information", MessageBoxButtons.YesNo, MessageBoxIcon.Hand);

@@ -264,7 +264,11 @@ namespace Air3550
             // StateComboBox
             // 
             this.StateComboBox.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.StateComboBox.DropDownHeight = 64;
+            this.StateComboBox.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.StateComboBox.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
+            this.StateComboBox.DropDownHeight = 100;
+            this.StateComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.StateComboBox.Font = new System.Drawing.Font("Rockwell", 18F);
             this.StateComboBox.FormattingEnabled = true;
             this.StateComboBox.IntegralHeight = false;
             this.StateComboBox.Items.AddRange(new object[] {
@@ -318,15 +322,19 @@ namespace Air3550
             "West Virginia",
             "Wisconsin",
             "Wyoming"});
-            this.StateComboBox.Location = new System.Drawing.Point(1450, 549);
+            this.StateComboBox.Location = new System.Drawing.Point(1450, 529);
             this.StateComboBox.Name = "StateComboBox";
-            this.StateComboBox.Size = new System.Drawing.Size(212, 33);
+            this.StateComboBox.Size = new System.Drawing.Size(718, 62);
             this.StateComboBox.TabIndex = 8;
             // 
             // AgeComboBox
             // 
             this.AgeComboBox.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.AgeComboBox.DropDownHeight = 64;
+            this.AgeComboBox.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.AgeComboBox.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
+            this.AgeComboBox.DropDownHeight = 100;
+            this.AgeComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.AgeComboBox.Font = new System.Drawing.Font("Rockwell", 18F);
             this.AgeComboBox.FormattingEnabled = true;
             this.AgeComboBox.IntegralHeight = false;
             this.AgeComboBox.Items.AddRange(new object[] {
@@ -431,9 +439,9 @@ namespace Air3550
             "98",
             "99",
             "100+"});
-            this.AgeComboBox.Location = new System.Drawing.Point(1450, 927);
+            this.AgeComboBox.Location = new System.Drawing.Point(1450, 907);
             this.AgeComboBox.Name = "AgeComboBox";
-            this.AgeComboBox.Size = new System.Drawing.Size(212, 33);
+            this.AgeComboBox.Size = new System.Drawing.Size(270, 62);
             this.AgeComboBox.TabIndex = 11;
             // 
             // PhoneButton
@@ -535,7 +543,7 @@ namespace Air3550
             this.ConfirmPasswordButton.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.ConfirmPasswordButton.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.ConfirmPasswordButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.ConfirmPasswordButton.Font = new System.Drawing.Font("Rockwell", 10F);
+            this.ConfirmPasswordButton.Font = new System.Drawing.Font("Rockwell", 8F);
             this.ConfirmPasswordButton.Location = new System.Drawing.Point(55, 655);
             this.ConfirmPasswordButton.Name = "ConfirmPasswordButton";
             this.ConfirmPasswordButton.Size = new System.Drawing.Size(221, 72);
@@ -658,7 +666,7 @@ namespace Air3550
             // 
             this.StateError.AutoSize = true;
             this.StateError.ForeColor = System.Drawing.Color.Red;
-            this.StateError.Location = new System.Drawing.Point(1452, 521);
+            this.StateError.Location = new System.Drawing.Point(1452, 501);
             this.StateError.Name = "StateError";
             this.StateError.Size = new System.Drawing.Size(144, 25);
             this.StateError.TabIndex = 47;
@@ -691,7 +699,7 @@ namespace Air3550
             // 
             this.AgeError.AutoSize = true;
             this.AgeError.ForeColor = System.Drawing.Color.Red;
-            this.AgeError.Location = new System.Drawing.Point(1452, 899);
+            this.AgeError.Location = new System.Drawing.Point(1452, 879);
             this.AgeError.Name = "AgeError";
             this.AgeError.Size = new System.Drawing.Size(132, 25);
             this.AgeError.TabIndex = 50;

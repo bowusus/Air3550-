@@ -40,6 +40,8 @@ namespace ClassLibrary
                 }
                 if (String.IsNullOrEmpty(role))
                     role = "employee";
+                rdr.Close();
+                con.Close();
                 return role; // return airport name
             }
         }
@@ -65,6 +67,8 @@ namespace ClassLibrary
                 {
                     count = rdr.GetInt32(0);
                 }
+                rdr.Close();
+                con.Close();
                 return count; // return count with that email
             }
         }
@@ -89,6 +93,8 @@ namespace ClassLibrary
                 {
                     currUserID = rdr.GetInt32(0); 
                 }
+                rdr.Close();
+                con.Close();
                 return currUserID; // return user id
             }
         }
@@ -147,6 +153,8 @@ namespace ClassLibrary
                 {
                     pass = rdr.GetString(0); // get the password from the database
                 }
+                rdr.Close();
+                con.Close();
                 if (pass == null) // if there is no password in the database, that means the userID is not in the database and the user is not a customer
                     return -1;
                 string encryptPass = ClassLibrary.SystemAction.EncryptPassword(currPass);
@@ -188,7 +196,9 @@ namespace ClassLibrary
                     data.Add(reader[9].ToString());
                     data.Add(reader[10].ToString());
                     data.Add(reader[11].ToString());
+                    reader.Close();
                 }
+                con.Close();
                 return data; // return user data
             }
         }
@@ -212,6 +222,8 @@ namespace ClassLibrary
                 {
                     routeID = rdr.GetInt32(0);
                 }
+                rdr.Close();
+                con.Close();
                 return routeID; // return user data
             }
         }
@@ -238,7 +250,9 @@ namespace ClassLibrary
                         flightIDs.Add(reader.GetInt32(5));
                     if (!String.IsNullOrEmpty(reader[6].ToString()))
                         flightIDs.Add(reader.GetInt32(6));
+                    reader.Close();
                 }
+                con.Close();
                 return flightIDs; // return user data
             }
         }
@@ -262,6 +276,8 @@ namespace ClassLibrary
                 {
                     flightIDsList.Add(rdr.GetInt32(0));
                 }
+                rdr.Close();
+                con.Close();
                 return flightIDsList; // return user data
             }
         }
@@ -285,6 +301,8 @@ namespace ClassLibrary
                 {
                     airportName = rdr.GetString(0); // get the airport name from the database
                 }
+                rdr.Close();
+                con.Close();
                 return airportName; // return airport name
             }
         }
@@ -319,7 +337,9 @@ namespace ClassLibrary
                     flightData.Add(reader[10].ToString());
                     flightData.Add(reader[11].ToString());
                     flightData.Add(reader[12].ToString());
+                    reader.Close();
                 }
+                con.Close();
                 return flightData; // return flight data
             }
         }
@@ -381,6 +401,8 @@ namespace ClassLibrary
                 {
                     paymentMethod = rdr.GetString(0);
                 }
+                rdr.Close();
+                con.Close();
                 return paymentMethod; // return payment method
             }
         }
@@ -404,6 +426,8 @@ namespace ClassLibrary
                 {
                     balance = rdr.GetInt32(0);
                 }
+                rdr.Close();
+                con.Close();
                 return balance; // return user id
             }
         }
@@ -445,6 +469,8 @@ namespace ClassLibrary
                 {
                     pointsAvailable = rdr.GetInt32(0);
                 }
+                rdr.Close();
+                con.Close();
                 return pointsAvailable; // return user id
             }
         }
@@ -486,6 +512,8 @@ namespace ClassLibrary
                 {
                     pointsUsed = rdr.GetInt32(0);
                 }
+                rdr.Close();
+                con.Close();
                 return pointsUsed; // return user id
             }
         }
