@@ -37,11 +37,13 @@ namespace Air3550
 
         private void LoadEngineerAddFlightPage_Load(object sender, EventArgs e)
         {
-            List<String> airportCodes = new List<string>();
-            airportCodes = SqliteDataAccess.GetAirportCodes();
-            originDropDown.DataSource = airportCodes;
-            airportCodes.Remove(originDropDown.Text);
-            destinationDropDown.DataSource = airportCodes;
+            List<string> originCodes = new List<string>();
+            List<string> destinationCodes = new List<string>();
+            originCodes = SqliteDataAccess.GetAirportCodes();
+            destinationCodes = SqliteDataAccess.GetAirportCodes();
+            originDropDown.DataSource = originCodes;
+            destinationCodes.Remove(originDropDown.Text);
+            destinationDropDown.DataSource = destinationCodes;
 
             routeTimePicker.Format = DateTimePickerFormat.Custom;
             routeTimePicker.CustomFormat = "hh:mm tt";
@@ -87,90 +89,118 @@ namespace Air3550
 
         private void addButton_Click(object sender, EventArgs e)
         {
+            generateFlightsAndRoute();
+        }
+
+        /*
+         * Helper method to generate all new Flights and the Route for the selected path
+         * 
+         */
+        private void generateFlightsAndRoute()
+        {
+            List<int> flightIDs = new List<int>();
             Path selectedPath;
             int pathID;
+
             if (routesGridView.SelectedRows.Count > 0)
             {
                 pathID = Convert.ToInt32(routesGridView.SelectedRows[0].Cells["pathID"].Value.ToString());
                 selectedPath = paths.Find(path => path.PathID == pathID);
 
-                for (int i = 0; i < selectedPath.NumberOfLayovers + 1; i++)
+                //check if any of the to be created flights exist
+                if (routesGridView.SelectedRows.Count > 0)
                 {
-                    if (SqliteDataAccess.MasterFlightExists(selectedPath.Airports[i].Code,
-                        selectedPath.Airports[i+1].Code,
-                        routeTimePicker.Value.ToShortTimeString()))
-                    {
-                        MessageBox.Show("Cannot create flight as it already exists.", "Error: Flight Exists", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        return;
-                    }
+                    pathID = Convert.ToInt32(routesGridView.SelectedRows[0].Cells["pathID"].Value.ToString());
+                    selectedPath = paths.Find(path => path.PathID == pathID);
                 }
 
                 DateTime departureTime = routeTimePicker.Value;
-                FlightModel[] flightModels = new FlightModel[selectedPath.NumberOfLayovers + 1];
                 int currentFlightID = SqliteDataAccess.GetLastMasterFlightID();
-                
-                // Double-Check to see if table is empty so currentFlightID is set to 1 rather than 2
-                if (currentFlightID == 2) currentFlightID = (SqliteDataAccess.CheckMasterFlightEmpty() == 0) ? 1 : 2;
+                List<FlightModel> newFlights = new List<FlightModel>();
+
+                // loop through selected path creating flights for each pair of airports if it
+                // does not already exist
                 for (int i = 0; i < selectedPath.NumberOfLayovers + 1; i++)
                 {
-                    if (i != 0)
-                    {
-                        int distance = SqliteDataAccess.GetDirectFlightDistance(
-                            selectedPath.Airports[i - 1].Code,
-                            selectedPath.Airports[i].Code);
+                    int distance = SqliteDataAccess.GetDirectFlightDistance(selectedPath.Airports[i].Code,
+                                                        selectedPath.Airports[i + 1].Code);
 
-                        /* 
-                         * hours is calculated by time it take to get to destination at 500 mph
-                         * plus 30 minutes exiting and entering runway 
-                         */
-                        decimal hours = (decimal)(distance / 500.0) + .5M + (40 / 60.0M);
-                        decimal minutes = (decimal)(hours - Math.Floor(hours)) * 60.0M;
-                        decimal adjustment = minutes % 5;
-                        hours = Math.Floor(hours);
-                        if (adjustment != 0) minutes = (minutes - adjustment) + 5;
-                        DateTime newDepartureTime = departureTime.AddHours((double)hours).AddMinutes((double)minutes);
-
-                        // Constructing a new flight model for each flight in the path
-                        flightModels[i] = new FlightModel(
-                            currentFlightID,
-                            selectedPath.Airports[i].Code,
-                            selectedPath.Airports[i + 1].Code,
-                            SqliteDataAccess.GetDirectFlightDistance(
-                                selectedPath.Airports[i].Code,
-                                selectedPath.Airports[i + 1].Code),
-                                newDepartureTime, "Boeing 737 MAX 7");
-                        departureTime = newDepartureTime;
-                    }
-                    else
+                    // if the flight in the route exists then add its flight id to the list
+                    if (SqliteDataAccess.MasterFlightExists(selectedPath.Airports[i].Code,
+                                        selectedPath.Airports[i + 1].Code,
+                                        departureTime.ToShortTimeString()))
                     {
-                        // Constructing a new flight model for each flight in the path
-                        flightModels[i] = new FlightModel(
-                            currentFlightID,
-                            selectedPath.Airports[i].Code,
-                            selectedPath.Airports[i + 1].Code,
-                            SqliteDataAccess.GetDirectFlightDistance(
-                                selectedPath.Airports[i].Code,
-                                selectedPath.Airports[i + 1].Code),
-                                departureTime, "Boeing 737 MAX 7");
+                        flightIDs.Add(SqliteDataAccess.GetFlightIDFromMaster(selectedPath.Airports[i].Code,
+                                                                              selectedPath.Airports[i + 1].Code,
+                                                                              departureTime.ToShortTimeString()));
                     }
-                    currentFlightID++;
+                    // create a new flight and add it to new flight list
+                    else 
+                    {
+                        newFlights.Add(new FlightModel(currentFlightID, selectedPath.Airports[i].Code,
+                                                       selectedPath.Airports[i + 1].Code, distance,
+                                                       departureTime, "Boeing 737 MAX 7"));
+                        flightIDs.Add(currentFlightID);
+                        currentFlightID++;
+                    }
+
+                    /* 
+                     * hours is calculated by time it take to get to destination at 500 mph
+                     * plus 30 minutes exiting and entering runway 
+                     */
+                    decimal hours = (decimal)(distance / 500.0) + .5M + (40 / 60.0M);
+                    decimal minutes = (decimal)(hours - Math.Floor(hours)) * 60.0M;
+                    decimal adjustment = minutes % 5;
+                    hours = Math.Floor(hours);
+                    if (adjustment != 0) minutes = (minutes - adjustment) + 5;
+                    DateTime newDepartureTime = departureTime.AddHours((double)hours).AddMinutes((double)minutes);
+                    departureTime = newDepartureTime;
                 }
-                SqliteDataAccess.AddFlightToMaster(flightModels);
-                LoadEngineerHomePage.GetInstance.LoadFlightGrid();
-                LoadEngineerHomePage.GetInstance.Show();
-                this.Dispose();
+
+                if (newFlights.Count == 0)
+                {
+                    MessageBox.Show("Cannot create route as it already exists.", "Error: Route Exists", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                SqliteDataAccess.AddFlightToMaster(newFlights);
+
+                int routeID = SqliteDataAccess.GetLastRouteID();
+                if (selectedPath.NumberOfLayovers == 0)
+                {
+                    SqliteDataAccess.AddToRoute(routeID, selectedPath.Airports[0].Code,
+                                                selectedPath.Airports[selectedPath.NumberOfLayovers + 1].Code,
+                                                selectedPath.NumberOfLayovers, flightIDs[0].ToString());
+                }
+                else if (selectedPath.NumberOfLayovers == 1)
+                {
+                    SqliteDataAccess.AddToRoute(routeID, selectedPath.Airports[0].Code,
+                                                selectedPath.Airports[selectedPath.NumberOfLayovers + 1].Code,
+                                                selectedPath.NumberOfLayovers, flightIDs[0].ToString(),
+                                                flightIDs[1].ToString());
+                }
+                else if (selectedPath.NumberOfLayovers == 2)
+                {
+                    SqliteDataAccess.AddToRoute(routeID, selectedPath.Airports[0].Code,
+                                                selectedPath.Airports[selectedPath.NumberOfLayovers + 1].Code,
+                                                selectedPath.NumberOfLayovers, flightIDs[0].ToString(),
+                                                flightIDs[1].ToString(), flightIDs[2].ToString());
+                }
             }
+            LoadEngineerHomePage.GetInstance.LoadFlightGrid();
+            LoadEngineerHomePage.GetInstance.Show();
+            this.Dispose();
         }
 
         private void originDropDown_SelectedIndexChanged(object sender, EventArgs e)
         {
-            List<String> airportCodes = new List<string>();
-            airportCodes = SqliteDataAccess.GetAirportCodes();
-            airportCodes.Remove(originDropDown.Text);
-            destinationDropDown.DataSource = airportCodes;
-        }
-        private void destinationDropDown_SelectedIndexChanged(object sender, EventArgs e)
-        {
+            string currentDestination = destinationDropDown.Text;
+            List<string> destinationCodes = new List<string>();
+            destinationCodes = SqliteDataAccess.GetAirportCodes();
+            destinationCodes.Remove(originDropDown.Text);
+            destinationDropDown.DataSource = destinationCodes;
+            
+            if(originDropDown.Text != currentDestination) destinationDropDown.Text = currentDestination;
         }
 
         private void backButton_Click(object sender, EventArgs e)

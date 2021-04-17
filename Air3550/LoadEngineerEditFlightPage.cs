@@ -61,7 +61,6 @@ namespace Air3550
         {
             if (routesGridView.SelectedRows.Count > 0)
             {
-                SqliteDataAccess.RemoveMasterFlight(LoadEngineerHomePage.GetInstance.FlightID);
                 Path selectedPath;
                 int pathID;
                 if (routesGridView.SelectedRows.Count > 0)
@@ -70,7 +69,7 @@ namespace Air3550
                     selectedPath = paths.Find(path => path.PathID == pathID);
 
                     DateTime departureTime = routeTimePicker.Value;
-                    FlightModel[] flightModels = new FlightModel[selectedPath.NumberOfLayovers + 1];
+                    List<FlightModel> flightModels = new List<FlightModel>();
                     int currentFlightID = SqliteDataAccess.GetLastMasterFlightID();
 
                     // Double-Check to see if table is empty so currentFlightID is set to 1 rather than 2
@@ -120,6 +119,7 @@ namespace Air3550
                         currentFlightID++;
                     }
                     SqliteDataAccess.AddFlightToMaster(flightModels);
+                    SqliteDataAccess.RemoveMasterFlight(LoadEngineerHomePage.GetInstance.FlightID);
                     LoadEngineerHomePage.GetInstance.LoadFlightGrid();
                     LoadEngineerHomePage.GetInstance.Show();
                     this.Dispose();
@@ -127,7 +127,8 @@ namespace Air3550
             }
             else
             {
-                SqliteDataAccess.ChangeTimeMaster(LoadEngineerHomePage.GetInstance.FlightID, routeTimePicker.Value);
+                int newFlightID = SqliteDataAccess.GetLastMasterFlightID();
+                SqliteDataAccess.ChangeTimeMaster(LoadEngineerHomePage.GetInstance.FlightID, routeTimePicker.Value, newFlightID);
                 LoadEngineerHomePage.GetInstance.LoadFlightGrid();
                 LoadEngineerHomePage.GetInstance.Show();
                 this.Dispose();
@@ -177,6 +178,14 @@ namespace Air3550
                 this.routeTimePicker.Value = this.routeTimePicker.Value.AddMinutes(4);
             else if (this.routeTimePicker.Value.Minute % 5 == 4)
                 this.routeTimePicker.Value = this.routeTimePicker.Value.AddMinutes(-4);
+        }
+
+        private void LoadEngineerEditFlightPage_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            //Add message box to ask user if they want to exit program
+            //yes than close LogInPage
+            //no cancel form close
+            LoadEngineerHomePage.GetInstance.Close();
         }
     }
 }

@@ -74,7 +74,6 @@ namespace Air3550
             this.destinationDropDown.Name = "destinationDropDown";
             this.destinationDropDown.Size = new System.Drawing.Size(121, 21);
             this.destinationDropDown.TabIndex = 5;
-            this.destinationDropDown.SelectedIndexChanged += new System.EventHandler(this.destinationDropDown_SelectedIndexChanged);
             // 
             // originDropDown
             // 
