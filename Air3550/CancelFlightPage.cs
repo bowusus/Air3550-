@@ -46,7 +46,7 @@ namespace Air3550
             int routeID = SqliteDataAccess.GetBookedFlightsRouteID(currCustomer.userID);
             if (routeID != 0)
             {
-                flightIDs = SqliteDataAccess.GetBookedFlights_Route(routeID);
+                flightIDs = SqliteDataAccess.GetFlightIDsInRoute(routeID);
                 //flightIDs = SqliteDataAccess.GetCurrentFlightIDs(currCustomer.userID); // get the flight ids of the customer's current flights 
                 // for each of these ids, get the flight information (origin, destination, etc.)
                 // Then get the name of the airports
@@ -87,6 +87,7 @@ namespace Air3550
             CancelFlightTable.Columns[7].HeaderText = "Total Time";
             CancelFlightTable.Columns[8].HeaderText = "Cost";
             CancelFlightTable.Columns[9].HeaderText = "Amount of Points";
+            CancelFlightTable.Columns[10].Visible = false;
         }
         private void CancelFlightButton_Click(object sender, EventArgs e)
         {

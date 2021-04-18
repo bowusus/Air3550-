@@ -61,6 +61,12 @@
     <Compile Include="AccountInformationPage.Designer.cs">
       <DependentUpon>AccountInformationPage.cs</DependentUpon>
     </Compile>
+    <Compile Include="BookFlightPage - Copy.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BookFlightPage - Copy.Designer.cs">
+      <DependentUpon>BookFlightPage - Copy.cs</DependentUpon>
+    </Compile>
     <Compile Include="LoadEngineerAddFlightPage.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -149,6 +155,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="AccountInformationPage.resx">
       <DependentUpon>AccountInformationPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BookFlightPage - Copy.resx">
+      <DependentUpon>BookFlightPage - Copy.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="LoadEngineerAddFlightPage.resx">
       <DependentUpon>LoadEngineerAddFlightPage.cs</DependentUpon>

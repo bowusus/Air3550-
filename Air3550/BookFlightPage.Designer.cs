@@ -29,6 +29,8 @@ namespace Air3550
         /// </summary>
         private void InitializeComponent()
         {
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
             this.AvailableFlightTable = new System.Windows.Forms.DataGridView();
             this.RoundTripButton = new System.Windows.Forms.RadioButton();
             this.OneWayButton = new System.Windows.Forms.RadioButton();
@@ -47,6 +49,8 @@ namespace Air3550
             this.DifferentLocationError = new System.Windows.Forms.Label();
             this.DepartDateError = new System.Windows.Forms.Label();
             this.ReturnDateError = new System.Windows.Forms.Label();
+            this.ReturnBeforeDepartError = new System.Windows.Forms.Label();
+            this.DepartDateAfterTodayError = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.AvailableFlightTable)).BeginInit();
             this.SuspendLayout();
             // 
@@ -56,14 +60,31 @@ namespace Air3550
             this.AvailableFlightTable.AllowUserToOrderColumns = true;
             this.AvailableFlightTable.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.AvailableFlightTable.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.AvailableFlightTable.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.AvailableFlightTable.BackgroundColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle5.Font = new System.Drawing.Font("Rockwell", 10F);
+            dataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.AvailableFlightTable.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle5;
             this.AvailableFlightTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.AvailableFlightTable.Location = new System.Drawing.Point(67, 392);
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle6.Font = new System.Drawing.Font("Rockwell", 10F);
+            dataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.AvailableFlightTable.DefaultCellStyle = dataGridViewCellStyle6;
+            this.AvailableFlightTable.Location = new System.Drawing.Point(67, 407);
             this.AvailableFlightTable.Name = "AvailableFlightTable";
             this.AvailableFlightTable.RowHeadersVisible = false;
             this.AvailableFlightTable.RowHeadersWidth = 82;
             this.AvailableFlightTable.RowTemplate.Height = 33;
-            this.AvailableFlightTable.Size = new System.Drawing.Size(2101, 597);
+            this.AvailableFlightTable.Size = new System.Drawing.Size(2101, 638);
             this.AvailableFlightTable.TabIndex = 46;
             // 
             // RoundTripButton
@@ -251,12 +272,36 @@ namespace Air3550
             this.ReturnDateError.Text = "Please Select a Return Date that is within 6 months";
             this.ReturnDateError.Visible = false;
             // 
+            // ReturnBeforeDepartError
+            // 
+            this.ReturnBeforeDepartError.AutoSize = true;
+            this.ReturnBeforeDepartError.ForeColor = System.Drawing.Color.Red;
+            this.ReturnBeforeDepartError.Location = new System.Drawing.Point(1366, 300);
+            this.ReturnBeforeDepartError.Name = "ReturnBeforeDepartError";
+            this.ReturnBeforeDepartError.Size = new System.Drawing.Size(553, 25);
+            this.ReturnBeforeDepartError.TabIndex = 66;
+            this.ReturnBeforeDepartError.Text = "Please Select a Return Date that is after the Depart Date";
+            this.ReturnBeforeDepartError.Visible = false;
+            // 
+            // DepartDateAfterTodayError
+            // 
+            this.DepartDateAfterTodayError.AutoSize = true;
+            this.DepartDateAfterTodayError.ForeColor = System.Drawing.Color.Red;
+            this.DepartDateAfterTodayError.Location = new System.Drawing.Point(756, 300);
+            this.DepartDateAfterTodayError.Name = "DepartDateAfterTodayError";
+            this.DepartDateAfterTodayError.Size = new System.Drawing.Size(493, 25);
+            this.DepartDateAfterTodayError.TabIndex = 73;
+            this.DepartDateAfterTodayError.Text = "Please Select a Depart Date that is Today or Later";
+            this.DepartDateAfterTodayError.Visible = false;
+            // 
             // BookFlightPage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.HighlightText;
             this.ClientSize = new System.Drawing.Size(2222, 1078);
+            this.Controls.Add(this.DepartDateAfterTodayError);
+            this.Controls.Add(this.ReturnBeforeDepartError);
             this.Controls.Add(this.ReturnDateError);
             this.Controls.Add(this.DepartDateError);
             this.Controls.Add(this.DifferentLocationError);
@@ -306,6 +351,8 @@ namespace Air3550
         private System.Windows.Forms.Label DifferentLocationError;
         private System.Windows.Forms.Label DepartDateError;
         private System.Windows.Forms.Label ReturnDateError;
+        private System.Windows.Forms.Label ReturnBeforeDepartError;
+        private System.Windows.Forms.Label DepartDateAfterTodayError;
     }
 }
 

@@ -202,6 +202,33 @@ namespace ClassLibrary
                 return data; // return user data
             }
         }
+        public static List<(int, int)> GetRouteInfo(string origin, string destination)
+        {
+            // This method goes into the database, specifically the route table, 
+            // and retrieves all of the routes with the specified originCode and destinationCode
+            using (SQLiteConnection con = new SQLiteConnection(LoadConnectionString()))
+            // closes the connection when there is an error or it is done executing
+            {
+                con.Open(); // open the connection
+                SQLiteCommand cmd = new SQLiteCommand();
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = "select route.routeID, route.numOfLayovers from route where route.originCode_fk = @originCode_fk and route.destinationCode_fk = @destinationCode_fk";
+                cmd.Parameters.AddWithValue("@originCode_fk", origin);
+                cmd.Parameters.AddWithValue("@destinationCode_fk", destination);
+                cmd.Connection = con;
+                List<(int, int)> routeIDs = new List<(int, int)>();
+                // execute the command with the reader, which only reads the database rather than updating it in anyway
+                SQLiteDataReader rdr = cmd.ExecuteReader();
+                // execute the command with the reader, which only reads the database rather than updating it in anyway
+                while (rdr.Read())
+                {
+                    routeIDs.Add((rdr.GetInt32(0), rdr.GetInt32(1)));
+                }
+                rdr.Close();
+                con.Close();
+                return routeIDs;
+            }
+        }
         public static int GetBookedFlightsRouteID(int userID)
         {
             // This method goes into the database, specifically the flightsBooked table, 
@@ -227,7 +254,7 @@ namespace ClassLibrary
                 return routeID; // return user data
             }
         }
-        public static List<int> GetBookedFlights_Route(int routeID)
+        public static List<int> GetFlightIDsInRoute(int routeID)
         {
             // This method goes into the database, specifically the customer table, 
             // and retrieves all of the user data and returns it as a list of strings
