@@ -260,7 +260,7 @@ namespace ClassLibrary
                 con.Close();
             }
         }
-        public static void DeleteTransaction(int userID, int flightID, double amount, string paymentMethod)
+        public static void DeleteTransaction(int userID, int flightID)
         {
             // This method goes into the database, specifically the flightsBooked table, 
             // and removes specific flights with the userID
@@ -270,11 +270,9 @@ namespace ClassLibrary
                 con.Open(); // open the connection
                 SQLiteCommand cmd = new SQLiteCommand();
                 cmd.CommandType = CommandType.Text;
-                cmd.CommandText = "delete from transactionTable where transactionTable.userID_fk = @userID_fk and transactionTable.flightID_fk = @flightID_fk and transactionTable.amount = @amount and transactionTable.paymentMethod = @paymentMethod";
+                cmd.CommandText = "delete from transactionTable where transactionTable.userID_fk = @userID_fk and transactionTable.flightID_fk = @flightID_fk";
                 cmd.Parameters.AddWithValue("@userID_fk", userID);
                 cmd.Parameters.AddWithValue("@flightID_fk", flightID);
-                cmd.Parameters.AddWithValue("@amount", amount);
-                cmd.Parameters.AddWithValue("@paymentMethod", paymentMethod);
                 cmd.Connection = con;
                 cmd.ExecuteNonQuery();
                 con.Close();
@@ -307,7 +305,7 @@ namespace ClassLibrary
                 return routeIDs;
             }
         }
-        public static int GetBookedFlightsRouteID(int userID)
+        public static List<int> GetBookedFlightsRouteID(int userID)
         {
             // This method goes into the database, specifically the flightsBooked table, 
             // and retrieves all of the customer's booked flights and returns this list
@@ -317,15 +315,15 @@ namespace ClassLibrary
                 con.Open(); // open the connection
                 SQLiteCommand cmd = new SQLiteCommand();
                 cmd.CommandType = CommandType.Text;
-                cmd.CommandText = "select flightsBooked.routeID_fk from flightsBooked where flightsBooked.userID_fk = @userID_fk limit 1";
+                cmd.CommandText = "select distinct flightsBooked.routeID_fk from flightsBooked where flightsBooked.userID_fk = @userID_fk";
                 cmd.Parameters.AddWithValue("@userID_fk", userID);
                 cmd.Connection = con;
                 SQLiteDataReader rdr = cmd.ExecuteReader();
-                int routeID = 0;
+                List<int> routeID = new List<int>();
                 // execute the command with the reader, which only reads the database rather than updating it in anyway
                 while (rdr.Read())
                 {
-                    routeID = rdr.GetInt32(0);
+                    routeID.Add(rdr.GetInt32(0));
                 }
                 rdr.Close();
                 con.Close();

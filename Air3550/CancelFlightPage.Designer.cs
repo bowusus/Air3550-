@@ -35,8 +35,9 @@ namespace Air3550
             this.CancelFlightLabel = new System.Windows.Forms.Label();
             this.CancelFlightTable = new System.Windows.Forms.DataGridView();
             this.BackButton = new System.Windows.Forms.Button();
-            this.CancelFlightsButton = new System.Windows.Forms.Button();
+            this.CancelSelectedButton = new System.Windows.Forms.Button();
             this.NoFlightLabel = new System.Windows.Forms.Label();
+            this.CancelAllFlightsButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.CancelFlightTable)).BeginInit();
             this.SuspendLayout();
             // 
@@ -98,6 +99,7 @@ namespace Air3550
             this.CancelFlightTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.CancelFlightTable.Size = new System.Drawing.Size(2101, 607);
             this.CancelFlightTable.TabIndex = 38;
+            this.CancelFlightTable.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.CancelFlightTable_CellClick);
             // 
             // BackButton
             // 
@@ -112,18 +114,18 @@ namespace Air3550
             this.BackButton.UseVisualStyleBackColor = false;
             this.BackButton.Click += new System.EventHandler(this.BackButton_Click);
             // 
-            // CancelFlightsButton
+            // CancelSelectedButton
             // 
-            this.CancelFlightsButton.BackColor = System.Drawing.SystemColors.HotTrack;
-            this.CancelFlightsButton.Font = new System.Drawing.Font("Rockwell", 10F);
-            this.CancelFlightsButton.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.CancelFlightsButton.Location = new System.Drawing.Point(1892, 904);
-            this.CancelFlightsButton.Name = "CancelFlightsButton";
-            this.CancelFlightsButton.Size = new System.Drawing.Size(276, 72);
-            this.CancelFlightsButton.TabIndex = 39;
-            this.CancelFlightsButton.Text = "Cancel Flights";
-            this.CancelFlightsButton.UseVisualStyleBackColor = false;
-            this.CancelFlightsButton.Click += new System.EventHandler(this.CancelFlightButton_Click);
+            this.CancelSelectedButton.BackColor = System.Drawing.SystemColors.HotTrack;
+            this.CancelSelectedButton.Font = new System.Drawing.Font("Rockwell", 10F);
+            this.CancelSelectedButton.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.CancelSelectedButton.Location = new System.Drawing.Point(1892, 904);
+            this.CancelSelectedButton.Name = "CancelSelectedButton";
+            this.CancelSelectedButton.Size = new System.Drawing.Size(276, 72);
+            this.CancelSelectedButton.TabIndex = 39;
+            this.CancelSelectedButton.Text = "Cancel Selected";
+            this.CancelSelectedButton.UseVisualStyleBackColor = false;
+            this.CancelSelectedButton.Click += new System.EventHandler(this.CancelSelectedFlightButton_Click);
             // 
             // NoFlightLabel
             // 
@@ -136,15 +138,30 @@ namespace Air3550
             this.NoFlightLabel.Text = "You Currently Have No Scheduled Flights";
             this.NoFlightLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // CancelAllFlightsButton
+            // 
+            this.CancelAllFlightsButton.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
+            this.CancelAllFlightsButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.CancelAllFlightsButton.Font = new System.Drawing.Font("Rockwell", 10F);
+            this.CancelAllFlightsButton.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.CancelAllFlightsButton.Location = new System.Drawing.Point(1595, 904);
+            this.CancelAllFlightsButton.Name = "CancelAllFlightsButton";
+            this.CancelAllFlightsButton.Size = new System.Drawing.Size(276, 72);
+            this.CancelAllFlightsButton.TabIndex = 42;
+            this.CancelAllFlightsButton.Text = "Cancel All";
+            this.CancelAllFlightsButton.UseVisualStyleBackColor = false;
+            this.CancelAllFlightsButton.Click += new System.EventHandler(this.CancelAllFlightsButton_Click);
+            // 
             // CancelFlightPage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.HighlightText;
             this.ClientSize = new System.Drawing.Size(2222, 1078);
+            this.Controls.Add(this.CancelAllFlightsButton);
             this.Controls.Add(this.NoFlightLabel);
             this.Controls.Add(this.BackButton);
-            this.Controls.Add(this.CancelFlightsButton);
+            this.Controls.Add(this.CancelSelectedButton);
             this.Controls.Add(this.CancelFlightTable);
             this.Controls.Add(this.LogOutButton);
             this.Controls.Add(this.CancelFlightLabel);
@@ -166,8 +183,9 @@ namespace Air3550
         private System.Windows.Forms.Label CancelFlightLabel;
         private System.Windows.Forms.DataGridView CancelFlightTable;
         private System.Windows.Forms.Button BackButton;
-        private System.Windows.Forms.Button CancelFlightsButton;
+        private System.Windows.Forms.Button CancelSelectedButton;
         private System.Windows.Forms.Label NoFlightLabel;
+        private System.Windows.Forms.Button CancelAllFlightsButton;
     }
 }
 

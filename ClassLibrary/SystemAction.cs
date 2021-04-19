@@ -191,6 +191,33 @@ namespace ClassLibrary
             }
             return routes;
         }
+        public static double CancelFlight(int uID, FlightModel flight, string paymentMethod, double totalCredit, int totalPoints)
+        {
+            // move this flight from booked to cancelled and increase the number of vacant seats on the plain
+            SqliteDataAccess.CancelBookedFlight(uID, flight.flightID);
+            SqliteDataAccess.AddToCancelledFlights(uID, flight.flightID);
+            SqliteDataAccess.UpdateNumOfVacantSeats(flight.flightID, flight.numberOfVacantSeats + 1);
+            // depending on the payment method, the customer will either get cash back from the airline
+            // which will also decrease their total flight income
+            // or they will receive points back, increasing available points and decreasing used points
+            if (paymentMethod == "Dollars" || paymentMethod == "AirlineCredit")
+            {
+                totalCredit += flight.cost;
+                int bal = SqliteDataAccess.GetBalance(uID);
+                SqliteDataAccess.UpdateBalance(uID, bal + flight.cost);
+                SqliteDataAccess.UpdateFlightIncome(flight.flightID, flight.flightIncome - flight.cost);
+                return totalCredit;
+            }
+            else
+            {
+                totalPoints += flight.numOfPoints;
+                int available = SqliteDataAccess.GetAvailablePoints(uID);
+                int used = SqliteDataAccess.GetUsedPoints(uID);
+                SqliteDataAccess.UpdateAvailablePoints(uID, available + flight.numOfPoints);
+                SqliteDataAccess.UpdateUsedPoints(uID, used - flight.numOfPoints);
+                return totalPoints;
+            }
+        }
         public static void GenerateFlights()
         {
 
