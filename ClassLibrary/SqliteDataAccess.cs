@@ -127,6 +127,24 @@ namespace ClassLibrary
                 con.Close();
             }
         }
+        public static void AddCustomerToCredits(int tempUserID)
+        {
+            // This method goes into the database, specifically the credits table, 
+            // and adds the customer to the credits table with default values
+            using (SQLiteConnection con = new SQLiteConnection(LoadConnectionString()))
+            // closes the connection when there is an error or it is done executing
+            {
+                con.Open(); // open the connection
+                SQLiteCommand cmd = new SQLiteCommand();
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = "insert into credits(userID_fk) values(@userID_fk)";
+                cmd.Connection = con;
+                // use the customer's information to input into the database
+                cmd.Parameters.AddWithValue("@userID_fk", tempUserID);
+                cmd.ExecuteNonQuery();
+                con.Close();
+            }
+        }
         public static int CheckPassword(int userID, string currPass)
         {
             // This method goes into the database, specifically the customer table
@@ -283,31 +301,6 @@ namespace ClassLibrary
                 return flightIDs; // return user data
             }
         }
-        public static List<int> GetCurrentFlightIDs(int userID)
-        {
-            // This method goes into the database, specifically the flightsBooked table, 
-            // and retrieves all of the customer's booked flights and returns this list
-            using (SQLiteConnection con = new SQLiteConnection(LoadConnectionString()))
-            // closes the connection when there is an error or it is done executing
-            {
-                con.Open(); // open the connection
-                SQLiteCommand cmd = new SQLiteCommand();
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = "select flightsBooked.flightID_fk from flightsBooked where flightsBooked.userID_fk = @userID_fk";
-                cmd.Parameters.AddWithValue("@userID_fk", userID);
-                cmd.Connection = con;
-                SQLiteDataReader rdr = cmd.ExecuteReader();
-                List<int> flightIDsList = new List<int>();
-                // execute the command with the reader, which only reads the database rather than updating it in anyway
-                while (rdr.Read())
-                {
-                    flightIDsList.Add(rdr.GetInt32(0));
-                }
-                rdr.Close();
-                con.Close();
-                return flightIDsList; // return user data
-            }
-        }
         public static string GetFlightNames(string code)
         {
             // This method goes into the database, specifically the airport table, 
@@ -363,7 +356,6 @@ namespace ClassLibrary
                     flightData.Add(reader[9].ToString());
                     flightData.Add(reader[10].ToString());
                     flightData.Add(reader[11].ToString());
-                    flightData.Add(reader[12].ToString());
                     reader.Close();
                 }
                 con.Close();

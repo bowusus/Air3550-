@@ -90,10 +90,12 @@ namespace Air3550
             dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.CancelFlightTable.DefaultCellStyle = dataGridViewCellStyle2;
             this.CancelFlightTable.Location = new System.Drawing.Point(67, 233);
+            this.CancelFlightTable.MultiSelect = false;
             this.CancelFlightTable.Name = "CancelFlightTable";
-            this.CancelFlightTable.RowHeadersVisible = false;
+            this.CancelFlightTable.ReadOnly = true;
             this.CancelFlightTable.RowHeadersWidth = 82;
             this.CancelFlightTable.RowTemplate.Height = 33;
+            this.CancelFlightTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.CancelFlightTable.Size = new System.Drawing.Size(2101, 607);
             this.CancelFlightTable.TabIndex = 38;
             // 

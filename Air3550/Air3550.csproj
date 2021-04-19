@@ -61,11 +61,11 @@
     <Compile Include="AccountInformationPage.Designer.cs">
       <DependentUpon>AccountInformationPage.cs</DependentUpon>
     </Compile>
-    <Compile Include="BookFlightPage - Copy.cs">
+    <Compile Include="BookFlightPage.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="BookFlightPage - Copy.Designer.cs">
-      <DependentUpon>BookFlightPage - Copy.cs</DependentUpon>
+    <Compile Include="BookFlightPage.Designer.cs">
+      <DependentUpon>BookFlightPage.cs</DependentUpon>
     </Compile>
     <Compile Include="LoadEngineerAddFlightPage.cs">
       <SubType>Form</SubType>
@@ -109,11 +109,11 @@
     <Compile Include="CancelFlightPage.Designer.cs">
       <DependentUpon>CancelFlightPage.cs</DependentUpon>
     </Compile>
-    <Compile Include="BookFlightPage.cs">
+    <Compile Include="BookFlightPage2.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="BookFlightPage.Designer.cs">
-      <DependentUpon>BookFlightPage.cs</DependentUpon>
+    <Compile Include="BookFlightPage2.Designer.cs">
+      <DependentUpon>BookFlightPage2.cs</DependentUpon>
     </Compile>
     <Compile Include="AccountHistoryPage.cs">
       <SubType>Form</SubType>
@@ -156,8 +156,8 @@
     <EmbeddedResource Include="AccountInformationPage.resx">
       <DependentUpon>AccountInformationPage.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="BookFlightPage - Copy.resx">
-      <DependentUpon>BookFlightPage - Copy.cs</DependentUpon>
+    <EmbeddedResource Include="BookFlightPage.resx">
+      <DependentUpon>BookFlightPage.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="LoadEngineerAddFlightPage.resx">
       <DependentUpon>LoadEngineerAddFlightPage.cs</DependentUpon>
@@ -180,8 +180,8 @@
     <EmbeddedResource Include="CancelFlightPage.resx">
       <DependentUpon>CancelFlightPage.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="BookFlightPage.resx">
-      <DependentUpon>BookFlightPage.cs</DependentUpon>
+    <EmbeddedResource Include="BookFlightPage2.resx">
+      <DependentUpon>BookFlightPage2.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="AccountHistoryPage.resx">
       <DependentUpon>AccountHistoryPage.cs</DependentUpon>

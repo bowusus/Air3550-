@@ -17,10 +17,12 @@ namespace Air3550
         public static CustomerModel currCustomer; // make a local object that can be read in the current context
         public static bool logOutButtonClicked = false;
         public static bool backButtonClicked = false;
-        public static List<string> airportsShown;
-        public static List<string> departAirports;
-        public static List<string> arriveAirports;
-        public static List<Route> availableRoutes; // list of available routes that gets updated throughout the form
+        public static List<string> departAirports; // list of depart airports
+        public static List<string> arriveAirports; // list of arrival airports
+        public static List<Route> departingRoutes; // list of departing flights that gets updated throughout the form
+        public static List<Route> returningRoutes; // list of returning flights that gets updated throughout the form
+        public static List<Route> selectedRoutes; // list of selected routes
+        public static int tempRouteSelected; // route that the user temporarily selects
         public BookFlightPage()
         {
             InitializeComponent();
@@ -32,9 +34,8 @@ namespace Air3550
             // get the current customer and pass that information to the textboxes
             currCustomer = customer;
             // create a new list for the airports that will be displayed
-            airportsShown = new List<string>();
-            departAirports = new List<string>();
-            arriveAirports = new List<string>();
+            departAirports = new List<string>(); // create the list of departing airports
+            arriveAirports = new List<string>(); // create the list of arrival airports
         }
         private void BookFlightPage_Load(object sender, EventArgs e)
         {
@@ -46,7 +47,6 @@ namespace Air3550
             foreach (Airport airport in airportList)
             {
                 string currAir = airport.Code + " (" + airport.Name + ")";
-                airportsShown.Add(currAir);
                 departAirports.Add(currAir);
                 arriveAirports.Add(currAir);
             }
@@ -58,6 +58,7 @@ namespace Air3550
             ArriveComboBox.DataSource = arriveAirports;
             ArriveComboBox.SelectedItem = null;
             ArriveComboBox.SelectedText = "--Select Location--";
+
             // set all of the default values and visibility of errors and buttons
             RoundTripButton.Checked = true;
             OneWayButton.Checked = false;
@@ -67,20 +68,43 @@ namespace Air3550
             ReturnDateError.Visible = false;
             ReturnBeforeDepartError.Visible = false;
             AvailableFlightTable.Visible = false;
+            ReturnFlightButton.Visible = false;
+            BookFlightButton.Visible = false;
+            DepartintFlightsLabel.Visible = false;
+            ReturningFlightsLabel.Visible = false;
+            ChangeDepartingFlightButton.Visible = false;
         }
         private void RoundTripButton_Click(object sender, EventArgs e)
         {
             // This method checks if the round trip button is clicked (or it is left as the default),
-            // then it makes the return date label and picker visible to the customer
+            // then it makes the return date label and picker and return flight button visible to the customer
             ReturnDateLabel.Visible = true;
             ReturnDatePicker.Visible = true;
+            if (AvailableFlightTable.Visible)
+            {
+                ReturnFlightButton.Visible = true;
+                BookFlightButton.Visible = false;
+            }
         }
         private void OneWayButton_Click(object sender, EventArgs e)
         {
             // This method checks if the one way button is clicked, then it makes the return date label
-            // and picker no longer visible to the customer
+            // and picker and return flight button no longer visible to the customer
             ReturnDateLabel.Visible = false;
             ReturnDatePicker.Visible = false;
+            if (AvailableFlightTable.Visible)
+            {
+                AvailableFlightTable.DataSource = null;
+                AvailableFlightTable.DataSource = departingRoutes;
+                selectedRoutes.Clear();
+                ReturnFlightButton.Visible = false;
+                if (ReturningFlightsLabel.Visible)
+                    ChangeDepartingFlightButton.Visible = false;
+                BookFlightButton.Visible = true;
+                ReturningFlightsLabel.Visible = false;
+                DepartintFlightsLabel.Visible = true;
+                FormatGrid();
+            }
         }
         private void DepartDatePicker_ValueChanged(object sender, EventArgs e)
         {
@@ -117,101 +141,132 @@ namespace Air3550
         private void FormatGrid()
         {
             // This method formats the data grid view with different column names
-            AvailableFlightTable.Columns[0].HeaderText = "Route ID";
+            AvailableFlightTable.Columns[0].HeaderText = "ID";
             AvailableFlightTable.Columns[1].HeaderText = "Departure Time";
             AvailableFlightTable.Columns[2].HeaderText = "Estimated Arrival Time";
             AvailableFlightTable.Columns[3].HeaderText = "Estimated Duration";
             AvailableFlightTable.Columns[4].HeaderText = "Number of Layovers";
-            AvailableFlightTable.Columns[5].HeaderText = "Flight IDs";
-            AvailableFlightTable.Columns[6].HeaderText = "Change Airport Code";
-            AvailableFlightTable.Columns[7].HeaderText = "Change Airport Name";
-            AvailableFlightTable.Columns[8].HeaderText = "Seats Available on Each Flight";
-            AvailableFlightTable.Columns[9].HeaderText = "Cost/Points";
+            AvailableFlightTable.Columns[5].HeaderText = "Layover Flight IDs";
+            AvailableFlightTable.Columns[6].HeaderText = "Change Plane";
+            AvailableFlightTable.Columns[7].HeaderText = "Seats Available on Each Flight";
+            AvailableFlightTable.Columns[8].HeaderText = "Cost/Points";
         }
         private void SearchButton_Click(object sender, EventArgs e)
         {
             // This method first checks if the depart and arrive locations are the same or null.
             // if they are, then errors appear. Otherwise, this method allows the user to select a flight for their depart flight
+            selectedRoutes = new List<Route>();
             DifferentLocationError.Visible = false;
+            EmptyError.Visible = false;
             if (DepartComboBox.SelectedValue == ArriveComboBox.SelectedValue)
                 DifferentLocationError.Visible = true;
-            else if (String.IsNullOrEmpty(DepartComboBox.SelectedValue.ToString()) || String.IsNullOrEmpty(ArriveComboBox.SelectedValue.ToString()))
-                DifferentLocationError.Visible = true;
+            else if (DepartComboBox.SelectedIndex == -1 || ArriveComboBox.SelectedIndex == -1)
+                EmptyError.Visible = true;
             else
             {
                 AvailableFlightTable.Visible = true;
-                // get the route ID and number of Layovers for the specified origin and destination
-                List<(int, int)> routeInfo = SqliteDataAccess.GetRouteInfo(DepartComboBox.Text.Substring(0, 3), ArriveComboBox.Text.Substring(0, 3));
-                availableRoutes = new List<Route>();
-                // go through the route IDs that were found for the specified origin and destination
-                // and get the flightIDs in that route, then get information to display to the customer
-                foreach ((int, int) id in routeInfo)
+                ChangeDepartingFlightButton.Visible = false;
+                DepartintFlightsLabel.Visible = true;
+                ReturningFlightsLabel.Visible = false;
+                if (OneWayButton.Checked)
                 {
-                    List<int> flightIDs = SqliteDataAccess.GetFlightIDsInRoute(id.Item1);
-                    List<FlightModel> flights = new List<FlightModel>();
-                    // initialization/declaration of values to be returned in data grid view
-                    string routeList = null;
-                    DateTime depart;
-                    string departString;
-                    DateTime arrive;
-                    string arriveString;
-                    string changeCode = null;
-                    string changeName = null;
-                    string seatsAvailable = null;
-                    double cost = 0;
-                    int points = 0;
-                    int i = 0; // used for grabbing information from the availableRoutes list
-                    // go through each of these flight IDs and check if the depart date is the same as the 
-                    // depart date in the departDatePicker. If it is, get the specific information to be displayed
-                    // and add that flight to the list of available flights.
-                    // otherwise, do not add it
-                    foreach (int fID in flightIDs)
-                    {
-                        List<string> flightsBookedData = SqliteDataAccess.GetFlightData(fID);
-                        if (DateTime.Parse(flightsBookedData[5]).Date == DepartDatePicker.Value.Date)
-                        {
-                            string originName = SqliteDataAccess.GetFlightNames(flightsBookedData[2]);
-                            string destinationName = SqliteDataAccess.GetFlightNames(flightsBookedData[3]);
-                            FlightModel flight = new FlightModel(int.Parse(flightsBookedData[0]), int.Parse(flightsBookedData[1]), flightsBookedData[2], originName, flightsBookedData[3], destinationName, int.Parse(flightsBookedData[4]), DateTime.Parse(flightsBookedData[5]), Convert.ToDouble(flightsBookedData[6]), flightsBookedData[7], DateTime.Parse(flightsBookedData[8]), Convert.ToDouble(flightsBookedData[9]), int.Parse(flightsBookedData[10]), int.Parse(flightsBookedData[11]), Convert.ToDouble(flightsBookedData[12]));
-                            flights.Add(flight);
-                            cost += flights[i].cost;
-                            points += flights[i].amountOfPoints;
-                            // mainly for formating purposes, check if the current Flight ID is the last in the list
-                            // if it is, then do not add extra lines
-                            if (fID == flightIDs[flightIDs.Count - 1])
-                            {
-                                routeList += fID;
-                                seatsAvailable += flights[i].numberOfVacantSeats;
-                            }
-                            else
-                            {
-                                routeList += fID + Environment.NewLine;
-                                changeCode += flights[i].destinationCode + Environment.NewLine;
-                                changeName += flights[i].destinationName + Environment.NewLine;
-                                seatsAvailable += flights[i].numberOfVacantSeats + Environment.NewLine;
-                            }
-                            i += 1;
-                        }
-                    }
-                    // as long as the flight count is not 0, get the depart time, arrive time, duration, and total credits, 
-                    // add that all to a route object, and add that route object to the available routes list
-                    if (flights.Count != 0)
-                    {
-                        depart = flights[0].departureDateTime;
-                        departString = flights[0].departureDateTime.ToShortTimeString();
-                        arrive = flights[flightIDs.Count - 1].departureDateTime.AddHours(flights[flightIDs.Count - 1].totalTime);
-                        arriveString = flights[flightIDs.Count - 1].departureDateTime.AddHours(flights[flightIDs.Count - 1].totalTime).ToShortTimeString();
-                        var duration = arrive.Subtract(depart);
-                        string credits = "$" + cost + " (" + points + " points)";
-                        Route route = new Route(id.Item1, departString, arriveString, duration, id.Item2, routeList, changeCode, changeName, seatsAvailable, credits);
-                        availableRoutes.Add(route);
-                    }
+                    ReturnFlightButton.Visible = false;
+                    BookFlightButton.Visible = true;
                 }
-                // the available routes list is the datasource for the available flight table
-                AvailableFlightTable.DataSource = availableRoutes;
-                FormatGrid();
+                else
+                {
+                    ReturnFlightButton.Visible = true;
+                    BookFlightButton.Visible = false;
+                }
 
+                departingRoutes = new List<Route>();
+                // get all of the available flights for the specified origin and destination
+                departingRoutes = SystemAction.GetAvailableFlights(DepartComboBox.Text.Substring(0, 3), ArriveComboBox.Text.Substring(0, 3));
+                // the available routes list is the datasource for the available flight table
+                AvailableFlightTable.DataSource = departingRoutes;
+                AvailableFlightTable.ClearSelection();
+                FormatGrid();
             }
+        }
+        private void ReturnFlightButton_Click(object sender, EventArgs e)
+        {
+            // This method allows the user to select a flight for their return flight
+            if (AvailableFlightTable.SelectedRows.Count == 0)
+            {
+                MessageBox.Show("No Departure Flight was Selected. Please Select a Departure Flight before continuing.", "Error: Choose a Departure Flight", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            else
+            {
+                selectedRoutes.Add(departingRoutes[tempRouteSelected]);
+                AvailableFlightTable.Visible = true;
+                ReturnFlightButton.Visible = false;
+                BookFlightButton.Visible = true;
+                ChangeDepartingFlightButton.Visible = true;
+                DepartintFlightsLabel.Visible = false;
+                ReturningFlightsLabel.Visible = true;
+
+                returningRoutes = new List<Route>();
+                // get all of the available flights for the specified origin and destination
+                AvailableFlightTable.DataSource = null;
+                returningRoutes = SystemAction.GetAvailableFlights(DepartComboBox.Text.Substring(0, 3), ArriveComboBox.Text.Substring(0, 3));
+                // the available routes list is the datasource for the available flight table
+                AvailableFlightTable.DataSource = returningRoutes;
+                FormatGrid();
+                AvailableFlightTable.ClearSelection();
+            }
+        }
+        private void ChangeDepartingFlightButton_Click(object sender, EventArgs e)
+        {
+            // This method allows for the user to return to the departing flights table and change their selection
+            // It sets the data source of the table to the departing routes and changes some of the buttons' visibility
+            selectedRoutes.Clear();
+            AvailableFlightTable.ClearSelection();
+            AvailableFlightTable.Visible = true;
+            ReturnFlightButton.Visible = true;
+            BookFlightButton.Visible = false;
+            ChangeDepartingFlightButton.Visible = false;
+            DepartintFlightsLabel.Visible = true;
+            ReturningFlightsLabel.Visible = false;
+
+            AvailableFlightTable.DataSource = null;
+            AvailableFlightTable.DataSource = departingRoutes;
+            FormatGrid();
+        }
+        private void BookFlightButton_Click(object sender, EventArgs e)
+        {
+            // This method is called when the book flight button is clicked
+            // First it checks if a flight was selected, then a message pops up if no flight was selected
+            // Otherwise, it will add the last flight to a list, then show the payment page and hide this page
+            if (AvailableFlightTable.SelectedRows.Count == 0)
+                MessageBox.Show("No Flight was Selected. Please Select a Flight before continuing.", "Error: Choose a Flight", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            else
+            {
+                if (OneWayButton.Checked)
+                    selectedRoutes.Add(departingRoutes[tempRouteSelected]);
+                else
+                    selectedRoutes.Add(returningRoutes[tempRouteSelected]);
+                PaymentPage payment = new PaymentPage(ref currCustomer, selectedRoutes, DepartDatePicker.Value, ReturnDatePicker.Value, DepartComboBox.SelectedValue.ToString(), ArriveComboBox.SelectedValue.ToString());
+                payment.Show();
+                selectedRoutes.Clear();
+                AvailableFlightTable.ClearSelection();
+                AvailableFlightTable.Visible = true;
+                ReturnFlightButton.Visible = true;
+                BookFlightButton.Visible = false;
+                ChangeDepartingFlightButton.Visible = false;
+                DepartintFlightsLabel.Visible = true;
+                ReturningFlightsLabel.Visible = false;
+
+                AvailableFlightTable.DataSource = null;
+                AvailableFlightTable.DataSource = departingRoutes;
+                FormatGrid();
+                this.Hide();
+            }
+        }
+        private void AvailableFlightTable_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            // This method prevents the column header row from being clicked and it gets the route id from the row that has been clicked
+            if (e.RowIndex != -1 && AvailableFlightTable.Rows[e.RowIndex].Cells[0].Value != null)
+                tempRouteSelected = e.RowIndex;
         }
         private void BackButton_Click(object sender, EventArgs e)
         {

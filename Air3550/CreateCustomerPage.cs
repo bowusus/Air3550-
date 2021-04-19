@@ -101,8 +101,9 @@ namespace Air3550
 
                     // create a customer object
                     CustomerModel customer = new CustomerModel(userID, pass, firstName, lastName, street, city, state, zip, phone, creditCardNum, age, email);
-                    // add the customer to the database aka create account
+                    // add the customer to the database aka create account and add customer the credits table
                     SqliteDataAccess.CreateAccount(userID, pass, firstName, lastName, street, city, state, zip, phone, creditCardNum, age, email);
+                    SqliteDataAccess.AddCustomerToCredits(userID);
                     // provide a pop up with the user's userID
                     DialogResult result = MessageBox.Show("Your account has been successfully created. Your USERID is " + userID, "SUCCESS: New Account Created", MessageBoxButtons.OK, MessageBoxIcon.None);
                     if (result == DialogResult.OK)

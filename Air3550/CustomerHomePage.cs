@@ -32,7 +32,7 @@ namespace Air3550
             // This method transitions the displayed page from the customer home page to the 
             // cancel flight page
             BookFlightPage bookFlight = new BookFlightPage(ref currCustomer); // create the next form
-            //BookFlightPageCopy bookFlight = new BookFlightPageCopy(ref currCustomer);
+            //BookFlightPage2 bookFlight = new BookFlightPage2(ref currCustomer);
             bookFlight.Show(); // show the next form
             logOutButtonClicked = false;
             this.Hide(); // hide the main form, so it can be accessed again

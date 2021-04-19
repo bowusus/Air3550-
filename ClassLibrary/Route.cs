@@ -18,12 +18,11 @@ namespace ClassLibrary
 		public TimeSpan duration { get; set; }
 		public int numOfLayovers { get; set; }
 		public string flightIDs { get; set; }
-		public string changePlaneCode { get; set; }
-		public string changePlaneName { get; set; }
+		public string planeChange { get; set; }
 		public string availableSeats { get; set; }
 		public string credits { get; set; }
 		// route constructor
-		public Route(int rID, string depart, string arrival, TimeSpan dur, int num, string fID, string changeCode, string changeName, string seats, string cred)
+		public Route(int rID, string depart, string arrival, TimeSpan dur, int num, string fID, string changeName, string seats, string cred)
 		{
 			routeID = rID;
 			departTime = depart;
@@ -31,8 +30,7 @@ namespace ClassLibrary
 			duration = dur;
 			numOfLayovers = num;
 			flightIDs = fID;
-			changePlaneCode = changeCode;
-			changePlaneName = changeName;
+			planeChange = changeName;
 			availableSeats = seats;
 			credits = cred;
 		}
