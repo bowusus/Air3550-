@@ -90,6 +90,7 @@ namespace Air3550
                     SqliteDataAccess.UpdateAvailablePoints(currCustomer.userID, available + currPoints);
                     SqliteDataAccess.UpdateFlightIncome(dID, Convert.ToDouble(flight[11]) + currCost);
                     SqliteDataAccess.AddToFlightsBooked(currCustomer.userID, dID, selectedRoutes[1].routeID, "Dollars");
+                    SqliteDataAccess.AddTransaction(currCustomer.userID, dID, total, "Dollars");
                 }
             }
             else if (PointsButton.Checked)
@@ -112,6 +113,7 @@ namespace Air3550
                         SqliteDataAccess.UpdateAvailablePoints(currCustomer.userID, available - currPoints);
                         SqliteDataAccess.UpdateUsedPoints(currCustomer.userID, used + currPoints);
                         SqliteDataAccess.AddToFlightsBooked(currCustomer.userID, dID, selectedRoutes[1].routeID, "Points");
+                        SqliteDataAccess.AddTransaction(currCustomer.userID, dID, total, "Points");
                     }
                 }
             }
@@ -136,6 +138,7 @@ namespace Air3550
                         SqliteDataAccess.UpdateBalance(currCustomer.userID, bal - currCost);
                         SqliteDataAccess.UpdateFlightIncome(dID, Convert.ToDouble(flight[11]) + currCost);
                         SqliteDataAccess.AddToFlightsBooked(currCustomer.userID, dID, selectedRoutes[1].routeID, "AirlineCredit");
+                        SqliteDataAccess.AddTransaction(currCustomer.userID, dID, total, "AirlineCredit");
                     }
                 }
             }
