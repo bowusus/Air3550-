@@ -117,6 +117,7 @@ namespace Air3550
                                 int bal = SqliteDataAccess.GetBalance(currCustomer.userID);
                                 SqliteDataAccess.UpdateBalance(currCustomer.userID, bal + flight.cost);
                                 SqliteDataAccess.UpdateFlightIncome(flight.flightID, flight.flightIncome - flight.cost);
+                                SqliteDataAccess.DeleteTransaction(currCustomer.userID, flight.flightID, flight.cost, paymentMethod);
                             }
                             else
                             {
@@ -125,6 +126,7 @@ namespace Air3550
                                 int used = SqliteDataAccess.GetUsedPoints(currCustomer.userID);
                                 SqliteDataAccess.UpdateAvailablePoints(currCustomer.userID, available + flight.numOfPoints);
                                 SqliteDataAccess.UpdateUsedPoints(currCustomer.userID, used - flight.numOfPoints);
+                                SqliteDataAccess.DeleteTransaction(currCustomer.userID, flight.flightID, flight.numOfPoints, paymentMethod);
                             }
                         }
                         // since bookedFlights stores the current flights, those flights need to be updated

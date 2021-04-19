@@ -242,20 +242,25 @@ namespace Air3550
             else
             {
                 if (OneWayButton.Checked)
+                {
                     selectedRoutes.Add(departingRoutes[tempRouteSelected]);
+                    ReturnFlightButton.Visible = false;
+                    BookFlightButton.Visible = true;
+                }
                 else
+                {
                     selectedRoutes.Add(returningRoutes[tempRouteSelected]);
+                    ReturnFlightButton.Visible = true;
+                    BookFlightButton.Visible = false;
+                }
                 PaymentPage payment = new PaymentPage(ref currCustomer, selectedRoutes, DepartDatePicker.Value, ReturnDatePicker.Value, DepartComboBox.SelectedValue.ToString(), ArriveComboBox.SelectedValue.ToString());
                 payment.Show();
                 selectedRoutes.Clear();
                 AvailableFlightTable.ClearSelection();
                 AvailableFlightTable.Visible = true;
-                ReturnFlightButton.Visible = true;
-                BookFlightButton.Visible = false;
                 ChangeDepartingFlightButton.Visible = false;
                 DepartintFlightsLabel.Visible = true;
                 ReturningFlightsLabel.Visible = false;
-
                 AvailableFlightTable.DataSource = null;
                 AvailableFlightTable.DataSource = departingRoutes;
                 FormatGrid();

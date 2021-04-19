@@ -34,11 +34,6 @@ namespace Air3550
             DepartureCitiesLabel.Text = origin + " → " + destination;
             ReturnCitiesLabel.Text = destination + " → " + origin;
         }
-        public PaymentPage(List<int> costs)
-        {
-            InitializeComponent();
-
-        }
         private void PaymentPage_Load(object sender, EventArgs e)
         {
             int indexOfSpace;
@@ -70,28 +65,39 @@ namespace Air3550
         }
         private void BookFlightButton_Click(object sender, EventArgs e)
         {
+            List<int> routeIDs = new List<int>();
+            routeIDs.Add(Convert.ToInt32(DepartureFlightDetailsTable.Rows[0].Cells[0].Value));
             int available = SqliteDataAccess.GetAvailablePoints(currCustomer.userID);
             int used = SqliteDataAccess.GetUsedPoints(currCustomer.userID);
             int bal = SqliteDataAccess.GetBalance(currCustomer.userID);
-
+            List<FlightModel> departFlights = SystemAction.GetCurrentFlights(routeIDs[0]);
+            List<FlightModel> returnFlights = new List<FlightModel>();
+            if (ReturnFlightDetailsTable.Visible)
+            {
+                routeIDs.Add(Convert.ToInt32(ReturnFlightDetailsTable.Rows[0].Cells[0].Value));
+                returnFlights = SystemAction.GetCurrentFlights(routeIDs[1]);
+            }
             if (CreditCardButton.Checked)
             {
-                foreach (int dID in selectedRoutes[1].flightIDs)
+                if (ReturnFlightDetailsTable.Visible)
                 {
-                    List<string> flight = SqliteDataAccess.GetFlightData(dID);
-                    DateTime departureDateTime = DateTime.Parse(flight[4] + " " + flight[5]);
-                    DateTime arriveDateTime = departureDateTime.AddHours(Convert.ToDouble(flight[7]));
-                    int depHour = departureDateTime.Hour;
-                    int arrHour = arriveDateTime.Hour;
-
-                    int currCost = SystemAction.CalculateCost(depHour, arrHour, int.Parse(flight[9]));
-                    int currPoints = currCost * 100;
-
-                    SqliteDataAccess.UpdateAvailablePoints(currCustomer.userID, available + currPoints);
-                    SqliteDataAccess.UpdateFlightIncome(dID, Convert.ToDouble(flight[11]) + currCost);
-                    SqliteDataAccess.AddToFlightsBooked(currCustomer.userID, dID, selectedRoutes[1].routeID, "Dollars");
-                    SqliteDataAccess.AddTransaction(currCustomer.userID, dID, total, "Dollars");
+                    foreach (FlightModel id in returnFlights)
+                    {
+                        SqliteDataAccess.UpdateFlightIncome(id.flightID, id.flightIncome + id.cost);
+                        SqliteDataAccess.AddToFlightsBooked(currCustomer.userID, id.flightID, routeIDs[1], "Dollars");
+                        SqliteDataAccess.AddTransaction(currCustomer.userID, id.flightID, total, "Dollars");
+                        SqliteDataAccess.UpdateNumOfVacantSeats(id.flightID, id.numberOfVacantSeats - 1);
+                    }
                 }
+                foreach (FlightModel id in departFlights)
+                {
+                    SqliteDataAccess.UpdateFlightIncome(id.flightID, id.flightIncome + id.cost);
+                    SqliteDataAccess.AddToFlightsBooked(currCustomer.userID, id.flightID, routeIDs[0], "Dollars");
+                    SqliteDataAccess.AddTransaction(currCustomer.userID, id.flightID, total, "Dollars");
+                    SqliteDataAccess.UpdateNumOfVacantSeats(id.flightID, id.numberOfVacantSeats - 1);
+                }
+                SqliteDataAccess.UpdateAvailablePoints(currCustomer.userID, available + points);
+                MessageBox.Show("You are now scheduled for your flight(s).", "Success: Flight(s) Booked", MessageBoxButtons.OK, MessageBoxIcon.None);
             }
             else if (PointsButton.Checked)
             {
@@ -99,22 +105,24 @@ namespace Air3550
                     MessageBox.Show("You do not have enough points in your account to purchase this ticket with points.", "Too Few Points", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 else
                 {
-                    foreach (int dID in selectedRoutes[1].flightIDs)
+                    if (ReturnFlightDetailsTable.Visible)
                     {
-                        List<string> flight = SqliteDataAccess.GetFlightData(dID);
-                        DateTime departureDateTime = DateTime.Parse(flight[4] + " " + flight[5]);
-                        DateTime arriveDateTime = departureDateTime.AddHours(Convert.ToDouble(flight[7]));
-                        int depHour = departureDateTime.Hour;
-                        int arrHour = arriveDateTime.Hour;
-
-                        int currCost = SystemAction.CalculateCost(depHour, arrHour, int.Parse(flight[9]));
-                        int currPoints = currCost * 100;
-
-                        SqliteDataAccess.UpdateAvailablePoints(currCustomer.userID, available - currPoints);
-                        SqliteDataAccess.UpdateUsedPoints(currCustomer.userID, used + currPoints);
-                        SqliteDataAccess.AddToFlightsBooked(currCustomer.userID, dID, selectedRoutes[1].routeID, "Points");
-                        SqliteDataAccess.AddTransaction(currCustomer.userID, dID, total, "Points");
+                        foreach (FlightModel id in returnFlights)
+                        {
+                            SqliteDataAccess.AddToFlightsBooked(currCustomer.userID, id.flightID, routeIDs[1], "Points");
+                            SqliteDataAccess.AddTransaction(currCustomer.userID, id.flightID, id.numOfPoints, "Points");
+                            SqliteDataAccess.UpdateNumOfVacantSeats(id.flightID, id.numberOfVacantSeats - 1);
+                        }
                     }
+                    foreach (FlightModel id in departFlights)
+                    {
+                        SqliteDataAccess.AddToFlightsBooked(currCustomer.userID, id.flightID, routeIDs[0], "Points");
+                        SqliteDataAccess.AddTransaction(currCustomer.userID, id.flightID, id.numOfPoints, "Points");
+                        SqliteDataAccess.UpdateNumOfVacantSeats(id.flightID, id.numberOfVacantSeats - 1);
+                    }
+                    SqliteDataAccess.UpdateAvailablePoints(currCustomer.userID, available - points);
+                    SqliteDataAccess.UpdateUsedPoints(currCustomer.userID, used + points);
+                    MessageBox.Show("You are now scheduled for your flight(s).", "Success: Flight(s) Booked", MessageBoxButtons.OK, MessageBoxIcon.None);
                 }
             }
             else 
@@ -123,42 +131,27 @@ namespace Air3550
                     MessageBox.Show("You do not have enough of an airline credit in your account to purchase this ticket with an airline credit.", "Too Small of an Airline Credit", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 else
                 {
-                    foreach (int dID in selectedRoutes[1].flightIDs)
+                    if (ReturnFlightDetailsTable.Visible)
                     {
-                        List<string> flight = SqliteDataAccess.GetFlightData(dID);
-                        DateTime departureDateTime = DateTime.Parse(flight[4] + " " + flight[5]);
-                        DateTime arriveDateTime = departureDateTime.AddHours(Convert.ToDouble(flight[7]));
-                        int depHour = departureDateTime.Hour;
-                        int arrHour = arriveDateTime.Hour;
-
-                        int currCost = SystemAction.CalculateCost(depHour, arrHour, int.Parse(flight[9]));
-                        int currPoints = currCost * 100;
-
-                        SqliteDataAccess.UpdateAvailablePoints(currCustomer.userID, available + currPoints);
-                        SqliteDataAccess.UpdateBalance(currCustomer.userID, bal - currCost);
-                        SqliteDataAccess.UpdateFlightIncome(dID, Convert.ToDouble(flight[11]) + currCost);
-                        SqliteDataAccess.AddToFlightsBooked(currCustomer.userID, dID, selectedRoutes[1].routeID, "AirlineCredit");
-                        SqliteDataAccess.AddTransaction(currCustomer.userID, dID, total, "AirlineCredit");
+                        foreach (FlightModel id in returnFlights)
+                        {
+                            SqliteDataAccess.UpdateFlightIncome(id.flightID, id.flightIncome + id.cost);
+                            SqliteDataAccess.AddToFlightsBooked(currCustomer.userID, id.flightID, routeIDs[1], "AirlineCredit");
+                            SqliteDataAccess.AddTransaction(currCustomer.userID, id.flightID, total, "AirlineCredit");
+                            SqliteDataAccess.UpdateNumOfVacantSeats(id.flightID, id.numberOfVacantSeats - 1);
+                        }
                     }
+                    foreach (FlightModel id in departFlights)
+                    {
+                        SqliteDataAccess.UpdateFlightIncome(id.flightID, id.flightIncome + id.cost);
+                        SqliteDataAccess.AddToFlightsBooked(currCustomer.userID, id.flightID, routeIDs[0], "AirlineCredit");
+                        SqliteDataAccess.AddTransaction(currCustomer.userID, id.flightID, total, "AirlineCredit");
+                        SqliteDataAccess.UpdateNumOfVacantSeats(id.flightID, id.numberOfVacantSeats - 1);
+                    }
+                    SqliteDataAccess.UpdateBalance(currCustomer.userID, bal - total);
+                    MessageBox.Show("You are now scheduled for your flight(s).", "Success: Flight(s) Booked", MessageBoxButtons.OK, MessageBoxIcon.None);
                 }
             }
-            if (selectedRoutes.Count == 2)
-            {
-                int i = 0;
-                foreach (int dID in selectedRoutes[1].flightIDs)
-                {
-                    SqliteDataAccess.UpdateNumOfVacantSeats(dID, selectedRoutes[1].availableSeats[i] - 1);
-                    i += 1;
-                }
-            }
-            int j = 0;
-            foreach (int dID in selectedRoutes[0].flightIDs)
-            {
-                SqliteDataAccess.UpdateNumOfVacantSeats(dID, selectedRoutes[1].availableSeats[j] - 1);
-                j += 1;
-            }
-            MessageBox.Show("You are now scheduled for your flight(s).", "Success: Flight(s) Booked", MessageBoxButtons.OK, MessageBoxIcon.None);
-
         }
         private void BackButton_Click(object sender, EventArgs e)
         {
