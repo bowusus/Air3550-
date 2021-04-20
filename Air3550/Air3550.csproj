@@ -109,12 +109,6 @@
     <Compile Include="CancelFlightPage.Designer.cs">
       <DependentUpon>CancelFlightPage.cs</DependentUpon>
     </Compile>
-    <Compile Include="BookFlightPage2.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="BookFlightPage2.Designer.cs">
-      <DependentUpon>BookFlightPage2.cs</DependentUpon>
-    </Compile>
     <Compile Include="AccountHistoryPage.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -179,9 +173,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="CancelFlightPage.resx">
       <DependentUpon>CancelFlightPage.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="BookFlightPage2.resx">
-      <DependentUpon>BookFlightPage2.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="AccountHistoryPage.resx">
       <DependentUpon>AccountHistoryPage.cs</DependentUpon>

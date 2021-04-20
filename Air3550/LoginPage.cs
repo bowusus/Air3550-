@@ -14,15 +14,28 @@ namespace Air3550
     public partial class LogInPage : Form
     {
         // This form file is to document the actions done on the Log In Page specifically
+        private static LogInPage instance;
         public LogInPage()
         {
             InitializeComponent();
+        }
+        public static LogInPage GetInstance
+        {
+            // This method follows the singleton pattern to allow for one form to be used rather than multiple being created
+            get
+            {
+                if (instance == null || instance.IsDisposed)
+                {
+                    instance = new LogInPage();
+                }
+                return instance;
+            }
         }
         private void LogInButton_Click(object sender, EventArgs e)
         {
             // This method checks the provided information against the database
             // and throws an error if the information is not in the database or
-            // loggs the user in and transistions to the customer home page
+            // logs the user in and transistions to the customer home page
             UserIDError.Visible = false;
             PasswordError.Visible = false;
             if (String.IsNullOrEmpty(UserIDText.Text) || UserIDText.Text.Length < 6)
@@ -33,7 +46,6 @@ namespace Air3550
             {
                 int userID = int.Parse(UserIDText.Text); // turn value from the UserID combo box into an int
                 string currPass = PasswordText.Text; // get the provided password
-                string user = SqliteDataAccess.CheckIfEmployee(userID, currPass);
                 if (SqliteDataAccess.CheckIfEmployee(userID, currPass).Equals("AccountingManager"))
                 {
                     // log in as accounting manager
@@ -89,9 +101,8 @@ namespace Air3550
                         UserIDText.Select(); // used to put cursor back in userID box
                         List<string> userData = SqliteDataAccess.GetUserData(userID);
                         CustomerModel customer = new CustomerModel(userID, userData[1], userData[2], userData[3], userData[4], userData[5], userData[6], userData[7], userData[8], userData[9], int.Parse(userData[10]), userData[11]);
-                        CustomerHomePage home = new CustomerHomePage(ref customer); // create the next form
-                        home.Show(); // show the next form
-                        this.Hide(); // close log in form
+                        this.Hide(); // close the instance of the log in page
+                        CustomerHomePage.GetInstance(ref customer).Show(); // show the customer home page to prevent the need to remember your userID
                     }
                 }
             }
@@ -100,9 +111,8 @@ namespace Air3550
         {
             // This method transitions the displayed page from the log in page to the create customer account page
             // after the button is clicked
-            CreateCustomerPage createCustomer = new CreateCustomerPage(); // create the next form
-            createCustomer.Show(); // show the next form
-            this.Hide(); // close log in form
+            this.Hide(); // close the instance of the log in page
+            CreateCustomerPage.GetInstance.Show(); // show the customer home page to prevent the need to remember your userID
         }
         private void UserIDText_MouseClick(object sender, MouseEventArgs e)
         {

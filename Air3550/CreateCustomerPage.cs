@@ -15,15 +15,28 @@ namespace Air3550
     public partial class CreateCustomerPage : Form
     {
         // This form file is to document the actions done on the Create Customer Page specifically
+        private static CreateCustomerPage instance;
         public CreateCustomerPage()
         {
             InitializeComponent();
+        }
+        public static CreateCustomerPage GetInstance
+        {
+            // This method follows the singleton pattern to allow for one form to be used rather than multiple being created
+            get
+            {
+                if (instance == null || instance.IsDisposed)
+                {
+                    instance = new CreateCustomerPage();
+                }
+                return instance;
+            }
         }
         private void CreateAccountButton_Click(object sender, EventArgs e)
         {
             // This method includes validating the data provided on the Create Account Form
             // and either throwing an error if something is invalid or creating the account 
-            // then taking the customer back to the Log In Page
+            // then taking the customer to the customer home page
             // get the values from the text boxes on the form
             string firstName = FirstNameText.Text;
             string lastName = LastNameText.Text;
@@ -57,7 +70,7 @@ namespace Air3550
             // make label array to access each label when there is an error
             Label[] errorArray = new Label[12] { FirstNameError, LastNameError, StreetError, CityError, ZipError, PhoneError, CreditError, EmailError, PasswordLengthError, ConfirmPasswordMatchError, StateError, AgeError};
             // get any errors from format
-            int[] errors = SystemAction.ValidateAccountFormat(password, firstName, lastName, street, city, zip, phone, email);
+            int[] errors = SystemAction.ValidateAccountFormat(firstName, lastName, street, city, zip, phone, email);
 
             // check if the combo boxes are empty 
             // and check if the password is less than 6 characters and if the two passwords match
@@ -108,28 +121,18 @@ namespace Air3550
                     DialogResult result = MessageBox.Show("Your account has been successfully created. Your USERID is " + userID, "SUCCESS: New Account Created", MessageBoxButtons.OK, MessageBoxIcon.None);
                     if (result == DialogResult.OK)
                     {
-                        CustomerHomePage customerHome = new CustomerHomePage(ref customer); // create customer home page with current customer
-                        int i = 0;
-                        // close the log in form and the create customer form
-                        while (i < Application.OpenForms.Count) // look at what forms are open
-                        {
-                            if (Application.OpenForms[i].Name != "CustomerHomePage") // close everything that isn't the customer home page
-                            {
-                                if (Application.OpenForms[i].Name == "LogInPage")
-                                    Application.OpenForms[i].Hide(); // hide the log in page, so it can be referenced later
-                                else
-                                    Application.OpenForms[i].Close(); // close everything else
-                            }
-                            i += 1;
-                        }
-                        customerHome.Show(); // show the customer home page to prevent the need to remember your userID
+                        this.Dispose(); // close the current page
+                        CustomerHomePage.GetInstance(ref customer).Show(); // show the customer home page to prevent the need to remember your userID
                     }
                 }
                 else
                 {
                     DialogResult result = MessageBox.Show("There is already an account linked with this email.\nPress OK to return to the Log In Page to use your previously created account.\nPress CANCEL to modify the email your provided when creating a new account.\n", "ERROR: Account Already Exists", MessageBoxButtons.OKCancel, MessageBoxIcon.Error);
                     if (result == DialogResult.OK) // return 
-                        this.Close(); // close current page
+                    {
+                        this.Dispose(); // close current page
+                        LogInPage.GetInstance.Show();
+                    }
                 }
             }
         }
@@ -138,19 +141,23 @@ namespace Air3550
             // This methods allows the user to return to the Log In page
             // The current form will close
             // The Log In page will open
-            DialogResult result = MessageBox.Show("Are you sure that you want to return to the Log In Page?\nAny changes not saved will not be updated.", "Account Information", MessageBoxButtons.YesNo, MessageBoxIcon.Hand);
+            DialogResult result = MessageBox.Show("Are you sure that you want to return home?\nAny changes not saved will not be updated.", "Account Information", MessageBoxButtons.YesNo, MessageBoxIcon.None);
             if (result == DialogResult.Yes)
             {
-                this.Close(); // close the current form if the customer confirms that they would like to log out
-                int i = 0;
-                // close the log in form and the create customer form
-                while (i < Application.OpenForms.Count) // look at what forms are open
-                {
-                    if (Application.OpenForms[i].Name == "LogInPage")
-                        Application.OpenForms[i].Show();// if the current form is the customer home page, show it
-                    i += 1;
-                }
+                LogInPage.GetInstance.Show();
+                this.Dispose();
             }
+        }
+        private void CreateCustomerPage_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            // This message checks if the user wants to exit
+            // If they do, then the application closes
+            // If they cancel, then the current page stays open
+            DialogResult result = MessageBox.Show("Are you sure you would like to exit?\nAny changes not saved will not be updated.", "Close", MessageBoxButtons.YesNo, MessageBoxIcon.None);
+            if (result == DialogResult.Yes)
+                LogInPage.GetInstance.Close();
+            else
+                e.Cancel = true;
         }
         private void PhoneText_MouseClick(object sender, MouseEventArgs e)
         {

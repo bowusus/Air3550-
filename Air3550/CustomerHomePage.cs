@@ -14,8 +14,8 @@ namespace Air3550
     public partial class CustomerHomePage : Form
     {
         // This form file is to document the actions done on the Customer Home Page specifically
+        private static CustomerHomePage instance;
         public static CustomerModel currCustomer; // make a local object that can be read in the current context
-        public static bool logOutButtonClicked = false;
         public CustomerHomePage()
         {
             InitializeComponent();
@@ -25,53 +25,50 @@ namespace Air3550
             // This constructor allows for the object to be accessed in this form
             InitializeComponent();
             currCustomer = customer;
-            logOutButtonClicked = false;
+        }
+        public static CustomerHomePage GetInstance(ref CustomerModel customer)
+        {
+            // This method follows the singleton pattern to allow for one form to be used rather than multiple being created
+            if (instance == null || instance.IsDisposed)
+            {
+                instance = new CustomerHomePage(ref customer);
+            }
+            return instance;
         }
         private void BookFlightButton_Click(object sender, EventArgs e)
         {
             // This method transitions the displayed page from the customer home page to the 
             // cancel flight page
-            BookFlightPage bookFlight = new BookFlightPage(ref currCustomer); // create the next form
-            //BookFlightPage2 bookFlight = new BookFlightPage2(ref currCustomer);
-            bookFlight.Show(); // show the next form
-            logOutButtonClicked = false;
-            this.Hide(); // hide the main form, so it can be accessed again
+            BookFlightPage.GetInstance(ref currCustomer).Show();
+            this.Dispose();
         }
         private void CancelFlightButton_Click(object sender, EventArgs e)
         {
             // This method transitions the displayed page from the customer home page to the 
             // cancel flight page
-            CancelFlightPage cancelFlight = new CancelFlightPage(ref currCustomer); // create the next form
-            cancelFlight.Show(); // show the next form
-            logOutButtonClicked = false;
-            this.Hide(); // hide the main form, so it can be accessed again
+            CancelFlightPage.GetInstance(ref currCustomer).Show();
+            this.Dispose();
         }
         public void AccountInformationButton_Click(object sender, EventArgs e)
         {
             // This method transitions the displayed page from the customer home page to the 
             // account information page
-            AccountInformationPage accountInformation = new AccountInformationPage(ref currCustomer); // create the next form
-            accountInformation.Show(); // show the next form
-            logOutButtonClicked = false;
-            this.Hide(); // hide the main form, so it can be accessed again
+            AccountInformationPage.GetInstance(ref currCustomer).Show();
+            this.Dispose();
         }
         private void AccountHistoryButton_Click(object sender, EventArgs e)
         {
             // This method transitions the displayed page from the customer home page to the 
             // account history page
-            AccountHistoryPage accountHistory = new AccountHistoryPage(ref currCustomer); // create the next form
-            accountHistory.Show(); // show the next form
-            logOutButtonClicked = false;
-            this.Hide(); // hide the main form, so it can be accessed again
+            AccountHistoryPage.GetInstance(ref currCustomer).Show();
+            this.Dispose();
         }
         private void PrintBoardingPassButton_Click(object sender, EventArgs e)
         {
             // This method transitions the displayed page from the customer home page to the 
             // print boarding pass page
-            PrintBoardingPassPage printBoardingPass = new PrintBoardingPassPage(ref currCustomer); // create the next form
-            printBoardingPass.Show(); // show the next form
-            logOutButtonClicked = false;
-            this.Hide(); // hide the main form, so it can be accessed again
+            PrintBoardingPassPage.GetInstance(ref currCustomer).Show();
+            this.Dispose();
         }
         private void LogOutButton_Click(object sender, EventArgs e)
         {
@@ -79,29 +76,23 @@ namespace Air3550
             // All open forms will close
             // The log in page will open
             // A message asks if the customer has saved everything they desire
-            DialogResult result = MessageBox.Show("Are you sure that you want to log out?\nAny changes not saved will not be updated.", "Log Out", MessageBoxButtons.YesNo, MessageBoxIcon.Hand);
+            DialogResult result = MessageBox.Show("Are you sure that you want to log out?\nAny changes not saved will not be updated.", "Log Out", MessageBoxButtons.YesNo, MessageBoxIcon.None);
             if (result == DialogResult.Yes)
             {
-                logOutButtonClicked = true; // used to access red x later
-                CustomerHomePage.logOutButtonClicked = false;
-                this.Close(); // close current form
-                Application.OpenForms[0].Show(); // open log in form
+                LogInPage.GetInstance.Show();
+                this.Dispose();
             }
         }
         private void CustomerHomePage_FormClosing(object sender, FormClosingEventArgs e)
         {
-            // This method allows the red X to be used to end the application
-            // If the red X is clicked, a message will make sure the customer wants to leave
-            // then the application ends or the customer cancels
-            /*System.Diagnostics.Debug.WriteLine(ActiveControl.Text);
-            if (CustomerHomePage.logOutButtonClicked == false)
-            {
-                DialogResult result = MessageBox.Show("Are you sure that you want to exit?\nAny changes not saved will not be updated.", "Exit Air3550 2", MessageBoxButtons.YesNo, MessageBoxIcon.Hand);
-                if (result == DialogResult.Yes)
-                    Application.Exit(); // close the application
-                else
-                    e.Cancel = true; // cancel the closing of the form
-            }*/
+            // This message checks if the user wants to exit
+            // If they do, then the application closes
+            // If they cancel, then the current page stays open
+            DialogResult result = MessageBox.Show("Are you sure you would like to exit?\nAny changes not saved will not be updated.", "Close", MessageBoxButtons.YesNo, MessageBoxIcon.None);
+            if (result == DialogResult.Yes)
+                LogInPage.GetInstance.Dispose();
+            else
+                e.Cancel = true;
         }
     }
 }

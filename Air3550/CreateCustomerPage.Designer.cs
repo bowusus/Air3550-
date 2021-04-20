@@ -773,6 +773,7 @@ namespace Air3550
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Air3550";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.CreateCustomerPage_FormClosing);
             this.ResumeLayout(false);
             this.PerformLayout();
 

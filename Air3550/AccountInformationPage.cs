@@ -15,10 +15,8 @@ namespace Air3550
     public partial class AccountInformationPage : Form
     {
         // This form file is to document the actions done on the Account Information Page specifically
+        public static AccountInformationPage instance; 
         public static CustomerModel currCustomer; // make a local object that can be read in the current context
-        public static bool saveChangesButtonClicked = false;
-        public static bool logOutButtonClicked = false;
-        public static bool backButtonClicked = false;
         public AccountInformationPage()
         {
             InitializeComponent();
@@ -29,9 +27,6 @@ namespace Air3550
             InitializeComponent();
             // get the current customer and pass that information to the textboxes
             currCustomer = customer;
-            saveChangesButtonClicked = false;
-            logOutButtonClicked = false;
-            backButtonClicked = false;
             FirstNameText.Text = customer.firstName;
             LastNameText.Text = customer.lastName;
             StreetText.Text = customer.street;
@@ -41,6 +36,15 @@ namespace Air3550
             PhoneText.Text = customer.phoneNumber;
             EmailText.Text = customer.email;
             AgeComboBox.Text = customer.age.ToString();
+        }
+        public static AccountInformationPage GetInstance(ref CustomerModel customer)
+        {
+            // This method follows the singleton pattern to allow for one form to be used rather than multiple being created
+            if (instance == null || instance.IsDisposed)
+            {
+                instance = new AccountInformationPage(ref customer);
+            }
+            return instance;
         }
         private void SaveChangesButton_Click(object sender, EventArgs e)
         {
@@ -84,7 +88,7 @@ namespace Air3550
             // make label array to access each label when there is an error
             Label[] errorArray = new Label[12] { FirstNameError, LastNameError, StreetError, CityError, ZipError, PhoneError, CreditError, EmailError, PasswordLengthError, ConfirmPasswordMatchError, StateError, AgeError };
             // get any errors from format
-            int[] errors = SystemAction.ValidateAccountFormat(password, first, last, street, city, zip, phone, email);
+            int[] errors = SystemAction.ValidateAccountFormat(first, last, street, city, zip, phone, email);
 
             // check if the combo boxes are empty 
             // and check if the password is less than 6 characters if not blank and if the two passwords match
@@ -105,7 +109,7 @@ namespace Air3550
             // if there are no errors, create the array
             if (errors.Contains(1))
             {
-                for (int i = 0; i < 12; i++)
+                for (int i = 0; i < 12; i++) // if any of the information is incorrectly inputted, then make that error visible and set it to 0
                 {
                     if (errors[i] == 1)
                         errorArray[i].Visible = true;
@@ -120,27 +124,18 @@ namespace Air3550
                     pass = SystemAction.EncryptPassword(password);
                 SqliteDataAccess.UpdateUser(currCustomer.userID, pass, first, last, street, city, state, zip, phone, creditCard, age, email); // update the database
                 MessageBox.Show("Your Information has been successfully updated and saved", "Account Information Updated and Saved", MessageBoxButtons.OK, MessageBoxIcon.None);
-                saveChangesButtonClicked = true;
             }
         }
         private void BackButton_Click(object sender, EventArgs e)
         {
-            // This methods allows the user to return to the home page
+            // This methods allows the user to return to the Log In page
             // The current form will close
-            // The home page will open
-            DialogResult result = MessageBox.Show("Are you sure that you want to return home?\nAny changes not saved will not be updated.", "Account Information", MessageBoxButtons.YesNo, MessageBoxIcon.Hand);
+            // The Log In page will open
+            DialogResult result = MessageBox.Show("Are you sure that you want to return home?\nAny changes not saved will not be updated.", "Account Information", MessageBoxButtons.YesNo, MessageBoxIcon.None);
             if (result == DialogResult.Yes)
             {
-                backButtonClicked = true;
-                this.Close(); // close the current form if the customer confirms that they would like to log out
-                int i = 0;
-                // close the log in form and the create customer form
-                while (i < Application.OpenForms.Count) // look at what forms are open
-                {
-                    if (Application.OpenForms[i].Name == "CustomerHomePage")
-                        Application.OpenForms[i].Show();// if the current form is the customer home page, show it
-                    i += 1;
-                }
+                CustomerHomePage.GetInstance(ref currCustomer).Show();
+                this.Dispose();
             }
         }
         private void LogOutButton_Click(object sender, EventArgs e)
@@ -149,25 +144,11 @@ namespace Air3550
             // All open forms will close
             // The log in page will open
             // A message asks if the customer has saved everything they desire
-            DialogResult result = MessageBox.Show("Are you sure that you want to log out?\nAny changes not saved will not be updated.", "Log Out", MessageBoxButtons.YesNo, MessageBoxIcon.Hand);
+            DialogResult result = MessageBox.Show("Are you sure that you want to log out?\nAny changes not saved will not be updated.", "Log Out", MessageBoxButtons.YesNo, MessageBoxIcon.None);
             if (result == DialogResult.Yes)
             {
-                logOutButtonClicked = true; // used to access red x later
-                CustomerHomePage.logOutButtonClicked = false;
-                int i = 0;
-                int indexAccount = 0;
-                int indexLogIn = 0;
-                this.Close();
-                while (i < Application.OpenForms.Count) // look at what forms are open
-                {
-                    if (Application.OpenForms[i].Name != "LogInPage") // get location of other form
-                        indexAccount = i;
-                    else
-                        indexLogIn = i;
-                    i += 1;
-                }
-                Application.OpenForms[indexAccount].Close(); // close other form open
-                Application.OpenForms[indexLogIn].Show(); // show the log in page that was hiding
+                LogInPage.GetInstance.Show();
+                this.Dispose();
             }
         }
         private void AccountInformationPage_FormClosing(object sender, FormClosingEventArgs e)
@@ -175,35 +156,68 @@ namespace Air3550
             // This method allows the red X to be used to end the application
             // If the red X is clicked, a message will make sure the customer wants to leave
             // then the application ends or the customer cancels
-            /*if (CustomerHomePage.logOutButtonClicked == false && AccountInformationPage.backButtonClicked == false && AccountInformationPage.logOutButtonClicked == false && AccountInformationPage.saveChangesButtonClicked == false && e.CloseReason != CloseReason.ApplicationExitCall)
-            {
-                DialogResult result = MessageBox.Show("Are you sure that you want to exit?\nAny changes not saved will not be updated.", "Exit Air3550 1", MessageBoxButtons.YesNo, MessageBoxIcon.Hand);
-                if (result == DialogResult.Yes)
-                    Application.Exit(); // close the application
-                else
-                    e.Cancel = true; // cancel the closing of the form
-            }*/
+            DialogResult result = MessageBox.Show("Are you sure you would like to exit?\nAny changes not saved will not be updated.", "Close", MessageBoxButtons.YesNo, MessageBoxIcon.None);
+            if (result == DialogResult.Yes)
+                LogInPage.GetInstance.Close();
+            else
+                e.Cancel = true;
         }
         private void PhoneText_MouseClick(object sender, MouseEventArgs e)
         {
             // This method was required to get the combo box cursor to start on the left side automatically
-            PhoneText.SelectionStart = 0;
+            int index = PhoneText.Text.IndexOf(" ");
+            if (PhoneText.Text.Equals("(   )   -"))
+                PhoneText.SelectionStart = 0;
+            else
+            {
+                if (index != -1)
+                    PhoneText.SelectionStart = index;
+                else
+                    PhoneText.SelectionStart = PhoneText.Text.Length;
+            }
         }
 
         private void PhoneText_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             // This method was required to get the combo box cursor to start on the left side automatically
-            PhoneText.SelectionStart = 0;
+            int index = PhoneText.Text.IndexOf(" ");
+            if (PhoneText.Text.Equals("(   )   -"))
+                PhoneText.SelectionStart = 0;
+            else
+            {
+                if (index != -1)
+                    PhoneText.SelectionStart = index;
+                else
+                    PhoneText.SelectionStart = PhoneText.Text.Length;
+            }
         }
         private void CreditCardNumText_MouseClick(object sender, MouseEventArgs e)
         {
             // This method was required to get the combo box cursor to start on the left side automatically
-            CreditCardNumText.SelectionStart = 0;
+            int index = CreditCardNumText.Text.IndexOf(" ");
+            if (CreditCardNumText.Text.Equals("    -    -    -"))
+                CreditCardNumText.SelectionStart = 0;
+            else
+            {
+                if (index != -1)
+                    CreditCardNumText.SelectionStart = index;
+                else
+                    CreditCardNumText.SelectionStart = CreditCardNumText.Text.Length;
+            }
         }
         private void CreditCardNumText_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             // This method was required to get the combo box cursor to start on the left side automatically
-            CreditCardNumText.SelectionStart = 0;
+            int index = CreditCardNumText.Text.IndexOf(" ");
+            if (CreditCardNumText.Text.Equals("    -    -    -"))
+                CreditCardNumText.SelectionStart = 0;
+            else
+            {
+                if (index != -1)
+                    CreditCardNumText.SelectionStart = index;
+                else
+                    CreditCardNumText.SelectionStart = CreditCardNumText.Text.Length;
+            }
         }
     }
 }

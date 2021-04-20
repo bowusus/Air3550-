@@ -374,7 +374,7 @@ namespace Air3550
             this.EmptyError.Text = "Please Fill in Both Locations";
             this.EmptyError.Visible = false;
             // 
-            // BookFlightPageCopy
+            // BookFlightPage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -407,10 +407,11 @@ namespace Air3550
             this.Controls.Add(this.RoundTripButton);
             this.Controls.Add(this.AvailableFlightTable);
             this.MaximumSize = new System.Drawing.Size(2248, 1149);
-            this.Name = "BookFlightPageCopy";
+            this.Name = "BookFlightPage";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Air3550";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.BookFlightPage_FormClosing);
             this.Load += new System.EventHandler(this.BookFlightPage_Load);
             ((System.ComponentModel.ISupportInitialize)(this.AvailableFlightTable)).EndInit();
             this.ResumeLayout(false);

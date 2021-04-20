@@ -17,14 +17,13 @@ namespace Air3550
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            LogInPage login = new LogInPage();
 
             /* Just for testing LE home page uncomment it later */
             //List<FlightModel> masterFlights = new List<FlightModel>();
             //masterFlights = SqliteDataAccess.GetAllMasterFlights();
             //Application.Run(LoadEngineerHomePage.GetInstance);
 
-            Application.Run(login); // start with the login page as the main page
+            Application.Run(LogInPage.GetInstance); // start with the login page as the main page
         }
     }
 }

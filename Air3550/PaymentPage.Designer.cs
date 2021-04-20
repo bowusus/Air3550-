@@ -29,10 +29,10 @@ namespace Air3550
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             this.FlightPaymentInfoLabel = new System.Windows.Forms.Label();
             this.PaymentLabel = new System.Windows.Forms.Label();
             this.CreditCardButton = new System.Windows.Forms.RadioButton();
@@ -45,8 +45,6 @@ namespace Air3550
             this.DepartureFlightLabel = new System.Windows.Forms.Label();
             this.ReturnFlightLabel = new System.Windows.Forms.Label();
             this.DepartureFlightDetailsTable = new System.Windows.Forms.DataGridView();
-            this.DepartureCitiesLabel = new System.Windows.Forms.Label();
-            this.ReturnCitiesLabel = new System.Windows.Forms.Label();
             this.ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.DepartureTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.EstimatedArrivalTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -56,6 +54,8 @@ namespace Air3550
             this.ChangePlane = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.SeatsAvailable = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Credits = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.DepartureCitiesLabel = new System.Windows.Forms.Label();
+            this.ReturnCitiesLabel = new System.Windows.Forms.Label();
             this.ReturnFlightDetailsTable = new System.Windows.Forms.DataGridView();
             this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -213,14 +213,14 @@ namespace Air3550
             this.DepartureFlightDetailsTable.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.DepartureFlightDetailsTable.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.DepartureFlightDetailsTable.BackgroundColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle9.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle9.Font = new System.Drawing.Font("Rockwell", 10F);
-            dataGridViewCellStyle9.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle9.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle9.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.DepartureFlightDetailsTable.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle9;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Rockwell", 10F);
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.DepartureFlightDetailsTable.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.DepartureFlightDetailsTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.DepartureFlightDetailsTable.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.ID,
@@ -232,14 +232,14 @@ namespace Air3550
             this.ChangePlane,
             this.SeatsAvailable,
             this.Credits});
-            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle10.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle10.Font = new System.Drawing.Font("Rockwell", 10F);
-            dataGridViewCellStyle10.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle10.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle10.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle10.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.DepartureFlightDetailsTable.DefaultCellStyle = dataGridViewCellStyle10;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Rockwell", 10F);
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.DepartureFlightDetailsTable.DefaultCellStyle = dataGridViewCellStyle2;
             this.DepartureFlightDetailsTable.Enabled = false;
             this.DepartureFlightDetailsTable.Location = new System.Drawing.Point(67, 249);
             this.DepartureFlightDetailsTable.MultiSelect = false;
@@ -250,30 +250,6 @@ namespace Air3550
             this.DepartureFlightDetailsTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.DepartureFlightDetailsTable.Size = new System.Drawing.Size(2101, 221);
             this.DepartureFlightDetailsTable.TabIndex = 102;
-            // 
-            // DepartureCitiesLabel
-            // 
-            this.DepartureCitiesLabel.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.DepartureCitiesLabel.AutoSize = true;
-            this.DepartureCitiesLabel.Font = new System.Drawing.Font("Rockwell", 14F);
-            this.DepartureCitiesLabel.Location = new System.Drawing.Point(801, 192);
-            this.DepartureCitiesLabel.Name = "DepartureCitiesLabel";
-            this.DepartureCitiesLabel.Size = new System.Drawing.Size(309, 42);
-            this.DepartureCitiesLabel.TabIndex = 105;
-            this.DepartureCitiesLabel.Text = "Departure Cities";
-            this.DepartureCitiesLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // ReturnCitiesLabel
-            // 
-            this.ReturnCitiesLabel.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.ReturnCitiesLabel.AutoSize = true;
-            this.ReturnCitiesLabel.Font = new System.Drawing.Font("Rockwell", 14F);
-            this.ReturnCitiesLabel.Location = new System.Drawing.Point(801, 506);
-            this.ReturnCitiesLabel.Name = "ReturnCitiesLabel";
-            this.ReturnCitiesLabel.Size = new System.Drawing.Size(244, 42);
-            this.ReturnCitiesLabel.TabIndex = 106;
-            this.ReturnCitiesLabel.Text = "Return Cities";
-            this.ReturnCitiesLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // ID
             // 
@@ -338,6 +314,30 @@ namespace Air3550
             this.Credits.Name = "Credits";
             this.Credits.ReadOnly = true;
             // 
+            // DepartureCitiesLabel
+            // 
+            this.DepartureCitiesLabel.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.DepartureCitiesLabel.AutoSize = true;
+            this.DepartureCitiesLabel.Font = new System.Drawing.Font("Rockwell", 14F);
+            this.DepartureCitiesLabel.Location = new System.Drawing.Point(801, 192);
+            this.DepartureCitiesLabel.Name = "DepartureCitiesLabel";
+            this.DepartureCitiesLabel.Size = new System.Drawing.Size(309, 42);
+            this.DepartureCitiesLabel.TabIndex = 105;
+            this.DepartureCitiesLabel.Text = "Departure Cities";
+            this.DepartureCitiesLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // ReturnCitiesLabel
+            // 
+            this.ReturnCitiesLabel.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.ReturnCitiesLabel.AutoSize = true;
+            this.ReturnCitiesLabel.Font = new System.Drawing.Font("Rockwell", 14F);
+            this.ReturnCitiesLabel.Location = new System.Drawing.Point(801, 506);
+            this.ReturnCitiesLabel.Name = "ReturnCitiesLabel";
+            this.ReturnCitiesLabel.Size = new System.Drawing.Size(244, 42);
+            this.ReturnCitiesLabel.TabIndex = 106;
+            this.ReturnCitiesLabel.Text = "Return Cities";
+            this.ReturnCitiesLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // ReturnFlightDetailsTable
             // 
             this.ReturnFlightDetailsTable.AllowUserToAddRows = false;
@@ -346,14 +346,14 @@ namespace Air3550
             this.ReturnFlightDetailsTable.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.ReturnFlightDetailsTable.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.ReturnFlightDetailsTable.BackgroundColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle11.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle11.Font = new System.Drawing.Font("Rockwell", 10F);
-            dataGridViewCellStyle11.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle11.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle11.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle11.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.ReturnFlightDetailsTable.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle11;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Rockwell", 10F);
+            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.ReturnFlightDetailsTable.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
             this.ReturnFlightDetailsTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.ReturnFlightDetailsTable.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.dataGridViewTextBoxColumn1,
@@ -365,14 +365,14 @@ namespace Air3550
             this.dataGridViewTextBoxColumn7,
             this.dataGridViewTextBoxColumn8,
             this.dataGridViewTextBoxColumn9});
-            dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle12.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle12.Font = new System.Drawing.Font("Rockwell", 10F);
-            dataGridViewCellStyle12.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle12.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle12.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle12.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.ReturnFlightDetailsTable.DefaultCellStyle = dataGridViewCellStyle12;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("Rockwell", 10F);
+            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.ReturnFlightDetailsTable.DefaultCellStyle = dataGridViewCellStyle4;
             this.ReturnFlightDetailsTable.Enabled = false;
             this.ReturnFlightDetailsTable.Location = new System.Drawing.Point(67, 563);
             this.ReturnFlightDetailsTable.MultiSelect = false;
@@ -473,6 +473,7 @@ namespace Air3550
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Air3550";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.PaymentPage_FormClosing);
             this.Load += new System.EventHandler(this.PaymentPage_Load);
             ((System.ComponentModel.ISupportInitialize)(this.DepartureFlightDetailsTable)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ReturnFlightDetailsTable)).EndInit();

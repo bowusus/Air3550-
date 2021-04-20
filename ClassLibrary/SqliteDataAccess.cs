@@ -36,13 +36,13 @@ namespace ClassLibrary
                 // execute the command with the reader, which only reads the database rather than updating it in anyway
                 while (rdr.Read())
                 {
-                    role = rdr.GetString(0); // get the airport name from the database
+                    role = rdr.GetString(0); // get the employee role
                 }
                 if (String.IsNullOrEmpty(role))
-                    role = "employee";
+                    role = "employee"; // if there is no employee role, then the user is a customer
                 rdr.Close();
                 con.Close();
-                return role; // return airport name
+                return role; // return the empployee role
             }
         }
         public static int CheckIfNewCustomer(string tempEmail)
@@ -69,13 +69,13 @@ namespace ClassLibrary
                 }
                 rdr.Close();
                 con.Close();
-                return count; // return count with that email
+                return count; // return row count with that email
             }
         }
         public static int GetRandUserID()
         {
             // This method goes into the database, specifically the userID table, 
-            // and random picks one userID then deletes that record, so it is a unique id
+            // and randomly picks one userID, so it is a unique id
             // for every user. It returns this unique userID
             using (SQLiteConnection con = new SQLiteConnection(LoadConnectionString())) 
             // closes the connection when there is an error or it is done executing
@@ -83,7 +83,7 @@ namespace ClassLibrary
                 con.Open(); // open the connection
                 SQLiteCommand cmd = new SQLiteCommand(); 
                 cmd.CommandType = CommandType.Text;
-                cmd.CommandText = "select * from userIDTable order by random() limit 1"; // remember to delete value
+                cmd.CommandText = "select * from userIDTable order by random() limit 1"; 
                 cmd.Connection = con;
                 // execute the command with the reader, which only reads the database rather than updating it in anyway
                 SQLiteDataReader rdr = cmd.ExecuteReader(); 
@@ -139,7 +139,7 @@ namespace ClassLibrary
                 cmd.CommandType = CommandType.Text;
                 cmd.CommandText = "insert into credits(userID_fk) values(@userID_fk)";
                 cmd.Connection = con;
-                // use the customer's information to input into the database
+                // use the customer's userID to input into the credits table
                 cmd.Parameters.AddWithValue("@userID_fk", tempUserID);
                 cmd.ExecuteNonQuery();
                 con.Close();
@@ -147,7 +147,7 @@ namespace ClassLibrary
         }
         public static int CheckPassword(int userID, string currPass)
         {
-            // This method goes into the database, specifically the customer table
+            // This method goes into the database, specifically the customer table,
             // and gets the current (encrypted) password asssociated with the UserID provided
             // When the provided password is encrypted, if they are the same string, then
             // the userID and password are correct. Return 1
@@ -199,6 +199,7 @@ namespace ClassLibrary
                 cmd.Connection = con;
                 List<string> data = new List<string>();
                 // execute the command with the reader, which only reads the database rather than updating it in anyway
+                // add of the customer's data to a list of strings to use elsewhere
                 using (SQLiteDataReader reader = cmd.ExecuteReader())
                 {
                     reader.Read();
@@ -231,6 +232,7 @@ namespace ClassLibrary
                 SQLiteCommand cmd = new SQLiteCommand();
                 cmd.CommandType = CommandType.Text;
                 cmd.CommandText = "insert into flightsBooked values (@userID_fk, @flightID_fk, @routeID_fk, @paymentMethod)";
+                // use the provided information to add to the flightsBooked table
                 cmd.Parameters.AddWithValue("@userID_fk", userID);
                 cmd.Parameters.AddWithValue("@flightID_fk", flightID);
                 cmd.Parameters.AddWithValue("@routeID_fk", routeID);
@@ -242,7 +244,7 @@ namespace ClassLibrary
         }
         public static void AddTransaction(int userID, int flightID, double amount, string paymentMethod)
         {
-            // This method goes into the database, specifically the transaction table, 
+            // This method goes into the database, specifically the transaction table 
             // and adds the transaction
             using (SQLiteConnection con = new SQLiteConnection(LoadConnectionString()))
             // closes the connection when there is an error or it is done executing
@@ -251,6 +253,7 @@ namespace ClassLibrary
                 SQLiteCommand cmd = new SQLiteCommand();
                 cmd.CommandType = CommandType.Text;
                 cmd.CommandText = "insert into transactionTable values (@userID_fk, @flightID_fk, @amount, @paymentMethod)";
+                // use the provided information to add to the transaction table
                 cmd.Parameters.AddWithValue("@userID_fk", userID);
                 cmd.Parameters.AddWithValue("@flightID_fk", flightID);
                 cmd.Parameters.AddWithValue("@amount", amount);
@@ -271,6 +274,7 @@ namespace ClassLibrary
                 SQLiteCommand cmd = new SQLiteCommand();
                 cmd.CommandType = CommandType.Text;
                 cmd.CommandText = "delete from transactionTable where transactionTable.userID_fk = @userID_fk and transactionTable.flightID_fk = @flightID_fk";
+                // delete the specified transaction from the table when the customer has cancelled that flight
                 cmd.Parameters.AddWithValue("@userID_fk", userID);
                 cmd.Parameters.AddWithValue("@flightID_fk", flightID);
                 cmd.Connection = con;
@@ -289,20 +293,21 @@ namespace ClassLibrary
                 SQLiteCommand cmd = new SQLiteCommand();
                 cmd.CommandType = CommandType.Text;
                 cmd.CommandText = "select route.routeID, route.numOfLayovers from route where route.originCode_fk = @originCode_fk and route.destinationCode_fk = @destinationCode_fk";
+                // use the specified information to get the routeID and number of Layovers
                 cmd.Parameters.AddWithValue("@originCode_fk", origin);
                 cmd.Parameters.AddWithValue("@destinationCode_fk", destination);
                 cmd.Connection = con;
                 List<(int, int)> routeIDs = new List<(int, int)>();
-                // execute the command with the reader, which only reads the database rather than updating it in anyway
                 SQLiteDataReader rdr = cmd.ExecuteReader();
                 // execute the command with the reader, which only reads the database rather than updating it in anyway
                 while (rdr.Read())
                 {
+                    // add the values to the list as a pair
                     routeIDs.Add((rdr.GetInt32(0), rdr.GetInt32(1)));
                 }
                 rdr.Close();
                 con.Close();
-                return routeIDs;
+                return routeIDs; // return the information
             }
         }
         public static List<int> GetBookedFlightsRouteID(int userID)
@@ -316,6 +321,7 @@ namespace ClassLibrary
                 SQLiteCommand cmd = new SQLiteCommand();
                 cmd.CommandType = CommandType.Text;
                 cmd.CommandText = "select distinct flightsBooked.routeID_fk from flightsBooked where flightsBooked.userID_fk = @userID_fk";
+                // use the userID to get the correct routeIDs
                 cmd.Parameters.AddWithValue("@userID_fk", userID);
                 cmd.Connection = con;
                 SQLiteDataReader rdr = cmd.ExecuteReader();
@@ -341,18 +347,19 @@ namespace ClassLibrary
                 SQLiteCommand cmd = new SQLiteCommand();
                 cmd.CommandType = CommandType.Text;
                 cmd.CommandText = "select flightsBooked.flightID_fk from flightsBooked where flightsBooked.userID_fk = @userID_fk";
+                // use the userID to get the current booked flights
                 cmd.Parameters.AddWithValue("@userID_fk", userID);
                 cmd.Connection = con;
                 SQLiteDataReader rdr = cmd.ExecuteReader();
-                List<int> routeID = new List<int>();
+                List<int> flightIDs = new List<int>();
                 // execute the command with the reader, which only reads the database rather than updating it in anyway
                 while (rdr.Read())
                 {
-                    routeID.Add(rdr.GetInt32(0));
+                    flightIDs.Add(rdr.GetInt32(0));
                 }
                 rdr.Close();
                 con.Close();
-                return routeID;
+                return flightIDs; // return the currently booked flightIDs
             }
         }
         public static List<int> GetFlightIDsInRoute(int routeID)
@@ -366,6 +373,7 @@ namespace ClassLibrary
                 SQLiteCommand cmd = new SQLiteCommand();
                 cmd.CommandType = CommandType.Text;
                 cmd.CommandText = "select * from route where route.routeID = @routeID";
+                // use the routeID to get the FlightIDs
                 cmd.Parameters.AddWithValue("@routeID", routeID);
                 cmd.Connection = con;
                 List<int> flightIDs = new List<int>();
@@ -381,7 +389,7 @@ namespace ClassLibrary
                     reader.Close();
                 }
                 con.Close();
-                return flightIDs; // return user data
+                return flightIDs; // return flightIDs in the route
             }
         }
         public static string GetFlightNames(string code)
@@ -395,6 +403,7 @@ namespace ClassLibrary
                 SQLiteCommand cmd = new SQLiteCommand();
                 cmd.CommandType = CommandType.Text;
                 cmd.CommandText = "select airport.airportName from airport where airport.airportCode = @airportCode";
+                // get the name for the provided airport code
                 cmd.Parameters.AddWithValue("@airportCode", code);
                 cmd.Connection = con;
                 SQLiteDataReader rdr = cmd.ExecuteReader();
@@ -420,6 +429,7 @@ namespace ClassLibrary
                 SQLiteCommand cmd = new SQLiteCommand();
                 cmd.CommandType = CommandType.Text;
                 cmd.CommandText = "select * from availableFlight where flightID = @flightID"; 
+                // use the flight ID to get the information about the flight
                 cmd.Parameters.AddWithValue("@flightID", flightID);
                 cmd.Connection = con;
                 List<string> flightData = new List<string>();
@@ -456,6 +466,7 @@ namespace ClassLibrary
                 SQLiteCommand cmd = new SQLiteCommand();
                 cmd.CommandType = CommandType.Text;
                 cmd.CommandText = "delete from flightsBooked where flightsBooked.userID_fk = @userID_fk and flightsBooked.flightID_fk = @flightID_fk";
+                // delete the specified flights from the flightsBooked table
                 cmd.Parameters.AddWithValue("@userID_fk", userID);
                 cmd.Parameters.AddWithValue("@flightID_fk", flightID);
                 cmd.Connection = con;
@@ -474,6 +485,7 @@ namespace ClassLibrary
                 SQLiteCommand cmd = new SQLiteCommand();
                 cmd.CommandType = CommandType.Text;
                 cmd.CommandText = "insert into flightsCancelled values (@userID_fk, @flightID_fk)";
+                // add the specified flight to the cancelledFlights table
                 cmd.Parameters.AddWithValue("@userID_fk", userID);
                 cmd.Parameters.AddWithValue("@flightID_fk", flightID);
                 cmd.Connection = con;
@@ -492,6 +504,7 @@ namespace ClassLibrary
                 SQLiteCommand cmd = new SQLiteCommand();
                 cmd.CommandType = CommandType.Text;
                 cmd.CommandText = "select flightsBooked.paymentMethod from flightsBooked where flightsBooked.userID_fk = @userID_fk and flightsBooked.flightID_fk = @flightID_fk";
+                // use the provided information to get the payment method
                 cmd.Parameters.AddWithValue("@userID_fk", userID);
                 cmd.Parameters.AddWithValue("@flightID_fk", flightID);
                 cmd.Connection = con;
@@ -519,10 +532,11 @@ namespace ClassLibrary
                 SQLiteCommand cmd = new SQLiteCommand();
                 cmd.CommandType = CommandType.Text;
                 cmd.CommandText = "select credits.balanceAvailable from credits where credits.userID_fk = @userID_fk";
+                // use the provided id to get the balance
                 cmd.Parameters.AddWithValue("@userID_fk", userID);
                 cmd.Connection = con;
                 SQLiteDataReader rdr = cmd.ExecuteReader();
-                int balance = 0; // used to return id
+                int balance = 0; // used to return balance
 
                 while (rdr.Read())
                 {
@@ -530,7 +544,7 @@ namespace ClassLibrary
                 }
                 rdr.Close();
                 con.Close();
-                return balance; // return user id
+                return balance; // return the balance
             }
         }
         public static void UpdateBalance(int userID, double balance)
@@ -544,6 +558,7 @@ namespace ClassLibrary
                 SQLiteCommand cmd = new SQLiteCommand();
                 cmd.CommandType = CommandType.Text;
                 cmd.CommandText = "update credits set balanceAvailable = @balanceAvailable where credits.userID_fk = @userID_fk";
+                // use the provided id to update the balance
                 cmd.Parameters.AddWithValue("@userID_fk", userID);
                 cmd.Parameters.AddWithValue("@balanceAvailable", balance);
                 cmd.Connection = con;
@@ -562,10 +577,11 @@ namespace ClassLibrary
                 SQLiteCommand cmd = new SQLiteCommand();
                 cmd.CommandType = CommandType.Text;
                 cmd.CommandText = "select credits.pointsAvailable from credits where credits.userID_fk = @userID_fk";
+                // use the provided id to get the available points
                 cmd.Parameters.AddWithValue("@userID_fk", userID);
                 cmd.Connection = con;
                 SQLiteDataReader rdr = cmd.ExecuteReader();
-                int pointsAvailable = 0; // used to return id
+                int pointsAvailable = 0; // used to return points available
 
                 while (rdr.Read())
                 {
@@ -573,7 +589,7 @@ namespace ClassLibrary
                 }
                 rdr.Close();
                 con.Close();
-                return pointsAvailable; // return user id
+                return pointsAvailable; // return points available
             }
         }
         public static void UpdateAvailablePoints(int userID, int points)
@@ -587,6 +603,7 @@ namespace ClassLibrary
                 SQLiteCommand cmd = new SQLiteCommand();
                 cmd.CommandType = CommandType.Text;
                 cmd.CommandText = "update credits set pointsAvailable = @pointsAvailable where credits.userID_fk = @userID_fk";
+                // use the provided id to update the available points
                 cmd.Parameters.AddWithValue("@userID_fk", userID);
                 cmd.Parameters.AddWithValue("@pointsAvailable", points);
                 cmd.Connection = con;
@@ -605,10 +622,11 @@ namespace ClassLibrary
                 SQLiteCommand cmd = new SQLiteCommand();
                 cmd.CommandType = CommandType.Text;
                 cmd.CommandText = "select credits.pointsUsed from credits where credits.userID_fk = @userID_fk";
+                // use the provided id to get the used points
                 cmd.Parameters.AddWithValue("@userID_fk", userID);
                 cmd.Connection = con;
                 SQLiteDataReader rdr = cmd.ExecuteReader();
-                int pointsUsed = 0;
+                int pointsUsed = 0; // used to return the points used
 
                 while (rdr.Read())
                 {
@@ -616,7 +634,7 @@ namespace ClassLibrary
                 }
                 rdr.Close();
                 con.Close();
-                return pointsUsed; 
+                return pointsUsed; // return points used
             }
         }
         public static void UpdateUsedPoints(int userID, int points)
@@ -630,6 +648,7 @@ namespace ClassLibrary
                 SQLiteCommand cmd = new SQLiteCommand();
                 cmd.CommandType = CommandType.Text;
                 cmd.CommandText = "update credits set pointsUsed = @pointsUsed where credits.userID_fk = @userID_fk";
+                // use the provided id to update the used points
                 cmd.Parameters.AddWithValue("@userID_fk", userID);
                 cmd.Parameters.AddWithValue("@pointsUsed", points);
                 cmd.Connection = con;
@@ -648,6 +667,7 @@ namespace ClassLibrary
                 SQLiteCommand cmd = new SQLiteCommand();
                 cmd.CommandType = CommandType.Text;
                 cmd.CommandText = "update availableFlight set numOfVacantSeats = @numOfVacantSeats where availableFlight.flightID = @flightID";
+                // use the provided id to update the number of vacant seats
                 cmd.Parameters.AddWithValue("@flightID", flightID);
                 cmd.Parameters.AddWithValue("@numOfVacantSeats", num);
                 cmd.Connection = con;
@@ -666,6 +686,7 @@ namespace ClassLibrary
                 SQLiteCommand cmd = new SQLiteCommand();
                 cmd.CommandType = CommandType.Text;
                 cmd.CommandText = "update availableFlight set flightIncome = @flightIncome where availableFlight.flightID = @flightID";
+                // use the provided id to update the flight income
                 cmd.Parameters.AddWithValue("@flightID", flightID);
                 cmd.Parameters.AddWithValue("@flightIncome", num);
                 cmd.Connection = con;
@@ -683,8 +704,10 @@ namespace ClassLibrary
                 con.Open(); // open the connection
                 SQLiteCommand cmd = new SQLiteCommand();
                 cmd.CommandType = CommandType.Text;
-                // if the password is not updated then do not change the password. Everything is else is included in the update
-                // if the password is updated, include the password in the sql script and update the password (that was already hashed)
+                // if the password is not updated but the credit card is then do not change the password but update everything else
+                // if the password is updated but the credit card is not then do not change the credit card but update everything else
+                // if both are updated, include both in the update
+                // otherwise, update everything but the password and credit card
                 if (String.IsNullOrEmpty(pass) && creditCardNumber1 != "    -    -    -")
                 {
                     cmd.CommandText = "UPDATE customer set firstName = @firstName, lastName = @lastName, street = @street, city = @city, state = @state, zipCode = @zipCode, phoneNumber = @phoneNumber, creditCardNumber = @creditCardNumber, age = @age, email = @email where customer.userID = @userID";
