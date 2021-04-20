@@ -9,9 +9,8 @@ namespace ClassLibrary
 	public class CustomerModel
 	{
 		// This class file is the CustomerModel class. There are 
-		// the attributes associated with the Customer included, 
-		// the constructor to create an instance of the CustomerModel,
-		// and methods to describe the actions the customer does.
+		// the attributes associated with the Customer included and 
+		// the constructor to create an instance of the CustomerModel
 
 		// auto-implemented properties for trivial get and set
 		public int userID { get; set; }

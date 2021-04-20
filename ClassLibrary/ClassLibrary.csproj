@@ -51,6 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Airport.cs" />
+    <Compile Include="Route.cs" />
     <Compile Include="Path.cs" />
     <Compile Include="PathFinder.cs" />
     <Compile Include="FlightModel.cs" />

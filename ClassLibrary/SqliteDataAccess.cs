@@ -40,6 +40,8 @@ namespace ClassLibrary
                 }
                 if (String.IsNullOrEmpty(role))
                     role = "employee";
+                rdr.Close();
+                con.Close();
                 return role; // return airport name
             }
         }
@@ -65,6 +67,8 @@ namespace ClassLibrary
                 {
                     count = rdr.GetInt32(0);
                 }
+                rdr.Close();
+                con.Close();
                 return count; // return count with that email
             }
         }
@@ -89,6 +93,8 @@ namespace ClassLibrary
                 {
                     currUserID = rdr.GetInt32(0); 
                 }
+                rdr.Close();
+                con.Close();
                 return currUserID; // return user id
             }
         }
@@ -121,6 +127,24 @@ namespace ClassLibrary
                 con.Close();
             }
         }
+        public static void AddCustomerToCredits(int tempUserID)
+        {
+            // This method goes into the database, specifically the credits table, 
+            // and adds the customer to the credits table with default values
+            using (SQLiteConnection con = new SQLiteConnection(LoadConnectionString()))
+            // closes the connection when there is an error or it is done executing
+            {
+                con.Open(); // open the connection
+                SQLiteCommand cmd = new SQLiteCommand();
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = "insert into credits(userID_fk) values(@userID_fk)";
+                cmd.Connection = con;
+                // use the customer's information to input into the database
+                cmd.Parameters.AddWithValue("@userID_fk", tempUserID);
+                cmd.ExecuteNonQuery();
+                con.Close();
+            }
+        }
         public static int CheckPassword(int userID, string currPass)
         {
             // This method goes into the database, specifically the customer table
@@ -147,6 +171,8 @@ namespace ClassLibrary
                 {
                     pass = rdr.GetString(0); // get the password from the database
                 }
+                rdr.Close();
+                con.Close();
                 if (pass == null) // if there is no password in the database, that means the userID is not in the database and the user is not a customer
                     return -1;
                 string encryptPass = ClassLibrary.SystemAction.EncryptPassword(currPass);
@@ -188,37 +214,126 @@ namespace ClassLibrary
                     data.Add(reader[9].ToString());
                     data.Add(reader[10].ToString());
                     data.Add(reader[11].ToString());
+                    reader.Close();
                 }
+                con.Close();
                 return data; // return user data
             }
         }
-        public static int GetBookedFlightsRouteID(int userID)
+        public static void AddToFlightsBooked(int userID, int flightID, int routeID, string paymentMethod)
         {
             // This method goes into the database, specifically the flightsBooked table, 
-            // and retrieves all of the customer's booked flights and returns this list
+            // and adds the booked flight
             using (SQLiteConnection con = new SQLiteConnection(LoadConnectionString()))
             // closes the connection when there is an error or it is done executing
             {
                 con.Open(); // open the connection
                 SQLiteCommand cmd = new SQLiteCommand();
                 cmd.CommandType = CommandType.Text;
-                cmd.CommandText = "select flightsBooked.routeID_fk from flightsBooked where flightsBooked.userID_fk = @userID_fk limit 1";
+                cmd.CommandText = "insert into flightsBooked values (@userID_fk, @flightID_fk, @routeID_fk, @paymentMethod)";
                 cmd.Parameters.AddWithValue("@userID_fk", userID);
+                cmd.Parameters.AddWithValue("@flightID_fk", flightID);
+                cmd.Parameters.AddWithValue("@routeID_fk", routeID);
+                cmd.Parameters.AddWithValue("@paymentMethod", paymentMethod);
                 cmd.Connection = con;
+                cmd.ExecuteNonQuery();
+                con.Close();
+            }
+        }
+        public static void AddTransaction(int userID, int flightID, double amount, string paymentMethod)
+        {
+            // This method goes into the database, specifically the transaction table, 
+            // and adds the transaction
+            using (SQLiteConnection con = new SQLiteConnection(LoadConnectionString()))
+            // closes the connection when there is an error or it is done executing
+            {
+                con.Open(); // open the connection
+                SQLiteCommand cmd = new SQLiteCommand();
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = "insert into transactionTable values (@userID_fk, @flightID_fk, @amount, @paymentMethod)";
+                cmd.Parameters.AddWithValue("@userID_fk", userID);
+                cmd.Parameters.AddWithValue("@flightID_fk", flightID);
+                cmd.Parameters.AddWithValue("@amount", amount);
+                cmd.Parameters.AddWithValue("@paymentMethod", paymentMethod);
+                cmd.Connection = con;
+                cmd.ExecuteNonQuery();
+                con.Close();
+            }
+        }
+        public static void DeleteTransaction(int userID, int flightID)
+        {
+            // This method goes into the database, specifically the transaction table, 
+            // and removes the specfied transaction
+            using (SQLiteConnection con = new SQLiteConnection(LoadConnectionString()))
+            // closes the connection when there is an error or it is done executing
+            {
+                con.Open(); // open the connection
+                SQLiteCommand cmd = new SQLiteCommand();
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = "delete from transactionTable where transactionTable.userID_fk = @userID_fk and transactionTable.flightID_fk = @flightID_fk";
+                cmd.Parameters.AddWithValue("@userID_fk", userID);
+                cmd.Parameters.AddWithValue("@flightID_fk", flightID);
+                cmd.Connection = con;
+                cmd.ExecuteNonQuery();
+                con.Close();
+            }
+        }
+        public static List<(int, int)> GetRouteInfo(string origin, string destination)
+        {
+            // This method goes into the database, specifically the route table, 
+            // and retrieves all of the routes with the specified originCode and destinationCode
+            using (SQLiteConnection con = new SQLiteConnection(LoadConnectionString()))
+            // closes the connection when there is an error or it is done executing
+            {
+                con.Open(); // open the connection
+                SQLiteCommand cmd = new SQLiteCommand();
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = "select route.routeID, route.numOfLayovers from route where route.originCode_fk = @originCode_fk and route.destinationCode_fk = @destinationCode_fk";
+                cmd.Parameters.AddWithValue("@originCode_fk", origin);
+                cmd.Parameters.AddWithValue("@destinationCode_fk", destination);
+                cmd.Connection = con;
+                List<(int, int)> routeIDs = new List<(int, int)>();
+                // execute the command with the reader, which only reads the database rather than updating it in anyway
                 SQLiteDataReader rdr = cmd.ExecuteReader();
-                int routeID = 0;
                 // execute the command with the reader, which only reads the database rather than updating it in anyway
                 while (rdr.Read())
                 {
-                    routeID = rdr.GetInt32(0);
+                    routeIDs.Add((rdr.GetInt32(0), rdr.GetInt32(1)));
                 }
-                return routeID; // return user data
+                rdr.Close();
+                con.Close();
+                return routeIDs;
             }
         }
-        public static List<int> GetBookedFlights_Route(int routeID)
+        public static List<int> GetBookedFlightsRouteID(int userID)
         {
-            // This method goes into the database, specifically the customer table, 
-            // and retrieves all of the user data and returns it as a list of strings
+            // This method goes into the database, specifically the flightsBooked table, 
+            // and retrieves all of the route IDs of the customer's booked flights and returns this list
+            using (SQLiteConnection con = new SQLiteConnection(LoadConnectionString()))
+            // closes the connection when there is an error or it is done executing
+            {
+                con.Open(); // open the connection
+                SQLiteCommand cmd = new SQLiteCommand();
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = "select distinct flightsBooked.routeID_fk from flightsBooked where flightsBooked.userID_fk = @userID_fk";
+                cmd.Parameters.AddWithValue("@userID_fk", userID);
+                cmd.Connection = con;
+                SQLiteDataReader rdr = cmd.ExecuteReader();
+                List<int> routeID = new List<int>();
+                // execute the command with the reader, which only reads the database rather than updating it in anyway
+                while (rdr.Read())
+                {
+                    routeID.Add(rdr.GetInt32(0));
+                }
+                rdr.Close();
+                con.Close();
+                return routeID; 
+            }
+        }
+        public static List<int> GetFlightIDsInRoute(int routeID)
+        {
+            // This method goes into the database, specifically the route table, 
+            // and retrieves all of the flightIDs in this route
             using (SQLiteConnection con = new SQLiteConnection(LoadConnectionString()))
             // closes the connection when there is an error or it is done executing
             {
@@ -238,31 +353,10 @@ namespace ClassLibrary
                         flightIDs.Add(reader.GetInt32(5));
                     if (!String.IsNullOrEmpty(reader[6].ToString()))
                         flightIDs.Add(reader.GetInt32(6));
+                    reader.Close();
                 }
+                con.Close();
                 return flightIDs; // return user data
-            }
-        }
-        public static List<int> GetCurrentFlightIDs(int userID)
-        {
-            // This method goes into the database, specifically the flightsBooked table, 
-            // and retrieves all of the customer's booked flights and returns this list
-            using (SQLiteConnection con = new SQLiteConnection(LoadConnectionString()))
-            // closes the connection when there is an error or it is done executing
-            {
-                con.Open(); // open the connection
-                SQLiteCommand cmd = new SQLiteCommand();
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = "select flightsBooked.flightID_fk from flightsBooked where flightsBooked.userID_fk = @userID_fk";
-                cmd.Parameters.AddWithValue("@userID_fk", userID);
-                cmd.Connection = con;
-                SQLiteDataReader rdr = cmd.ExecuteReader();
-                List<int> flightIDsList = new List<int>();
-                // execute the command with the reader, which only reads the database rather than updating it in anyway
-                while (rdr.Read())
-                {
-                    flightIDsList.Add(rdr.GetInt32(0));
-                }
-                return flightIDsList; // return user data
             }
         }
         public static string GetFlightNames(string code)
@@ -285,6 +379,8 @@ namespace ClassLibrary
                 {
                     airportName = rdr.GetString(0); // get the airport name from the database
                 }
+                rdr.Close();
+                con.Close();
                 return airportName; // return airport name
             }
         }
@@ -318,8 +414,9 @@ namespace ClassLibrary
                     flightData.Add(reader[9].ToString());
                     flightData.Add(reader[10].ToString());
                     flightData.Add(reader[11].ToString());
-                    flightData.Add(reader[12].ToString());
+                    reader.Close();
                 }
+                con.Close();
                 return flightData; // return flight data
             }
         }
@@ -381,6 +478,8 @@ namespace ClassLibrary
                 {
                     paymentMethod = rdr.GetString(0);
                 }
+                rdr.Close();
+                con.Close();
                 return paymentMethod; // return payment method
             }
         }
@@ -404,6 +503,8 @@ namespace ClassLibrary
                 {
                     balance = rdr.GetInt32(0);
                 }
+                rdr.Close();
+                con.Close();
                 return balance; // return user id
             }
         }
@@ -445,6 +546,8 @@ namespace ClassLibrary
                 {
                     pointsAvailable = rdr.GetInt32(0);
                 }
+                rdr.Close();
+                con.Close();
                 return pointsAvailable; // return user id
             }
         }
@@ -480,13 +583,15 @@ namespace ClassLibrary
                 cmd.Parameters.AddWithValue("@userID_fk", userID);
                 cmd.Connection = con;
                 SQLiteDataReader rdr = cmd.ExecuteReader();
-                int pointsUsed = 0; // used to return id
+                int pointsUsed = 0;
 
                 while (rdr.Read())
                 {
                     pointsUsed = rdr.GetInt32(0);
                 }
-                return pointsUsed; // return user id
+                rdr.Close();
+                con.Close();
+                return pointsUsed; 
             }
         }
         public static void UpdateUsedPoints(int userID, int points)
@@ -499,9 +604,9 @@ namespace ClassLibrary
                 con.Open(); // open the connection
                 SQLiteCommand cmd = new SQLiteCommand();
                 cmd.CommandType = CommandType.Text;
-                cmd.CommandText = "update credits set pointsAvailable = @pointsAvailable where credits.userID_fk = @userID_fk";
+                cmd.CommandText = "update credits set pointsUsed = @pointsUsed where credits.userID_fk = @userID_fk";
                 cmd.Parameters.AddWithValue("@userID_fk", userID);
-                cmd.Parameters.AddWithValue("@pointsAvailable", points);
+                cmd.Parameters.AddWithValue("@pointsUsed", points);
                 cmd.Connection = con;
                 cmd.ExecuteNonQuery();
                 con.Close();
@@ -588,7 +693,6 @@ namespace ClassLibrary
                 con.Close();
             }
         }
-
         public static List<Airport> GetAirports()
         {
             using (SQLiteConnection con = new SQLiteConnection(LoadConnectionString()))

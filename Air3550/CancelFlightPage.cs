@@ -20,6 +20,7 @@ namespace Air3550
         public static bool cancelFlightButtonClicked = false; 
         public static bool logOutButtonClicked = false;
         public static bool backButtonClicked = false;
+        public static int tempFlightSelected; // route that the user temporarily selects
         public CancelFlightPage()
         {
             InitializeComponent();
@@ -41,23 +42,16 @@ namespace Air3550
             // This method loads all current flights for the current customer
             // These are the flights that the customer can cancel
             // There can be multiple flights due to a round trip or if a flight has layovers
-            List<int> flightIDs;
+            //List<int> flightIDs;
             bookedFlights = new List<FlightModel>();
-            int routeID = SqliteDataAccess.GetBookedFlightsRouteID(currCustomer.userID);
-            if (routeID != 0)
+            List<int> routeIDs = SqliteDataAccess.GetBookedFlightsRouteID(currCustomer.userID);
+            if (routeIDs.Count != 0)
             {
-                flightIDs = SqliteDataAccess.GetBookedFlights_Route(routeID);
-                //flightIDs = SqliteDataAccess.GetCurrentFlightIDs(currCustomer.userID); // get the flight ids of the customer's current flights 
-                // for each of these ids, get the flight information (origin, destination, etc.)
-                // Then get the name of the airports
-                // Finally create a FlightModel object with that information and add it to a list of booked flights to be displayed to the customer
-                foreach (int id in flightIDs) 
+                foreach (int rID in routeIDs)
                 {
-                    List<string> flightsBookedData = SqliteDataAccess.GetFlightData(id);
-                    string originName = SqliteDataAccess.GetFlightNames(flightsBookedData[2]);
-                    string destinationName = SqliteDataAccess.GetFlightNames(flightsBookedData[3]);
-                    FlightModel flight = new FlightModel(int.Parse(flightsBookedData[0]), int.Parse(flightsBookedData[1]), flightsBookedData[2], originName, flightsBookedData[3], destinationName, int.Parse(flightsBookedData[4]), DateTime.Parse(flightsBookedData[5]), Convert.ToDouble(flightsBookedData[6]), flightsBookedData[7], DateTime.Parse(flightsBookedData[8]), Convert.ToDouble(flightsBookedData[9]), int.Parse(flightsBookedData[10]), int.Parse(flightsBookedData[11]), Convert.ToDouble(flightsBookedData[12]));
-                    bookedFlights.Add(flight);
+                    List<FlightModel> flights = SystemAction.GetCurrentFlights(rID);
+                    foreach (FlightModel flight in flights)
+                        bookedFlights.Add(flight);
                 }
             }
             // This list of FlightModel objects will be the data source of the datagridview table
@@ -72,8 +66,9 @@ namespace Air3550
         {
             // This method renames and removes some columns that do not get updated when the data in the datagridview gets updated
             // Remove some information that the employees need but not the customer
+            CancelFlightTable.Columns.Remove("masterFlightID");
             CancelFlightTable.Columns.Remove("planeType");
-            CancelFlightTable.Columns.Remove("dateCreated");
+            CancelFlightTable.Columns.Remove("distance");
             CancelFlightTable.Columns.Remove("numberOfVacantSeats");
             CancelFlightTable.Columns.Remove("flightIncome");
             // change the name of the columns
@@ -82,21 +77,23 @@ namespace Air3550
             CancelFlightTable.Columns[2].HeaderText = "Origin Name";
             CancelFlightTable.Columns[3].HeaderText = "Destination Code";
             CancelFlightTable.Columns[4].HeaderText = "Destination Name";
-            CancelFlightTable.Columns[5].HeaderText = "Distance";
-            CancelFlightTable.Columns[6].HeaderText = "Departure Date and Time";
-            CancelFlightTable.Columns[7].HeaderText = "Total Time";
-            CancelFlightTable.Columns[8].HeaderText = "Cost";
-            CancelFlightTable.Columns[9].HeaderText = "Amount of Points";
+            CancelFlightTable.Columns[5].HeaderText = "Departure Date and Time";
+            CancelFlightTable.Columns[6].HeaderText = "Duration";
+            CancelFlightTable.Columns[7].HeaderText = "Cost";
+            CancelFlightTable.Columns[8].HeaderText = "Number of Points";
         }
-        private void CancelFlightButton_Click(object sender, EventArgs e)
+        private void CancelFlightTable_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            // This method cancels the customer's currently booked flights
-            // All flights will be cancelled at once
+            // This method prevents the column header row from being clicked and it gets the route id from the row that has been clicked
+            if (e.RowIndex != -1 && CancelFlightTable.Rows[e.RowIndex].Cells[0].Value != null)
+                tempFlightSelected = e.RowIndex;
+        }
+        private void CancelSelectedFlightButton_Click(object sender, EventArgs e)
+        {
+            // This method cancels the selected flight
             // Tables updated: bookedFlights, cancelledFlights, credits, and availableFlight
             // Points or balanced are returned based on what the customer originally used as payment
-            // The airline only decreases flight income if the customer cancelling used cash to pay originally 
-            DateTime time = DateTime.Now; // get the current time that the customer is trying to cancel the flight
-            // All of the flights will be cancelled, so bookedFlights is referenced to access each flight 
+            // The airline only decreases flight income if the customer cancelling used cash or a credit to pay originally 
             // If there are flights to be cancelled, go through and change the database tables
             // else produce a pop up saying nothing can be cancelled
             if (bookedFlights.Count == 0)
@@ -107,6 +104,68 @@ namespace Air3550
                 DialogResult result = MessageBox.Show("Are you sure that you would like to cancel your scheduled flight(s)?\nAll flights will be cancelled, and you will get a refund in the way you paid.", "Cancel Flight", MessageBoxButtons.YesNo, MessageBoxIcon.None);
                 if (result == DialogResult.Yes)
                 {
+                    DateTime time = DateTime.Now; // get the current time that the customer is trying to cancel the flight
+                    var delta = bookedFlights[0].departureDateTime.Subtract(time); // get the difference in times between now and departure time
+                    cancelFlightButtonClicked = true; // used to access the red x later
+                                                      // if the difference in time between now and departure time is great than 60 minutes then the cancellation can proceed
+                                                      // otherwise, a message appears notifying the customer that they can no longer cancel the flight
+                    if (delta.TotalMinutes > 60)
+                    {
+                        int totalPoints = 0;
+                        double totalCredit = 0;
+                        FlightModel selectedFlight = bookedFlights[tempFlightSelected];
+                        string paymentMethod = SqliteDataAccess.GetPaymentMethod(currCustomer.userID, selectedFlight.flightID);
+                        if (paymentMethod == "Dollars" || paymentMethod == "AirlineCredit")
+                        {
+                            totalCredit = SystemAction.CancelFlight(currCustomer.userID, selectedFlight, paymentMethod, totalCredit, totalPoints);
+                            SqliteDataAccess.DeleteTransaction(currCustomer.userID, selectedFlight.flightID);
+                        }
+                        else
+                        {
+                            totalPoints = Convert.ToInt32(SystemAction.CancelFlight(currCustomer.userID, selectedFlight, paymentMethod, totalCredit, totalPoints));
+                            SqliteDataAccess.DeleteTransaction(currCustomer.userID, selectedFlight.flightID);
+                        }
+                        // since bookedFlights stores the current flights, those flights need to be updated
+                        // the data grid view also needs updating, so set the datasource to null and repopulate it with the bookedFlights list
+                        if (totalCredit != 0)
+                            MessageBox.Show("Your Flights have been successfully cancelled.\nYour account will now reflect that cancellation.\nYou are receiving " + totalCredit + " dollars credited back to your account.", "Cancel Flight", MessageBoxButtons.OK, MessageBoxIcon.None);
+                        else
+                            MessageBox.Show("Your Flights have been successfully cancelled.\nYour account will now reflect that cancellation.\nYou are receiving " + totalPoints + " points credited back to your account.", "Cancel Flight", MessageBoxButtons.OK, MessageBoxIcon.None);
+
+                        // clear data source, and add any still booked flights to the data grid view
+                        // otherwise, show a no booked flights label and format the grid
+                        CancelFlightTable.DataSource = null;
+                        bookedFlights.Remove(bookedFlights[tempFlightSelected]);
+                        if (bookedFlights.Count == 0)
+                            NoFlightLabel.Visible = true;
+                        CancelFlightTable.DataSource = bookedFlights;
+                        FormatDataGrid(); // remove and rename certain columns
+                    }
+                    else
+                        MessageBox.Show("You are within an hour of your flight and can no longer cancel it", "Error: Cannot Cancel Flight", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+        private void CancelAllFlightsButton_Click(object sender, EventArgs e)
+        {
+            // This method cancels all flights
+            // It checks if the first flight does not occur within an hour. If it does, then a pop up appears.
+            // If the first flight does not occur within an hour, all of the flights are cancelled, and the specific
+            // tables are updated
+            // Tables updated: bookedFlights, cancelledFlights, credits, availableFlight, and transactionTable
+            // Points or balanced are returned based on what the customer originally used as payment
+            // The airline only decreases flight income if the customer cancelling used cash or a credit to pay originally 
+            // If there are flights to be cancelled, go through and change the database tables
+            // else produce a pop up saying nothing can be cancelled
+            if (bookedFlights.Count == 0)
+                NoFlightLabel.Visible = true;
+            else
+            {
+                NoFlightLabel.Visible = false;
+                DialogResult result = MessageBox.Show("Are you sure that you would like to cancel your scheduled flight(s)?\nAll flights will be cancelled, and you will get a refund in the way you paid.", "Cancel Flight", MessageBoxButtons.YesNo, MessageBoxIcon.None);
+                if (result == DialogResult.Yes)
+                {
+                    DateTime time = DateTime.Now; // get the current time that the customer is trying to cancel the flight
                     var delta = bookedFlights[0].departureDateTime.Subtract(time); // get the difference in times between now and departure time
                     cancelFlightButtonClicked = true; // used to access the red x later
                                                       // if the difference in time between now and departure time is great than 60 minutes then the cancellation can proceed
@@ -118,27 +177,15 @@ namespace Air3550
                         foreach (FlightModel flight in bookedFlights)
                         {
                             string paymentMethod = SqliteDataAccess.GetPaymentMethod(currCustomer.userID, flight.flightID);
-                            // move this flight from booked to cancelled and increase the number of vacant seats on the plain
-                            SqliteDataAccess.CancelBookedFlight(currCustomer.userID, flight.flightID);
-                            SqliteDataAccess.AddToCancelledFlights(currCustomer.userID, flight.flightID);
-                            SqliteDataAccess.UpdateNumOfVacantSeats(flight.flightID, flight.numberOfVacantSeats + 1);
-                            // depending on the payment method, the customer will either get cash back from the airline
-                            // which will also decrease their total flight income
-                            // or they will receive points back, increasing available points and decreasing used points
-                            if (paymentMethod == "Dollars")
+                            if (paymentMethod == "Dollars" || paymentMethod == "AirlineCredit")
                             {
-                                totalCredit += flight.cost;
-                                int bal = SqliteDataAccess.GetBalance(currCustomer.userID);
-                                SqliteDataAccess.UpdateBalance(currCustomer.userID, bal + flight.cost);
-                                SqliteDataAccess.UpdateFlightIncome(flight.flightID, flight.flightIncome - flight.cost);
+                                totalCredit = SystemAction.CancelFlight(currCustomer.userID, flight, paymentMethod, totalCredit, totalPoints);
+                                SqliteDataAccess.DeleteTransaction(currCustomer.userID, flight.flightID);
                             }
                             else
                             {
-                                totalPoints += flight.amountOfPoints;
-                                int available = SqliteDataAccess.GetAvailablePoints(currCustomer.userID);
-                                int used = SqliteDataAccess.GetUsedPoints(currCustomer.userID);
-                                SqliteDataAccess.UpdateAvailablePoints(currCustomer.userID, available + flight.amountOfPoints);
-                                SqliteDataAccess.UpdateUsedPoints(currCustomer.userID, used - flight.amountOfPoints);
+                                totalPoints = Convert.ToInt32(SystemAction.CancelFlight(currCustomer.userID, flight, paymentMethod, totalCredit, totalPoints));
+                                SqliteDataAccess.DeleteTransaction(currCustomer.userID, flight.flightID);
                             }
                         }
                         // since bookedFlights stores the current flights, those flights need to be updated
@@ -148,20 +195,26 @@ namespace Air3550
                         else
                             MessageBox.Show("Your Flights have been successfully cancelled.\nYour account will now reflect that cancellation.\nYou are receiving " + totalPoints + " points credited back to your account.", "Cancel Flight", MessageBoxButtons.OK, MessageBoxIcon.None);
 
-                        bookedFlights = SystemAction.GetCurrentFlights(currCustomer.userID);
+                        // clear data source, and add any still booked flights to the data grid view
+                        // otherwise, show a no booked flights label and format the grid
                         CancelFlightTable.DataSource = null;
+                        List<int> routeIDs = SqliteDataAccess.GetBookedFlightsRouteID(currCustomer.userID);
+                        if (routeIDs.Count != 0)
+                        {
+                            foreach (int rID in routeIDs)
+                            {
+                                List<FlightModel> flights = SystemAction.GetCurrentFlights(rID);
+                                foreach (FlightModel flight in flights)
+                                    bookedFlights.Add(flight);
+                            }
+                        }
+                        else
+                        {
+                            bookedFlights.Clear();
+                            NoFlightLabel.Visible = true;
+                        }
                         CancelFlightTable.DataSource = bookedFlights;
                         FormatDataGrid(); // remove and rename certain columns
-                        NoFlightLabel.Visible = true;
-                        /*this.Close(); // close the current form
-                        int i = 0;
-                        // close the log in form and the cancel flight form
-                        while (i < Application.OpenForms.Count) // look at what forms are open
-                        {
-                            if (Application.OpenForms[i].Name == "CustomerHomePage")
-                                Application.OpenForms[i].Show();// if the current form is the customer home page, show it
-                            i += 1;
-                        }*/
                     }
                     else
                         MessageBox.Show("You are within an hour of your flight and can no longer cancel it", "Error: Cannot Cancel Flight", MessageBoxButtons.OK, MessageBoxIcon.Error);
