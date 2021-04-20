@@ -80,12 +80,10 @@ namespace ClassLibrary
         public static List<FlightModel> GetCurrentFlights(int routeID)
         {
             // This method creates a list of Flights that allows this page to access that flights details without going back to the database
-            // After every cancellation, the current flights are repopulated and updates the datagridview with the most current information
-            // A list of the current flights are returned
+            // It gets all of the currently booked flights and their details then returns a list of these flight objects
             List<int> flightIDs;
             List<FlightModel> flights = new List<FlightModel>();
             flightIDs = SqliteDataAccess.GetFlightIDsInRoute(routeID);
-            //flightIDs = SqliteDataAccess.GetCurrentFlightIDs(currCustomer.userID); // get the flight ids of the customer's current flights 
             // for each of these ids, get the flight information (origin, destination, etc.)
             // Then get the name of the airports, depart times, arrival times, any discounts to the base cost, and calculate the points
             // Finally create a FlightModel object with that information and add it to a list of booked flights to be displayed to the customer
@@ -104,7 +102,6 @@ namespace ClassLibrary
                 int currPoints = currCost * 100;
 
                 var duration = arriveDateTime.Subtract(departureDateTime);
-                //double dur = duration.TotalHours;
 
                 FlightModel flight = new FlightModel(int.Parse(flightsBookedData[0]), int.Parse(flightsBookedData[1]), flightsBookedData[2], originName, flightsBookedData[3], destinationName, int.Parse(flightsBookedData[6]), DateTime.Parse(flightsBookedData[4] + " " + flightsBookedData[5]), duration, flightsBookedData[8], currCost, currPoints, int.Parse(flightsBookedData[10]), Convert.ToDouble(flightsBookedData[11]));
 
@@ -112,9 +109,10 @@ namespace ClassLibrary
             }
             return flights;
         }
-        public static List<Route> GetAvailableFlights(string origin, string destination)
+        public static List<Route> GetAvailableRoutes(string origin, string destination)
         {
-            // This method finds all available routes for the given origin and destinationqa    
+            // This method finds all available routes for the given origin and destination
+            // A list of the available routes are returned
             List<Route> routes = new List<Route>();
             List<(int, int)> routeInfo = SqliteDataAccess.GetRouteInfo(origin, destination);
             // go through the route IDs that were found for the specified origin and destination
@@ -134,10 +132,8 @@ namespace ClassLibrary
                 int cost = 0;
                 int points = 0;
                 int i = 0; // used for grabbing information from the availableRoutes list
-                           // go through each of these flight IDs and check if the depart date is the same as the 
-                           // depart date in the departDatePicker. If it is, get the specific information to be displayed
-                           // and add that flight to the list of available flights.
-                           // otherwise, do not add it
+                // go through each of these flight IDs, make a flight object, add it to the list to be returned
+                // add some formatting since this method is used to populate the datagridview tables in the bookFlight form
                 foreach (int fID in flightIDs)
                 {
                     List<string> flightsBookedData = SqliteDataAccess.GetFlightData(fID);
@@ -185,21 +181,62 @@ namespace ClassLibrary
                     arriveString = flights[flightIDs.Count - 1].departureDateTime.AddHours(flights[flightIDs.Count - 1].duration.TotalHours).ToShortTimeString();
                     var duration = arrive.Subtract(depart);
                     string credits = "$" + cost + " (" + points + " points)";
-                    Route route = new Route(id.Item1, departString, arriveString, duration, id.Item2, routeList, planeChange, seatsAvailable, credits);
+                    Route route = new Route(id.Item1, depart, arrive, duration, id.Item2, routeList, planeChange, seatsAvailable, credits);
                     routes.Add(route);
                 }
             }
             return routes;
         }
+        public static List<Route> FilterRoutes(List<Route> routes, DateTime departDateTime, DateTime compareDateTime)
+        {
+            // This method is used to check the routes that will display to the customer
+            // For example, the routes should have a departure date and return date that match the input
+            // Also, if any of the routes do not have available seats, they should not be displayed
+            List<Route> filteredRoutes = new List<Route>();
+            foreach (Route route in routes)
+            {
+                var delta = route.departTime.Subtract(compareDateTime);
+                int index1 = route.availableSeats.IndexOf("\r\n");
+                int index2 = route.availableSeats.LastIndexOf("\r\n");
+                int seats1;
+                int seats2 = 0;
+                int seats3 = 0;
+                if (index1 == -1)
+                {
+                    seats1 = int.Parse(route.availableSeats);
+                    if (seats1 != 0 && route.departTime.Date == departDateTime.Date && delta.TotalMinutes > 0)
+                        filteredRoutes.Add(route);
+                }
+                else if (index1 == index2)
+                {
+                    seats1 = int.Parse(route.availableSeats.Substring(0, index1));
+                    seats2 = int.Parse(route.availableSeats.Substring(index1 + 1, route.availableSeats.Length - index1 - 1));
+                    if (seats1 != 0 && seats2 != 0 && route.departTime.Date == departDateTime.Date && delta.TotalMinutes > 0)
+                        filteredRoutes.Add(route);
+                }
+                else
+                {
+                    seats1 = int.Parse(route.availableSeats.Substring(0, index1));
+                    seats2 = int.Parse(route.availableSeats.Substring(index1 + 1, index2 - index1));
+                    seats3 = int.Parse(route.availableSeats.Substring(index2 + 1, route.availableSeats.Length - index2 - 1));
+                    if (seats1 != 0 && seats2 != 0 && seats3 != 0 && route.departTime.Date == departDateTime.Date && delta.TotalMinutes > 0)
+                        filteredRoutes.Add(route);
+                }
+            }
+            return filteredRoutes;
+        }
         public static double CancelFlight(int uID, FlightModel flight, string paymentMethod, double totalCredit, int totalPoints)
         {
-            // move this flight from booked to cancelled and increase the number of vacant seats on the plain
+            // This method is used to cancel the specified flight and update the total credits or points
+            // Depending on whether the payment method was dollars, airline credit, or points, whichever value is returned
+
+            // Move the specified flight from booked to cancelled and increase the number of vacant seats on the plain
             SqliteDataAccess.CancelBookedFlight(uID, flight.flightID);
             SqliteDataAccess.AddToCancelledFlights(uID, flight.flightID);
             SqliteDataAccess.UpdateNumOfVacantSeats(flight.flightID, flight.numberOfVacantSeats + 1);
-            // depending on the payment method, the customer will either get cash back from the airline
-            // which will also decrease their total flight income
-            // or they will receive points back, increasing available points and decreasing used points
+            // Depending on the payment method, the customer will either get cash back from the airline
+            // Which will also decrease their total flight income
+            // Or they will receive points back, increasing available points and decreasing used points
             if (paymentMethod == "Dollars" || paymentMethod == "AirlineCredit")
             {
                 totalCredit += flight.cost;

@@ -60,6 +60,9 @@ namespace Air3550
             ArriveComboBox.SelectedText = "--Select Location--";
 
             // set all of the default values and visibility of errors and buttons
+            DepartDatePicker.Value = DateTime.Today;
+            ReturnDatePicker.Value = DateTime.Today;
+
             RoundTripButton.Checked = true;
             OneWayButton.Checked = false;
             DifferentLocationError.Visible = false;
@@ -119,7 +122,7 @@ namespace Air3550
             var delta2 = DepartDatePicker.Value.Subtract(date);
             if (delta1.TotalMinutes > 0)
                 DepartDateError.Visible = true;
-            else if (delta2.TotalMinutes < 0)
+            else if (delta2.TotalMinutes < 0 || DepartDatePicker.Value == DepartDatePicker.MinDate)
                 DepartDateAfterTodayError.Visible = true;
         }
         private void ReturnDatePicker_ValueChanged(object sender, EventArgs e)
@@ -135,7 +138,7 @@ namespace Air3550
             var delta2 = ReturnDatePicker.Value.Subtract(DepartDatePicker.Value);
             if (delta1.TotalMinutes > 0)
                 ReturnDateError.Visible = true;
-            else if (delta2.TotalMinutes < 0)
+            else if (delta2.TotalMinutes < 0 || ReturnDatePicker.Value == ReturnDatePicker.MinDate)
                 ReturnBeforeDepartError.Visible = true;
         }
         private void FormatGrid()
@@ -155,37 +158,47 @@ namespace Air3550
         {
             // This method first checks if the depart and arrive locations are the same or null.
             // if they are, then errors appear. Otherwise, this method allows the user to select a flight for their depart flight
-            selectedRoutes = new List<Route>();
-            DifferentLocationError.Visible = false;
-            EmptyError.Visible = false;
-            if (DepartComboBox.SelectedValue == ArriveComboBox.SelectedValue)
-                DifferentLocationError.Visible = true;
-            else if (DepartComboBox.SelectedIndex == -1 || ArriveComboBox.SelectedIndex == -1)
-                EmptyError.Visible = true;
+            var delta1 = ReturnDatePicker.Value.Subtract(DateTime.Today.AddMonths(6)); // get the difference in times between 6 months from now and the depart date
+            var delta2 = ReturnDatePicker.Value.Subtract(DepartDatePicker.Value);
+            if (delta1.TotalMinutes > 0)
+                ReturnDateError.Visible = true;
+            else if (delta2.TotalMinutes < 0 || ReturnDatePicker.Value == ReturnDatePicker.MinDate)
+                ReturnBeforeDepartError.Visible = true;
             else
             {
-                AvailableFlightTable.Visible = true;
-                ChangeDepartingFlightButton.Visible = false;
-                DepartintFlightsLabel.Visible = true;
-                ReturningFlightsLabel.Visible = false;
-                if (OneWayButton.Checked)
-                {
-                    ReturnFlightButton.Visible = false;
-                    BookFlightButton.Visible = true;
-                }
+                selectedRoutes = new List<Route>();
+                DifferentLocationError.Visible = false;
+                EmptyError.Visible = false;
+                if (DepartComboBox.SelectedValue == ArriveComboBox.SelectedValue)
+                    DifferentLocationError.Visible = true;
+                else if (DepartComboBox.SelectedIndex == -1 || ArriveComboBox.SelectedIndex == -1)
+                    EmptyError.Visible = true;
                 else
                 {
-                    ReturnFlightButton.Visible = true;
-                    BookFlightButton.Visible = false;
-                }
+                    AvailableFlightTable.Visible = true;
+                    ChangeDepartingFlightButton.Visible = false;
+                    DepartintFlightsLabel.Visible = true;
+                    ReturningFlightsLabel.Visible = false;
+                    if (OneWayButton.Checked)
+                    {
+                        ReturnFlightButton.Visible = false;
+                        BookFlightButton.Visible = true;
+                    }
+                    else
+                    {
+                        ReturnFlightButton.Visible = true;
+                        BookFlightButton.Visible = false;
+                    }
 
-                departingRoutes = new List<Route>();
-                // get all of the available flights for the specified origin and destination
-                departingRoutes = SystemAction.GetAvailableFlights(DepartComboBox.Text.Substring(0, 3), ArriveComboBox.Text.Substring(0, 3));
-                // the available routes list is the datasource for the available flight table
-                AvailableFlightTable.DataSource = departingRoutes;
-                AvailableFlightTable.ClearSelection();
-                FormatGrid();
+                    departingRoutes = new List<Route>();
+                    // get all of the available flights for the specified origin and destination
+                    departingRoutes = SystemAction.GetAvailableRoutes(DepartComboBox.Text.Substring(0, 3), ArriveComboBox.Text.Substring(0, 3));
+                    //List<Route> filteredRoutes = SystemAction.FilterRoutes(departingRoutes, departingR);
+                    // the available routes list is the datasource for the available flight table
+                    AvailableFlightTable.DataSource = departingRoutes;
+                    AvailableFlightTable.ClearSelection();
+                    FormatGrid();
+                }
             }
         }
         private void ReturnFlightButton_Click(object sender, EventArgs e)
@@ -208,7 +221,7 @@ namespace Air3550
                 returningRoutes = new List<Route>();
                 // get all of the available flights for the specified origin and destination
                 AvailableFlightTable.DataSource = null;
-                returningRoutes = SystemAction.GetAvailableFlights(DepartComboBox.Text.Substring(0, 3), ArriveComboBox.Text.Substring(0, 3));
+                returningRoutes = SystemAction.GetAvailableRoutes(DepartComboBox.Text.Substring(0, 3), ArriveComboBox.Text.Substring(0, 3));
                 // the available routes list is the datasource for the available flight table
                 AvailableFlightTable.DataSource = returningRoutes;
                 FormatGrid();
@@ -243,7 +256,7 @@ namespace Air3550
             {
                 if (OneWayButton.Checked)
                 {
-                    selectedRoutes.Add(departingRoutes[tempRouteSelected]);
+                    selectedRoutes.Add(departingRoutes[tempRouteSelected]); 
                     ReturnFlightButton.Visible = false;
                     BookFlightButton.Visible = true;
                 }

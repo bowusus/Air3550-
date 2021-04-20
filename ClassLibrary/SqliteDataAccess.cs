@@ -222,8 +222,8 @@ namespace ClassLibrary
         }
         public static void AddToFlightsBooked(int userID, int flightID, int routeID, string paymentMethod)
         {
-            // This method goes into the database, specifically the flightsCancelled table, 
-            // and adds the cancelled flight
+            // This method goes into the database, specifically the flightsBooked table, 
+            // and adds the booked flight
             using (SQLiteConnection con = new SQLiteConnection(LoadConnectionString()))
             // closes the connection when there is an error or it is done executing
             {
@@ -242,8 +242,8 @@ namespace ClassLibrary
         }
         public static void AddTransaction(int userID, int flightID, double amount, string paymentMethod)
         {
-            // This method goes into the database, specifically the flightsCancelled table, 
-            // and adds the cancelled flight
+            // This method goes into the database, specifically the transaction table, 
+            // and adds the transaction
             using (SQLiteConnection con = new SQLiteConnection(LoadConnectionString()))
             // closes the connection when there is an error or it is done executing
             {
@@ -262,8 +262,8 @@ namespace ClassLibrary
         }
         public static void DeleteTransaction(int userID, int flightID)
         {
-            // This method goes into the database, specifically the flightsBooked table, 
-            // and removes specific flights with the userID
+            // This method goes into the database, specifically the transaction table, 
+            // and removes the specfied transaction
             using (SQLiteConnection con = new SQLiteConnection(LoadConnectionString()))
             // closes the connection when there is an error or it is done executing
             {
@@ -308,7 +308,7 @@ namespace ClassLibrary
         public static List<int> GetBookedFlightsRouteID(int userID)
         {
             // This method goes into the database, specifically the flightsBooked table, 
-            // and retrieves all of the customer's booked flights and returns this list
+            // and retrieves all of the route IDs of the customer's booked flights and returns this list
             using (SQLiteConnection con = new SQLiteConnection(LoadConnectionString()))
             // closes the connection when there is an error or it is done executing
             {
@@ -327,13 +327,13 @@ namespace ClassLibrary
                 }
                 rdr.Close();
                 con.Close();
-                return routeID; // return user data
+                return routeID; 
             }
         }
         public static List<int> GetFlightIDsInRoute(int routeID)
         {
-            // This method goes into the database, specifically the customer table, 
-            // and retrieves all of the user data and returns it as a list of strings
+            // This method goes into the database, specifically the route table, 
+            // and retrieves all of the flightIDs in this route
             using (SQLiteConnection con = new SQLiteConnection(LoadConnectionString()))
             // closes the connection when there is an error or it is done executing
             {

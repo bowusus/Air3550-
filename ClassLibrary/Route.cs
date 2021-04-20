@@ -13,8 +13,8 @@ namespace ClassLibrary
 		// the constructor to create an instance of the Route
 		// auto-implemented properties for trivial get and set
 		public int routeID { get; set; }
-		public string departTime { get; set; }
-		public string arriveTime { get; set; }
+		public DateTime departTime { get; set; }
+		public DateTime arriveTime { get; set; }
 		public TimeSpan duration { get; set; }
 		public int numOfLayovers { get; set; }
 		public string flightIDs { get; set; }
@@ -22,7 +22,7 @@ namespace ClassLibrary
 		public string availableSeats { get; set; }
 		public string credits { get; set; }
 		// route constructor
-		public Route(int rID, string depart, string arrival, TimeSpan dur, int num, string fID, string changeName, string seats, string cred)
+		public Route(int rID, DateTime depart, DateTime arrival, TimeSpan dur, int num, string fID, string changeName, string seats, string cred)
 		{
 			routeID = rID;
 			departTime = depart;
