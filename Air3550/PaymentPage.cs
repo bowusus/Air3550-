@@ -136,7 +136,18 @@ namespace Air3550
                     SqliteDataAccess.UpdateNumOfVacantSeats(id.flightID, id.numberOfVacantSeats - 1);
                 }
                 SqliteDataAccess.UpdateAvailablePoints(currCustomer.userID, available + points);
-                MessageBox.Show("You are now scheduled for your flight(s).", "Success: Flight(s) Booked", MessageBoxButtons.OK, MessageBoxIcon.None);
+                DialogResult result = MessageBox.Show("You are now scheduled for your flight(s).\nWould you like to schedule any more flights?", "Success: Flight(s) Booked", MessageBoxButtons.YesNo, MessageBoxIcon.None);
+                // check if they want to schedule anymore flights
+                if (result == DialogResult.Yes)
+                {
+                    BookFlightPage.GetInstance(ref currCustomer).Show();
+                    this.Dispose();
+                }
+                else
+                {
+                    CustomerHomePage.GetInstance(ref currCustomer).Show();
+                    this.Dispose();
+                }
             }
             else if (PointsButton.Checked)
             {
@@ -161,7 +172,18 @@ namespace Air3550
                     }
                     SqliteDataAccess.UpdateAvailablePoints(currCustomer.userID, available - points);
                     SqliteDataAccess.UpdateUsedPoints(currCustomer.userID, used + points);
-                    MessageBox.Show("You are now scheduled for your flight(s).", "Success: Flight(s) Booked", MessageBoxButtons.OK, MessageBoxIcon.None);
+                    DialogResult result = MessageBox.Show("You are now scheduled for your flight(s).\nWould you like to schedule any more flights?", "Success: Flight(s) Booked", MessageBoxButtons.YesNo, MessageBoxIcon.None);
+                    // check if they want to schedule anymore flights
+                    if (result == DialogResult.Yes)
+                    {
+                        BookFlightPage.GetInstance(ref currCustomer).Show();
+                        this.Dispose();
+                    }
+                    else
+                    {
+                        CustomerHomePage.GetInstance(ref currCustomer).Show();
+                        this.Dispose();
+                    }
                 }
             }
             else 
@@ -188,7 +210,18 @@ namespace Air3550
                         SqliteDataAccess.UpdateNumOfVacantSeats(id.flightID, id.numberOfVacantSeats - 1);
                     }
                     SqliteDataAccess.UpdateBalance(currCustomer.userID, bal - total);
-                    MessageBox.Show("You are now scheduled for your flight(s).", "Success: Flight(s) Booked", MessageBoxButtons.OK, MessageBoxIcon.None);
+                    DialogResult result = MessageBox.Show("You are now scheduled for your flight(s).\nWould you like to schedule any more flights?", "Success: Flight(s) Booked", MessageBoxButtons.YesNo, MessageBoxIcon.None);
+                    // check if they want to schedule anymore flights
+                    if (result == DialogResult.Yes)
+                    {
+                        BookFlightPage.GetInstance(ref currCustomer).Show();
+                        this.Dispose();
+                    }
+                    else
+                    {
+                        CustomerHomePage.GetInstance(ref currCustomer).Show();
+                        this.Dispose();
+                    }
                 }
             }
         }
