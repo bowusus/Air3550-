@@ -330,6 +330,31 @@ namespace ClassLibrary
                 return routeID; 
             }
         }
+        public static List<int> GetBookedFlightIDs(int userID)
+        {
+            // This method goes into the database, specifically the flightsBooked table, 
+            // and retrieves all of the flight IDs of the customer's booked flights and returns this list
+            using (SQLiteConnection con = new SQLiteConnection(LoadConnectionString()))
+            // closes the connection when there is an error or it is done executing
+            {
+                con.Open(); // open the connection
+                SQLiteCommand cmd = new SQLiteCommand();
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = "select flightsBooked.flightID_fk from flightsBooked where flightsBooked.userID_fk = @userID_fk";
+                cmd.Parameters.AddWithValue("@userID_fk", userID);
+                cmd.Connection = con;
+                SQLiteDataReader rdr = cmd.ExecuteReader();
+                List<int> routeID = new List<int>();
+                // execute the command with the reader, which only reads the database rather than updating it in anyway
+                while (rdr.Read())
+                {
+                    routeID.Add(rdr.GetInt32(0));
+                }
+                rdr.Close();
+                con.Close();
+                return routeID;
+            }
+        }
         public static List<int> GetFlightIDsInRoute(int routeID)
         {
             // This method goes into the database, specifically the route table, 

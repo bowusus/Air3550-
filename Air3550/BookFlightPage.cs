@@ -20,7 +20,9 @@ namespace Air3550
         public static List<string> departAirports; // list of depart airports
         public static List<string> arriveAirports; // list of arrival airports
         public static List<Route> departingRoutes; // list of departing flights that gets updated throughout the form
+        public static List<Route> departingFilter;
         public static List<Route> returningRoutes; // list of returning flights that gets updated throughout the form
+        public static List<Route> returningFilter;
         public static List<Route> selectedRoutes; // list of selected routes
         public static int tempRouteSelected; // route that the user temporarily selects
         public BookFlightPage()
@@ -122,7 +124,7 @@ namespace Air3550
             var delta2 = DepartDatePicker.Value.Subtract(date);
             if (delta1.TotalMinutes > 0)
                 DepartDateError.Visible = true;
-            else if (delta2.TotalMinutes < 0 || DepartDatePicker.Value == DepartDatePicker.MinDate)
+            else if (delta2.TotalMinutes < 0)
                 DepartDateAfterTodayError.Visible = true;
         }
         private void ReturnDatePicker_ValueChanged(object sender, EventArgs e)
@@ -138,7 +140,7 @@ namespace Air3550
             var delta2 = ReturnDatePicker.Value.Subtract(DepartDatePicker.Value);
             if (delta1.TotalMinutes > 0)
                 ReturnDateError.Visible = true;
-            else if (delta2.TotalMinutes < 0 || ReturnDatePicker.Value == ReturnDatePicker.MinDate)
+            else if (delta2.TotalMinutes < 0)
                 ReturnBeforeDepartError.Visible = true;
         }
         private void FormatGrid()
@@ -162,7 +164,7 @@ namespace Air3550
             var delta2 = ReturnDatePicker.Value.Subtract(DepartDatePicker.Value);
             if (delta1.TotalMinutes > 0)
                 ReturnDateError.Visible = true;
-            else if (delta2.TotalMinutes < 0 || ReturnDatePicker.Value == ReturnDatePicker.MinDate)
+            else if (delta2.TotalMinutes < 0)
                 ReturnBeforeDepartError.Visible = true;
             else
             {
@@ -191,11 +193,12 @@ namespace Air3550
                     }
 
                     departingRoutes = new List<Route>();
+                    departingFilter = new List<Route>();
                     // get all of the available flights for the specified origin and destination
                     departingRoutes = SystemAction.GetAvailableRoutes(DepartComboBox.Text.Substring(0, 3), ArriveComboBox.Text.Substring(0, 3));
-                    //List<Route> filteredRoutes = SystemAction.FilterRoutes(departingRoutes, departingR);
+                    departingFilter = SystemAction.FilterRoutes(departingRoutes, DepartDatePicker.Value, DateTime.Now); ;
                     // the available routes list is the datasource for the available flight table
-                    AvailableFlightTable.DataSource = departingRoutes;
+                    AvailableFlightTable.DataSource = departingFilter;
                     AvailableFlightTable.ClearSelection();
                     FormatGrid();
                 }
@@ -210,7 +213,7 @@ namespace Air3550
             }
             else
             {
-                selectedRoutes.Add(departingRoutes[tempRouteSelected]);
+                selectedRoutes.Add(departingFilter[tempRouteSelected]);
                 AvailableFlightTable.Visible = true;
                 ReturnFlightButton.Visible = false;
                 BookFlightButton.Visible = true;
@@ -219,11 +222,13 @@ namespace Air3550
                 ReturningFlightsLabel.Visible = true;
 
                 returningRoutes = new List<Route>();
+                returningFilter = new List<Route>();
                 // get all of the available flights for the specified origin and destination
                 AvailableFlightTable.DataSource = null;
                 returningRoutes = SystemAction.GetAvailableRoutes(DepartComboBox.Text.Substring(0, 3), ArriveComboBox.Text.Substring(0, 3));
+                returningFilter = SystemAction.FilterRoutes(returningRoutes, ReturnDatePicker.Value, selectedRoutes[0].departTime); ;
                 // the available routes list is the datasource for the available flight table
-                AvailableFlightTable.DataSource = returningRoutes;
+                AvailableFlightTable.DataSource = returningFilter;
                 FormatGrid();
                 AvailableFlightTable.ClearSelection();
             }
@@ -242,7 +247,7 @@ namespace Air3550
             ReturningFlightsLabel.Visible = false;
 
             AvailableFlightTable.DataSource = null;
-            AvailableFlightTable.DataSource = departingRoutes;
+            AvailableFlightTable.DataSource = departingFilter;
             FormatGrid();
         }
         private void BookFlightButton_Click(object sender, EventArgs e)
@@ -256,13 +261,13 @@ namespace Air3550
             {
                 if (OneWayButton.Checked)
                 {
-                    selectedRoutes.Add(departingRoutes[tempRouteSelected]); 
+                    selectedRoutes.Add(departingFilter[tempRouteSelected]); 
                     ReturnFlightButton.Visible = false;
                     BookFlightButton.Visible = true;
                 }
                 else
                 {
-                    selectedRoutes.Add(returningRoutes[tempRouteSelected]);
+                    selectedRoutes.Add(returningFilter[tempRouteSelected]);
                     ReturnFlightButton.Visible = true;
                     BookFlightButton.Visible = false;
                 }
@@ -275,7 +280,7 @@ namespace Air3550
                 DepartintFlightsLabel.Visible = true;
                 ReturningFlightsLabel.Visible = false;
                 AvailableFlightTable.DataSource = null;
-                AvailableFlightTable.DataSource = departingRoutes;
+                AvailableFlightTable.DataSource = departingFilter;
                 FormatGrid();
                 this.Hide();
             }

@@ -85,7 +85,7 @@ namespace Air3550
                     {
                         SqliteDataAccess.UpdateFlightIncome(id.flightID, id.flightIncome + id.cost);
                         SqliteDataAccess.AddToFlightsBooked(currCustomer.userID, id.flightID, routeIDs[1], "Dollars");
-                        SqliteDataAccess.AddTransaction(currCustomer.userID, id.flightID, total, "Dollars");
+                        SqliteDataAccess.AddTransaction(currCustomer.userID, id.flightID, id.cost, "Dollars");
                         SqliteDataAccess.UpdateNumOfVacantSeats(id.flightID, id.numberOfVacantSeats - 1);
                     }
                 }
@@ -93,7 +93,7 @@ namespace Air3550
                 {
                     SqliteDataAccess.UpdateFlightIncome(id.flightID, id.flightIncome + id.cost);
                     SqliteDataAccess.AddToFlightsBooked(currCustomer.userID, id.flightID, routeIDs[0], "Dollars");
-                    SqliteDataAccess.AddTransaction(currCustomer.userID, id.flightID, total, "Dollars");
+                    SqliteDataAccess.AddTransaction(currCustomer.userID, id.flightID, id.cost, "Dollars");
                     SqliteDataAccess.UpdateNumOfVacantSeats(id.flightID, id.numberOfVacantSeats - 1);
                 }
                 SqliteDataAccess.UpdateAvailablePoints(currCustomer.userID, available + points);
@@ -137,7 +137,7 @@ namespace Air3550
                         {
                             SqliteDataAccess.UpdateFlightIncome(id.flightID, id.flightIncome + id.cost);
                             SqliteDataAccess.AddToFlightsBooked(currCustomer.userID, id.flightID, routeIDs[1], "AirlineCredit");
-                            SqliteDataAccess.AddTransaction(currCustomer.userID, id.flightID, total, "AirlineCredit");
+                            SqliteDataAccess.AddTransaction(currCustomer.userID, id.flightID, id.cost, "AirlineCredit");
                             SqliteDataAccess.UpdateNumOfVacantSeats(id.flightID, id.numberOfVacantSeats - 1);
                         }
                     }
@@ -145,7 +145,7 @@ namespace Air3550
                     {
                         SqliteDataAccess.UpdateFlightIncome(id.flightID, id.flightIncome + id.cost);
                         SqliteDataAccess.AddToFlightsBooked(currCustomer.userID, id.flightID, routeIDs[0], "AirlineCredit");
-                        SqliteDataAccess.AddTransaction(currCustomer.userID, id.flightID, total, "AirlineCredit");
+                        SqliteDataAccess.AddTransaction(currCustomer.userID, id.flightID, id.cost, "AirlineCredit");
                         SqliteDataAccess.UpdateNumOfVacantSeats(id.flightID, id.numberOfVacantSeats - 1);
                     }
                     SqliteDataAccess.UpdateBalance(currCustomer.userID, bal - total);
