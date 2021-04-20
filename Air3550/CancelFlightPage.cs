@@ -15,7 +15,7 @@ namespace Air3550
     {
         // This form file is to document the actions done on the Cancel Flight Page specifically
         public static CustomerModel currCustomer; // make a local object that can be read in the current context
-        public static List<FlightModel> bookedFlights; // list of booked flights that gets updated throughout the form
+        public static List<FlightModel> bookedFlights = new List<FlightModel>(); // list of booked flights that gets updated throughout the form
         // the following variables are used to check what button is clicked to access red x 
         public static bool cancelFlightButtonClicked = false; 
         public static bool logOutButtonClicked = false;
@@ -42,16 +42,21 @@ namespace Air3550
             // This method loads all current flights for the current customer
             // These are the flights that the customer can cancel
             // There can be multiple flights due to a round trip or if a flight has layovers
-            //List<int> flightIDs;
-            bookedFlights = new List<FlightModel>();
-            List<int> routeIDs = SqliteDataAccess.GetBookedFlightsRouteID(currCustomer.userID);
-            if (routeIDs.Count != 0)
+            if (bookedFlights.Count == 0)
             {
-                foreach (int rID in routeIDs)
+                List<int> routeIDs = SqliteDataAccess.GetBookedFlightsRouteID(currCustomer.userID);
+                if (routeIDs.Count != 0)
                 {
-                    List<FlightModel> flights = SystemAction.GetCurrentFlights(rID);
-                    foreach (FlightModel flight in flights)
-                        bookedFlights.Add(flight);
+                    foreach (int rID in routeIDs)
+                    {
+                        List<FlightModel> flights = SystemAction.GetCurrentFlights(rID);
+                        List<int> flightIDs = SqliteDataAccess.GetBookedFlightIDs(currCustomer.userID);
+                        foreach (FlightModel flight in flights)
+                        {
+                            if (flightIDs.Contains(flight.flightID))
+                                bookedFlights.Add(flight);
+                        }
+                    }
                 }
             }
             // This list of FlightModel objects will be the data source of the datagridview table
