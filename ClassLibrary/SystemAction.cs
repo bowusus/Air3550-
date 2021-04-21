@@ -84,6 +84,7 @@ namespace ClassLibrary
             List<int> flightIDs;
             List<FlightModel> flights = new List<FlightModel>();
             flightIDs = SqliteDataAccess.GetFlightIDsInRoute(routeID);
+            int i = 0;
             // for each of these ids, get the flight information (origin, destination, etc.)
             // Then get the name of the airports, depart times, arrival times, any discounts to the base cost, and calculate the points
             // Finally create a FlightModel object with that information and add it to a list of booked flights to be displayed to the customer
@@ -99,6 +100,10 @@ namespace ClassLibrary
                 int arrHour = arriveDateTime.Hour;
 
                 double currCost = SystemAction.CalculateCost(depHour, arrHour, Convert.ToDouble(flightsBookedData[9]));
+                if (i == 0)
+                    currCost += 50;
+                else
+                    currCost += 8;
                 int currPoints = Convert.ToInt32(currCost * 100);
 
                 var duration = arriveDateTime.Subtract(departureDateTime);
@@ -106,6 +111,7 @@ namespace ClassLibrary
                 FlightModel flight = new FlightModel(int.Parse(flightsBookedData[0]), int.Parse(flightsBookedData[1]), flightsBookedData[2], originName, flightsBookedData[3], destinationName, int.Parse(flightsBookedData[6]), DateTime.Parse(flightsBookedData[4] + " " + flightsBookedData[5]), duration, flightsBookedData[8], currCost, currPoints, int.Parse(flightsBookedData[10]), Convert.ToDouble(flightsBookedData[11]));
 
                 flights.Add(flight);
+                i += 1;
             }
             return flights;
         }
@@ -146,6 +152,16 @@ namespace ClassLibrary
 
                     double currCost = SystemAction.CalculateCost(depHour, arrHour, int.Parse(flightsBookedData[9]));
                     cost += currCost;
+                    if (i == 0)
+                    {
+                        currCost += 50;
+                        cost += 50;
+                    }
+                    else
+                    {
+                        currCost += 8;
+                        cost += 8;
+                    }
                     int currPoints = Convert.ToInt32(currCost * 100);
                     points += currPoints;
 
