@@ -89,7 +89,78 @@ namespace ClassLibrary
 
         public static void GenerateFlights()
         {
+            // Get all of the flgihts on the master flights that we are going to use as a template to create available flights
+            List<FlightModel> masterFlights = new List<FlightModel>();
+            masterFlights = SqliteDataAccess.GetAllMasterFlights();
 
+            // Check if database is empty if it is start making flights based on the current date otherwise generate based on the date last date a flight was made
+            DateTime startDate = (SqliteDataAccess.CheckAvailableFlightEmpty()) ? DateTime.Now : Convert.ToDateTime(SqliteDataAccess.GetLatestAvailableFlight()).AddDays(1);
+            // Flights should only exist if they are within 6 months of the current date
+            DateTime endDate = DateTime.Now.AddMonths(6).AddDays(1);
+            int currentFlightID = SqliteDataAccess.GetLastAvailableFlightID();
+
+            //continue making flights until we reach the date that is 6 months + 1 day current date
+            while (DateTime.Compare(startDate, endDate) < 0)
+            {
+                foreach (FlightModel masterFlight in masterFlights)
+                {
+                    DateTime newDepartureDateTime = startDate.Date + masterFlight.departureDateTime.TimeOfDay;
+                    //create the new available flight based on the master flight templeate and add it to the available flights table
+                    decimal duration = (decimal)(masterFlight.distance / 500.0) + .5M + (40 / 60.0M);
+                    decimal cost = (decimal)(masterFlight.distance * .12);
+                    FlightModel newAvaFlight = new FlightModel(currentFlightID, masterFlight.flightID, masterFlight.originCode,
+                                                                masterFlight.destinationCode, (int)masterFlight.distance, 
+                                                                newDepartureDateTime, (double)duration, masterFlight.planeType, 
+                                                                (double)cost, SqliteDataAccess.GetPlaneCapacity(masterFlight.planeType), 0);
+                    SqliteDataAccess.AddFlightToAvailable(newAvaFlight);
+                    currentFlightID++;
+                }
+                // increment the date
+                DateTime newStartDate = startDate.AddDays(1);
+                startDate = newStartDate;
+            }
         }
+
+        public static void GenerateFlight(FlightModel masterFlight)
+        {
+            // New flight has been made in master so creating all available flights from the current date to 6 months out
+            DateTime startDate = DateTime.Now;
+            DateTime endDate = DateTime.Now.AddMonths(6).AddDays(1);
+            int currentFlightID = SqliteDataAccess.GetLastAvailableFlightID();
+
+            // keep making flights from now to 6 months out
+            while (DateTime.Compare(startDate, endDate) < 0)
+            {
+                //create the new available flight based on the master flight templeate and add it to the available flights table
+                decimal duration = (decimal)(masterFlight.distance / 500.0) + .5M + (40 / 60.0M);
+                decimal cost = (decimal)(masterFlight.distance * .12);
+                FlightModel newAvaFlight = new FlightModel(currentFlightID, masterFlight.flightID, masterFlight.originCode,
+                                                            masterFlight.destinationCode, (int)masterFlight.distance,
+                                                            startDate, (double)duration, masterFlight.planeType,
+                                                            (double)cost, SqliteDataAccess.GetPlaneCapacity(masterFlight.planeType), 0);
+                SqliteDataAccess.AddFlightToAvailable(newAvaFlight);
+                currentFlightID++;
+                // increment the date
+                DateTime newStartDate = startDate.AddDays(1);
+                startDate = newStartDate;
+            }
+        }
+
+        public static void CleanAvailableFlights()
+        {
+            // Get the oldest date in the available flights data base
+            if (SqliteDataAccess.GetOldestAvailable().Equals("")) return;
+            DateTime oldestDate = Convert.ToDateTime(SqliteDataAccess.GetOldestAvailable());
+            DateTime endDate = DateTime.Now;
+            
+            // Clean from oldest date till the current date is reached
+            while (oldestDate.ToShortDateString() != endDate.ToShortDateString())
+            {
+                SqliteDataAccess.RemoveOldAvailable(oldestDate.ToShortDateString());
+                DateTime newOldestDate = oldestDate.AddDays(1);
+                oldestDate = newOldestDate;
+            }
+        }
+
     }
 }

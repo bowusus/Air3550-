@@ -107,13 +107,6 @@ namespace Air3550
                 pathID = Convert.ToInt32(routesGridView.SelectedRows[0].Cells["pathID"].Value.ToString());
                 selectedPath = paths.Find(path => path.PathID == pathID);
 
-                //check if any of the to be created flights exist
-                if (routesGridView.SelectedRows.Count > 0)
-                {
-                    pathID = Convert.ToInt32(routesGridView.SelectedRows[0].Cells["pathID"].Value.ToString());
-                    selectedPath = paths.Find(path => path.PathID == pathID);
-                }
-
                 DateTime departureTime = routeTimePicker.Value;
                 int currentFlightID = SqliteDataAccess.GetLastMasterFlightID();
                 List<FlightModel> newFlights = new List<FlightModel>();
@@ -157,34 +150,56 @@ namespace Air3550
                     departureTime = newDepartureTime;
                 }
 
-                if (newFlights.Count == 0)
-                {
-                    MessageBox.Show("Cannot create route as it already exists.", "Error: Route Exists", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-
-                SqliteDataAccess.AddFlightToMaster(newFlights);
-
                 int routeID = SqliteDataAccess.GetLastRouteID();
                 if (selectedPath.NumberOfLayovers == 0)
                 {
+                    if (SqliteDataAccess.RouteExists(flightIDs[0].ToString()))
+                    {
+                        MessageBox.Show("Cannot create route as it already exists.", "Error: Route Exists", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
                     SqliteDataAccess.AddToRoute(routeID, selectedPath.Airports[0].Code,
                                                 selectedPath.Airports[selectedPath.NumberOfLayovers + 1].Code,
                                                 selectedPath.NumberOfLayovers, flightIDs[0].ToString());
+                    if (newFlights.Count != 0)
+                    {
+                        SqliteDataAccess.AddFlightToMaster(newFlights);
+                        foreach (FlightModel flight in newFlights) SystemAction.GenerateFlight(flight);
+                    }
                 }
                 else if (selectedPath.NumberOfLayovers == 1)
                 {
+                    if (SqliteDataAccess.RouteExists(flightIDs[0].ToString(), flightIDs[1].ToString()))
+                    {
+                        MessageBox.Show("Cannot create route as it already exists.", "Error: Route Exists", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
                     SqliteDataAccess.AddToRoute(routeID, selectedPath.Airports[0].Code,
                                                 selectedPath.Airports[selectedPath.NumberOfLayovers + 1].Code,
                                                 selectedPath.NumberOfLayovers, flightIDs[0].ToString(),
                                                 flightIDs[1].ToString());
+                    if (newFlights.Count != 0)
+                    {
+                        SqliteDataAccess.AddFlightToMaster(newFlights);
+                        foreach (FlightModel flight in newFlights) SystemAction.GenerateFlight(flight);
+                    }
                 }
                 else if (selectedPath.NumberOfLayovers == 2)
                 {
+                    if(SqliteDataAccess.RouteExists(flightIDs[0].ToString(), flightIDs[1].ToString(), flightIDs[2].ToString()))
+                    {
+                        MessageBox.Show("Cannot create route as it already exists.", "Error: Route Exists", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
                     SqliteDataAccess.AddToRoute(routeID, selectedPath.Airports[0].Code,
                                                 selectedPath.Airports[selectedPath.NumberOfLayovers + 1].Code,
                                                 selectedPath.NumberOfLayovers, flightIDs[0].ToString(),
                                                 flightIDs[1].ToString(), flightIDs[2].ToString());
+                    if (newFlights.Count != 0)
+                    {
+                        SqliteDataAccess.AddFlightToMaster(newFlights);
+                        foreach (FlightModel flight in newFlights) SystemAction.GenerateFlight(flight);
+                    }
                 }
             }
             LoadEngineerHomePage.GetInstance.LoadFlightGrid();
@@ -226,6 +241,11 @@ namespace Air3550
             //yes than close LogInPage
             //no cancel form close
             LoadEngineerHomePage.GetInstance.Close();
+        }
+
+        private void routesGridView_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
         }
     }
 }

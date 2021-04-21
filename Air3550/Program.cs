@@ -20,9 +20,11 @@ namespace Air3550
             //LogInPage login = new LogInPage();
 
             /* Just for testing LE home page uncomment it later */
-            List<FlightModel> masterFlights = new List<FlightModel>();
-            masterFlights = SqliteDataAccess.GetAllMasterFlights();
-            Application.Run(LoadEngineerHomePage.GetInstance);
+            // SystemAction.CleanAvailableFlights();
+            SqliteDataAccess.CleanRoutes();
+            SystemAction.GenerateFlights();
+            Application.Run(MarketingManagerHomePage.GetInstance);
+            //Application.Run(LoadEngineerHomePage.GetInstance);
 
             //LogInPage login2 = new LogInPage();
             //CustomerHomePage home = new CustomerHomePage();
