@@ -970,13 +970,13 @@ namespace ClassLibrary
                 con.Open(); // open the connection
                 SQLiteCommand cmd = new SQLiteCommand();
                 cmd.CommandType = CommandType.Text;
-                cmd.CommandText = "SELECT airportCode, airportName FROM airport";
+                cmd.CommandText = "SELECT airportCode, airportName, timeZone FROM airport";
                 cmd.Connection = con;
                 SQLiteDataReader rdr = cmd.ExecuteReader();
 
                 while (rdr.Read())
                 {
-                    airports.Add(new Airport(rdr.GetString(0), rdr.GetString(1)));
+                    airports.Add(new Airport(rdr.GetString(0), rdr.GetString(1), rdr.GetString(2)));
                 }
                 rdr.Close();
                 con.Close();
@@ -1049,14 +1049,14 @@ namespace ClassLibrary
             }
         }
 
-        public static void AddFlightToMaster(FlightModel[] flightModels)
+        public static void AddFlightToMaster(List<FlightModel> flightModels)
         {
             using (SQLiteConnection con = new SQLiteConnection(LoadConnectionString()))
             {
                 con.Open(); // open the connection
                 SQLiteCommand cmd = new SQLiteCommand();
                 cmd.CommandType = CommandType.Text;
-                if (flightModels.Length == 1)
+                if (flightModels.Count == 1)
                 {
 
                     cmd.CommandText = "INSERT INTO masterFlight VALUES (@flightID, @originCode_fk, @destinationCode_fk, @distance, @departureTime, @planeType, @numberOfVacantSeats)";
@@ -1068,7 +1068,7 @@ namespace ClassLibrary
                     cmd.Parameters.AddWithValue("@planeType", flightModels[0].planeType);
                     cmd.Parameters.AddWithValue("@numberOfVacantSeats", flightModels[0].numberOfVacantSeats);
                 }
-                else if (flightModels.Length == 2)
+                else if (flightModels.Count == 2)
                 {
                     cmd.CommandText = @"BEGIN TRANSACTION;
                                         INSERT INTO masterFlight 
@@ -1091,7 +1091,7 @@ namespace ClassLibrary
                     cmd.Parameters.AddWithValue("@planeType2", flightModels[1].planeType);
                     cmd.Parameters.AddWithValue("@numberOfVacantSeats2", flightModels[1].numberOfVacantSeats);
                 }
-                else if (flightModels.Length == 3)
+                else if (flightModels.Count == 3)
                 {
                     cmd.CommandText = @"BEGIN TRANSACTION;
                                         INSERT INTO masterFlight 
@@ -1131,7 +1131,7 @@ namespace ClassLibrary
 
         public static int GetLastMasterFlightID()
         {
-            int newID = 1;
+            int newID = 0;
             using (SQLiteConnection con = new SQLiteConnection(LoadConnectionString()))
             // closes the connection when there is an error or it is done executing
             {
@@ -1139,7 +1139,7 @@ namespace ClassLibrary
                 SQLiteCommand cmd = new SQLiteCommand();
                 cmd.CommandType = CommandType.Text;
 
-                cmd.CommandText = "SELECT flightID FROM masterFlight WHERE flightID=(SELECT max(flightID) FROM masterFlight)";
+                cmd.CommandText = "SELECT masterFlightID FROM masterFlight WHERE masterFlightID=(SELECT max(masterFlightID) FROM masterFlight)";
                 cmd.Connection = con;
                 SQLiteDataReader rdr = cmd.ExecuteReader();
                 if (rdr.Read()) newID = rdr.GetInt32(0);
@@ -1179,7 +1179,7 @@ namespace ClassLibrary
                 con.Open(); // open the connection
                 SQLiteCommand cmd = new SQLiteCommand();
                 cmd.CommandType = CommandType.Text;
-                cmd.CommandText = "DELETE FROM masterFlight WHERE masterFlight.flightID = @flightID";
+                cmd.CommandText = "DELETE FROM masterFlight WHERE masterFlight.masterFlightID = @flightID";
                 cmd.Parameters.AddWithValue("@flightID", flightID);
                 cmd.Connection = con;
                 cmd.ExecuteNonQuery();
@@ -1205,16 +1205,17 @@ namespace ClassLibrary
             return numOfRows;
         }
 
-        public static void ChangeTimeMaster(int flightID, DateTime departureTime)
+        public static void ChangeTimeMaster(int flightID, DateTime departureTime, int newFlightID)
         {
             using (SQLiteConnection con = new SQLiteConnection(LoadConnectionString()))
             {
                 con.Open(); // open the connection
                 SQLiteCommand cmd = new SQLiteCommand();
                 cmd.CommandType = CommandType.Text;
-                cmd.CommandText = "UPDATE masterFlight SET departureTime = @departureTime WHERE flightID = @flightID";
+                cmd.CommandText = "UPDATE masterFlight SET departureTime = @departureTime, masterFlightID = @newFlightID WHERE masterFlightID = @flightID";
                 cmd.Parameters.AddWithValue("@flightID", flightID);
                 cmd.Parameters.AddWithValue("@departureTime", departureTime.ToShortTimeString());
+                cmd.Parameters.AddWithValue("@newFlightID", newFlightID);
                 cmd.Connection = con;
                 cmd.ExecuteNonQuery();
                 con.Close();
@@ -1247,7 +1248,6 @@ namespace ClassLibrary
 
         public static Boolean MasterFlightExists(string originCode, string destinationCode, string departureTime)
         {
-
             using (SQLiteConnection con = new SQLiteConnection(LoadConnectionString()))
             // closes the connection when there is an error or it is done executing
             {
@@ -1297,6 +1297,358 @@ namespace ClassLibrary
                 rdr.Close();
                 con.Close();
                 return capacity;
+            }
+        }
+
+        public static int GetLastRouteID()
+        {
+            int newID = 0;
+            using (SQLiteConnection con = new SQLiteConnection(LoadConnectionString()))
+            // closes the connection when there is an error or it is done executing
+            {
+                con.Open(); // open the connection
+                SQLiteCommand cmd = new SQLiteCommand();
+                cmd.CommandType = CommandType.Text;
+
+                cmd.CommandText = "SELECT routeID FROM route WHERE routeID=(SELECT max(routeID) FROM route)";
+                cmd.Connection = con;
+                SQLiteDataReader rdr = cmd.ExecuteReader();
+                if (rdr.Read()) newID = rdr.GetInt32(0);
+                newID++;
+                rdr.Close();
+                con.Close();
+            }
+            return newID;
+        }
+
+        public static void AddToRoute(int routeID, string originCode, string destinationCode, int numOfLayovers, string flightID1, string flightID2 = null, string flightID3 = null)
+        {
+            using (SQLiteConnection con = new SQLiteConnection(LoadConnectionString()))
+            {
+                con.Open(); // open the connection
+                SQLiteCommand cmd = new SQLiteCommand();
+                cmd.CommandType = CommandType.Text;
+
+                if (flightID2 == null)
+                {
+                    cmd.CommandText = "INSERT INTO route VALUES (@routeID, @originCode_fk, @destinationCode_fk, @numOfLayovers, @masterFlightID1_fk, null, null, null)";
+                    cmd.Parameters.AddWithValue("@routeID", routeID);
+                    cmd.Parameters.AddWithValue("@originCode_fk", originCode);
+                    cmd.Parameters.AddWithValue("@destinationCode_fk", destinationCode);
+                    cmd.Parameters.AddWithValue("@numOfLayovers", numOfLayovers);
+                    cmd.Parameters.AddWithValue("@masterFlightID1_fk", Convert.ToInt32(flightID1));
+                }
+                else if (flightID3 == null)
+                {
+                    cmd.CommandText = "INSERT INTO route VALUES (@routeID, @originCode_fk, @destinationCode_fk, @numOfLayovers, @masterFlightID1_fk, @masterFlightID2_fk, null, null)";
+                    cmd.Parameters.AddWithValue("@routeID", routeID);
+                    cmd.Parameters.AddWithValue("@originCode_fk", originCode);
+                    cmd.Parameters.AddWithValue("@destinationCode_fk", destinationCode);
+                    cmd.Parameters.AddWithValue("@numOfLayovers", numOfLayovers);
+                    cmd.Parameters.AddWithValue("@masterFlightID1_fk", Convert.ToInt32(flightID1));
+                    cmd.Parameters.AddWithValue("@masterFlightID2_fk", Convert.ToInt32(flightID2));
+                }
+                else
+                {
+                    cmd.CommandText = "INSERT INTO route VALUES (@routeID, @originCode_fk, @destinationCode_fk, @numOfLayovers, @masterFlightID1_fk, @masterFlightID2_fk, @masterFlightID3_fk, null)";
+                    cmd.Parameters.AddWithValue("@routeID", routeID);
+                    cmd.Parameters.AddWithValue("@originCode_fk", originCode);
+                    cmd.Parameters.AddWithValue("@destinationCode_fk", destinationCode);
+                    cmd.Parameters.AddWithValue("@numOfLayovers", numOfLayovers);
+                    cmd.Parameters.AddWithValue("@masterFlightID1_fk", Convert.ToInt32(flightID1));
+                    cmd.Parameters.AddWithValue("@masterFlightID2_fk", Convert.ToInt32(flightID2));
+                    cmd.Parameters.AddWithValue("@masterFlightID3_fk", Convert.ToInt32(flightID3));
+                }
+                cmd.Connection = con;
+                cmd.ExecuteNonQuery();
+                con.Close();
+            }
+        }
+
+        public static int GetFlightIDFromMaster(string originCode, string destinationCode, string departureTime)
+        {
+            int flightID = 0;
+            using (SQLiteConnection con = new SQLiteConnection(LoadConnectionString()))
+            // closes the connection when there is an error or it is done executing
+            {
+                con.Open(); // open the connection
+                SQLiteCommand cmd = new SQLiteCommand();
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = "SELECT masterFlightID FROM masterFlight " +
+                                  "WHERE masterFlight.originCode_fk = @originCode_fk " +
+                                  "AND masterFlight.destinationCode_fk = @destinationCode_fk " +
+                                  "AND masterFlight.departureTime = @departureTime";
+                cmd.Parameters.AddWithValue("@originCode_fk", originCode);
+                cmd.Parameters.AddWithValue("@destinationCode_fk", destinationCode);
+                cmd.Parameters.AddWithValue("@departureTime", departureTime);
+                cmd.Connection = con;
+
+                SQLiteDataReader rdr = cmd.ExecuteReader();
+                if (rdr.Read()) flightID = rdr.GetInt32(0);
+
+                rdr.Close();
+                con.Close();
+            }
+            return flightID;
+        }
+
+        public static void SetRemovalDateRoutes(int flightID)
+        {
+            using (SQLiteConnection con = new SQLiteConnection(LoadConnectionString()))
+            {
+                con.Open(); // open the connection
+                SQLiteCommand cmd = new SQLiteCommand();
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = "UPDATE route SET lastFlightDate = @currentDate WHERE masterFlightID1_fk = @flightID OR masterFlightID2_fk = @flightID OR masterFlightID3_fk = @flightID";
+                cmd.Parameters.AddWithValue("@flightID", flightID);
+
+                DateTime currentDate = DateTime.Now.AddMonths(6).AddDays(1);
+                cmd.Parameters.AddWithValue("@currentDate", currentDate.ToShortDateString());
+                cmd.Connection = con;
+                cmd.ExecuteNonQuery();
+                con.Close();
+            }
+        }
+
+        public static Boolean RouteExists(string flightID1, string flightID2 = null, string flightID3 = null)
+        {
+            using (SQLiteConnection con = new SQLiteConnection(LoadConnectionString()))
+            // closes the connection when there is an error or it is done executing
+            {
+                con.Open(); // open the connection
+                SQLiteCommand cmd = new SQLiteCommand();
+                cmd.CommandType = CommandType.Text;
+
+                cmd.CommandText = "SELECT 1 FROM route " +
+                                  "WHERE masterFlightID1_fk = @flightID1 " +
+                                  "AND masterFlightID2_fk = @flightID2 " +
+                                  "AND masterFlightID3_fk = @flightID3";
+
+                cmd.Parameters.AddWithValue("@flightID1", Convert.ToInt32(flightID1));
+                _ = (flightID2 != null) ? cmd.Parameters.AddWithValue("@flightID2", Convert.ToInt32(flightID2)) : cmd.Parameters.AddWithValue("@flightID2", null);
+                _ = (flightID2 != null) ? cmd.Parameters.AddWithValue("@flightID3", Convert.ToInt32(flightID3)) : cmd.Parameters.AddWithValue("@flightID3", null);
+                cmd.Connection = con;
+
+                SQLiteDataReader rdr = cmd.ExecuteReader();
+                if (rdr.Read())
+                {
+                    rdr.Close();
+                    con.Close();
+                    return true;
+                }
+                else
+                {
+                    rdr.Close();
+                    con.Close();
+                    return false;
+                }
+            }
+        }
+
+        public static Boolean CheckAvailableFlightEmpty()
+        {
+            using (SQLiteConnection con = new SQLiteConnection(LoadConnectionString()))
+            {
+                con.Open(); // open the connection
+                SQLiteCommand cmd = new SQLiteCommand();
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = "SELECT COUNT(*) AS RowCnt FROM availableFlight";
+                cmd.Connection = con;
+                SQLiteDataReader rdr = cmd.ExecuteReader();
+                if (rdr.Read())
+                {
+                    if (rdr.GetInt32(0) == 0)
+                    {
+                        rdr.Close();
+                        con.Close();
+                        return true;
+                    }
+                    else
+                    {
+                        rdr.Close();
+                        con.Close();
+                        return false;
+                    }
+                }
+                rdr.Close();
+                con.Close();
+                return true; // should never reach here
+            }
+        }
+
+        public static string GetLatestAvailableFlight()
+        {
+            string lastDate = "";
+            using (SQLiteConnection con = new SQLiteConnection(LoadConnectionString()))
+            // closes the connection when there is an error or it is done executing
+            {
+                con.Open(); // open the connection
+                SQLiteCommand cmd = new SQLiteCommand();
+                cmd.CommandType = CommandType.Text;
+
+                cmd.CommandText = "SELECT departureDate FROM availableFlight WHERE flightID=(SELECT max(flightID) FROM availableFlight)";
+                cmd.Connection = con;
+                SQLiteDataReader rdr = cmd.ExecuteReader();
+                if (rdr.Read()) lastDate = rdr.GetString(0);
+                rdr.Close();
+                con.Close();
+            }
+            return lastDate;
+        }
+
+        public static int GetLastAvailableFlightID()
+        {
+            int newID = 0;
+            using (SQLiteConnection con = new SQLiteConnection(LoadConnectionString()))
+            // closes the connection when there is an error or it is done executing
+            {
+                con.Open(); // open the connection
+                SQLiteCommand cmd = new SQLiteCommand();
+                cmd.CommandType = CommandType.Text;
+
+                cmd.CommandText = "SELECT flightID FROM availableFlight WHERE flightID=(SELECT max(flightID) FROM availableFlight)";
+                cmd.Connection = con;
+                SQLiteDataReader rdr = cmd.ExecuteReader();
+                if (rdr.Read()) newID = rdr.GetInt32(0);
+                newID++;
+                rdr.Close();
+                con.Close();
+            }
+            return newID;
+        }
+
+        public static void AddFlightToAvailable(FlightModel newFlight)
+        {
+            using (SQLiteConnection con = new SQLiteConnection(LoadConnectionString()))
+            {
+                con.Open(); // open the connection
+                SQLiteCommand cmd = new SQLiteCommand();
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = "INSERT INTO availableFlight VALUES (@flightID, @masterFlightID_fk, @originCode_fk, @destinationCode_fk, " +
+                                  "@departureDate, @departureTime, @distance, @duration, @planeType_fk, @cost, @numOfVacantSeats, @flightIncome)";
+                cmd.Parameters.AddWithValue("@flightID", newFlight.flightID);
+                cmd.Parameters.AddWithValue("@masterFlightID_fk", newFlight.masterFlightID);
+                cmd.Parameters.AddWithValue("@originCode_fk", newFlight.originCode);
+                cmd.Parameters.AddWithValue("@destinationCode_fk", newFlight.destinationCode);
+                cmd.Parameters.AddWithValue("@departureDate", newFlight.departureDateTime.ToString("yyyy-MM-dd"));
+                cmd.Parameters.AddWithValue("@departureTime", newFlight.departureDateTime.ToShortTimeString());
+                cmd.Parameters.AddWithValue("@distance", newFlight.distance);
+                cmd.Parameters.AddWithValue("@duration", newFlight.duration);
+                cmd.Parameters.AddWithValue("@planeType_fk", newFlight.planeType);
+                cmd.Parameters.AddWithValue("@cost", newFlight.cost);
+                cmd.Parameters.AddWithValue("@numOfVacantSeats", newFlight.numberOfVacantSeats);
+                cmd.Parameters.AddWithValue("@flightIncome", newFlight.flightIncome);
+                cmd.Connection = con;
+                cmd.ExecuteNonQuery();
+                con.Close();
+            }
+        }
+
+        public static string GetOldestAvailable()
+        {
+            using (SQLiteConnection con = new SQLiteConnection(LoadConnectionString()))
+            {
+                string oldestDate = "";
+                con.Open(); // open the connection
+                SQLiteCommand cmd = new SQLiteCommand();
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = "SELECT * FROM availableFlight LIMIT 1";
+                cmd.Connection = con;
+                SQLiteDataReader rdr = cmd.ExecuteReader();
+                if (rdr.Read()) oldestDate = rdr.GetString(4);
+                rdr.Close();
+                con.Close();
+                return oldestDate;
+            }
+        }
+
+        public static void RemoveOldAvailable(string oldestDate)
+        {
+            using (SQLiteConnection con = new SQLiteConnection(LoadConnectionString()))
+            {
+                con.Open(); // open the connection
+                SQLiteCommand cmd = new SQLiteCommand();
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = "DELETE FROM availableFlight WHERE departureDate = @departureDate";
+                cmd.Parameters.AddWithValue("@departureDate", oldestDate);
+                cmd.Connection = con;
+                cmd.ExecuteNonQuery();
+                con.Close();
+            }
+        }
+
+        public static void CleanRoutes()
+        {
+            using (SQLiteConnection con = new SQLiteConnection(LoadConnectionString()))
+            {
+                con.Open(); // open the connection
+                SQLiteCommand cmd = new SQLiteCommand();
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = "DELETE FROM route WHERE lastFlightDate = @lastFlightDate";
+                cmd.Parameters.AddWithValue("@lastFlightDate", DateTime.Now.ToShortDateString());
+                cmd.Connection = con;
+                cmd.ExecuteNonQuery();
+                con.Close();
+            }
+        }
+
+        public static List<int> GetRoutesWithFlightID(int flightID)
+        {
+            using (SQLiteConnection con = new SQLiteConnection(LoadConnectionString()))
+            {
+                List<int> routeIDs = new List<int>();
+                con.Open(); // open the connection
+                SQLiteCommand cmd = new SQLiteCommand();
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = "SELECT routeID FROM route WHERE masterFlightID1_fk = @flightID OR masterFlightID2_fk = @flightID OR masterFlightID3_fk = @flightID";
+                cmd.Parameters.AddWithValue("@masterFlightID", flightID);
+
+                SQLiteDataReader rdr = cmd.ExecuteReader();
+                while (rdr.Read()) routeIDs.Add(rdr.GetInt32(0));
+                cmd.Connection = con;
+                cmd.ExecuteNonQuery();
+                con.Close();
+                return routeIDs;
+            }
+        }
+
+        public static List<String> GetPlaneTypes()
+        {
+            using (SQLiteConnection con = new SQLiteConnection(LoadConnectionString()))
+            // closes the connection when there is an error or it is done executing
+            {
+                List<string> planeTypes = new List<string>();
+                con.Open(); // open the connection
+                SQLiteCommand cmd = new SQLiteCommand();
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = "SELECT planeType FROM plane";
+                cmd.Connection = con;
+                SQLiteDataReader rdr = cmd.ExecuteReader();
+
+                while (rdr.Read())
+                {
+                    planeTypes.Add(rdr.GetString(0));
+                }
+                rdr.Close();
+                con.Close();
+                return planeTypes;
+            }
+        }
+
+        public static void UpdateMasterNewPlane(int flightID, string planeType)
+        {
+            using (SQLiteConnection con = new SQLiteConnection(LoadConnectionString()))
+            {
+                con.Open(); // open the connection
+                SQLiteCommand cmd = new SQLiteCommand();
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = "UPDATE masterFlight SET planeType = @planeType, capacity = @capacity WHERE masterFlightID = @flightID";
+                cmd.Parameters.AddWithValue("@flightID", flightID);
+                cmd.Parameters.AddWithValue("@planeType", planeType);
+                cmd.Parameters.AddWithValue("@capacity", GetPlaneCapacity(planeType));
+                cmd.Connection = con;
+                cmd.ExecuteNonQuery();
+                con.Close();
             }
         }
 

@@ -13,7 +13,10 @@ namespace ClassLibrary
 		// the constructor to create an instance of the FlightModel
 		// auto-implemented properties for trivial get and set
 		public int flightID { get; set; }
+
 		public int masterFlightID { get; set; }
+		public double durDouble { get; set; }
+        public int routeID { get; set; }
 		public string originCode { get; set; }
 		public string originName { get; set; }
 		public string destinationCode { get; set; }
@@ -45,6 +48,23 @@ namespace ClassLibrary
 			numberOfVacantSeats = seats;
 			flightIncome = income;
 		}
+
+		public FlightModel(int flightID, int masterFlightID, string originCode, string destinationCode, int distance, DateTime departureDateTime, double duration,
+						   string planeType, double cost, int numberOfVacantSeat, double flightIncome)
+        {
+			this.flightID = flightID;
+			this.masterFlightID = masterFlightID;
+			this.originCode = originCode;
+			this.destinationCode = destinationCode;
+			this.distance = distance;
+			this.departureDateTime = departureDateTime;
+			this.durDouble = duration;
+			this.planeType = planeType;
+			this.cost = cost;
+			this.numberOfVacantSeats = numberOfVacantSeat;
+			this.flightIncome = flightIncome;
+        }
+				
 		public FlightModel(int flightID, string originCode, string destinationCode, int distance, DateTime departureDateTime, string planeType)
         {
 			this.flightID = flightID;

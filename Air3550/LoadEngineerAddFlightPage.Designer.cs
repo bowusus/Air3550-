@@ -29,21 +29,23 @@ namespace Air3550
         /// </summary>
         private void InitializeComponent()
         {
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.destinationCodeLabel = new System.Windows.Forms.Label();
             this.originCodeLabel = new System.Windows.Forms.Label();
             this.destinationDropDown = new System.Windows.Forms.ComboBox();
             this.originDropDown = new System.Windows.Forms.ComboBox();
             this.routesGridView = new System.Windows.Forms.DataGridView();
+            this.addButton = new System.Windows.Forms.Button();
+            this.routeTimePicker = new System.Windows.Forms.DateTimePicker();
+            this.searchButton = new System.Windows.Forms.Button();
+            this.backButton = new System.Windows.Forms.Button();
             this.pathID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.numberOfLayoversColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.originColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.layoverOneColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.layoverTwoColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.destinationColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.addButton = new System.Windows.Forms.Button();
-            this.routeTimePicker = new System.Windows.Forms.DateTimePicker();
-            this.searchButton = new System.Windows.Forms.Button();
-            this.backButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.routesGridView)).BeginInit();
             this.SuspendLayout();
             // 
@@ -74,7 +76,6 @@ namespace Air3550
             this.destinationDropDown.Name = "destinationDropDown";
             this.destinationDropDown.Size = new System.Drawing.Size(121, 21);
             this.destinationDropDown.TabIndex = 5;
-            this.destinationDropDown.SelectedIndexChanged += new System.EventHandler(this.destinationDropDown_SelectedIndexChanged);
             // 
             // originDropDown
             // 
@@ -90,6 +91,14 @@ namespace Air3550
             // 
             this.routesGridView.AllowUserToAddRows = false;
             this.routesGridView.AllowUserToDeleteRows = false;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.routesGridView.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.routesGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.routesGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.pathID,
@@ -98,6 +107,14 @@ namespace Air3550
             this.layoverOneColumn,
             this.layoverTwoColumn,
             this.destinationColumn});
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.routesGridView.DefaultCellStyle = dataGridViewCellStyle2;
             this.routesGridView.Location = new System.Drawing.Point(12, 39);
             this.routesGridView.MultiSelect = false;
             this.routesGridView.Name = "routesGridView";
@@ -105,43 +122,8 @@ namespace Air3550
             this.routesGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.routesGridView.Size = new System.Drawing.Size(621, 399);
             this.routesGridView.TabIndex = 8;
+            this.routesGridView.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.routesGridView_CellContentClick);
             this.routesGridView.SelectionChanged += new System.EventHandler(this.routesGridView_SelectionChanged);
-            // 
-            // pathID
-            // 
-            this.pathID.HeaderText = "Path ID";
-            this.pathID.Name = "pathID";
-            this.pathID.ReadOnly = true;
-            // 
-            // numberOfLayoversColumn
-            // 
-            this.numberOfLayoversColumn.HeaderText = "Number Of Layovers";
-            this.numberOfLayoversColumn.Name = "numberOfLayoversColumn";
-            this.numberOfLayoversColumn.ReadOnly = true;
-            // 
-            // originColumn
-            // 
-            this.originColumn.HeaderText = "Origin";
-            this.originColumn.Name = "originColumn";
-            this.originColumn.ReadOnly = true;
-            // 
-            // layoverOneColumn
-            // 
-            this.layoverOneColumn.HeaderText = "Layover 1";
-            this.layoverOneColumn.Name = "layoverOneColumn";
-            this.layoverOneColumn.ReadOnly = true;
-            // 
-            // layoverTwoColumn
-            // 
-            this.layoverTwoColumn.HeaderText = "Layover 2";
-            this.layoverTwoColumn.Name = "layoverTwoColumn";
-            this.layoverTwoColumn.ReadOnly = true;
-            // 
-            // destinationColumn
-            // 
-            this.destinationColumn.HeaderText = "Destination";
-            this.destinationColumn.Name = "destinationColumn";
-            this.destinationColumn.ReadOnly = true;
             // 
             // addButton
             // 
@@ -183,6 +165,42 @@ namespace Air3550
             this.backButton.UseVisualStyleBackColor = true;
             this.backButton.Click += new System.EventHandler(this.backButton_Click);
             // 
+            // pathID
+            // 
+            this.pathID.HeaderText = "Path ID";
+            this.pathID.Name = "pathID";
+            this.pathID.ReadOnly = true;
+            // 
+            // numberOfLayoversColumn
+            // 
+            this.numberOfLayoversColumn.HeaderText = "Number Of Layovers";
+            this.numberOfLayoversColumn.Name = "numberOfLayoversColumn";
+            this.numberOfLayoversColumn.ReadOnly = true;
+            // 
+            // originColumn
+            // 
+            this.originColumn.HeaderText = "Origin";
+            this.originColumn.Name = "originColumn";
+            this.originColumn.ReadOnly = true;
+            // 
+            // layoverOneColumn
+            // 
+            this.layoverOneColumn.HeaderText = "Layover 1";
+            this.layoverOneColumn.Name = "layoverOneColumn";
+            this.layoverOneColumn.ReadOnly = true;
+            // 
+            // layoverTwoColumn
+            // 
+            this.layoverTwoColumn.HeaderText = "Layover 2";
+            this.layoverTwoColumn.Name = "layoverTwoColumn";
+            this.layoverTwoColumn.ReadOnly = true;
+            // 
+            // destinationColumn
+            // 
+            this.destinationColumn.HeaderText = "Destination";
+            this.destinationColumn.Name = "destinationColumn";
+            this.destinationColumn.ReadOnly = true;
+            // 
             // LoadEngineerAddFlightPage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -214,15 +232,15 @@ namespace Air3550
         private System.Windows.Forms.ComboBox destinationDropDown;
         private System.Windows.Forms.ComboBox originDropDown;
         private System.Windows.Forms.DataGridView routesGridView;
+        private System.Windows.Forms.Button addButton;
+        private System.Windows.Forms.DateTimePicker routeTimePicker;
+        private System.Windows.Forms.Button searchButton;
+        private System.Windows.Forms.Button backButton;
         private System.Windows.Forms.DataGridViewTextBoxColumn pathID;
         private System.Windows.Forms.DataGridViewTextBoxColumn numberOfLayoversColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn originColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn layoverOneColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn layoverTwoColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn destinationColumn;
-        private System.Windows.Forms.Button addButton;
-        private System.Windows.Forms.DateTimePicker routeTimePicker;
-        private System.Windows.Forms.Button searchButton;
-        private System.Windows.Forms.Button backButton;
     }
 }

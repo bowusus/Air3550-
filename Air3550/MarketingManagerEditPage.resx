@@ -117,13 +117,4 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="label1.Text" xml:space="preserve">
-    <value>Warning: Modifying the specific date of a flight 
-is not recommended as it will result in all routes 
-currently using this flight to be scheduled for 
-removal 6 months + 1 day from now
- so that time inconsistencies do not occur
-between flights belonging to the same route past 
-the editing date.</value>
-  </data>
 </root>

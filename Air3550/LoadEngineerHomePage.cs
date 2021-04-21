@@ -54,8 +54,9 @@ namespace Air3550
         {
             if (flightGrid.SelectedRows.Count > 0)
             {
-                int flightID = Convert.ToInt32(flightGrid.SelectedRows[0].Cells["flightID"].Value.ToString());
+                int flightID = Convert.ToInt32(flightGrid.SelectedRows[0].Cells["masterFlightID"].Value.ToString());
                 SqliteDataAccess.RemoveMasterFlight(flightID);
+                SqliteDataAccess.SetRemovalDateRoutes(flightID);
                 LoadFlightGrid();
             }
         }
@@ -67,11 +68,9 @@ namespace Air3550
                 this.originCode = flightGrid.SelectedRows[0].Cells["originCode_fk"].Value.ToString();
                 this.destinationCode = flightGrid.SelectedRows[0].Cells["destinationCode_fk"].Value.ToString();
                 this.time = string.Format("1-1-2021 {0}", flightGrid.SelectedRows[0].Cells["departureTime"].Value.ToString());
-                this.flightID = Convert.ToInt32(flightGrid.SelectedRows[0].Cells["flightID"].Value.ToString());
+                this.flightID = Convert.ToInt32(flightGrid.SelectedRows[0].Cells["masterFlightID"].Value.ToString());
                 LoadEngineerEditFlightPage.GetInstance.Show();
                 LoadEngineerEditFlightPage.GetInstance.Location = this.Location;
-                this.Hide();
-
             }
         }
 
