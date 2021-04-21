@@ -74,7 +74,6 @@ namespace Air3550
             if (result == DialogResult.Yes)
             {
                 logOutButtonClicked = true; // used to access red x later
-                CustomerHomePage.logOutButtonClicked = false;
                 int i = 0;
                 int indexAccount = 0;
                 int indexLogIn = 0;

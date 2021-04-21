@@ -60,14 +60,14 @@ namespace Air3550
         {
             // This method transitions the displayed page from the customer home page to the 
             // account history page
-            AccountHistoryPage.GetInstance(ref currCustomer).Show();
+            //AccountHistoryPage.GetInstance(ref currCustomer).Show();
             this.Dispose();
         }
         private void PrintBoardingPassButton_Click(object sender, EventArgs e)
         {
             // This method transitions the displayed page from the customer home page to the 
             // print boarding pass page
-            PrintBoardingPassPage.GetInstance(ref currCustomer).Show();
+            //PrintBoardingPassPage.GetInstance(ref currCustomer).Show();
             this.Dispose();
         }
         private void LogOutButton_Click(object sender, EventArgs e)

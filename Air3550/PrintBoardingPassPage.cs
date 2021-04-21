@@ -57,8 +57,7 @@ namespace Air3550
             DialogResult result = MessageBox.Show("Are you sure that you want to log out?\nAny changes not saved will not be updated.", "Log Out", MessageBoxButtons.YesNo, MessageBoxIcon.Hand);
             if (result == DialogResult.Yes)
             {
-                logOutButtonClicked = true; // used to access red x later
-                CustomerHomePage.logOutButtonClicked = false;
+                //logOutButtonClicked = true; // used to access red x later
                 int i = 0;
                 int indexAccount = 0;
                 int indexLogIn = 0;

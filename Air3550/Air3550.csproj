@@ -67,6 +67,12 @@
     <Compile Include="BookFlightPage.Designer.cs">
       <DependentUpon>BookFlightPage.cs</DependentUpon>
     </Compile>
+    <Compile Include="FlightManifest.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FlightManifest.Designer.cs">
+      <DependentUpon>FlightManifest.cs</DependentUpon>
+    </Compile>
     <Compile Include="LoadEngineerAddFlightPage.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -152,6 +158,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="BookFlightPage.resx">
       <DependentUpon>BookFlightPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FlightManifest.resx">
+      <DependentUpon>FlightManifest.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="LoadEngineerAddFlightPage.resx">
       <DependentUpon>LoadEngineerAddFlightPage.cs</DependentUpon>

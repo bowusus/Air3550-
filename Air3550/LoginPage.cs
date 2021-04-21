@@ -62,9 +62,8 @@ namespace Air3550
                     UserIDText.Text = null;
                     PasswordText.Text = null;
                     UserIDText.Select(); // used to put cursor back in userID box
-                    FlightManagerHomePage flightHome = new FlightManagerHomePage();
-                    flightHome.Show(); // show the next form
-                    this.Hide(); // close log in form
+                    FlightManagerHomePage.GetInstance().Show(); // show the customer home page to prevent the need to remember your userID
+                    this.Hide(); // close the instance of the log in page
                 }
                 else if (SqliteDataAccess.CheckIfEmployee(userID, currPass).Equals("LoadEngineer"))
                 {
@@ -101,8 +100,8 @@ namespace Air3550
                         UserIDText.Select(); // used to put cursor back in userID box
                         List<string> userData = SqliteDataAccess.GetUserData(userID);
                         CustomerModel customer = new CustomerModel(userID, userData[1], userData[2], userData[3], userData[4], userData[5], userData[6], userData[7], userData[8], userData[9], int.Parse(userData[10]), userData[11]);
-                        this.Hide(); // close the instance of the log in page
                         CustomerHomePage.GetInstance(ref customer).Show(); // show the customer home page to prevent the need to remember your userID
+                        this.Hide(); // close the instance of the log in page
                     }
                 }
             }
