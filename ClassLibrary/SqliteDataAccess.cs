@@ -362,6 +362,58 @@ namespace ClassLibrary
                 return flightIDs; // return the currently booked flightIDs
             }
         }
+        public static List<int> GetCancelledFlightIDs(int userID)
+        {
+            // This method goes into the database, specifically the flightsBooked table, 
+            // and retrieves all of the flight IDs of the customer's cancelled flights and returns this list
+            using (SQLiteConnection con = new SQLiteConnection(LoadConnectionString()))
+            // closes the connection when there is an error or it is done executing
+            {
+                con.Open(); // open the connection
+                SQLiteCommand cmd = new SQLiteCommand();
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = "select flightsCancelled.flightID_fk from flightsCancelled where flightsCancelled.userID_fk = @userID_fk";
+                // use the userID to get the cancelled flights
+                cmd.Parameters.AddWithValue("@userID_fk", userID);
+                cmd.Connection = con;
+                SQLiteDataReader rdr = cmd.ExecuteReader();
+                List<int> flightIDs = new List<int>();
+                // execute the command with the reader, which only reads the database rather than updating it in anyway
+                while (rdr.Read())
+                {
+                    flightIDs.Add(rdr.GetInt32(0));
+                }
+                rdr.Close();
+                con.Close();
+                return flightIDs; // return the currently booked flightIDs
+            }
+        }
+        public static List<int> GetTakenFlightIDs(int userID)
+        {
+            // This method goes into the database, specifically the flightsBooked table, 
+            // and retrieves all of the flight IDs of the customer's taken flights and returns this list
+            using (SQLiteConnection con = new SQLiteConnection(LoadConnectionString()))
+            // closes the connection when there is an error or it is done executing
+            {
+                con.Open(); // open the connection
+                SQLiteCommand cmd = new SQLiteCommand();
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = "select flightsTaken.flightID_fk from flightsTaken where flightsTaken.userID_fk = @userID_fk";
+                // use the userID to get the current taken flights
+                cmd.Parameters.AddWithValue("@userID_fk", userID);
+                cmd.Connection = con;
+                SQLiteDataReader rdr = cmd.ExecuteReader();
+                List<int> flightIDs = new List<int>();
+                // execute the command with the reader, which only reads the database rather than updating it in anyway
+                while (rdr.Read())
+                {
+                    flightIDs.Add(rdr.GetInt32(0));
+                }
+                rdr.Close();
+                con.Close();
+                return flightIDs; // return the currently booked flightIDs
+            }
+        }
         public static List<int> GetFlightIDsInRoute(int routeID)
         {
             // This method goes into the database, specifically the route table, 
