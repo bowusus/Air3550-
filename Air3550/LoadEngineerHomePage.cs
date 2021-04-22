@@ -80,6 +80,12 @@ namespace Air3550
             }
         }
 
+        private void routeButton_Click(object sender, EventArgs e)
+        {
+            LoadEngineerRoutesPage.GetInstance.Show();
+            LoadEngineerRoutesPage.GetInstance.Location = this.Location;
+        }
+
         private void editFlight_Click(object sender, EventArgs e)
         {
             if (flightGrid.SelectedRows.Count > 0)

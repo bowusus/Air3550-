@@ -34,6 +34,7 @@ namespace Air3550
             this.removeFlight = new System.Windows.Forms.Button();
             this.editFlight = new System.Windows.Forms.Button();
             this.logOutButton = new System.Windows.Forms.Button();
+            this.routeButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.flightGrid)).BeginInit();
             this.SuspendLayout();
             // 
@@ -89,12 +90,23 @@ namespace Air3550
             this.logOutButton.UseVisualStyleBackColor = true;
             this.logOutButton.Click += new System.EventHandler(this.logOutButton_Click);
             // 
+            // routeButton
+            // 
+            this.routeButton.Location = new System.Drawing.Point(551, 274);
+            this.routeButton.Name = "routeButton";
+            this.routeButton.Size = new System.Drawing.Size(133, 47);
+            this.routeButton.TabIndex = 5;
+            this.routeButton.Text = "View Routes Offered";
+            this.routeButton.UseVisualStyleBackColor = true;
+            this.routeButton.Click += new System.EventHandler(this.routeButton_Click);
+            // 
             // LoadEngineerHomePage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.HighlightText;
             this.ClientSize = new System.Drawing.Size(696, 517);
+            this.Controls.Add(this.routeButton);
             this.Controls.Add(this.logOutButton);
             this.Controls.Add(this.editFlight);
             this.Controls.Add(this.removeFlight);
@@ -118,6 +130,7 @@ namespace Air3550
         private System.Windows.Forms.Button removeFlight;
         private System.Windows.Forms.Button editFlight;
         private System.Windows.Forms.Button logOutButton;
+        private System.Windows.Forms.Button routeButton;
     }
 }
 

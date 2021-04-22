@@ -1652,6 +1652,26 @@ namespace ClassLibrary
             }
         }
 
+        public static DataTable GetRouteDT()
+        {
+            using (SQLiteConnection con = new SQLiteConnection(LoadConnectionString()))
+            // closes the connection when there is an error or it is done executing
+            {
+                con.Open(); // open the connection
+                SQLiteCommand cmd = new SQLiteCommand();
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = "SELECT * FROM route";
+                cmd.Connection = con;
+                SQLiteDataReader rdr = cmd.ExecuteReader();
+
+                DataTable dt = new DataTable();
+                dt.Load(rdr);
+                rdr.Close();
+                con.Close();
+                return dt;
+            }
+        }
+
         private static string LoadConnectionString(string id = "Default")
         {
             // This method helps connect to the database
