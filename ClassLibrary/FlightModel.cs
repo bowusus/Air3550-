@@ -44,13 +44,6 @@ namespace ClassLibrary
 		public double flightIncome { get; set; }
 
 
-		public FlightModel(ref CustomerModel customer)
-		{
-
-			currCustomer = customer;
-
-		}
-
 
 
 		// customer constructor
