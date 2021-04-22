@@ -46,20 +46,50 @@ namespace Air3550
             // There can be multiple flights due to a round trip or if a flight has layovers
             if (bookedFlights.Count == 0)
             {
-                List<int> routeIDs = SqliteDataAccess.GetBookedFlightsRouteID(currCustomer.userID); // get the route IDs from the booked flights table
-                if (routeIDs.Count != 0) 
+                List<int> flightIDs_Route = SqliteDataAccess.GetBookedFlightsRouteID(currCustomer.userID); // get the route IDs from the booked flights table
+                List<int> flightIDs_Booked = SqliteDataAccess.GetBookedFlightIDs(currCustomer.userID);
+                int i = 0;
+                if (flightIDs_Booked.Count != 0 ) 
                 // as long as there is a flight currently booked with a route ID
                 // then check if each ID in the route is still booked and add it to the booked flights list
                 {
-                    foreach (int rID in routeIDs)
+                    foreach (int fID in flightIDs_Route)
                     {
-                        List<FlightModel> flights = SystemAction.GetCurrentFlights(rID);
+                        if (flightIDs_Booked.Contains(fID))
+                        {
+                            List<string> flightsBookedData = SqliteDataAccess.GetFlightData(fID);
+
+                            string originName = SqliteDataAccess.GetFlightNames(flightsBookedData[2]);
+                            string destinationName = SqliteDataAccess.GetFlightNames(flightsBookedData[3]);
+
+                            DateTime departureDateTime = DateTime.Parse(flightsBookedData[4] + " " + flightsBookedData[5]);
+                            DateTime arriveDateTime = departureDateTime.AddHours(Convert.ToDouble(flightsBookedData[7]));
+                            int depHour = departureDateTime.Hour;
+                            int arrHour = arriveDateTime.Hour;
+
+                            double currCost;
+                            if (i == 0)
+                                currCost = SystemAction.CalculateCost(depHour, arrHour, Convert.ToDouble(flightsBookedData[9]) + 50);
+                            else
+                                currCost = SystemAction.CalculateCost(depHour, arrHour, Convert.ToDouble(flightsBookedData[9]) + 8);
+                            int currPoints = Convert.ToInt32(currCost * 100);
+
+                            var duration = arriveDateTime.Subtract(departureDateTime);
+                            duration = new TimeSpan(duration.Ticks / TimeSpan.TicksPerSecond * TimeSpan.TicksPerSecond);
+
+                            departureDateTime = arriveDateTime.Subtract(duration);
+                            FlightModel flight = new FlightModel(int.Parse(flightsBookedData[0]), int.Parse(flightsBookedData[1]), flightsBookedData[2], originName, flightsBookedData[3], destinationName, int.Parse(flightsBookedData[6]), departureDateTime, arriveDateTime, duration, flightsBookedData[8], Math.Round(currCost, 2), currPoints, int.Parse(flightsBookedData[10]), Convert.ToDouble(flightsBookedData[11]));
+                            bookedFlights.Add(flight);
+                            i += 1;
+                        }
+                        /*List<FlightModel> flights = SystemAction.GetCurrentFlights(rID);
                         List<int> flightIDs = SqliteDataAccess.GetBookedFlightIDs(currCustomer.userID);
                         foreach (FlightModel flight in flights)
                         {
                             if (flightIDs.Contains(flight.flightID))
                                 bookedFlights.Add(flight);
-                        }
+                        }*/
+
                     }
                 }
             }
@@ -77,22 +107,23 @@ namespace Air3550
             // This method renames and removes some columns that do not get updated when the data in the datagridview gets updated
             // Remove some information that the employees need but not the customer
             CancelFlightTable.Columns.Remove("masterFlightID");
+            CancelFlightTable.Columns.Remove("durDouble");
             CancelFlightTable.Columns.Remove("planeType");
-            CancelFlightTable.Columns.Remove("distance");
             CancelFlightTable.Columns.Remove("numberOfVacantSeats");
             CancelFlightTable.Columns.Remove("flightIncome");
-            CancelFlightTable.Columns.Remove("cost");
-            CancelFlightTable.Columns.Remove("numOfPoints");
             // change the name of the columns
             CancelFlightTable.Columns[0].HeaderText = "FlightID";
             CancelFlightTable.Columns[1].HeaderText = "Origin Code";
             CancelFlightTable.Columns[2].HeaderText = "Origin Name";
             CancelFlightTable.Columns[3].HeaderText = "Destination Code";
             CancelFlightTable.Columns[4].HeaderText = "Destination Name";
-            CancelFlightTable.Columns[5].HeaderText = "Departure Date and Time";
-            CancelFlightTable.Columns[6].HeaderText = "Duration";
-            CancelFlightTable.Columns[7].HeaderText = "Cost";
-            CancelFlightTable.Columns[8].HeaderText = "Number of Points";
+            CancelFlightTable.Columns[5].HeaderText = "Distance (in miles)";
+            CancelFlightTable.Columns[6].HeaderText = "Departure Date and Time";
+            CancelFlightTable.Columns[7].HeaderText = "Est. Arrival Date and Time";
+            CancelFlightTable.Columns[8].HeaderText = "Est. Duration (h:mm:ss)";
+            CancelFlightTable.Columns[9].HeaderText = "Cost (in dollars)";
+            CancelFlightTable.Columns[10].HeaderText = "Number of Points";
+            CancelFlightTable.ClearSelection();
         }
         private void CancelFlightTable_CellClick(object sender, DataGridViewCellEventArgs e)
         {

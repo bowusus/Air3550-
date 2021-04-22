@@ -150,18 +150,21 @@ namespace Air3550
             DateTime date = DateTime.Today; // get the current datetime
             var delta1 = ReturnDatePicker.Value.Subtract(date.AddMonths(6)); // get the difference in times between 6 months from now and the return date
             var delta2 = ReturnDatePicker.Value.Subtract(DepartDatePicker.Value); // get the difference between the depart date and the return date
-            if (delta1.TotalMinutes > 0) // if the return date is not within 6 months, then an error displays
-                ReturnDateError.Visible = true;
-            else if (delta2.TotalMinutes < 0) // if the return date is before today, then an error displays
-                ReturnBeforeDepartError.Visible = true;
+            if (!OneWayButton.Checked)
+            {
+                if (delta1.TotalMinutes > 0) // if the return date is not within 6 months, then an error displays
+                    ReturnDateError.Visible = true;
+                else if (delta2.TotalMinutes < 0) // if the return date is before today, then an error displays
+                    ReturnBeforeDepartError.Visible = true;
+            }
         }
         private void FormatGrid()
         {
             // This method formats the data grid view with different column names
-            AvailableFlightTable.Columns[0].HeaderText = "ID";
-            AvailableFlightTable.Columns[1].HeaderText = "Departure Time";
-            AvailableFlightTable.Columns[2].HeaderText = "Estimated Arrival Time";
-            AvailableFlightTable.Columns[3].HeaderText = "Estimated Duration";
+            AvailableFlightTable.Columns[0].HeaderText = "Overall Route ID";
+            AvailableFlightTable.Columns[1].HeaderText = "Departure Date and Time";
+            AvailableFlightTable.Columns[2].HeaderText = "Est. Arrival Date and Time";
+            AvailableFlightTable.Columns[3].HeaderText = "Est. Duration";
             AvailableFlightTable.Columns[4].HeaderText = "Number of Layovers";
             AvailableFlightTable.Columns[5].HeaderText = "Layover Flight IDs";
             AvailableFlightTable.Columns[6].HeaderText = "Change Plane";
@@ -178,10 +181,13 @@ namespace Air3550
             DifferentLocationError.Visible = false;
             EmptyError.Visible = false;
             // if origin, destination, or depart/return date times are invalid, then produce an error label
-            if (delta1.TotalMinutes > 0)
-                ReturnDateError.Visible = true;
-            else if (delta2.TotalMinutes < 0)
-                ReturnBeforeDepartError.Visible = true;
+            if (!OneWayButton.Checked)
+            {
+                if (delta1.TotalMinutes > 0)
+                    ReturnDateError.Visible = true;
+                else if (delta2.TotalMinutes < 0)
+                    ReturnBeforeDepartError.Visible = true;
+            }
             if (DepartComboBox.SelectedValue == ArriveComboBox.SelectedValue)
                 DifferentLocationError.Visible = true;
             else if (DepartComboBox.SelectedIndex == -1 || ArriveComboBox.SelectedIndex == -1)
@@ -210,11 +216,14 @@ namespace Air3550
                 departingRoutes = new List<Route>();
                 departingFilter = new List<Route>();
                 // get all of the available flights for the specified origin and destination
-                departingRoutes = SystemAction.GetAvailableRoutes(DepartComboBox.Text.Substring(0, 3), ArriveComboBox.Text.Substring(0, 3));
+                if (OneWayButton.Checked)
+                    departingRoutes = SystemAction.GetAvailableRoutes(DepartComboBox.Text.Substring(0, 3), ArriveComboBox.Text.Substring(0, 3), DepartDatePicker.Value.Date, DateTime.MinValue);
+                else
+                    departingRoutes = SystemAction.GetAvailableRoutes(DepartComboBox.Text.Substring(0, 3), ArriveComboBox.Text.Substring(0, 3), DepartDatePicker.Value.Date, ReturnDatePicker.Value.Date);
                 // filter those flights
-                departingFilter = SystemAction.FilterRoutes(departingRoutes, DepartDatePicker.Value, DateTime.Now); ;
+                //departingFilter = SystemAction.FilterRoutes(departingRoutes, DepartDatePicker.Value, DateTime.Now); ;
                 // the filtered departing routes list is the datasource for the available flight table
-                AvailableFlightTable.DataSource = departingFilter;
+                AvailableFlightTable.DataSource = departingRoutes;
                 // clear the table's selection so no row is clicked
                 AvailableFlightTable.ClearSelection();
                 FormatGrid();
@@ -243,7 +252,10 @@ namespace Air3550
                 returningFilter = new List<Route>();
                 // get all of the available flights for the specified origin and destination
                 AvailableFlightTable.DataSource = null;
-                returningRoutes = SystemAction.GetAvailableRoutes(DepartComboBox.Text.Substring(0, 3), ArriveComboBox.Text.Substring(0, 3));
+                if (OneWayButton.Checked)
+                    returningRoutes = SystemAction.GetAvailableRoutes(DepartComboBox.Text.Substring(0, 3), ArriveComboBox.Text.Substring(0, 3), DepartDatePicker.Value.Date, DateTime.MinValue);
+                else
+                    returningRoutes = SystemAction.GetAvailableRoutes(DepartComboBox.Text.Substring(0, 3), ArriveComboBox.Text.Substring(0, 3), DepartDatePicker.Value.Date, ReturnDatePicker.Value.Date);
                 // filter those flights
                 returningFilter = SystemAction.FilterRoutes(returningRoutes, ReturnDatePicker.Value, selectedRoutes[0].departTime); ;
                 // the filtered returning routes list is the datasource for the available flight table
@@ -286,7 +298,7 @@ namespace Air3550
                 // if the round trip button was clicked, then add the selected return flight, make the book flight button not visible, and make the return flight button visible
                 if (OneWayButton.Checked)
                 {
-                    selectedRoutes.Add(departingFilter[tempRouteSelected]); 
+                    selectedRoutes.Add(departingRoutes[tempRouteSelected]); 
                     ReturnFlightButton.Visible = false;
                     BookFlightButton.Visible = true;
                 }

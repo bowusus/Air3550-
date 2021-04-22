@@ -242,7 +242,7 @@ namespace ClassLibrary
                 con.Close();
             }
         }
-        public static void AddTransaction(int userID, int flightID, double amount, string paymentMethod)
+        public static void AddTransaction(int userID, int flightID, double amount, string paymentMethod, DateTime departDate)
         {
             // This method goes into the database, specifically the transaction table 
             // and adds the transaction
@@ -252,12 +252,13 @@ namespace ClassLibrary
                 con.Open(); // open the connection
                 SQLiteCommand cmd = new SQLiteCommand();
                 cmd.CommandType = CommandType.Text;
-                cmd.CommandText = "insert into transactionTable values (@userID_fk, @flightID_fk, @amount, @paymentMethod)";
+                cmd.CommandText = "insert into transactionTable values (@userID_fk, @flightID_fk, @amount, @paymentMethod, @departDate)";
                 // use the provided information to add to the transaction table
                 cmd.Parameters.AddWithValue("@userID_fk", userID);
                 cmd.Parameters.AddWithValue("@flightID_fk", flightID);
                 cmd.Parameters.AddWithValue("@amount", amount);
                 cmd.Parameters.AddWithValue("@paymentMethod", paymentMethod);
+                cmd.Parameters.AddWithValue("@departDate", departDate.ToString("yyyy-MM-dd"));
                 cmd.Connection = con;
                 cmd.ExecuteNonQuery();
                 con.Close();
@@ -282,7 +283,7 @@ namespace ClassLibrary
                 con.Close();
             }
         }
-        public static List<(int, int)> GetRouteInfo(string origin, string destination)
+        public static List<(int, int)> GetRouteInfo(string origin, string destination, DateTime departDate, DateTime returnDate)
         {
             // This method goes into the database, specifically the route table, 
             // and retrieves all of the routes with the specified originCode and destinationCode
@@ -292,10 +293,17 @@ namespace ClassLibrary
                 con.Open(); // open the connection
                 SQLiteCommand cmd = new SQLiteCommand();
                 cmd.CommandType = CommandType.Text;
-                cmd.CommandText = "select route.routeID, route.numOfLayovers from route where route.originCode_fk = @originCode_fk and route.destinationCode_fk = @destinationCode_fk";
+                if (returnDate.Date != DateTime.MinValue)
+                {
+                    cmd.CommandText = "select route.routeID, route.numOfLayovers from route where route.originCode_fk = @originCode_fk and route.destinationCode_fk = @destinationCode_fk and date(route.lastFlightDate) not between date(@departDate) and date(@returnDate)";
+                    cmd.Parameters.AddWithValue("@returnDate", returnDate.Date);
+                }
+                else
+                    cmd.CommandText = "select route.routeID, route.numOfLayovers from route where route.originCode_fk = @originCode_fk and route.destinationCode_fk = @destinationCode_fk and date(route.lastFlightDate) != date(@departDate)";
                 // use the specified information to get the routeID and number of Layovers
                 cmd.Parameters.AddWithValue("@originCode_fk", origin);
                 cmd.Parameters.AddWithValue("@destinationCode_fk", destination);
+                cmd.Parameters.AddWithValue("@departDate", departDate.Date);
                 cmd.Connection = con;
                 List<(int, int)> routeIDs = new List<(int, int)>();
                 SQLiteDataReader rdr = cmd.ExecuteReader();
