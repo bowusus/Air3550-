@@ -366,6 +366,46 @@ namespace ClassLibrary
                 startDate = newStartDate;
             }
         }
+        public static List<FlightModel> GetBoardingFlights(int rID, CustomerModel currCustomer)
+        {
+            List<int> flightIDs;
+
+
+            List<FlightModel> flights = new List<FlightModel>();
+            flightIDs = SqliteDataAccess.GetFlightIDsInRoute(rID);
+            // for each of these ids, get the flight information (origin, destination, etc.)
+            // Then get the name of the airports, depart times, arrival times
+            // Then also get the customer's name and userID 
+            // Finally create a FlightModel object with that information and add it to a list of booked flights to be displayed to the customer
+
+            foreach (int id in flightIDs)
+            {
+                List<string> flightsBookedData = SqliteDataAccess.GetFlightData(id);
+                string originName = SqliteDataAccess.GetFlightNames(flightsBookedData[2]);
+                string destinationName = SqliteDataAccess.GetFlightNames(flightsBookedData[3]);
+                string firsname = SqliteDataAccess.GetUserData(currCustomer.userID).ElementAt(2); // get the user's info needed 
+                currCustomer.firstName = firsname;
+
+
+
+
+                DateTime departureDateTime = DateTime.Parse(flightsBookedData[4] + " " + flightsBookedData[5]);
+                DateTime arriveDateTime = departureDateTime.AddHours(Convert.ToDouble(flightsBookedData[7]));
+
+                int depHour = departureDateTime.Hour;
+                int arrHour = arriveDateTime.Hour;
+                // arrival time to be fixed 
+                var duration = arriveDateTime.Subtract(departureDateTime);
+
+
+                FlightModel flight = new FlightModel(int.Parse(flightsBookedData[0]), DateTime.Parse(flightsBookedData[4] + " " + flightsBookedData[5]), duration, originName, destinationName, ref currCustomer);
+
+                flights.Add(flight);
+            }
+            return flights;
+
+        }
+
         public static void CleanAvailableFlights()
         {
             // Get the oldest date in the available flights data base
@@ -379,6 +419,27 @@ namespace ClassLibrary
                 SqliteDataAccess.RemoveOldAvailable(oldestDate.ToShortDateString());
                 DateTime newOldestDate = oldestDate.AddDays(1);
                 oldestDate = newOldestDate;
+            }
+        }
+
+        /*
+         * On start up this method will take any flights from the customer's booked flight list 
+         * and set them as being taken if the date and time is less than the current date and time
+         */
+        public static void SetTakenFlights()
+        {
+            List<int> custIDs = SqliteDataAccess.GetAllCustomerIDs();
+            foreach (int custID in custIDs)
+            {
+                List<int> bookedFIDs = SqliteDataAccess.GetBookedFlightIDs(custID);
+                foreach(int bookedFID in bookedFIDs)
+                {
+                    if(SqliteDataAccess.CheckIfBookedOld(bookedFID))
+                    {
+                        SqliteDataAccess.AddToFlightsTaken(custID, bookedFID);
+                        SqliteDataAccess.RemoveFromFlightsBooked(custID, bookedFID);
+                    }
+                }
             }
         }
 

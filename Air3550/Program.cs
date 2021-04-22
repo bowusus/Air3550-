@@ -22,6 +22,7 @@ namespace Air3550
             // SystemAction.CleanAvailableFlights();
             SqliteDataAccess.CleanRoutes();
             SystemAction.GenerateFlights();
+            SystemAction.SetTakenFlights();
             Application.Run(LogInPage.GetInstance);
         }
     }
