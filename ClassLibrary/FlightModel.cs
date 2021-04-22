@@ -9,7 +9,7 @@ namespace ClassLibrary
 	public class FlightModel
 	{
 		public CustomerModel currCustomer;
-		
+
 
 		// This class file is the FlightModel class. There are 
 		// the attributes associated with the Flight included, 
@@ -28,26 +28,18 @@ namespace ClassLibrary
 		public string lastName { get; set; }
 		public string destinationCode { get; set; }
 		public string destinationName { get; set; }
-		public DateTime arrivaltime { get; set; }
 		public double distance { get; set; }
 		public DateTime departureDateTime { get; set; }
+		public DateTime arrivalDateTime { get; set; }
 		public TimeSpan duration { get; set; }
-
-
-
 		public double totalTime { get; set; }
 		public string planeType { get; set; }
-		public DateTime dateCreated { get; set; }
 		public double cost { get; set; }
-		public int amountOfPoints { get; set; }
 		public int numberOfVacantSeats { get; set; }
 		public double flightIncome { get; set; }
 
-
-
-
 		// customer constructor
-		public FlightModel(int fID, int mID, string origin, string oName, string destination, string dName, int dist, DateTime date, TimeSpan dur, string plane, double baseCost, int points, int seats, double income)
+		public FlightModel(int fID, int mID, string origin, string oName, string destination, string dName, int dist, DateTime departDate, DateTime arriveDate, TimeSpan dur, string plane, double baseCost, int points, int seats, double income)
 		{
 			flightID = fID;
 			masterFlightID = mID;
@@ -56,7 +48,8 @@ namespace ClassLibrary
 			destinationCode = destination;
 			destinationName = dName;
 			distance = dist;
-			departureDateTime = date;
+			departureDateTime = departDate;
+			arrivalDateTime = arriveDate;
 			duration = dur;
 			planeType = plane;
 			cost = baseCost;
@@ -91,6 +84,9 @@ namespace ClassLibrary
 			this.planeType = planeType;
 			this.numberOfVacantSeats = SqliteDataAccess.GetPlaneCapacity(this.planeType);
 		}
+
+		/* This overloading of the flight model is specific for the direct flight the edges of the graph
+		 * Connecting all of the airports (vectors) in the graph */
 		public FlightModel(string originCode, string destinationCode, int distance)
 		{
 			this.originCode = originCode;
@@ -99,19 +95,17 @@ namespace ClassLibrary
 		}
 
 
-		public FlightModel (int fID, DateTime depat, TimeSpan dur,  string origin, string destination, ref CustomerModel customer)
-        {
+		public FlightModel(int fID, DateTime departDate, DateTime arriveDate, TimeSpan dur, string origin, string destination, ref CustomerModel customer)
+		{
 			flightID = fID;
 			originName = origin;
 			destinationName = destination;
-			//arrivaltime = arrival;
 			duration = dur;
-			departureDateTime = depat;
+			departureDateTime = departDate;
+			arrivalDateTime = arriveDate;
 			firstName = customer.firstName;
 			lastName = customer.lastName;
 			userid = customer.userID;
-
-
 		}
 	}
 }

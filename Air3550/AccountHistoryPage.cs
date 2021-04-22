@@ -75,10 +75,10 @@ namespace Air3550
             dataGridView1.Columns.Remove("planeType");
             dataGridView1.Columns.Remove("flightIncome");
             dataGridView1.Columns.Remove("numberOfVacantSeats");
-            dataGridView1.Columns.Remove("amountOfPoints");
+        //    dataGridView1.Columns.Remove("amountOfPoints");
             dataGridView1.Columns.Remove("totalTime");
             dataGridView1.Columns.Remove("distance");
-            dataGridView1.Columns.Remove("dateCreated");
+      //      dataGridView1.Columns.Remove("dateCreated");
             dataGridView1.Columns.Remove("cost");
             dataGridView1.Columns.Remove("numOfPoints");
             dataGridView1.Columns.Remove("durDouble");
@@ -89,8 +89,8 @@ namespace Air3550
             dataGridView1.Columns[2].HeaderText = "Origin Name";
             dataGridView1.Columns[3].HeaderText = "Destination Code";
             dataGridView1.Columns[4].HeaderText = "Destination Name";
-            dataGridView1.Columns[5].HeaderText = "Arriaval Time";
-            dataGridView1.Columns[6].HeaderText = "Departure Date and Time";
+            dataGridView1.Columns[5].HeaderText = "Departure Date";
+            dataGridView1.Columns[6].HeaderText = "Arrival Date and Time";
             dataGridView1.Columns[7].HeaderText = "Duration";
 
         }
@@ -138,10 +138,10 @@ namespace Air3550
 
 
                     var duration = arriveDateTime.Subtract(departureDateTime);
-                    double dur = duration.TotalHours;
 
-                    FlightModel flight = new FlightModel(int.Parse(flightData[0]), int.Parse(flightData[1]), flightData[2], originName, flightData[3], destinationName, int.Parse(flightData[6]), DateTime.Parse(flightData[4] + " " + flightData[5]), duration, flightData[8], currCost, currPoints, int.Parse(flightData[10]), Convert.ToDouble(flightData[11]));
-                  
+                    departureDateTime = arriveDateTime.Subtract(duration);
+                    FlightModel flight = new FlightModel(int.Parse(flightData[0]), int.Parse(flightData[1]), flightData[2], originName, flightData[3], destinationName, int.Parse(flightData[6]), departureDateTime, arriveDateTime, duration, flightData[8], Math.Round(currCost, 2), currPoints, int.Parse(flightData[10]), Convert.ToDouble(flightData[11]));
+
 
                     cancelflight.Add(flight);
                 }
@@ -195,9 +195,9 @@ namespace Air3550
 
 
                     var duration = arriveDateTime.Subtract(departureDateTime);
-                    double dur = duration.TotalHours;
 
-                    FlightModel flight = new FlightModel(int.Parse(flightData[0]), int.Parse(flightData[1]), flightData[2], originName, flightData[3], destinationName, int.Parse(flightData[6]), DateTime.Parse(flightData[4] + " " + flightData[5]), duration, flightData[8], currCost, currPoints, int.Parse(flightData[10]), Convert.ToDouble(flightData[11]));
+                    departureDateTime = arriveDateTime.Subtract(duration);
+                    FlightModel flight = new FlightModel(int.Parse(flightData[0]), int.Parse(flightData[1]), flightData[2], originName, flightData[3], destinationName, int.Parse(flightData[6]), departureDateTime, arriveDateTime, duration, flightData[8], Math.Round(currCost, 2), currPoints, int.Parse(flightData[10]), Convert.ToDouble(flightData[11]));
 
 
                     takenFlights.Add(flight);

@@ -178,10 +178,13 @@ namespace Air3550
             DifferentLocationError.Visible = false;
             EmptyError.Visible = false;
             // if origin, destination, or depart/return date times are invalid, then produce an error label
-            if (delta1.TotalMinutes > 0)
-                ReturnDateError.Visible = true;
-            else if (delta2.TotalMinutes < 0)
-                ReturnBeforeDepartError.Visible = true;
+            if (!OneWayButton.Checked)
+            {
+                if (delta1.TotalMinutes > 0)
+                    ReturnDateError.Visible = true;
+                else if (delta2.TotalMinutes < 0)
+                    ReturnBeforeDepartError.Visible = true;
+            }
             if (DepartComboBox.SelectedValue == ArriveComboBox.SelectedValue)
                 DifferentLocationError.Visible = true;
             else if (DepartComboBox.SelectedIndex == -1 || ArriveComboBox.SelectedIndex == -1)
@@ -210,11 +213,14 @@ namespace Air3550
                 departingRoutes = new List<Route>();
                 departingFilter = new List<Route>();
                 // get all of the available flights for the specified origin and destination
-                departingRoutes = SystemAction.GetAvailableRoutes(DepartComboBox.Text.Substring(0, 3), ArriveComboBox.Text.Substring(0, 3));
+                if (OneWayButton.Checked)
+                    departingRoutes = SystemAction.GetAvailableRoutes(DepartComboBox.Text.Substring(0, 3), ArriveComboBox.Text.Substring(0, 3), DepartDatePicker.Value.Date, DateTime.MinValue);
+                else
+                    departingRoutes = SystemAction.GetAvailableRoutes(DepartComboBox.Text.Substring(0, 3), ArriveComboBox.Text.Substring(0, 3), DepartDatePicker.Value.Date, ReturnDatePicker.Value.Date);
                 // filter those flights
-                departingFilter = SystemAction.FilterRoutes(departingRoutes, DepartDatePicker.Value, DateTime.Now); ;
+                //departingFilter = SystemAction.FilterRoutes(departingRoutes, DepartDatePicker.Value, DateTime.Now); ;
                 // the filtered departing routes list is the datasource for the available flight table
-                AvailableFlightTable.DataSource = departingFilter;
+                AvailableFlightTable.DataSource = departingRoutes;
                 // clear the table's selection so no row is clicked
                 AvailableFlightTable.ClearSelection();
                 FormatGrid();
@@ -243,7 +249,10 @@ namespace Air3550
                 returningFilter = new List<Route>();
                 // get all of the available flights for the specified origin and destination
                 AvailableFlightTable.DataSource = null;
-                returningRoutes = SystemAction.GetAvailableRoutes(DepartComboBox.Text.Substring(0, 3), ArriveComboBox.Text.Substring(0, 3));
+                if (OneWayButton.Checked)
+                    returningRoutes = SystemAction.GetAvailableRoutes(DepartComboBox.Text.Substring(0, 3), ArriveComboBox.Text.Substring(0, 3), DepartDatePicker.Value.Date, DateTime.MinValue);
+                else
+                    returningRoutes = SystemAction.GetAvailableRoutes(DepartComboBox.Text.Substring(0, 3), ArriveComboBox.Text.Substring(0, 3), DepartDatePicker.Value.Date, ReturnDatePicker.Value.Date);
                 // filter those flights
                 returningFilter = SystemAction.FilterRoutes(returningRoutes, ReturnDatePicker.Value, selectedRoutes[0].departTime); ;
                 // the filtered returning routes list is the datasource for the available flight table

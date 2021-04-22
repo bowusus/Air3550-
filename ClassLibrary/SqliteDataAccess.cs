@@ -242,7 +242,7 @@ namespace ClassLibrary
                 con.Close();
             }
         }
-        public static void AddTransaction(int userID, int flightID, double amount, string paymentMethod)
+        public static void AddTransaction(int userID, int flightID, double amount, string paymentMethod, DateTime departDate)
         {
             // This method goes into the database, specifically the transaction table 
             // and adds the transaction
@@ -252,12 +252,13 @@ namespace ClassLibrary
                 con.Open(); // open the connection
                 SQLiteCommand cmd = new SQLiteCommand();
                 cmd.CommandType = CommandType.Text;
-                cmd.CommandText = "insert into transactionTable values (@userID_fk, @flightID_fk, @amount, @paymentMethod)";
+                cmd.CommandText = "insert into transactionTable values (@userID_fk, @flightID_fk, @amount, @paymentMethod, @departDate)";
                 // use the provided information to add to the transaction table
                 cmd.Parameters.AddWithValue("@userID_fk", userID);
                 cmd.Parameters.AddWithValue("@flightID_fk", flightID);
                 cmd.Parameters.AddWithValue("@amount", amount);
                 cmd.Parameters.AddWithValue("@paymentMethod", paymentMethod);
+                cmd.Parameters.AddWithValue("@departDate", departDate.ToString("yyyy-MM-dd"));
                 cmd.Connection = con;
                 cmd.ExecuteNonQuery();
                 con.Close();
@@ -282,7 +283,7 @@ namespace ClassLibrary
                 con.Close();
             }
         }
-        public static List<(int, int)> GetRouteInfo(string origin, string destination)
+        public static List<(int, int)> GetRouteInfo(string origin, string destination, DateTime departDate, DateTime returnDate)
         {
             // This method goes into the database, specifically the route table, 
             // and retrieves all of the routes with the specified originCode and destinationCode
@@ -292,10 +293,17 @@ namespace ClassLibrary
                 con.Open(); // open the connection
                 SQLiteCommand cmd = new SQLiteCommand();
                 cmd.CommandType = CommandType.Text;
-                cmd.CommandText = "select route.routeID, route.numOfLayovers from route where route.originCode_fk = @originCode_fk and route.destinationCode_fk = @destinationCode_fk";
+                if (returnDate.Date != DateTime.MinValue)
+                {
+                    cmd.CommandText = "select route.routeID, route.numOfLayovers from route where route.originCode_fk = @originCode_fk and route.destinationCode_fk = @destinationCode_fk and date(route.lastFlightDate) not between date(@departDate) and date(@returnDate)";
+                    cmd.Parameters.AddWithValue("@returnDate", returnDate.Date);
+                }
+                else
+                    cmd.CommandText = "select route.routeID, route.numOfLayovers from route where route.originCode_fk = @originCode_fk and route.destinationCode_fk = @destinationCode_fk and date(route.lastFlightDate) != date(@departDate)";
                 // use the specified information to get the routeID and number of Layovers
                 cmd.Parameters.AddWithValue("@originCode_fk", origin);
                 cmd.Parameters.AddWithValue("@destinationCode_fk", destination);
+                cmd.Parameters.AddWithValue("@departDate", departDate.Date);
                 cmd.Connection = con;
                 List<(int, int)> routeIDs = new List<(int, int)>();
                 SQLiteDataReader rdr = cmd.ExecuteReader();
@@ -959,6 +967,296 @@ namespace ClassLibrary
                 rdr.Close();
                 con.Close();
                 return routeID;
+            }
+        }
+        public static int GetCompanyFlightCount(string origin, string destination, DateTime from, DateTime to)
+        {
+            // This method goes into the database, specifically the availableFlights table, 
+            // and gets the count of all flights that have the specific information
+            // All dates are before right now since the account summaries are lists of everyone on each flight when it takes off.
+            using (SQLiteConnection con = new SQLiteConnection(LoadConnectionString()))
+            // closes the connection when there is an error or it is done executing
+            {
+                con.Open(); // open the connection
+                SQLiteCommand cmd = new SQLiteCommand();
+                cmd.CommandType = CommandType.Text;
+
+                if (!String.IsNullOrEmpty(origin) && String.IsNullOrEmpty(destination) && from == DateTime.MinValue && to == DateTime.MinValue)
+                {
+                    // if the origin is the only filter provided, then find  the count of flights with that originCode
+                    cmd.CommandText = "select count(*) from availableFlight where availableFlight.originCode_fk = @originCode_fk and datetime(availableFlight.departureDate + availableFlight.departureTime) <= @toDate";
+                    cmd.Parameters.AddWithValue("@originCode_fk", origin);
+                    cmd.Parameters.AddWithValue("@toDate", DateTime.Now);
+                }
+                else if (String.IsNullOrEmpty(origin) && !String.IsNullOrEmpty(destination) && from == DateTime.MinValue && to == DateTime.MinValue)
+                {
+                    // if the destination is the only filter provided, then find  the count of flights with that destinationCode
+                    cmd.CommandText = "select count(*) from availableFlight where availableFlight.destinationCode_fk = @destinationCode_fk and datetime(availableFlight.departureDate + availableFlight.departureTime) <= @toDate";
+                    cmd.Parameters.AddWithValue("@destinationCode_fk", destination);
+                    cmd.Parameters.AddWithValue("@toDate", DateTime.Now);
+                }
+                else if (String.IsNullOrEmpty(origin) && String.IsNullOrEmpty(destination) && from != DateTime.MinValue && to == DateTime.MinValue)
+                {
+                    // if the from date is the only filter provided, then find  the count of flights since that date
+                    cmd.CommandText = "select count(*) from availableFlight where date(availableFlight.departureDate) between @fromDate and @toDate";
+                    cmd.Parameters.AddWithValue("@fromDate", from);
+                    cmd.Parameters.AddWithValue("@toDate", DateTime.Now);
+                }
+                else if (String.IsNullOrEmpty(origin) && String.IsNullOrEmpty(destination) && from == DateTime.MinValue && to != DateTime.MinValue)
+                {
+                    // if the to date is the only filter provided, then find  the count of flights up until that date
+                    cmd.CommandText = "select count(*) from availableFlight where date(availableFlight.departureDate) <= @toDate";
+                    cmd.Parameters.AddWithValue("@toDate", to);
+                }
+                else if (!String.IsNullOrEmpty(origin) && !String.IsNullOrEmpty(destination) && from == DateTime.MinValue && to == DateTime.MinValue)
+                {
+                    // if the origin and destination are the filters provided, then find  the count of flights with that originCode and destinationCode
+                    cmd.CommandText = "select count(*) from availableFlight where availableFlight.originCode_fk = @originCode_fk and availableFlight.destinationCode_fk = @destinationCode_fk and datetime(availableFlight.departureDate + availableFlight.departureTime) <= @toDate";
+                    cmd.Parameters.AddWithValue("@originCode_fk", origin);
+                    cmd.Parameters.AddWithValue("@destinationCode_fk", destination);
+                    cmd.Parameters.AddWithValue("@toDate", DateTime.Now);
+                }
+                else if (!String.IsNullOrEmpty(origin) && String.IsNullOrEmpty(destination) && from != DateTime.MinValue && to == DateTime.MinValue)
+                {
+                    // if the origin and from date are the filters provided, then find  the count of flights with that originCode and all flights since that date
+                    cmd.CommandText = "select count(*) from availableFlight where availableFlight.originCode_fk = @originCode_fk and date(availableFlight.departureDate) between @fromDate and @toDate";
+                    cmd.Parameters.AddWithValue("@originCode_fk", origin);
+                    cmd.Parameters.AddWithValue("@fromDate", from);
+                    cmd.Parameters.AddWithValue("@toDate", DateTime.Now);
+                }
+                else if (!String.IsNullOrEmpty(origin) && String.IsNullOrEmpty(destination) && from == DateTime.MinValue && to != DateTime.MinValue)
+                {
+                    // if the origin and to date are the filters provided, then find  the count of flights with that originCode and all flights up until that date
+                    cmd.CommandText = "select count(*) from availableFlight where availableFlight.originCode_fk = @originCode_fk and date(availableFlight.departureDate) <= @toDate";
+                    cmd.Parameters.AddWithValue("@originCode_fk", origin);
+                    cmd.Parameters.AddWithValue("@toDate", to);
+                }
+                else if (String.IsNullOrEmpty(origin) && !String.IsNullOrEmpty(destination) && from != DateTime.MinValue && to == DateTime.MinValue)
+                {
+                    // if the destination and from date are the filters provided, then find  the count of flights with that destinationCode and all flights since that date
+                    cmd.CommandText = "select count(*) from availableFlight where availableFlight.destinationCode_fk = @destinationCode_fk and date(availableFlight.departureDate) between @fromDate and @toDate";
+                    cmd.Parameters.AddWithValue("@destinationCode_fk", origin);
+                    cmd.Parameters.AddWithValue("@fromDate", from);
+                    cmd.Parameters.AddWithValue("@toDate", DateTime.Now);
+                }
+                else if (String.IsNullOrEmpty(origin) && !String.IsNullOrEmpty(destination) && from == DateTime.MinValue && to != DateTime.MinValue)
+                {
+                    // if the destination and to date are the filters provided, then find  the count of flights with that destinationCode and all flights up until that date
+                    cmd.CommandText = "select count(*) from availableFlight where availableFlight.destinationCode_fk = @destinationCode_fk and date(availableFlight.departureDate) <= @toDate";
+                    cmd.Parameters.AddWithValue("@destinationCode_fk", origin);
+                    cmd.Parameters.AddWithValue("@toDate", to);
+                }
+                else if (String.IsNullOrEmpty(origin) && String.IsNullOrEmpty(destination) && from != DateTime.MinValue && to != DateTime.MinValue)
+                {
+                    // if the from and to dates are the filters provided, then find  the count of flights between those two dates
+                    cmd.CommandText = "select count(*) from availableFlight where date(availableFlight.departureDate) between @fromDate and @toDate";
+                    cmd.Parameters.AddWithValue("@fromDate", from);
+                    cmd.Parameters.AddWithValue("@toDate", to);
+                }
+                else if (!String.IsNullOrEmpty(origin) && !String.IsNullOrEmpty(destination) && from != DateTime.MinValue && to == DateTime.MinValue)
+                {
+                    // if the origin, destination, and from date are the filters provided, then find  the count of flights with that originCode and destinationCode and all flights since that date
+                    cmd.CommandText = "select count(*) from availableFlight where availableFlight.originCode_fk = @originCode_fk and availableFlight.destinationCode_fk = @destinationCode_fk  and date(availableFlight.departureDate) between @fromDate and @toDate";
+                    cmd.Parameters.AddWithValue("@originCode_fk", origin);
+                    cmd.Parameters.AddWithValue("@destinationCode_fk", destination);
+                    cmd.Parameters.AddWithValue("@fromDate", from);
+                    cmd.Parameters.AddWithValue("@toDate", DateTime.Now);
+                }
+                else if (!String.IsNullOrEmpty(origin) && !String.IsNullOrEmpty(destination) && from == DateTime.MinValue && to != DateTime.MinValue)
+                {
+                    // if the origin, destination, and to date are the filters provided, then find  the count of flights with that originCode and destinationCode and all flights up until that date
+                    cmd.CommandText = "select count(*) from availableFlight where availableFlight.originCode_fk = @originCode_fk and availableFlight.destinationCode_fk = @destinationCode_fk  and date(availableFlight.departureDate) <= @toDate";
+                    cmd.Parameters.AddWithValue("@originCode_fk", origin);
+                    cmd.Parameters.AddWithValue("@destinationCode_fk", destination);
+                    cmd.Parameters.AddWithValue("@toDate", to);
+                }
+                else if (!String.IsNullOrEmpty(origin) && String.IsNullOrEmpty(destination) && from != DateTime.MinValue && to != DateTime.MinValue)
+                {
+                    // if the origin, from, and to date are the filters provided, then find  the count of flights with that originCode and all flights between those two dates
+                    cmd.CommandText = "select count(*) from availableFlight where availableFlight.originCode_fk = @originCode_fk and date(availableFlight.departureDate) between @fromDate and @toDate";
+                    cmd.Parameters.AddWithValue("@originCode_fk", origin);
+                    cmd.Parameters.AddWithValue("@fromDate", from);
+                    cmd.Parameters.AddWithValue("@toDate", to);
+                }
+                else if (String.IsNullOrEmpty(origin) && !String.IsNullOrEmpty(destination) && from != DateTime.MinValue && to != DateTime.MinValue)
+                {
+                    // if the destination, from, and to date are the filters provided, then find  the count of flights with that destinationCode and all flights between those two dates
+                    cmd.CommandText = "select count(*) from availableFlight where availableFlight.destinationCode_fk = @destinationCode_fk and date(availableFlight.departureDate) between @fromDate and @toDate";
+                    cmd.Parameters.AddWithValue("@destinationCode_fk", destination);
+                    cmd.Parameters.AddWithValue("@fromDate", from);
+                    cmd.Parameters.AddWithValue("@toDate", to);
+                }
+                else if (!String.IsNullOrEmpty(origin) && !String.IsNullOrEmpty(destination) && from != DateTime.MinValue && to != DateTime.MinValue)
+                {
+                    // if everything is provided, then find  the count of flights with that originCode and destinationCode and all flights between those two dates
+                    cmd.CommandText = "select count(*) from availableFlight where availableFlight.originCode_fk = @originCode_fk and availableFlight.destinationCode_fk = @destinationCode_fk and date(availableFlight.departureDate) between @fromDate and @toDate";
+                    cmd.Parameters.AddWithValue("@originCode_fk", origin);
+                    cmd.Parameters.AddWithValue("@destinationCode_fk", destination);
+                    cmd.Parameters.AddWithValue("@fromDate", from);
+                    cmd.Parameters.AddWithValue("@toDate", to);
+                }
+                else
+                {
+                    // if nothing is provide, just find the count of flights in the availableFlight table before today
+                    cmd.CommandText = "select count(*) from availableFlight where date(availableFlight.departureDate) <= @toDate";
+                    cmd.Parameters.AddWithValue("@toDate", DateTime.Now);
+                }
+                cmd.Connection = con;
+                SQLiteDataReader rdr = cmd.ExecuteReader();
+                int flightCount = 0; // used to return the company flight count based on filters
+
+                while (rdr.Read())
+                {
+                    flightCount = rdr.GetInt32(0);
+                }
+                rdr.Close();
+                con.Close();
+                return flightCount; // return company flight count
+            }
+        }
+        public static double GetCompanyIncome(string origin, string destination, DateTime from, DateTime to)
+        {
+            // This method goes into the database, specifically the availableFlights table, 
+            // and gets the count of all flights that have the specific information
+            // All dates are before right now since the account summaries are lists of everyone on each flight when it takes off.
+            using (SQLiteConnection con = new SQLiteConnection(LoadConnectionString()))
+            // closes the connection when there is an error or it is done executing
+            {
+                con.Open(); // open the connection
+                SQLiteCommand cmd = new SQLiteCommand();
+                cmd.CommandType = CommandType.Text;
+
+                if (!String.IsNullOrEmpty(origin) && String.IsNullOrEmpty(destination) && from == DateTime.MinValue && to == DateTime.MinValue)
+                {
+                    // if the origin is the only filter provided, then find the income with that originCode
+                    cmd.CommandText = "select availableFlight.flightIncome from availableFlight where availableFlight.originCode_fk = @originCode_fk and datetime(availableFlight.departureDate + availableFlight.departureTime) <= @toDate";
+                    cmd.Parameters.AddWithValue("@originCode_fk", origin);
+                    cmd.Parameters.AddWithValue("@toDate", DateTime.Now);
+                }
+                else if (String.IsNullOrEmpty(origin) && !String.IsNullOrEmpty(destination) && from == DateTime.MinValue && to == DateTime.MinValue)
+                {
+                    // if the destination is the only filter provided, then find the income with that destinationCode
+                    cmd.CommandText = "select availableFlight.flightIncome from availableFlight where availableFlight.destinationCode_fk = @destinationCode_fk and datetime(availableFlight.departureDate + availableFlight.departureTime) <= @toDate";
+                    cmd.Parameters.AddWithValue("@destinationCode_fk", destination);
+                    cmd.Parameters.AddWithValue("@toDate", DateTime.Now);
+                }
+                else if (String.IsNullOrEmpty(origin) && String.IsNullOrEmpty(destination) && from != DateTime.MinValue && to == DateTime.MinValue)
+                {
+                    // if the from date is the only filter provided, then find the income since that date
+                    cmd.CommandText = "select availableFlight.flightIncome from availableFlight where date(availableFlight.departureDate) between @fromDate and @toDate";
+                    cmd.Parameters.AddWithValue("@fromDate", from);
+                    cmd.Parameters.AddWithValue("@toDate", DateTime.Now);
+                }
+                else if (String.IsNullOrEmpty(origin) && String.IsNullOrEmpty(destination) && from == DateTime.MinValue && to != DateTime.MinValue)
+                {
+                    // if the to date is the only filter provided, then find the income up until that date
+                    cmd.CommandText = "select availableFlight.flightIncome from availableFlight where date(availableFlight.departureDate) <= @toDate";
+                    cmd.Parameters.AddWithValue("@toDate", to);
+                }
+                else if (!String.IsNullOrEmpty(origin) && !String.IsNullOrEmpty(destination) && from == DateTime.MinValue && to == DateTime.MinValue)
+                {
+                    // if the origin and destination are the filters provided, then find the income with that originCode and destinationCode
+                    cmd.CommandText = "select availableFlight.flightIncome from availableFlight where availableFlight.originCode_fk = @originCode_fk and availableFlight.destinationCode_fk = @destinationCode_fk and datetime(availableFlight.departureDate + availableFlight.departureTime) <= @toDate";
+                    cmd.Parameters.AddWithValue("@originCode_fk", origin);
+                    cmd.Parameters.AddWithValue("@destinationCode_fk", destination);
+                    cmd.Parameters.AddWithValue("@toDate", DateTime.Now);
+                }
+                else if (!String.IsNullOrEmpty(origin) && String.IsNullOrEmpty(destination) && from != DateTime.MinValue && to == DateTime.MinValue)
+                {
+                    // if the origin and from date are the filters provided, then find the income with that originCode and all flights since that date
+                    cmd.CommandText = "select availableFlight.flightIncome from availableFlight where availableFlight.originCode_fk = @originCode_fk and date(availableFlight.departureDate) between @fromDate and @toDate";
+                    cmd.Parameters.AddWithValue("@originCode_fk", origin);
+                    cmd.Parameters.AddWithValue("@fromDate", from);
+                    cmd.Parameters.AddWithValue("@toDate", DateTime.Now);
+                }
+                else if (!String.IsNullOrEmpty(origin) && String.IsNullOrEmpty(destination) && from == DateTime.MinValue && to != DateTime.MinValue)
+                {
+                    // if the origin and to date are the filters provided, then find the income with that originCode and all flights up until that date
+                    cmd.CommandText = "select availableFlight.flightIncome from availableFlight where availableFlight.originCode_fk = @originCode_fk and date(availableFlight.departureDate) <= @toDate";
+                    cmd.Parameters.AddWithValue("@originCode_fk", origin);
+                    cmd.Parameters.AddWithValue("@toDate", to);
+                }
+                else if (String.IsNullOrEmpty(origin) && !String.IsNullOrEmpty(destination) && from != DateTime.MinValue && to == DateTime.MinValue)
+                {
+                    // if the destination and from date are the filters provided, then find the income with that destinationCode and all flights since that date
+                    cmd.CommandText = "select availableFlight.flightIncome from availableFlight where availableFlight.destinationCode_fk = @destinationCode_fk and date(availableFlight.departureDate) between @fromDate and @toDate";
+                    cmd.Parameters.AddWithValue("@destinationCode_fk", origin);
+                    cmd.Parameters.AddWithValue("@fromDate", from);
+                    cmd.Parameters.AddWithValue("@toDate", DateTime.Now);
+                }
+                else if (String.IsNullOrEmpty(origin) && !String.IsNullOrEmpty(destination) && from == DateTime.MinValue && to != DateTime.MinValue)
+                {
+                    // if the destination and to date are the filters provided, then find the income with that destinationCode and all flights up until that date
+                    cmd.CommandText = "select availableFlight.flightIncome from availableFlight where availableFlight.destinationCode_fk = @destinationCode_fk and date(availableFlight.departureDate) <= @toDate";
+                    cmd.Parameters.AddWithValue("@destinationCode_fk", origin);
+                    cmd.Parameters.AddWithValue("@toDate", to);
+                }
+                else if (String.IsNullOrEmpty(origin) && String.IsNullOrEmpty(destination) && from != DateTime.MinValue && to != DateTime.MinValue)
+                {
+                    // if the from and to dates are the filters provided, then find the income between those two dates
+                    cmd.CommandText = "select availableFlight.flightIncome from availableFlight where date(availableFlight.departureDate) between @fromDate and @toDate";
+                    cmd.Parameters.AddWithValue("@fromDate", from);
+                    cmd.Parameters.AddWithValue("@toDate", to);
+                }
+                else if (!String.IsNullOrEmpty(origin) && !String.IsNullOrEmpty(destination) && from != DateTime.MinValue && to == DateTime.MinValue)
+                {
+                    // if the origin, destination, and from date are the filters provided, then find the income with that originCode and destinationCode and all flights since that date
+                    cmd.CommandText = "select availableFlight.flightIncome from availableFlight where availableFlight.originCode_fk = @originCode_fk and availableFlight.destinationCode_fk = @destinationCode_fk  and date(availableFlight.departureDate) between @fromDate and @toDate";
+                    cmd.Parameters.AddWithValue("@originCode_fk", origin);
+                    cmd.Parameters.AddWithValue("@destinationCode_fk", destination);
+                    cmd.Parameters.AddWithValue("@fromDate", from);
+                    cmd.Parameters.AddWithValue("@toDate", DateTime.Now);
+                }
+                else if (!String.IsNullOrEmpty(origin) && !String.IsNullOrEmpty(destination) && from == DateTime.MinValue && to != DateTime.MinValue)
+                {
+                    // if the origin, destination, and to date are the filters provided, then find the income with that originCode and destinationCode and all flights up until that date
+                    cmd.CommandText = "select availableFlight.flightIncome from availableFlight where availableFlight.originCode_fk = @originCode_fk and availableFlight.destinationCode_fk = @destinationCode_fk  and date(availableFlight.departureDate) <= @toDate";
+                    cmd.Parameters.AddWithValue("@originCode_fk", origin);
+                    cmd.Parameters.AddWithValue("@destinationCode_fk", destination);
+                    cmd.Parameters.AddWithValue("@toDate", to);
+                }
+                else if (!String.IsNullOrEmpty(origin) && String.IsNullOrEmpty(destination) && from != DateTime.MinValue && to != DateTime.MinValue)
+                {
+                    // if the origin, from, and to date are the filters provided, then find the income with that originCode and all flights between those two dates
+                    cmd.CommandText = "select availableFlight.flightIncome from availableFlight where availableFlight.originCode_fk = @originCode_fk and date(availableFlight.departureDate) between @fromDate and @toDate";
+                    cmd.Parameters.AddWithValue("@originCode_fk", origin);
+                    cmd.Parameters.AddWithValue("@fromDate", from);
+                    cmd.Parameters.AddWithValue("@toDate", to);
+                }
+                else if (String.IsNullOrEmpty(origin) && !String.IsNullOrEmpty(destination) && from != DateTime.MinValue && to != DateTime.MinValue)
+                {
+                    // if the destination, from, and to date are the filters provided, then find the income with that destinationCode and all flights between those two dates
+                    cmd.CommandText = "select availableFlight.flightIncome from availableFlight where availableFlight.destinationCode_fk = @destinationCode_fk and date(availableFlight.departureDate) between @fromDate and @toDate";
+                    cmd.Parameters.AddWithValue("@destinationCode_fk", destination);
+                    cmd.Parameters.AddWithValue("@fromDate", from);
+                    cmd.Parameters.AddWithValue("@toDate", to);
+                }
+                else if (!String.IsNullOrEmpty(origin) && !String.IsNullOrEmpty(destination) && from != DateTime.MinValue && to != DateTime.MinValue)
+                {
+                    // if everything is provided, then find the income with that originCode and destinationCode and all flights between those two dates
+                    cmd.CommandText = "select availableFlight.flightIncome from availableFlight where availableFlight.originCode_fk = @originCode_fk and availableFlight.destinationCode_fk = @destinationCode_fk and date(availableFlight.departureDate) between @fromDate and @toDate";
+                    cmd.Parameters.AddWithValue("@originCode_fk", origin);
+                    cmd.Parameters.AddWithValue("@destinationCode_fk", destination);
+                    cmd.Parameters.AddWithValue("@fromDate", from);
+                    cmd.Parameters.AddWithValue("@toDate", to);
+                }
+                else
+                {
+                    // if nothing is provide, just find the income for all flights before today
+                    cmd.CommandText = "select availableFlight.flightIncome from availableFlight where date(availableFlight.departureDate) <= @toDate";
+                    cmd.Parameters.AddWithValue("@toDate", DateTime.Now);
+                }
+                cmd.Connection = con;
+                SQLiteDataReader rdr = cmd.ExecuteReader();
+                double income = 0; // used to return the company income count based on filters
+
+                while (rdr.Read())
+                {
+                    income += rdr.GetDouble(0);
+                }
+                rdr.Close();
+                con.Close();
+                return income; // return company income
             }
         }
         public static List<Airport> GetAirports()
@@ -1649,6 +1947,26 @@ namespace ClassLibrary
                 cmd.Connection = con;
                 cmd.ExecuteNonQuery();
                 con.Close();
+            }
+        }
+
+        public static DataTable GetRouteDT()
+        {
+            using (SQLiteConnection con = new SQLiteConnection(LoadConnectionString()))
+            // closes the connection when there is an error or it is done executing
+            {
+                con.Open(); // open the connection
+                SQLiteCommand cmd = new SQLiteCommand();
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = "SELECT * FROM route";
+                cmd.Connection = con;
+                SQLiteDataReader rdr = cmd.ExecuteReader();
+
+                DataTable dt = new DataTable();
+                dt.Load(rdr);
+                rdr.Close();
+                con.Close();
+                return dt;
             }
         }
 

@@ -8,7 +8,7 @@ namespace ClassLibrary
 {
     public class Airport
     {
-        string code, name, timezone;
+        string code, name;
 
         public Airport(string code, string name)
         {

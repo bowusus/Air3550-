@@ -106,7 +106,6 @@ namespace Air3550
             // This method renames and removes some columns that do not get updated when the data in the datagridview gets updated
             // Remove some information that the employees need but not the customer
             dataGridView1.Columns.Remove("planeType");
-            dataGridView1.Columns.Remove("dateCreated");
             dataGridView1.Columns.Remove("numberOfVacantSeats");
             dataGridView1.Columns.Remove("flightIncome");
             dataGridView1.Columns.Remove("masterFlightID");
@@ -116,7 +115,6 @@ namespace Air3550
             dataGridView1.Columns.Remove("totalTime");
             dataGridView1.Columns.Remove("cost");
             dataGridView1.Columns.Remove("numOfPoints");
-            dataGridView1.Columns.Remove("amountOfPoints");
             dataGridView1.Columns.Remove("durDouble");
 
 
@@ -206,6 +204,7 @@ namespace Air3550
                 FirstNameText.Text = row.Cells[2].Value.ToString();
                 UserIDText.Text = row.Cells[3].Value.ToString();
                 DesText.Text = row.Cells[5].Value.ToString();
+                ArrivalText.Text = row.Cells[6].Value.ToString();
                 DepText.Text = row.Cells[7].Value.ToString();
                 LastNameText.Text = row.Cells[4].Value.ToString();
 
