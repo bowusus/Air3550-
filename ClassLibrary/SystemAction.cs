@@ -142,7 +142,7 @@ namespace ClassLibrary
                 foreach (int fID in flightIDs)
                 {
                     List<string> flightsBookedData = SqliteDataAccess.GetFlightData(fID);
-
+                    
                     string originName = SqliteDataAccess.GetFlightNames(flightsBookedData[2]);
                     string destinationName = SqliteDataAccess.GetFlightNames(flightsBookedData[3]);
 
