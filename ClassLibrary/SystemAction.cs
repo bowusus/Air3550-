@@ -371,7 +371,6 @@ namespace ClassLibrary
 
         }
 
-
         public static void CleanAvailableFlights()
         {
             // Get the oldest date in the available flights data base
@@ -385,6 +384,27 @@ namespace ClassLibrary
                 SqliteDataAccess.RemoveOldAvailable(oldestDate.ToShortDateString());
                 DateTime newOldestDate = oldestDate.AddDays(1);
                 oldestDate = newOldestDate;
+            }
+        }
+
+        /*
+         * On start up this method will take any flights from the customer's booked flight list 
+         * and set them as being taken if the date and time is less than the current date and time
+         */
+        public static void SetTakenFlights()
+        {
+            List<int> custIDs = SqliteDataAccess.GetAllCustomerIDs();
+            foreach (int custID in custIDs)
+            {
+                List<int> bookedFIDs = SqliteDataAccess.GetBookedFlightIDs(custID);
+                foreach(int bookedFID in bookedFIDs)
+                {
+                    if(SqliteDataAccess.CheckIfBookedOld(bookedFID))
+                    {
+                        SqliteDataAccess.AddToFlightsTaken(custID, bookedFID);
+                        SqliteDataAccess.RemoveFromFlightsBooked(custID, bookedFID);
+                    }
+                }
             }
         }
 

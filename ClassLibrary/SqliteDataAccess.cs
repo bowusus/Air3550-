@@ -1615,6 +1615,7 @@ namespace ClassLibrary
                 while (rdr.Read()) routeIDs.Add(rdr.GetInt32(0));
                 cmd.Connection = con;
                 cmd.ExecuteNonQuery();
+                rdr.Close();
                 con.Close();
                 return routeIDs;
             }
@@ -1677,6 +1678,108 @@ namespace ClassLibrary
                 rdr.Close();
                 con.Close();
                 return dt;
+            }
+        }
+
+        /*
+         * This method will get all customer ids in the database and return them as a list
+         * 
+         */
+        public static List<int> GetAllCustomerIDs()
+        {
+            List<int> custIDs = new List<int>();
+
+            using (SQLiteConnection con = new SQLiteConnection(LoadConnectionString()))
+            // closes the connection when there is an error or it is done executing
+            {
+                con.Open(); // open the connection
+                SQLiteCommand cmd = new SQLiteCommand();
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = "SELECT * FROM customer";
+                cmd.Connection = con;
+                SQLiteDataReader rdr = cmd.ExecuteReader();
+
+                while (rdr.Read())
+                {
+                    custIDs.Add(rdr.GetInt32(0));
+                }
+                rdr.Close();
+                con.Close();
+            }
+            return custIDs;
+        }
+
+        /* Check and see if the flight for the flight ID passed in is older than the current date and time */
+        public static Boolean CheckIfBookedOld(int flightID)
+        {
+            using (SQLiteConnection con = new SQLiteConnection(LoadConnectionString()))
+            // closes the connection when there is an error or it is done executing
+            {
+                con.Open(); // open the connection
+                SQLiteCommand cmd = new SQLiteCommand();
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = "SELECT departureDate, departureTime FROM availableFlight WHERE flightID = @flightID";
+                cmd.Connection = con;
+                cmd.Parameters.AddWithValue("@flightID", flightID);
+                SQLiteDataReader rdr = cmd.ExecuteReader();
+
+                while (rdr.Read())
+                {
+                    // If flight is older than current date and time return true
+                    DateTime departureDate = Convert.ToDateTime(rdr.GetString(0)).Date + Convert.ToDateTime(rdr.GetString(1)).TimeOfDay;
+                    if (DateTime.Compare(departureDate, DateTime.Now) < 0)
+                    {
+                        rdr.Close();
+                        con.Close();
+                        return true;
+                    }
+                }
+                rdr.Close();
+                con.Close();
+                return false;
+            }
+        }
+
+        /* This method adds a flight to the flight taken table in the database based on the passed in
+         * customer id and flight id
+         */
+        public static void AddToFlightsTaken(int userID, int flightID)
+        {
+            // This method goes into the database, specifically the flightsBooked table, 
+            // and adds the booked flight
+            using (SQLiteConnection con = new SQLiteConnection(LoadConnectionString()))
+            // closes the connection when there is an error or it is done executing
+            {
+                con.Open(); // open the connection
+                SQLiteCommand cmd = new SQLiteCommand();
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = "INSERT INTO flightsTaken values (@userID_fk, @flightID_fk)";
+                // use the provided information to add to the flightsBooked table
+                cmd.Parameters.AddWithValue("@userID_fk", userID);
+                cmd.Parameters.AddWithValue("@flightID_fk", flightID);
+                cmd.Connection = con;
+                cmd.ExecuteNonQuery();
+                con.Close();
+            }
+        }
+
+        public static void RemoveFromFlightsBooked(int userID, int flightID)
+        {
+            // This method goes into the database, specifically the flightsBooked table, 
+            // and adds the booked flight
+            using (SQLiteConnection con = new SQLiteConnection(LoadConnectionString()))
+            // closes the connection when there is an error or it is done executing
+            {
+                con.Open(); // open the connection
+                SQLiteCommand cmd = new SQLiteCommand();
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = "DELETE FROM flightsBooked WHERE userID_fk = @userID_fk AND flightID_fk = @flightID_fk";
+                // use the provided information to add to the flightsBooked table
+                cmd.Parameters.AddWithValue("@userID_fk", userID);
+                cmd.Parameters.AddWithValue("@flightID_fk", flightID);
+                cmd.Connection = con;
+                cmd.ExecuteNonQuery();
+                con.Close();
             }
         }
 
