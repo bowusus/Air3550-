@@ -75,12 +75,10 @@ namespace Air3550
             dataGridView1.Columns.Remove("planeType");
             dataGridView1.Columns.Remove("flightIncome");
             dataGridView1.Columns.Remove("numberOfVacantSeats");
-            dataGridView1.Columns.Remove("amountOfPoints");
+            dataGridView1.Columns.Remove("numOfPoints");
             dataGridView1.Columns.Remove("totalTime");
             dataGridView1.Columns.Remove("distance");
-            dataGridView1.Columns.Remove("dateCreated");
             dataGridView1.Columns.Remove("cost");
-            dataGridView1.Columns.Remove("numOfPoints");
             dataGridView1.Columns.Remove("durDouble");
 
             //// Fix and rename header text
@@ -92,15 +90,13 @@ namespace Air3550
             dataGridView1.Columns[5].HeaderText = "Arriaval Time";
             dataGridView1.Columns[6].HeaderText = "Departure Date and Time";
             dataGridView1.Columns[7].HeaderText = "Duration";
-
+            dataGridView1.ClearSelection();
         }
 
         private void FlightsCancelledButton_Click(object sender, EventArgs e)
         {
             flightList.Rows.Clear(); // clears the data gridview
             cancelflight = new List<FlightModel>();
-            double cost = 0;
-            int points = 0;
             int i = 0;
             List<int> flightID = SqliteDataAccess.GetCancelledFlightIDs(currCustomer.userID);
             if (flightID.Count != 0)
@@ -114,35 +110,28 @@ namespace Air3550
                     // string firsname = SqliteDataAccess.GetUserData(currCustomer.userID).ElementAt(2);
                     //  currCustomer.firstName = firsname;
 
-                    DateTime departureDateTime = DateTime.Parse(flightData[5]);
+                    DateTime departureDateTime = DateTime.Parse(flightData[4] + " " + flightData[5]);
                     DateTime arriveDateTime = departureDateTime.AddHours(Convert.ToDouble(flightData[7]));
 
                     int depHour = departureDateTime.Hour;
                     int arrHour = arriveDateTime.Hour;
 
-
-                    double currCost = SystemAction.CalculateCost(depHour, arrHour, double.Parse(flightData[9]));
-                    cost += currCost;
+                    double currCost;
                     if (i == 0)
-                    {
-                        currCost += 50;
-                        cost += 50;
-                    }
+                        currCost = SystemAction.CalculateCost(depHour, arrHour, Convert.ToDouble(flightData[9]) + 50);
                     else
-                    {
-                        currCost += 8;
-                        cost += 8;
-                    }
+                        currCost = SystemAction.CalculateCost(depHour, arrHour, Convert.ToDouble(flightData[9]) + 8);
                     int currPoints = Convert.ToInt32(currCost * 100);
-                    points += currPoints;
-
 
                     var duration = arriveDateTime.Subtract(departureDateTime);
-                    double dur = duration.TotalHours;
+                    duration = new TimeSpan(duration.Ticks / TimeSpan.TicksPerSecond * TimeSpan.TicksPerSecond);
+
+                    departureDateTime = arriveDateTime.Subtract(duration);
 
                     FlightModel flight = new FlightModel(int.Parse(flightData[0]), int.Parse(flightData[1]), flightData[2], originName, flightData[3], destinationName, int.Parse(flightData[6]), departureDateTime, arriveDateTime, duration, flightData[8], Math.Round(currCost, 2), currPoints, int.Parse(flightData[10]), Convert.ToDouble(flightData[11]));
 
                     cancelflight.Add(flight);
+                    i += 1;
                 }
 
             }
@@ -155,8 +144,6 @@ namespace Air3550
         {
 
             flightList.Rows.Clear(); // clears the data gridview
-            double cost = 0;
-            int points = 0;
             int i = 0;
             takenFlights = new List<FlightModel>();
 
@@ -169,38 +156,29 @@ namespace Air3550
                     List<string> flightData = SqliteDataAccess.GetFlightData(fID);
                     string originName = SqliteDataAccess.GetFlightNames(flightData[2]);
                     string destinationName = SqliteDataAccess.GetFlightNames(flightData[3]);
-                    DateTime departureDateTime = DateTime.Parse(flightData[5]);
+
+                    DateTime departureDateTime = DateTime.Parse(flightData[4] + " " + flightData[5]);
                     DateTime arriveDateTime = departureDateTime.AddHours(Convert.ToDouble(flightData[7]));
 
                     int depHour = departureDateTime.Hour;
                     int arrHour = arriveDateTime.Hour;
 
-
-
-                    double currCost = SystemAction.CalculateCost(depHour, arrHour, double.Parse(flightData[9]));
-                    cost += currCost;
+                    double currCost;
                     if (i == 0)
-                    {
-                        currCost += 50;
-                        cost += 50;
-                    }
+                        currCost = SystemAction.CalculateCost(depHour, arrHour, Convert.ToDouble(flightData[9]) + 50);
                     else
-                    {
-                        currCost += 8;
-                        cost += 8;
-                    }
+                        currCost = SystemAction.CalculateCost(depHour, arrHour, Convert.ToDouble(flightData[9]) + 8);
                     int currPoints = Convert.ToInt32(currCost * 100);
-                    points += currPoints;
-
 
                     var duration = arriveDateTime.Subtract(departureDateTime);
-                    double dur = duration.TotalHours;
+                    duration = new TimeSpan(duration.Ticks / TimeSpan.TicksPerSecond * TimeSpan.TicksPerSecond);
+
+                    departureDateTime = arriveDateTime.Subtract(duration);
 
                     FlightModel flight = new FlightModel(int.Parse(flightData[0]), int.Parse(flightData[1]), flightData[2], originName, flightData[3], destinationName, int.Parse(flightData[6]), departureDateTime, arriveDateTime, duration, flightData[8], Math.Round(currCost, 2), currPoints, int.Parse(flightData[10]), Convert.ToDouble(flightData[11]));
 
-
                     takenFlights.Add(flight);
-
+                    i += 1;
                 }
             }
             dataGridView1.DataSource = takenFlights;
