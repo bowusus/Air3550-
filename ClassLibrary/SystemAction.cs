@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ClassLibrary
 {
-    public class SystemAction 
+    public class SystemAction
     {
         // This class file will include any methods that the system does, 
         // so there is no connection to the database and no specific class 
@@ -294,8 +294,8 @@ namespace ClassLibrary
                     decimal duration = (decimal)(masterFlight.distance / 500.0) + .5M + (40 / 60.0M);
                     decimal cost = (decimal)(masterFlight.distance * .12);
                     FlightModel newAvaFlight = new FlightModel(currentFlightID, masterFlight.flightID, masterFlight.originCode,
-                                                                masterFlight.destinationCode, (int)masterFlight.distance, 
-                                                                newDepartureDateTime, (double)duration, masterFlight.planeType, 
+                                                                masterFlight.destinationCode, (int)masterFlight.distance,
+                                                                newDepartureDateTime, (double)duration, masterFlight.planeType,
                                                                 (double)cost, SqliteDataAccess.GetPlaneCapacity(masterFlight.planeType), 0);
                     SqliteDataAccess.AddFlightToAvailable(newAvaFlight);
                     currentFlightID++;
@@ -331,6 +331,46 @@ namespace ClassLibrary
                 startDate = newStartDate;
             }
         }
+        public static List<FlightModel> GetBoardingFlights(int rID, CustomerModel currCustomer)
+        {
+            List<int> flightIDs;
+
+
+            List<FlightModel> flights = new List<FlightModel>();
+            flightIDs = SqliteDataAccess.GetFlightIDsInRoute(rID);
+            // for each of these ids, get the flight information (origin, destination, etc.)
+            // Then get the name of the airports, depart times, arrival times
+            // Then also get the customer's name and userID 
+            // Finally create a FlightModel object with that information and add it to a list of booked flights to be displayed to the customer
+
+            foreach (int id in flightIDs)
+            {
+                List<string> flightsBookedData = SqliteDataAccess.GetFlightData(id);
+                string originName = SqliteDataAccess.GetFlightNames(flightsBookedData[2]);
+                string destinationName = SqliteDataAccess.GetFlightNames(flightsBookedData[3]);
+                string firsname = SqliteDataAccess.GetUserData(currCustomer.userID).ElementAt(2); // get the user's info needed 
+                currCustomer.firstName = firsname;
+
+
+
+
+                DateTime departureDateTime = DateTime.Parse(flightsBookedData[4] + " " + flightsBookedData[5]);
+                DateTime arriveDateTime = departureDateTime.AddHours(Convert.ToDouble(flightsBookedData[7]));
+
+                int depHour = departureDateTime.Hour;
+                int arrHour = arriveDateTime.Hour;
+                // arrival time to be fixed 
+                var duration = arriveDateTime.Subtract(departureDateTime);
+
+
+                FlightModel flight = new FlightModel(int.Parse(flightsBookedData[0]), DateTime.Parse(flightsBookedData[4] + " " + flightsBookedData[5]), duration, originName, destinationName, ref currCustomer);
+
+                flights.Add(flight);
+            }
+            return flights;
+
+        }
+
 
         public static void CleanAvailableFlights()
         {
@@ -338,7 +378,7 @@ namespace ClassLibrary
             if (SqliteDataAccess.GetOldestAvailable().Equals("")) return;
             DateTime oldestDate = Convert.ToDateTime(SqliteDataAccess.GetOldestAvailable());
             DateTime endDate = DateTime.Now;
-            
+
             // Clean from oldest date till the current date is reached
             while (oldestDate.ToShortDateString() != endDate.ToShortDateString())
             {
