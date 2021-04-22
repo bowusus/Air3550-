@@ -21,8 +21,8 @@ namespace Air3550
 
             /* Just for testing LE home page uncomment it later */
             // SystemAction.CleanAvailableFlights();
-            SqliteDataAccess.CleanRoutes();
-            SystemAction.GenerateFlights();
+           // SqliteDataAccess.CleanRoutes();
+            //SystemAction.GenerateFlights();
             Application.Run(LogInPage.GetInstance);
             //Application.Run(LoadEngineerHomePage.GetInstance);
 

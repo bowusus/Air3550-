@@ -77,21 +77,21 @@ namespace ClassLibrary
             // This method goes into the database, specifically the userID table, 
             // and randomly picks one userID, so it is a unique id
             // for every user. It returns this unique userID
-            using (SQLiteConnection con = new SQLiteConnection(LoadConnectionString())) 
+            using (SQLiteConnection con = new SQLiteConnection(LoadConnectionString()))
             // closes the connection when there is an error or it is done executing
             {
                 con.Open(); // open the connection
-                SQLiteCommand cmd = new SQLiteCommand(); 
+                SQLiteCommand cmd = new SQLiteCommand();
                 cmd.CommandType = CommandType.Text;
-                cmd.CommandText = "select * from userIDTable order by random() limit 1"; 
+                cmd.CommandText = "select * from userIDTable order by random() limit 1";
                 cmd.Connection = con;
                 // execute the command with the reader, which only reads the database rather than updating it in anyway
-                SQLiteDataReader rdr = cmd.ExecuteReader(); 
+                SQLiteDataReader rdr = cmd.ExecuteReader();
                 int currUserID = 0; // used to return id
 
                 while (rdr.Read())
                 {
-                    currUserID = rdr.GetInt32(0); 
+                    currUserID = rdr.GetInt32(0);
                 }
                 rdr.Close();
                 con.Close();
@@ -333,7 +333,7 @@ namespace ClassLibrary
                 }
                 rdr.Close();
                 con.Close();
-                return routeID; 
+                return routeID;
             }
         }
         public static List<int> GetBookedFlightIDs(int userID)
@@ -480,7 +480,7 @@ namespace ClassLibrary
                 con.Open(); // open the connection
                 SQLiteCommand cmd = new SQLiteCommand();
                 cmd.CommandType = CommandType.Text;
-                cmd.CommandText = "select * from availableFlight where flightID = @flightID"; 
+                cmd.CommandText = "select * from availableFlight where flightID = @flightID";
                 // use the flight ID to get the information about the flight
                 cmd.Parameters.AddWithValue("@flightID", flightID);
                 cmd.Connection = con;
@@ -1238,12 +1238,12 @@ namespace ClassLibrary
 
                 while (rdr.Read())
                 {
-                    masterFlights.Add(new FlightModel(rdr.GetInt32(0), rdr.GetString(1), 
+                    masterFlights.Add(new FlightModel(rdr.GetInt32(0), rdr.GetString(1),
                         rdr.GetString(2), rdr.GetInt32(3), Convert.ToDateTime(rdr.GetString(4)),
                         rdr.GetString(5)));
                 }
             }
-                return masterFlights;
+            return masterFlights;
         }
 
         public static Boolean MasterFlightExists(string originCode, string destinationCode, string departureTime)

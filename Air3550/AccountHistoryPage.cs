@@ -15,11 +15,27 @@ namespace Air3550
     {
         // This form file is to document the actions done on the Account History specifically
         public static CustomerModel currCustomer; // make a local object that can be read in the current context
+        public static AccountHistoryPage instance;
         public static bool logOutButtonClicked = false;
         public static bool backButtonClicked = false;
+        public static List<FlightModel> bookedFlights;
+        public static List<FlightModel> takenFlights;
+        public static List<FlightModel> cancelflight;
+        private DataTable flightList = new DataTable();
+
+
         public AccountHistoryPage()
         {
             InitializeComponent();
+        }
+        public static AccountHistoryPage GetInstance(ref CustomerModel customer)
+        {
+            // This method follows the singleton pattern to allow for one form to be used rather than multiple being created
+            if (instance == null || instance.IsDisposed)
+            {
+                instance = new AccountHistoryPage(ref customer);
+            }
+            return instance;
         }
         public AccountHistoryPage(ref CustomerModel customer)
         {
@@ -27,68 +43,212 @@ namespace Air3550
             InitializeComponent();
             // get the current customer and pass that information to the textboxes
             currCustomer = customer;
+
         }
         private void FlightsBookedButton_Click(object sender, EventArgs e)
         {
 
+            flightList.Rows.Clear(); // clears the data gridview
+            bookedFlights = new List<FlightModel>();
+            List<int> routeID = SqliteDataAccess.GetBookedFlightsRouteID(currCustomer.userID);
+            if (routeID.Count != 0)
+            {
+                foreach (int rID in routeID)
+                {
+                    List<FlightModel> flightsBooked = SystemAction.GetCurrentFlights(rID);
+                    foreach (FlightModel model in flightsBooked)
+                        bookedFlights.Add(model);
+                }
+
+                dataGridView1.DataSource = bookedFlights;
+                FormatDataGrid();
+            }
         }
-        private void FlightsCancelledButton_Click(object sender, EventArgs e)
+
+        private void FormatDataGrid()
         {
+            //// removes the information not needed
+            dataGridView1.Columns.Remove("masterFlightID");
+            dataGridView1.Columns.Remove("firstName");
+            dataGridView1.Columns.Remove("userid");
+            dataGridView1.Columns.Remove("lastName");
+            dataGridView1.Columns.Remove("planeType");
+            dataGridView1.Columns.Remove("flightIncome");
+            dataGridView1.Columns.Remove("numberOfVacantSeats");
+            dataGridView1.Columns.Remove("amountOfPoints");
+            dataGridView1.Columns.Remove("totalTime");
+            dataGridView1.Columns.Remove("distance");
+            dataGridView1.Columns.Remove("dateCreated");
+            dataGridView1.Columns.Remove("cost");
+            dataGridView1.Columns.Remove("numOfPoints");
+            dataGridView1.Columns.Remove("durDouble");
+
+            //// Fix and rename header text
+            dataGridView1.Columns[0].HeaderText = "Flight ID";
+            dataGridView1.Columns[1].HeaderText = "Origin Code";
+            dataGridView1.Columns[2].HeaderText = "Origin Name";
+            dataGridView1.Columns[3].HeaderText = "Destination Code";
+            dataGridView1.Columns[4].HeaderText = "Destination Name";
+            dataGridView1.Columns[5].HeaderText = "Arriaval Time";
+            dataGridView1.Columns[6].HeaderText = "Departure Date and Time";
+            dataGridView1.Columns[7].HeaderText = "Duration";
 
         }
+
+        private void FlightsCancelledButton_Click(object sender, EventArgs e)
+        {
+            flightList.Rows.Clear(); // clears the data gridview
+            cancelflight = new List<FlightModel>();
+            double cost = 0;
+            int points = 0;
+            int i = 0;
+            List<int> flightID = SqliteDataAccess.GetCancelledFlightIDs(currCustomer.userID);
+            if (flightID.Count != 0)
+            {
+                foreach (int rID in flightID)
+                {
+                    List<string> flightData = SqliteDataAccess.GetFlightData(rID);
+                    //        List<string> flightsBookedData = SqliteDataAccess.GetFlightData(rID);
+                    string originName = SqliteDataAccess.GetFlightNames(flightData[2]);
+                    string destinationName = SqliteDataAccess.GetFlightNames(flightData[3]);
+                    // string firsname = SqliteDataAccess.GetUserData(currCustomer.userID).ElementAt(2);
+                    //  currCustomer.firstName = firsname;
+
+                    DateTime departureDateTime = DateTime.Parse(flightData[5]);
+                    DateTime arriveDateTime = departureDateTime.AddHours(Convert.ToDouble(flightData[7]));
+
+                    int depHour = departureDateTime.Hour;
+                    int arrHour = arriveDateTime.Hour;
+
+
+                    double currCost = SystemAction.CalculateCost(depHour, arrHour, double.Parse(flightData[9]));
+                    cost += currCost;
+                    if (i == 0)
+                    {
+                        currCost += 50;
+                        cost += 50;
+                    }
+                    else
+                    {
+                        currCost += 8;
+                        cost += 8;
+                    }
+                    int currPoints = Convert.ToInt32(currCost * 100);
+                    points += currPoints;
+
+
+                    var duration = arriveDateTime.Subtract(departureDateTime);
+                    double dur = duration.TotalHours;
+
+                    FlightModel flight = new FlightModel(int.Parse(flightData[0]), int.Parse(flightData[1]), flightData[2], originName, flightData[3], destinationName, int.Parse(flightData[6]), DateTime.Parse(flightData[4] + " " + flightData[5]), duration, flightData[8], currCost, currPoints, int.Parse(flightData[10]), Convert.ToDouble(flightData[11]));
+                  
+
+                    cancelflight.Add(flight);
+                }
+
+            }
+            dataGridView1.DataSource = cancelflight;
+            FormatDataGrid();
+        }
+
+
         private void FlightsTakenButton_Click(object sender, EventArgs e)
         {
 
-        }
-        private void CreditsButton_Click(object sender, EventArgs e)
-        {
+            flightList.Rows.Clear(); // clears the data gridview
+            double cost = 0;
+            int points = 0;
+            int i = 0;
+            takenFlights = new List<FlightModel>();
 
-        }
-        private void BackButton_Click(object sender, EventArgs e)
-        {
-            // This methods allows the user to return to the home page
-            // The current form will close
-            // The home page will open
-            DialogResult result = MessageBox.Show("Are you sure that you want to return home?\nAny changes not saved will not be updated.", "Account Information", MessageBoxButtons.YesNo, MessageBoxIcon.Hand);
-            if (result == DialogResult.Yes)
+            List<int> flightID = SqliteDataAccess.GetTakenFlightIDs(currCustomer.userID);
+
+            if (flightID.Count != 0)
             {
-                backButtonClicked = true;
-                this.Close(); // close the current form if the customer confirms that they would like to log out
-                int i = 0;
-                // close the log in form and the create customer form
-                while (i < Application.OpenForms.Count) // look at what forms are open
+                foreach (int fID in flightID)
                 {
-                    if (Application.OpenForms[i].Name == "CustomerHomePage")
-                        Application.OpenForms[i].Show();// if the current form is the customer home page, show it
-                    i += 1;
+                    List<string> flightData = SqliteDataAccess.GetFlightData(fID);
+                    string originName = SqliteDataAccess.GetFlightNames(flightData[2]);
+                    string destinationName = SqliteDataAccess.GetFlightNames(flightData[3]);
+                    DateTime departureDateTime = DateTime.Parse(flightData[5]);
+                    DateTime arriveDateTime = departureDateTime.AddHours(Convert.ToDouble(flightData[7]));
+
+                    int depHour = departureDateTime.Hour;
+                    int arrHour = arriveDateTime.Hour;
+
+
+
+                    double currCost = SystemAction.CalculateCost(depHour, arrHour, double.Parse(flightData[9]));
+                    cost += currCost;
+                    if (i == 0)
+                    {
+                        currCost += 50;
+                        cost += 50;
+                    }
+                    else
+                    {
+                        currCost += 8;
+                        cost += 8;
+                    }
+                    int currPoints = Convert.ToInt32(currCost * 100);
+                    points += currPoints;
+
+
+                    var duration = arriveDateTime.Subtract(departureDateTime);
+                    double dur = duration.TotalHours;
+
+                    FlightModel flight = new FlightModel(int.Parse(flightData[0]), int.Parse(flightData[1]), flightData[2], originName, flightData[3], destinationName, int.Parse(flightData[6]), DateTime.Parse(flightData[4] + " " + flightData[5]), duration, flightData[8], currCost, currPoints, int.Parse(flightData[10]), Convert.ToDouble(flightData[11]));
+
+
+                    takenFlights.Add(flight);
+
                 }
             }
+            dataGridView1.DataSource = takenFlights;
+            FormatDataGrid();
         }
+
+        private void BackButton_Click(object sender, EventArgs e)
+        {
+            // This methods allows the user to return to the Log In page
+            // The current form will close
+            // The Log In page will open
+            DialogResult result = MessageBox.Show("Are you sure that you want to return home?\nAny changes not saved will not be updated.", "Account Information", MessageBoxButtons.YesNo, MessageBoxIcon.None);
+            if (result == DialogResult.Yes)
+            {
+                CustomerHomePage.GetInstance(ref currCustomer).Show();
+                this.Dispose();
+            }
+        }
+
         private void LogOutButton_Click(object sender, EventArgs e)
         {
             // This method allows the user to return to the log in page
             // All open forms will close
             // The log in page will open
             // A message asks if the customer has saved everything they desire
-            DialogResult result = MessageBox.Show("Are you sure that you want to log out?\nAny changes not saved will not be updated.", "Log Out", MessageBoxButtons.YesNo, MessageBoxIcon.Hand);
+            DialogResult result = MessageBox.Show("Are you sure that you want to log out?\nAny changes not saved will not be updated.", "Log Out", MessageBoxButtons.YesNo, MessageBoxIcon.None);
             if (result == DialogResult.Yes)
             {
-                logOutButtonClicked = true; // used to access red x later
-                int i = 0;
-                int indexAccount = 0;
-                int indexLogIn = 0;
-                this.Close();
-                while (i < Application.OpenForms.Count) // look at what forms are open
-                {
-                    if (Application.OpenForms[i].Name != "LogInPage") // get location of other form
-                        indexAccount = i;
-                    else
-                        indexLogIn = i;
-                    i += 1;
-                }
-                Application.OpenForms[indexAccount].Close(); // close other form open
-                Application.OpenForms[indexLogIn].Show(); // show the log in page that was hiding
+                LogInPage.GetInstance.Show();
+                this.Dispose();
             }
+        }
+
+        // Loads all the points available, points used and credits
+        private void AccountHistoryPage_Load(object sender, EventArgs e)
+        {
+            // FillFlightListColumns();
+            dataGridView1.DataSource = flightList;
+            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+
+
+            int availablepoints = SqliteDataAccess.GetAvailablePoints(currCustomer.userID);
+            pointsAvailableText.Text = availablepoints.ToString(); // shows the available points 
+            int pointsused = SqliteDataAccess.GetUsedPoints(currCustomer.userID);
+            PointsText.Text = pointsused.ToString(); // shows amount of points of used
+            int credits = SqliteDataAccess.GetBalance(currCustomer.userID);
+            creditText.Text = credits.ToString(); // shows credit remaining
         }
     }
 }
