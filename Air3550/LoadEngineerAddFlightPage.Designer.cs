@@ -36,16 +36,16 @@ namespace Air3550
             this.destinationDropDown = new System.Windows.Forms.ComboBox();
             this.originDropDown = new System.Windows.Forms.ComboBox();
             this.routesGridView = new System.Windows.Forms.DataGridView();
-            this.addButton = new System.Windows.Forms.Button();
-            this.routeTimePicker = new System.Windows.Forms.DateTimePicker();
-            this.searchButton = new System.Windows.Forms.Button();
-            this.backButton = new System.Windows.Forms.Button();
             this.pathID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.numberOfLayoversColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.originColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.layoverOneColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.layoverTwoColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.destinationColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.addButton = new System.Windows.Forms.Button();
+            this.routeTimePicker = new System.Windows.Forms.DateTimePicker();
+            this.searchButton = new System.Windows.Forms.Button();
+            this.backButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.routesGridView)).BeginInit();
             this.SuspendLayout();
             // 
@@ -122,8 +122,43 @@ namespace Air3550
             this.routesGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.routesGridView.Size = new System.Drawing.Size(621, 399);
             this.routesGridView.TabIndex = 8;
-            this.routesGridView.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.routesGridView_CellContentClick);
             this.routesGridView.SelectionChanged += new System.EventHandler(this.routesGridView_SelectionChanged);
+            // 
+            // pathID
+            // 
+            this.pathID.HeaderText = "Path ID";
+            this.pathID.Name = "pathID";
+            this.pathID.ReadOnly = true;
+            // 
+            // numberOfLayoversColumn
+            // 
+            this.numberOfLayoversColumn.HeaderText = "Number Of Layovers";
+            this.numberOfLayoversColumn.Name = "numberOfLayoversColumn";
+            this.numberOfLayoversColumn.ReadOnly = true;
+            // 
+            // originColumn
+            // 
+            this.originColumn.HeaderText = "Origin";
+            this.originColumn.Name = "originColumn";
+            this.originColumn.ReadOnly = true;
+            // 
+            // layoverOneColumn
+            // 
+            this.layoverOneColumn.HeaderText = "Layover 1";
+            this.layoverOneColumn.Name = "layoverOneColumn";
+            this.layoverOneColumn.ReadOnly = true;
+            // 
+            // layoverTwoColumn
+            // 
+            this.layoverTwoColumn.HeaderText = "Layover 2";
+            this.layoverTwoColumn.Name = "layoverTwoColumn";
+            this.layoverTwoColumn.ReadOnly = true;
+            // 
+            // destinationColumn
+            // 
+            this.destinationColumn.HeaderText = "Destination";
+            this.destinationColumn.Name = "destinationColumn";
+            this.destinationColumn.ReadOnly = true;
             // 
             // addButton
             // 
@@ -164,42 +199,6 @@ namespace Air3550
             this.backButton.Text = "Back";
             this.backButton.UseVisualStyleBackColor = true;
             this.backButton.Click += new System.EventHandler(this.backButton_Click);
-            // 
-            // pathID
-            // 
-            this.pathID.HeaderText = "Path ID";
-            this.pathID.Name = "pathID";
-            this.pathID.ReadOnly = true;
-            // 
-            // numberOfLayoversColumn
-            // 
-            this.numberOfLayoversColumn.HeaderText = "Number Of Layovers";
-            this.numberOfLayoversColumn.Name = "numberOfLayoversColumn";
-            this.numberOfLayoversColumn.ReadOnly = true;
-            // 
-            // originColumn
-            // 
-            this.originColumn.HeaderText = "Origin";
-            this.originColumn.Name = "originColumn";
-            this.originColumn.ReadOnly = true;
-            // 
-            // layoverOneColumn
-            // 
-            this.layoverOneColumn.HeaderText = "Layover 1";
-            this.layoverOneColumn.Name = "layoverOneColumn";
-            this.layoverOneColumn.ReadOnly = true;
-            // 
-            // layoverTwoColumn
-            // 
-            this.layoverTwoColumn.HeaderText = "Layover 2";
-            this.layoverTwoColumn.Name = "layoverTwoColumn";
-            this.layoverTwoColumn.ReadOnly = true;
-            // 
-            // destinationColumn
-            // 
-            this.destinationColumn.HeaderText = "Destination";
-            this.destinationColumn.Name = "destinationColumn";
-            this.destinationColumn.ReadOnly = true;
             // 
             // LoadEngineerAddFlightPage
             // 

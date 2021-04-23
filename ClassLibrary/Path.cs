@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace ClassLibrary
 {
+    /* Path contains almost all the information to create a route 
+       and will be constructed when gathering all possible paths that can
+       be taken from on vector to another vector */
     public class Path
     {
         int pathID;

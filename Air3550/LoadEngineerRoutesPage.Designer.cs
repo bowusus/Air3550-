@@ -45,7 +45,6 @@ namespace Air3550
             this.routeGrid.ShowCellToolTips = false;
             this.routeGrid.Size = new System.Drawing.Size(533, 493);
             this.routeGrid.TabIndex = 1;
-            this.routeGrid.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.flightGrid_CellContentClick);
             // 
             // LoadEngineerRoutesPage
             // 

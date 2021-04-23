@@ -13,11 +13,10 @@ namespace Air3550
 {
     public partial class MarketingManagerHomePage : Form
     {
-        private static MarketingManagerHomePage instance;
+        private static MarketingManagerHomePage instance; //Singleton-Pattern Instance
         private string planeType;
         private int flightID;
 
-        // This form file is to document the actions done on the Customer Home Page specifically
         public MarketingManagerHomePage()
         {
             InitializeComponent();
@@ -25,6 +24,9 @@ namespace Air3550
 
         public string PlaneType { get => planeType; set => planeType = value; }
         public int FlightID { get => flightID; set => flightID = value; }
+
+        /* Gets an already existing instance of this page if one does not exist
+         * then it creates a new instance */
         public static MarketingManagerHomePage GetInstance
         {
             get
@@ -37,7 +39,7 @@ namespace Air3550
             }
         }
 
-
+        /* Loads the marketing manager editing page with information based on the selected flight */
         private void editFlight_Click(object sender, EventArgs e)
         {
             if (flightGrid.SelectedRows.Count > 0)
@@ -49,6 +51,7 @@ namespace Air3550
             }
         }
 
+        /* Set the flight grid to the masterFlight SQL */
         public void LoadFlightGrid()
         {
             flightGrid.DataSource = SqliteDataAccess.GetMasterFlightDT();
@@ -59,6 +62,7 @@ namespace Air3550
             LoadFlightGrid();
         }
 
+        /* Close the application */
         private void MarketingManagerHomePage_FormClosing(object sender, FormClosingEventArgs e)
         {
             LogInPage.GetInstance.Close();

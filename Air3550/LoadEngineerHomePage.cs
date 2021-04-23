@@ -13,7 +13,7 @@ namespace Air3550
 {
     public partial class LoadEngineerHomePage : Form
     {
-        private static LoadEngineerHomePage instance;
+        private static LoadEngineerHomePage instance; // Singleton-Pattern Instance
         private string originCode, destinationCode, time;
         private int flightID;
         public LoadEngineerHomePage()
@@ -21,6 +21,7 @@ namespace Air3550
             InitializeComponent();
         }
 
+        /* Get an already existing instance of this page if it does not exist then create it */
         public static LoadEngineerHomePage GetInstance
         {
             get
@@ -43,6 +44,7 @@ namespace Air3550
             LoadFlightGrid();
         }
 
+        /* Create and show the add flight form when add flight is clicked */
         private void AddFlight_Click(object sender, EventArgs e)
         {
             LoadEngineerAddFlightPage.GetInstance.Show();
@@ -50,6 +52,7 @@ namespace Air3550
             this.Hide();
         }
 
+        /* Remove the selected flight from the masterFlight table when remove flight is clicked */
         private void removeFlight_Click(object sender, EventArgs e)
         {
             if (flightGrid.SelectedRows.Count > 0)
@@ -61,11 +64,13 @@ namespace Air3550
             }
         }
 
+        /* Close the application when the X is hit */
         private void LoadEngineerHomePage_FormClosing(object sender, FormClosingEventArgs e)
         {
             LogInPage.GetInstance.Close();
         }
 
+        /* Log out to the login page and dispose of the page */
         private void logOutButton_Click(object sender, EventArgs e)
         {
             // This method allows the user to return to the log in page
@@ -80,12 +85,14 @@ namespace Air3550
             }
         }
 
+        /* Show all routes currently being offered */
         private void routeButton_Click(object sender, EventArgs e)
         {
             LoadEngineerRoutesPage.GetInstance.Show();
             LoadEngineerRoutesPage.GetInstance.Location = this.Location;
         }
 
+        /* Create a new edit flight form pop up */
         private void editFlight_Click(object sender, EventArgs e)
         {
             if (flightGrid.SelectedRows.Count > 0)
@@ -99,6 +106,7 @@ namespace Air3550
             }
         }
 
+        /* Load in the masterFlight SQL table and set it to the flightGrid's datasource */
         public void LoadFlightGrid()
         {
             flightGrid.DataSource = SqliteDataAccess.GetMasterFlightDT();

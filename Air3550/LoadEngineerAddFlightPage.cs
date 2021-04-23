@@ -35,6 +35,10 @@ namespace Air3550
             }
         }
 
+        /* On loading the page it gets all of the origin and destination
+         * codes for the drop down boxes, and sets the routeTimePicker to the
+         * correct format while hidding both the time picker and the add flgiht button 
+         */
         private void LoadEngineerAddFlightPage_Load(object sender, EventArgs e)
         {
             List<string> originCodes = new List<string>();
@@ -53,6 +57,8 @@ namespace Air3550
             addButton.Visible = false;
         }
 
+        /* Searchs for all the paths between the selected origin and destination
+         */
         private void searchButton_Click(object sender, EventArgs e)
         {
             routesGridView.Rows.Clear();
@@ -60,8 +66,13 @@ namespace Air3550
             List<FlightModel> directFlights = SqliteDataAccess.GetDirectFlights();
             Airport origin = airports.Find(airport => airport.Code == originDropDown.Text);
             Airport destination = airports.Find(airport => airport.Code == destinationDropDown.Text);
+
+            // Create a new pathfinder object based on the origin, destination, airports, and direct flgihts
             PathFinder pf = new PathFinder(origin, destination, airports, directFlights);
+            // call the Breadth-First Search algorithm to find all paths from the origin to the destination with
+            // less than 3 layovers
             paths = pf.BFS();
+            // for every path found create a new row in the data grid view for this page 
             foreach (Path path in paths)
             {
                 if (path.NumberOfLayovers == 0)
@@ -81,12 +92,15 @@ namespace Air3550
             }
         }
 
+        /* When a selection for the route is made change the visibility of the time picker and the
+         * add button to true */
         private void routesGridView_SelectionChanged(object sender, EventArgs e)
         {
             routeTimePicker.Visible = true;
             addButton.Visible = true;
         }
 
+        /* Call the helper method to generate all the new master flights and route */
         private void addButton_Click(object sender, EventArgs e)
         {
             generateFlightsAndRoute();
@@ -139,62 +153,78 @@ namespace Air3550
 
                     /* 
                      * hours is calculated by time it take to get to destination at 500 mph
-                     * plus 30 minutes exiting and entering runway 
+                     * plus 30 minutes exiting and entering runway. This with give us the duration of the
+                     * current flight
                      */
                     decimal hours = (decimal)(distance / 500.0) + .5M + (40 / 60.0M);
                     decimal minutes = (decimal)(hours - Math.Floor(hours)) * 60.0M;
                     decimal adjustment = minutes % 5;
                     hours = Math.Floor(hours);
                     if (adjustment != 0) minutes = (minutes - adjustment) + 5;
+
+                    // Take the duration of the current flight and add it to the departure time so that the
+                    // departure time of the next flight is set
                     DateTime newDepartureTime = departureTime.AddHours((double)hours).AddMinutes((double)minutes);
                     departureTime = newDepartureTime;
                 }
 
                 int routeID = SqliteDataAccess.GetLastRouteID();
+                // No layovers
                 if (selectedPath.NumberOfLayovers == 0)
                 {
+                    // Check to see if the route already exists
                     if (SqliteDataAccess.RouteExists(flightIDs[0].ToString()))
                     {
                         MessageBox.Show("Cannot create route as it already exists.", "Error: Route Exists", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
                     }
+                    // Add route to the routes table
                     SqliteDataAccess.AddToRoute(routeID, selectedPath.Airports[0].Code,
                                                 selectedPath.Airports[selectedPath.NumberOfLayovers + 1].Code,
                                                 selectedPath.NumberOfLayovers, flightIDs[0].ToString());
+                    // Add any new flights to the flight master table
                     if (newFlights.Count != 0)
                     {
                         SqliteDataAccess.AddFlightToMaster(newFlights);
                         foreach (FlightModel flight in newFlights) SystemAction.GenerateFlight(flight);
                     }
                 }
+                // Only one layover
                 else if (selectedPath.NumberOfLayovers == 1)
                 {
+                    // Check to see if the route already exists
                     if (SqliteDataAccess.RouteExists(flightIDs[0].ToString(), flightIDs[1].ToString()))
                     {
                         MessageBox.Show("Cannot create route as it already exists.", "Error: Route Exists", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
                     }
+                    // Add route to the routes table
                     SqliteDataAccess.AddToRoute(routeID, selectedPath.Airports[0].Code,
                                                 selectedPath.Airports[selectedPath.NumberOfLayovers + 1].Code,
                                                 selectedPath.NumberOfLayovers, flightIDs[0].ToString(),
                                                 flightIDs[1].ToString());
+                    // Add any new flights to the flight master table
                     if (newFlights.Count != 0)
                     {
                         SqliteDataAccess.AddFlightToMaster(newFlights);
                         foreach (FlightModel flight in newFlights) SystemAction.GenerateFlight(flight);
                     }
                 }
+                // Two layovers
                 else if (selectedPath.NumberOfLayovers == 2)
                 {
-                    if(SqliteDataAccess.RouteExists(flightIDs[0].ToString(), flightIDs[1].ToString(), flightIDs[2].ToString()))
+                    // Check to see if the route already exists
+                    if (SqliteDataAccess.RouteExists(flightIDs[0].ToString(), flightIDs[1].ToString(), flightIDs[2].ToString()))
                     {
                         MessageBox.Show("Cannot create route as it already exists.", "Error: Route Exists", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
                     }
+                    // Add route to the routes table
                     SqliteDataAccess.AddToRoute(routeID, selectedPath.Airports[0].Code,
                                                 selectedPath.Airports[selectedPath.NumberOfLayovers + 1].Code,
                                                 selectedPath.NumberOfLayovers, flightIDs[0].ToString(),
                                                 flightIDs[1].ToString(), flightIDs[2].ToString());
+                    // Add any new flights to the flight master table
                     if (newFlights.Count != 0)
                     {
                         SqliteDataAccess.AddFlightToMaster(newFlights);
@@ -202,11 +232,14 @@ namespace Air3550
                     }
                 }
             }
+            // Load the home page and dispose of the current page
             LoadEngineerHomePage.GetInstance.LoadFlightGrid();
             LoadEngineerHomePage.GetInstance.Show();
             this.Dispose();
         }
 
+        /* Change the destination codes given if the origin code was changed so that 
+         * it is impossible to choose the same origin and destination */
         private void originDropDown_SelectedIndexChanged(object sender, EventArgs e)
         {
             string currentDestination = destinationDropDown.Text;
@@ -218,6 +251,8 @@ namespace Air3550
             if(originDropDown.Text != currentDestination) destinationDropDown.Text = currentDestination;
         }
 
+        /* Returns to home page and disposes of the current page when back button
+         * is selected */
         private void backButton_Click(object sender, EventArgs e)
         {
             LoadEngineerHomePage.GetInstance.LoadFlightGrid();
@@ -225,6 +260,7 @@ namespace Air3550
             this.Dispose();
         }
 
+        /* Make it so that the route time picker only increments in 5 for minutes */
         private void routeTimePicker_ValueChanged(object sender, EventArgs e)
         {
             if (this.routeTimePicker.Value.Minute % 5 == 0) 
@@ -235,6 +271,8 @@ namespace Air3550
                 this.routeTimePicker.Value = this.routeTimePicker.Value.AddMinutes(-4);
         }
 
+        /* Ask user if they are sure they want to exit the application then close if the program if they confirm 
+         * yes */
         private void LoadEngineerAddFlightPage_FormClosing(object sender, FormClosingEventArgs e)
         {
             //Add message box to ask user if they want to exit program
@@ -245,11 +283,6 @@ namespace Air3550
                 LogInPage.GetInstance.Close();
             else
                 e.Cancel = true;
-        }
-
-        private void routesGridView_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-
         }
     }
 }

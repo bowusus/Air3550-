@@ -38,7 +38,7 @@ namespace ClassLibrary
 		public int numberOfVacantSeats { get; set; }
 		public double flightIncome { get; set; }
 
-		// customer constructor
+		// base flightModel constructor
 		public FlightModel(int fID, int mID, string origin, string oName, string destination, string dName, int dist, DateTime departDate, DateTime arriveDate, TimeSpan dur, string plane, double baseCost, int points, int seats, double income)
 		{
 			flightID = fID;
@@ -58,6 +58,7 @@ namespace ClassLibrary
 			flightIncome = income;
 		}
 
+		/* This overloading of the flight model is specific for the availableFlight table we have in the database */
 		public FlightModel(int flightID, int masterFlightID, string originCode, string destinationCode, int distance, DateTime departureDateTime, double duration,
 						   string planeType, double cost, int numberOfVacantSeat, double flightIncome)
 		{
@@ -74,6 +75,8 @@ namespace ClassLibrary
 			this.flightIncome = flightIncome;
 		}
 
+		/* This overloading of the flight model is specific for the masterFlight table we have in the database it is basically a
+		 * template for the creation of all available flights*/
 		public FlightModel(int flightID, string originCode, string destinationCode, int distance, DateTime departureDateTime, string planeType)
 		{
 			this.flightID = flightID;

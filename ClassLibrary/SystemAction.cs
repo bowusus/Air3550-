@@ -307,6 +307,9 @@ namespace ClassLibrary
             return flights;
 
         }
+
+        /* Generates all available flights for each master flight from the last generated date in the 
+         * available flights table to 6 months from the current date */
         public static void GenerateFlights()
         {
             // Get all of the flgihts on the master flights that we are going to use as a template to create available flights
@@ -341,6 +344,8 @@ namespace ClassLibrary
             }
         }
 
+        /* Generates all the available flights for the newly created masterFlight based on
+         * the next days date to 6 months out */
         public static void GenerateFlight(FlightModel masterFlight)
         {
             // New flight has been made in master so creating all available flights from the current date to 6 months out
@@ -366,45 +371,6 @@ namespace ClassLibrary
                 startDate = newStartDate;
             }
         }
-        public static List<FlightModel> GetBoardingFlights(int rID, CustomerModel currCustomer)
-        {
-            List<int> flightIDs;
-
-
-            List<FlightModel> flights = new List<FlightModel>();
-            flightIDs = SqliteDataAccess.GetFlightIDsInRoute(rID);
-            // for each of these ids, get the flight information (origin, destination, etc.)
-            // Then get the name of the airports, depart times, arrival times
-            // Then also get the customer's name and userID 
-            // Finally create a FlightModel object with that information and add it to a list of booked flights to be displayed to the customer
-
-            foreach (int id in flightIDs)
-            {
-                List<string> flightsBookedData = SqliteDataAccess.GetFlightData(id);
-                string originName = SqliteDataAccess.GetFlightNames(flightsBookedData[2]);
-                string destinationName = SqliteDataAccess.GetFlightNames(flightsBookedData[3]);
-                string firsname = SqliteDataAccess.GetUserData(currCustomer.userID).ElementAt(2); // get the user's info needed 
-                currCustomer.firstName = firsname;
-
-
-
-
-                DateTime departureDateTime = DateTime.Parse(flightsBookedData[4] + " " + flightsBookedData[5]);
-                DateTime arriveDateTime = departureDateTime.AddHours(Convert.ToDouble(flightsBookedData[7]));
-
-                int depHour = departureDateTime.Hour;
-                int arrHour = arriveDateTime.Hour;
-                // arrival time to be fixed 
-                var duration = arriveDateTime.Subtract(departureDateTime);
-
-
-                FlightModel flight = new FlightModel(int.Parse(flightsBookedData[0]), DateTime.Parse(flightsBookedData[4] + " " + flightsBookedData[5]), duration, originName, destinationName, ref currCustomer);
-
-                flights.Add(flight);
-            }
-            return flights;
-
-        }
 
         public static void CleanAvailableFlights()
         {
@@ -428,10 +394,16 @@ namespace ClassLibrary
          */
         public static void SetTakenFlights()
         {
+            // Gets all of the customer ids
             List<int> custIDs = SqliteDataAccess.GetAllCustomerIDs();
+            // Cycles through all customers
             foreach (int custID in custIDs)
             {
+                // Checks flights booked by the current custID
                 List<int> bookedFIDs = SqliteDataAccess.GetBookedFlightIDs(custID);
+                // Cycles through all booked flights by the current customer and 
+                // checks if they are old if they are then they get passed to the
+                // flights taken table and is removed from booked flights
                 foreach(int bookedFID in bookedFIDs)
                 {
                     if(SqliteDataAccess.CheckIfBookedOld(bookedFID))

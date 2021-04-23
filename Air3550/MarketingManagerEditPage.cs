@@ -13,13 +13,14 @@ namespace Air3550
 {
     public partial class MarketingManagerEditPage : Form
     {
-        private static MarketingManagerEditPage instance;
-
-        // This form file is to document the actions done on the Customer Home Page specifically
+        private static MarketingManagerEditPage instance; // Singleton-Pattern instance
         public MarketingManagerEditPage()
         {
             InitializeComponent();
         }
+        
+        /* Gets an already existing instance of this page or creates a 
+         * new one if it does not exist */
         public static MarketingManagerEditPage GetInstance
         {
             get
@@ -32,6 +33,8 @@ namespace Air3550
             }
         }
 
+        /* Updates the masterFlight with the newly selected plane type and disposes of the page while 
+         * reloading the flight grid */
         private void saveButton_Click(object sender, EventArgs e)
         {
             SqliteDataAccess.UpdateMasterNewPlane(MarketingManagerHomePage.GetInstance.FlightID, planeTypeDropDown.Text);
@@ -39,12 +42,15 @@ namespace Air3550
             this.Dispose();
         }
 
+        /* Gets all of the plane types from the plane SQL table and sets the current selection
+         * to the previous planeType of the selected flight */
         private void MarketingManagerEditPage_Load(object sender, EventArgs e)
         {
             planeTypeDropDown.DataSource = SqliteDataAccess.GetPlaneTypes();
             planeTypeDropDown.Text = MarketingManagerHomePage.GetInstance.PlaneType;
         }
 
+        /* Dispose of the from on closing */
         private void MarketingManagerEditPage_FormClosing(object sender, FormClosingEventArgs e)
         {
             this.Dispose();
