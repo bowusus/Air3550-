@@ -309,7 +309,7 @@ namespace ClassLibrary
         public static void GenerateFlight(FlightModel masterFlight)
         {
             // New flight has been made in master so creating all available flights from the current date to 6 months out
-            DateTime startDate = DateTime.Now;
+            DateTime startDate = DateTime.Now.AddDays(1);
             DateTime endDate = DateTime.Now.AddMonths(6).AddDays(1);
             int currentFlightID = SqliteDataAccess.GetLastAvailableFlightID();
 
