@@ -116,17 +116,47 @@ namespace ClassLibrary
             }
             return flights;
         }
-        public static List<Route> GetAvailableRoutes(string origin, string destination, DateTime departDate, DateTime returnDateTime)
+        public static FlightModel GetFlight(int flightID, int i)
+        {
+            // This method gets the specified flight's data. It calculates its cost, points, and duration,
+            // Then it makes it a flight object and returns the flight
+            List<string> flightsBookedData = SqliteDataAccess.GetFlightData(flightID);
+
+            string originName = SqliteDataAccess.GetFlightNames(flightsBookedData[2]);
+            string destinationName = SqliteDataAccess.GetFlightNames(flightsBookedData[3]);
+
+            DateTime departureDateTime = DateTime.Parse(flightsBookedData[4] + " " + flightsBookedData[5]);
+            DateTime arriveDateTime = departureDateTime.AddHours(Convert.ToDouble(flightsBookedData[7]));
+            int depHour = departureDateTime.Hour;
+            int arrHour = arriveDateTime.Hour;
+
+            double currCost;
+            if (i == 0)
+                currCost = CalculateCost(depHour, arrHour, Convert.ToDouble(flightsBookedData[9]) + 50);
+            else
+                currCost = CalculateCost(depHour, arrHour, Convert.ToDouble(flightsBookedData[9]) + 8);
+            int currPoints = Convert.ToInt32(currCost * 100);
+
+            var duration = arriveDateTime.Subtract(departureDateTime);
+            duration = new TimeSpan(duration.Ticks / TimeSpan.TicksPerSecond * TimeSpan.TicksPerSecond);
+
+            departureDateTime = arriveDateTime.Subtract(duration);
+            FlightModel flight = new FlightModel(int.Parse(flightsBookedData[0]), int.Parse(flightsBookedData[1]), flightsBookedData[2], originName, flightsBookedData[3], destinationName, int.Parse(flightsBookedData[6]), departureDateTime, arriveDateTime, duration, flightsBookedData[8], Math.Round(currCost, 2), currPoints, int.Parse(flightsBookedData[10]), Convert.ToDouble(flightsBookedData[11]));
+
+            return flight;
+        }
+        public static List<Route> GetFlights_MasterID(string origin, string destination, DateTime departDate, DateTime compareDateTime)
         {
             // This method finds all available routes for the given origin and destination
             // A list of the available routes are returned
             List<Route> routes = new List<Route>();
-            List<(int, int)> routeInfo = SqliteDataAccess.GetRouteInfo(origin, destination, departDate.Date, returnDateTime.Date);
+            List<(int, int)> routeInfo = SqliteDataAccess.GetRouteInfo(origin, destination, departDate.Date, compareDateTime.Date);
             // go through the route IDs that were found for the specified origin and destination
             // and get the flightIDs in that route, then get information to display to the customer
             foreach ((int, int) id in routeInfo)
             {
-                List<int> flightIDs = SqliteDataAccess.GetFlightIDsInRoute(id.Item1);
+                List<int> masterFlightIDs = SqliteDataAccess.GetFlightIDsInRoute(id.Item1);
+                List<int> flightIDs_MasterID = new List<int>();
                 List<FlightModel> flights = new List<FlightModel>();
                 // initialization/declaration of values to be returned in data grid view
                 string routeList = null;
@@ -137,110 +167,49 @@ namespace ClassLibrary
                 double cost = 0;
                 int points = 0;
                 int i = 0; // used for grabbing information from the availableRoutes list
-                // go through each of these flight IDs, make a flight object, add it to the list to be returned
-                // add some formatting since this method is used to populate the datagridview tables in the bookFlight form
-                foreach (int fID in flightIDs)
+
+                foreach (int mID in masterFlightIDs)
                 {
-                    List<string> flightsBookedData = SqliteDataAccess.GetFlightData(fID);
-
-                    string originName = SqliteDataAccess.GetFlightNames(flightsBookedData[2]);
-                    string destinationName = SqliteDataAccess.GetFlightNames(flightsBookedData[3]);
-
-                    DateTime departureDateTime = DateTime.Parse(flightsBookedData[4] + " " + flightsBookedData[5]);
-                    DateTime arriveDateTime = departureDateTime.AddHours(Convert.ToDouble(flightsBookedData[7]));
-                    int depHour = departureDateTime.Hour;
-                    int arrHour = arriveDateTime.Hour;
-
-                    double currCost; 
-                    if (i == 0)
-                        currCost = SystemAction.CalculateCost(depHour, arrHour, Convert.ToDouble(flightsBookedData[9]) + 50);
-                    else
-                        currCost = SystemAction.CalculateCost(depHour, arrHour, Convert.ToDouble(flightsBookedData[9]) + 8);
-                    cost += currCost;
-                    int currPoints = Convert.ToInt32(currCost * 100);
-                    points += currPoints;
-
-                    var duration = arriveDateTime.Subtract(departureDateTime);
-
-                    departureDateTime = arriveDateTime.Subtract(duration);
-                    FlightModel flight = new FlightModel(int.Parse(flightsBookedData[0]), int.Parse(flightsBookedData[1]), flightsBookedData[2], originName, flightsBookedData[3], destinationName, int.Parse(flightsBookedData[6]), departureDateTime, arriveDateTime, duration, flightsBookedData[8], Math.Round(currCost, 2), currPoints, int.Parse(flightsBookedData[10]), Convert.ToDouble(flightsBookedData[11]));
-                    flights.Add(flight);
-                    // mainly for formating purposes, check if the current Flight ID is the last in the list
-                    // if it is, then do not add extra lines
-                    if (fID == flightIDs[flightIDs.Count - 1])
-                    {
-                        routeList += fID;
-                        seatsAvailable += flights[i].numberOfVacantSeats;
-                    }
-                    else
-                    {
-                        routeList += fID + Environment.NewLine;
-                        planeChange += flights[i].destinationCode + "/" + flights[i].destinationName + Environment.NewLine;
-                        seatsAvailable += flights[i].numberOfVacantSeats + Environment.NewLine;
-                    }
-                    i += 1;
+                    flightIDs_MasterID = SqliteDataAccess.GetFlightIDs_MasterID(mID, flightIDs_MasterID, departDate, compareDateTime);
                 }
-                // as long as the flight count is not 0, get the depart time, arrive time, duration, and total credits, 
-                // add that all to a route object, and add that route object to the available routes list
-                if (flights.Count != 0)
+                if (flightIDs_MasterID.Count == masterFlightIDs.Count)
                 {
-                    depart = flights[0].departureDateTime;
-                    arrive = flights[flightIDs.Count - 1].arrivalDateTime;
-                    var duration = arrive.Subtract(depart);
-                    string credits = "$" + cost + " (" + points + " points)";
-                    Route route = new Route(id.Item1, depart, arrive, duration, id.Item2, routeList, planeChange, seatsAvailable, credits);
-                    routes.Add(route);
+                    // go through each of these flight IDs, make a flight object, add it to the list to be returned
+                    // add some formatting since this method is used to populate the datagridview tables in the bookFlight form
+                    foreach (int fID in flightIDs_MasterID)
+                    {
+                        FlightModel flight = GetFlight(fID, i);
+                        flights.Add(flight);
+                        cost += flight.cost;
+                        points += flight.numOfPoints;
+                        if (i == masterFlightIDs.Count - 1)
+                        {
+                            routeList += fID;
+                            seatsAvailable += flights[i].numberOfVacantSeats;
+                        }
+                        else
+                        {
+                            routeList += fID + Environment.NewLine;
+                            planeChange += flights[i].destinationCode + "/" + flights[i].destinationName + Environment.NewLine;
+                            seatsAvailable += flights[i].numberOfVacantSeats + Environment.NewLine;
+                        }
+                        i += 1;
+                    }
+                    // as long as the flight count is not 0, get the depart time, arrive time, duration, and total credits, 
+                    // add that all to a route object, and add that route object to the available routes list
+                    if (flights.Count != 0)
+                    {
+                        depart = flights[0].departureDateTime;
+                        arrive = flights[masterFlightIDs.Count - 1].arrivalDateTime;
+                        var duration = arrive.Subtract(depart);
+                        duration = new TimeSpan(duration.Ticks / TimeSpan.TicksPerSecond * TimeSpan.TicksPerSecond);
+                        string credits = "$" + cost + " (" + points + " points)";
+                        Route route = new Route(id.Item1, depart, arrive, duration, id.Item2, routeList, planeChange, seatsAvailable, credits);
+                        routes.Add(route);
+                    }
                 }
             }
             return routes;
-        }
-        public static List<Route> FilterRoutes(List<Route> routes, DateTime departDateTime, DateTime compareDateTime)
-        {
-            // This method is used to check the routes that will display to the customer
-            // For example, the routes should have a departure date and return date that match the input
-            // Also, if any of the routes do not have available seats, they should not be displayed
-            List<Route> filteredRoutes = new List<Route>();
-            // go through the provided routes, if they are valid routes, then add them to a list that will be returned
-            foreach (Route route in routes)
-            {
-                var delta = route.departTime.Subtract(compareDateTime); // get the difference between this route's depart time and the compareDateTime (which could be now or the departure route's depart dateTime)
-                int index1 = route.availableSeats.IndexOf("\r\n"); // get the first index of the first space to find the available seats of the first flight in the route 
-                int index2 = route.availableSeats.LastIndexOf("\r\n"); // get the last index of the space to find the available seats of the second and third flight in the route 
-                int seats1; // used for available seats on the first flight
-                int seats2; // used for available seats on the second flight
-                int seats3; // used for available seats on the third flight
-                if (index1 == -1) // if there is no "\r\n" then, there is only one flight
-                {
-                    seats1 = int.Parse(route.availableSeats);
-                    // check if the number of available seats is not zero, if the route's depart date is the same as the provided depart date,
-                    // and if the difference between the route's depart date time and the compareDateTime
-                    // If these are all valid, then all the route to the filtered routes list
-                    if (seats1 != 0 && route.departTime.Date == departDateTime.Date && delta.TotalMinutes > 0)
-                        filteredRoutes.Add(route);
-                }
-                else if (index1 == index2) // if the index of the first and last "\r\n" are the same, then there are two flights
-                {
-                    seats1 = int.Parse(route.availableSeats.Substring(0, index1));
-                    seats2 = int.Parse(route.availableSeats.Substring(index1 + 1, route.availableSeats.Length - index1 - 1));
-                    // check if the number of available seats for both flights is not zero, if the route's depart date is the same as the provided depart date,
-                    // and if the difference between the route's depart date time and the compareDateTime
-                    // If these are all valid, then all the route to the filtered routes list
-                    if (seats1 != 0 && seats2 != 0 && route.departTime.Date == departDateTime.Date && delta.TotalMinutes > 0)
-                        filteredRoutes.Add(route);
-                }
-                else // if the index of the first and last "\r\n" are different, then there are three flights
-                {
-                    // check if the number of available seats for all three flights is not zero, if the route's depart date is the same as the provided depart date,
-                    // and if the difference between the route's depart date time and the compareDateTime
-                    // If these are all valid, then all the route to the filtered routes list
-                    seats1 = int.Parse(route.availableSeats.Substring(0, index1));
-                    seats2 = int.Parse(route.availableSeats.Substring(index1 + 1, index2 - index1));
-                    seats3 = int.Parse(route.availableSeats.Substring(index2 + 1, route.availableSeats.Length - index2 - 1));
-                    if (seats1 != 0 && seats2 != 0 && seats3 != 0 && route.departTime.Date == departDateTime.Date && delta.TotalMinutes > 0)
-                        filteredRoutes.Add(route);
-                }
-            }
-            return filteredRoutes;
         }
         public static double CancelFlight(int uID, FlightModel flight, string paymentMethod, double totalCredit, int totalPoints)
         {
@@ -248,7 +217,7 @@ namespace ClassLibrary
             // Depending on whether the payment method was dollars, airline credit, or points, whichever value is returned
 
             // Move the specified flight from booked to cancelled and increase the number of vacant seats in the plane
-            SqliteDataAccess.CancelBookedFlight(uID, flight.flightID);
+            SqliteDataAccess.RemoveFromFlightsBooked(uID, flight.flightID);
             SqliteDataAccess.AddToCancelledFlights(uID, flight.flightID);
             SqliteDataAccess.UpdateNumOfVacantSeats(flight.flightID, flight.numberOfVacantSeats + 1);
             // Depending on the payment method, the customer will either get cash back from the airline
@@ -270,6 +239,39 @@ namespace ClassLibrary
                 SqliteDataAccess.UpdateAvailablePoints(uID, available + flight.numOfPoints);
                 SqliteDataAccess.UpdateUsedPoints(uID, used - flight.numOfPoints);
                 return Convert.ToDouble(totalPoints);
+            }
+        }
+        public static List<int> DeriveFlightIDs_SelectedRoute(string flightIDs)
+        {
+            List<int> flightIDsList = new List<int>();
+            int index1 = flightIDs.IndexOf("\r\n"); // get the first index of the first space to find the available seats of the first flight in the route 
+            int index2 = flightIDs.LastIndexOf("\r\n"); // get the last index of the space to find the available seats of the second and third flight in the route 
+            int flightID1; // used for available seats on the first flight
+            int flightID2; // used for available seats on the second flight
+            int flightID3; // used for available seats on the third flight
+            if (index1 == -1) // if there is no "\r\n" then, there is only one flight
+            {
+                flightID1 = int.Parse(flightIDs);
+                flightIDsList.Add(flightID1);
+                return flightIDsList;
+            }
+            else if (index1 == index2) // if the index of the first and last "\r\n" are the same, then there are two flights
+            {
+                flightID1 = int.Parse(flightIDs.Substring(0, index1));
+                flightID2 = int.Parse(flightIDs.Substring(index1 + 1, flightIDs.Length - index1 - 1));
+                flightIDsList.Add(flightID1);
+                flightIDsList.Add(flightID2);
+                return flightIDsList;
+            }
+            else // if the index of the first and last "\r\n" are different, then there are three flights
+            {
+                flightID1 = int.Parse(flightIDs.Substring(0, index1));
+                flightID2 = int.Parse(flightIDs.Substring(index1 + 1, index2 - index1));
+                flightID3 = int.Parse(flightIDs.Substring(index2 + 1, flightIDs.Length - index2 - 1));
+                flightIDsList.Add(flightID1);
+                flightIDsList.Add(flightID2);
+                flightIDsList.Add(flightID3);
+                return flightIDsList;
             }
         }
         public static List<FlightModel> GetBoardingFlights(int rID, CustomerModel currCustomer)
@@ -371,7 +373,7 @@ namespace ClassLibrary
                 startDate = newStartDate;
             }
         }
-
+        
         public static void CleanAvailableFlights()
         {
             // Get the oldest date in the available flights data base

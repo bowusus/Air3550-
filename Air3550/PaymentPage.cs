@@ -93,23 +93,39 @@ namespace Air3550
             // This method actually books the selected flight(s)
             // Tables updated: bookedFlights, transaction, availableFlights, credits
             // if the customer wants to use points or an airline credit to pay, an error will appear if they do not have enough available in their account
-
-            // The original list of the flights disappears for some reason, so a new list of those routeIDs are added to a list
-            // The departure route ID is added
-            List<int> routeIDs = new List<int>();
-            routeIDs.Add(Convert.ToInt32(DepartureFlightDetailsTable.Rows[0].Cells[0].Value));
+            int departingRouteId = Convert.ToInt32(DepartureFlightDetailsTable.Rows[0].Cells[0].Value.ToString());
+            int returningRouteID = 0;
+            List<int> departingFlightIDs = SystemAction.DeriveFlightIDs_SelectedRoute(DepartureFlightDetailsTable.Rows[0].Cells[5].Value.ToString());
+            List<FlightModel> departingFlights = new List<FlightModel>();
+            List<int> returningFlightIDs = new List<int>();
+            List<FlightModel> returningFlights = new List<FlightModel>();
+            if (ReturnFlightDetailsTable.Visible)
+            {
+                returningFlightIDs = SystemAction.DeriveFlightIDs_SelectedRoute(ReturnFlightDetailsTable.Rows[0].Cells[5].Value.ToString());
+                returningRouteID = Convert.ToInt32(ReturnFlightDetailsTable.Rows[0].Cells[0].Value.ToString());
+            }
             // get the available points, used points, and balance for the current customer
             int available = SqliteDataAccess.GetAvailablePoints(currCustomer.userID);
             int used = SqliteDataAccess.GetUsedPoints(currCustomer.userID);
             int bal = SqliteDataAccess.GetBalance(currCustomer.userID);
+            int i = 0;
             // get all of the current flights in that chosen route
-            List<FlightModel> departFlights = SystemAction.GetCurrentFlights(routeIDs[0]);
-            List<FlightModel> returnFlights = new List<FlightModel>();
+            foreach (int fID in departingFlightIDs)
+            {
+                FlightModel flight = SystemAction.GetFlight(fID, i);
+                i += 1;
+                departingFlights.Add(flight);
+            }
+            i = 0;
             if (ReturnFlightDetailsTable.Visible)
             {
                 // if there is a return flight chosen, then add the route ID for that flight and get all of the current flights in that chosen route
-                routeIDs.Add(Convert.ToInt32(ReturnFlightDetailsTable.Rows[0].Cells[0].Value));
-                returnFlights = SystemAction.GetCurrentFlights(routeIDs[1]);
+                foreach (int fID in returningFlightIDs)
+                {
+                    FlightModel flight = SystemAction.GetFlight(fID, i);
+                    returningFlights.Add(flight);
+                    i += 1;
+                }
             }
             // Next check what payment method is selected
             // If the credit card is chosen, then the flight income, flights booked, transaction table, available points, and number of seats are updated
@@ -120,18 +136,18 @@ namespace Air3550
             {
                 if (ReturnFlightDetailsTable.Visible)
                 {
-                    foreach (FlightModel id in returnFlights)
+                    foreach (FlightModel id in returningFlights)
                     {
                         SqliteDataAccess.UpdateFlightIncome(id.flightID, id.flightIncome + id.cost);
-                        SqliteDataAccess.AddToFlightsBooked(currCustomer.userID, id.flightID, routeIDs[1], "Dollars");
+                        SqliteDataAccess.AddToFlightsBooked(currCustomer.userID, id.flightID, returningRouteID, "Dollars");
                         SqliteDataAccess.AddTransaction(currCustomer.userID, id.flightID, id.cost, "Dollars", id.departureDateTime);
                         SqliteDataAccess.UpdateNumOfVacantSeats(id.flightID, id.numberOfVacantSeats - 1);
                     }
                 }
-                foreach (FlightModel id in departFlights)
+                foreach (FlightModel id in departingFlights)
                 {
                     SqliteDataAccess.UpdateFlightIncome(id.flightID, id.flightIncome + id.cost);
-                    SqliteDataAccess.AddToFlightsBooked(currCustomer.userID, id.flightID, routeIDs[0], "Dollars");
+                    SqliteDataAccess.AddToFlightsBooked(currCustomer.userID, id.flightID, departingRouteId, "Dollars");
                     SqliteDataAccess.AddTransaction(currCustomer.userID, id.flightID, id.cost, "Dollars", id.departureDateTime);
                     SqliteDataAccess.UpdateNumOfVacantSeats(id.flightID, id.numberOfVacantSeats - 1);
                 }
@@ -139,15 +155,10 @@ namespace Air3550
                 DialogResult result = MessageBox.Show("You are now scheduled for your flight(s).\nWould you like to schedule any more flights?", "Success: Flight(s) Booked", MessageBoxButtons.YesNo, MessageBoxIcon.None);
                 // check if they want to schedule anymore flights
                 if (result == DialogResult.Yes)
-                {
                     BookFlightPage.GetInstance(ref currCustomer).Show();
-                    this.Dispose();
-                }
                 else
-                {
                     CustomerHomePage.GetInstance(ref currCustomer).Show();
-                    this.Dispose();
-                }
+                this.Dispose();
             }
             else if (PointsButton.Checked)
             {
@@ -157,16 +168,16 @@ namespace Air3550
                 {
                     if (ReturnFlightDetailsTable.Visible)
                     {
-                        foreach (FlightModel id in returnFlights)
+                        foreach (FlightModel id in returningFlights)
                         {
-                            SqliteDataAccess.AddToFlightsBooked(currCustomer.userID, id.flightID, routeIDs[1], "Points");
+                            SqliteDataAccess.AddToFlightsBooked(currCustomer.userID, id.flightID, returningRouteID, "Points");
                             SqliteDataAccess.AddTransaction(currCustomer.userID, id.flightID, id.numOfPoints, "Points", id.departureDateTime);
                             SqliteDataAccess.UpdateNumOfVacantSeats(id.flightID, id.numberOfVacantSeats - 1);
                         }
                     }
-                    foreach (FlightModel id in departFlights)
+                    foreach (FlightModel id in departingFlights)
                     {
-                        SqliteDataAccess.AddToFlightsBooked(currCustomer.userID, id.flightID, routeIDs[0], "Points");
+                        SqliteDataAccess.AddToFlightsBooked(currCustomer.userID, id.flightID, departingRouteId, "Points");
                         SqliteDataAccess.AddTransaction(currCustomer.userID, id.flightID, id.numOfPoints, "Points", id.departureDateTime);
                         SqliteDataAccess.UpdateNumOfVacantSeats(id.flightID, id.numberOfVacantSeats - 1);
                     }
@@ -175,15 +186,10 @@ namespace Air3550
                     DialogResult result = MessageBox.Show("You are now scheduled for your flight(s).\nWould you like to schedule any more flights?", "Success: Flight(s) Booked", MessageBoxButtons.YesNo, MessageBoxIcon.None);
                     // check if they want to schedule anymore flights
                     if (result == DialogResult.Yes)
-                    {
                         BookFlightPage.GetInstance(ref currCustomer).Show();
-                        this.Dispose();
-                    }
                     else
-                    {
                         CustomerHomePage.GetInstance(ref currCustomer).Show();
-                        this.Dispose();
-                    }
+                    this.Dispose();
                 }
             }
             else 
@@ -194,18 +200,18 @@ namespace Air3550
                 {
                     if (ReturnFlightDetailsTable.Visible)
                     {
-                        foreach (FlightModel id in returnFlights)
+                        foreach (FlightModel id in returningFlights)
                         {
                             SqliteDataAccess.UpdateFlightIncome(id.flightID, id.flightIncome + id.cost);
-                            SqliteDataAccess.AddToFlightsBooked(currCustomer.userID, id.flightID, routeIDs[1], "AirlineCredit");
+                            SqliteDataAccess.AddToFlightsBooked(currCustomer.userID, id.flightID, returningRouteID, "AirlineCredit");
                             SqliteDataAccess.AddTransaction(currCustomer.userID, id.flightID, id.cost, "AirlineCredit", id.departureDateTime);
                             SqliteDataAccess.UpdateNumOfVacantSeats(id.flightID, id.numberOfVacantSeats - 1);
                         }
                     }
-                    foreach (FlightModel id in departFlights)
+                    foreach (FlightModel id in departingFlights)
                     {
                         SqliteDataAccess.UpdateFlightIncome(id.flightID, id.flightIncome + id.cost);
-                        SqliteDataAccess.AddToFlightsBooked(currCustomer.userID, id.flightID, routeIDs[0], "AirlineCredit");
+                        SqliteDataAccess.AddToFlightsBooked(currCustomer.userID, id.flightID, departingRouteId, "AirlineCredit");
                         SqliteDataAccess.AddTransaction(currCustomer.userID, id.flightID, id.cost, "AirlineCredit", id.departureDateTime);
                         SqliteDataAccess.UpdateNumOfVacantSeats(id.flightID, id.numberOfVacantSeats - 1);
                     }
@@ -213,15 +219,10 @@ namespace Air3550
                     DialogResult result = MessageBox.Show("You are now scheduled for your flight(s).\nWould you like to schedule any more flights?", "Success: Flight(s) Booked", MessageBoxButtons.YesNo, MessageBoxIcon.None);
                     // check if they want to schedule anymore flights
                     if (result == DialogResult.Yes)
-                    {
                         BookFlightPage.GetInstance(ref currCustomer).Show();
-                        this.Dispose();
-                    }
                     else
-                    {
                         CustomerHomePage.GetInstance(ref currCustomer).Show();
-                        this.Dispose();
-                    }
+                    this.Dispose();
                 }
             }
         }

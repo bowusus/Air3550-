@@ -47,7 +47,7 @@ namespace Air3550
         }
         private void FlightsBookedButton_Click(object sender, EventArgs e)
         {
-
+            
             flightList.Rows.Clear(); // clears the data gridview
             bookedFlights = new List<FlightModel>();
             List<int> routeID = SqliteDataAccess.GetBookedFlightsRouteID(currCustomer.userID);
@@ -67,7 +67,7 @@ namespace Air3550
 
         private void FormatDataGrid()
         {
-            //// removes the information not needed
+            // removes the information not needed
             dataGridView1.Columns.Remove("masterFlightID");
             dataGridView1.Columns.Remove("firstName");
             dataGridView1.Columns.Remove("userid");
@@ -90,7 +90,6 @@ namespace Air3550
             dataGridView1.Columns[5].HeaderText = "Arriaval Time";
             dataGridView1.Columns[6].HeaderText = "Departure Date and Time";
             dataGridView1.Columns[7].HeaderText = "Duration";
-            dataGridView1.ClearSelection();
         }
 
         private void FlightsCancelledButton_Click(object sender, EventArgs e)

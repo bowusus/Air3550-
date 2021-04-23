@@ -16,6 +16,7 @@ namespace Air3550
         // This form file is to document the actions done on the Customer Home Page specifically
         public static FlightManifest instance;
         public static int currFlightID;
+        public static FlightModel flight;
         public FlightManifest()
         {
             InitializeComponent();
@@ -24,6 +25,16 @@ namespace Air3550
         {
             InitializeComponent();
             currFlightID = flightID;
+            flight = SystemAction.GetFlight(flightID, 0);
+            OriginLabel.Text += flight.originCode;
+            DestinationLabel.Text += flight.destinationCode;
+            DepartureDateTimeLabel.Text += flight.departureDateTime;
+            DurationLabel.Text += flight.duration;
+            DistanceLabel.Text += flight.distance;
+            PlaneTypeLabel.Text += flight.planeType;
+            CostLabel.Text += flight.cost;
+            FlightIncomeLabel.Text += flight.flightIncome;
+            VacantSeatsLabel.Text += flight.numberOfVacantSeats;
         }
         public static FlightManifest GetInstance(int flightID)
         {

@@ -18,17 +18,17 @@ namespace Air3550
         public static List<string> departAirports; // list of depart airports
         public static List<string> arriveAirports; // list of arrival airports
         public static int tempFlightSelected; // route that the user temporarily selects
+        DateTime fromTempVariable;
+        DateTime toTempVariable;
         public FlightManagerHomePage()
         {
             // This method sets the default values of the datetimepickers and makes the table not visible
             InitializeComponent();
-            FromDatePicker.CustomFormat = " ";
-            FromDatePicker.Format = DateTimePickerFormat.Custom;
-            ToDatePicker.CustomFormat = " ";
-            ToDatePicker.Format = DateTimePickerFormat.Custom;
             FlightTable.Visible = false;
             departAirports = new List<string>(); // create the list of departing airports
             arriveAirports = new List<string>(); // create the list of arrival airports
+            fromTempVariable = DateTime.Now;
+            toTempVariable = DateTime.Now;
         }
         public static FlightManagerHomePage GetInstance()
         {
@@ -72,8 +72,8 @@ namespace Air3550
             string origin = null;
             string destination = null;
             // set the dates to the default min value
-            DateTime fromDate = DateTimePicker.MinimumDateTime;
-            DateTime toDate = DateTimePicker.MinimumDateTime;
+            DateTime fromDate = DateTime.Now;
+            DateTime toDate = DateTime.Now;
             // if the depart city is not null, then get the origin airport code from the drop down
             if (!String.IsNullOrEmpty(DepartComboBox.Text))
             {
@@ -85,24 +85,24 @@ namespace Air3550
                 destination = ArriveComboBox.Text.Substring(0, 3);
             }
             // if the from date picker is selected, then get that date
-            if (FromDatePicker.Value.TimeOfDay.Ticks == 0)
+            if (fromTempVariable == DateTime.MinValue || !FromDatePicker.Text.Equals(" "))
             {
-                fromDate = FromDatePicker.Value;
+                fromDate = FromDatePicker.Value.Date;
             }
             // if the to date picker is selected, then get that date
-            if (ToDatePicker.Value.TimeOfDay.Ticks == 0)
+            if (toTempVariable == DateTime.MinValue || !ToDatePicker.Text.Equals(" "))
             {
-                toDate = ToDatePicker.Value;
+                toDate = ToDatePicker.Value.Date;
             }
-            if (fromDate != DateTimePicker.MinimumDateTime && toDate != DateTimePicker.MinimumDateTime && fromDate > toDate)
+            if ((fromTempVariable == DateTime.MinValue || !FromDatePicker.Text.Equals(" ")) && (toTempVariable == DateTime.MinValue || !ToDatePicker.Text.Equals(" ")) && fromDate > toDate)
                 BeforeFromDateError.Visible = true;
             else
             {
                 // change the fromDate and toDate back to the minValue to send through the query
-                if (fromDate == DateTimePicker.MinimumDateTime)
-                    fromDate = DateTime.MinValue;
-                if (toDate == DateTimePicker.MinimumDateTime)
-                    toDate = DateTime.MinValue;
+                if (fromDate.TimeOfDay.Ticks != 0)
+                    fromDate = DateTime.MinValue.Date;
+                if (toDate.TimeOfDay.Ticks != 0)
+                    toDate = DateTime.MinValue.Date;
                 FlightTable.DataSource = SqliteDataAccess.GetFlights(origin, destination, fromDate, toDate); // get the flights that have the specified values
                 FlightTable.Visible = true; // display the table
                 FlightTable.ClearSelection();
@@ -132,12 +132,10 @@ namespace Air3550
             // This method clears all filters and resets them to their defaults
             DepartComboBox.SelectedIndex = -1; 
             ArriveComboBox.SelectedIndex = -1;
-            FromDatePicker.Value = DateTimePicker.MinimumDateTime;
-            FromDatePicker.CustomFormat = " ";
-            FromDatePicker.Format = DateTimePickerFormat.Custom;
-            ToDatePicker.Value = DateTimePicker.MinimumDateTime;
-            ToDatePicker.CustomFormat = " ";
-            ToDatePicker.Format = DateTimePickerFormat.Custom;
+            FromDatePicker.ResetText();
+            ToDatePicker.ResetText();
+            fromTempVariable = DateTime.Now;
+            toTempVariable = DateTime.Now;
         }
         private void ViewFlightManifestButton_Click(object sender, EventArgs e)
         {
@@ -167,6 +165,8 @@ namespace Air3550
             var delta = FromDatePicker.Value.Subtract(DateTime.Today); // get the difference between the to date and today
             if (delta.TotalMinutes > 0) // if the from date is after today
                 FromDateAfterTodayError.Visible = true;
+            else
+                this.fromTempVariable = DateTime.MinValue;
         }
         private void ToDatePicker_ValueChanged(object sender, EventArgs e)
         {
@@ -176,15 +176,19 @@ namespace Air3550
             ToDatePicker.Value = ToDatePicker.Value.Date; // this sets the time to midnight, so ticks = 0
             BeforeFromDateError.Visible = false;
             ToDateAfterTodayError.Visible = false;
-            if (FromDatePicker.Value.TimeOfDay.Ticks == 0)
+            var delta2 = ToDatePicker.Value.Subtract(DateTime.Today); // get the difference between the to date and today
+            if (this.fromTempVariable == DateTime.MinValue)
             {
                 var delta1 = ToDatePicker.Value.Subtract(FromDatePicker.Value); // get the difference between the from date and the to date
                 if (delta1.TotalMinutes < 0) // if the to date is before the from date
                     BeforeFromDateError.Visible = true;
+                else if (delta2.TotalMinutes > 0) // if the to date is after today
+                    ToDateAfterTodayError.Visible = true;
+                else
+                    this.toTempVariable = DateTime.MinValue;
             }
-            var delta2 = ToDatePicker.Value.Subtract(DateTime.Today); // get the difference between the to date and today
-            if (delta2.TotalMinutes > 0) // if the to date is after today
-                ToDateAfterTodayError.Visible = true;
+            
+            
         }
         private void LogOutButton_Click(object sender, EventArgs e)
         {

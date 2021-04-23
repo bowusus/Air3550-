@@ -27,6 +27,7 @@ namespace Air3550
             InitializeComponent();
             // get the current customer and pass that information to the textboxes
             currCustomer = customer;
+            EditAccountLabel.Text += currCustomer.userID;
             FirstNameText.Text = customer.firstName;
             LastNameText.Text = customer.lastName;
             StreetText.Text = customer.street;
