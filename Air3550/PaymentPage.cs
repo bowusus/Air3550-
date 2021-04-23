@@ -90,12 +90,14 @@ namespace Air3550
         }
         private void BookFlightButton_Click(object sender, EventArgs e)
         {
+
             // This method actually books the selected flight(s)
             // Tables updated: bookedFlights, transaction, availableFlights, credits
             // if the customer wants to use points or an airline credit to pay, an error will appear if they do not have enough available in their account
 
             // The original list of the flights disappears for some reason, so a new list of those routeIDs are added to a list
             // The departure route ID is added
+            
             List<int> routeIDs = new List<int>();
             routeIDs.Add(Convert.ToInt32(DepartureFlightDetailsTable.Rows[0].Cells[0].Value));
             // get the available points, used points, and balance for the current customer

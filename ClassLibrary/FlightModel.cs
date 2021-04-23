@@ -20,7 +20,6 @@ namespace ClassLibrary
 		public int flightID { get; set; }
 		public double durDouble { get; set; }
 		public int masterFlightID { get; set; }
-		public int numOfPoints { get; set; }
 		public string originCode { get; set; }
 		public string originName { get; set; }
 		public string firstName { get; set; }
@@ -28,13 +27,13 @@ namespace ClassLibrary
 		public string lastName { get; set; }
 		public string destinationCode { get; set; }
 		public string destinationName { get; set; }
-		public double distance { get; set; }
+		public int distance { get; set; }
 		public DateTime departureDateTime { get; set; }
 		public DateTime arrivalDateTime { get; set; }
 		public TimeSpan duration { get; set; }
-		public double totalTime { get; set; }
 		public string planeType { get; set; }
 		public double cost { get; set; }
+		public int numOfPoints { get; set; }
 		public int numberOfVacantSeats { get; set; }
 		public double flightIncome { get; set; }
 

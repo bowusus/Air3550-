@@ -106,11 +106,11 @@ namespace Air3550
             // 
             this.EditAccountLabel.AutoSize = true;
             this.EditAccountLabel.Font = new System.Drawing.Font("Rockwell", 24F);
-            this.EditAccountLabel.Location = new System.Drawing.Point(798, 98);
+            this.EditAccountLabel.Location = new System.Drawing.Point(555, 98);
             this.EditAccountLabel.Name = "EditAccountLabel";
-            this.EditAccountLabel.Size = new System.Drawing.Size(627, 72);
+            this.EditAccountLabel.Size = new System.Drawing.Size(960, 72);
             this.EditAccountLabel.TabIndex = 21;
-            this.EditAccountLabel.Text = "Account Information";
+            this.EditAccountLabel.Text = "Account Information - User ID #";
             this.EditAccountLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // SaveAccountButton

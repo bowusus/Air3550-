@@ -241,14 +241,14 @@ namespace Air3550
             dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
             this.DepartureFlightDetailsTable.DefaultCellStyle = dataGridViewCellStyle2;
             this.DepartureFlightDetailsTable.Enabled = false;
-            this.DepartureFlightDetailsTable.Location = new System.Drawing.Point(67, 249);
+            this.DepartureFlightDetailsTable.Location = new System.Drawing.Point(67, 245);
             this.DepartureFlightDetailsTable.MultiSelect = false;
             this.DepartureFlightDetailsTable.Name = "DepartureFlightDetailsTable";
             this.DepartureFlightDetailsTable.ReadOnly = true;
             this.DepartureFlightDetailsTable.RowHeadersWidth = 82;
             this.DepartureFlightDetailsTable.RowTemplate.Height = 33;
             this.DepartureFlightDetailsTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.DepartureFlightDetailsTable.Size = new System.Drawing.Size(2101, 221);
+            this.DepartureFlightDetailsTable.Size = new System.Drawing.Size(2101, 254);
             this.DepartureFlightDetailsTable.TabIndex = 102;
             // 
             // ID
@@ -374,14 +374,14 @@ namespace Air3550
             dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
             this.ReturnFlightDetailsTable.DefaultCellStyle = dataGridViewCellStyle4;
             this.ReturnFlightDetailsTable.Enabled = false;
-            this.ReturnFlightDetailsTable.Location = new System.Drawing.Point(67, 563);
+            this.ReturnFlightDetailsTable.Location = new System.Drawing.Point(67, 559);
             this.ReturnFlightDetailsTable.MultiSelect = false;
             this.ReturnFlightDetailsTable.Name = "ReturnFlightDetailsTable";
             this.ReturnFlightDetailsTable.ReadOnly = true;
             this.ReturnFlightDetailsTable.RowHeadersWidth = 82;
             this.ReturnFlightDetailsTable.RowTemplate.Height = 33;
             this.ReturnFlightDetailsTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.ReturnFlightDetailsTable.Size = new System.Drawing.Size(2101, 221);
+            this.ReturnFlightDetailsTable.Size = new System.Drawing.Size(2101, 254);
             this.ReturnFlightDetailsTable.TabIndex = 107;
             // 
             // dataGridViewTextBoxColumn1
