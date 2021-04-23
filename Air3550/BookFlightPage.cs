@@ -183,7 +183,7 @@ namespace Air3550
             {
                 if (delta1.TotalMinutes > 0)
                     ReturnDateError.Visible = true;
-                else if (delta2.TotalMinutes < 0)
+                else if (delta2.TotalMinutes < 1440)
                     ReturnBeforeDepartError.Visible = true;
             }
             if (DepartComboBox.SelectedValue == ArriveComboBox.SelectedValue)

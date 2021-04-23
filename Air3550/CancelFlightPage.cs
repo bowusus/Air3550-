@@ -44,24 +44,42 @@ namespace Air3550
             // This method loads all current flights for the current customer
             // These are the flights that the customer can cancel
             // There can be multiple flights due to a round trip or if a flight has layovers
+            List<int> routeIDs = SqliteDataAccess.GetBookedFlightsRouteID(currCustomer.userID); // get the route IDs from the booked flights table
+            List<int> flightIDs_Booked = SqliteDataAccess.GetBookedFlightIDs(currCustomer.userID);
+            int count = 0;
+            int index = 0;
+            int i = 0;
+            int j = 0;
             if (bookedFlights.Count == 0)
             {
-                
-                List<int> flightIDs_Route = SqliteDataAccess.GetBookedFlightsRouteID(currCustomer.userID); // get the route IDs from the booked flights table
-                List<int> flightIDs_Booked = SqliteDataAccess.GetBookedFlightIDs(currCustomer.userID);
-                int i = 0;
                 if (flightIDs_Booked.Count != 0 ) 
                 // as long as there is a flight currently booked with a route ID
                 // then check if each ID in the route is still booked and add it to the booked flights list
                 {
-                    foreach (int fID in flightIDs_Route)
+                    foreach (int rID in routeIDs)
                     {
-                        if (flightIDs_Booked.Contains(fID))
+                        List<int> masterFlightIDsRoute = SqliteDataAccess.GetFlightIDsInRoute(rID);
+                        count = masterFlightIDsRoute.Count;
+                        while (i < count)
                         {
-                            FlightModel flight = SystemAction.GetFlight(fID, i);
-                            bookedFlights.Add(flight);
-                            i += 1;
+                            if (flightIDs_Booked.Contains(flightIDs_Booked[j]))
+                            {
+                                FlightModel flight;
+                                if (bookedFlights.Count % count == 0 && i != 0)
+                                {
+                                    flight = SystemAction.GetFlight(flightIDs_Booked[j], i);
+                                    i = 0;
+                                }
+                                else
+                                {
+                                    flight = SystemAction.GetFlight(flightIDs_Booked[j], i);
+                                    i += 1;
+                                }
+                                bookedFlights.Add(flight);
+                            }
+                            j += 1;
                         }
+                        i = 0;
                     }
                 }
             }

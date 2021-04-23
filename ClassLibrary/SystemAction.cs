@@ -241,6 +241,39 @@ namespace ClassLibrary
                 return Convert.ToDouble(totalPoints);
             }
         }
+        public static List<int> DeriveFlightIDs_SelectedRoute(string flightIDs)
+        {
+            List<int> flightIDsList = new List<int>();
+            int index1 = flightIDs.IndexOf("\r\n"); // get the first index of the first space to find the available seats of the first flight in the route 
+            int index2 = flightIDs.LastIndexOf("\r\n"); // get the last index of the space to find the available seats of the second and third flight in the route 
+            int flightID1; // used for available seats on the first flight
+            int flightID2; // used for available seats on the second flight
+            int flightID3; // used for available seats on the third flight
+            if (index1 == -1) // if there is no "\r\n" then, there is only one flight
+            {
+                flightID1 = int.Parse(flightIDs);
+                flightIDsList.Add(flightID1);
+                return flightIDsList;
+            }
+            else if (index1 == index2) // if the index of the first and last "\r\n" are the same, then there are two flights
+            {
+                flightID1 = int.Parse(flightIDs.Substring(0, index1));
+                flightID2 = int.Parse(flightIDs.Substring(index1 + 1, flightIDs.Length - index1 - 1));
+                flightIDsList.Add(flightID1);
+                flightIDsList.Add(flightID2);
+                return flightIDsList;
+            }
+            else // if the index of the first and last "\r\n" are different, then there are three flights
+            {
+                flightID1 = int.Parse(flightIDs.Substring(0, index1));
+                flightID2 = int.Parse(flightIDs.Substring(index1 + 1, index2 - index1));
+                flightID3 = int.Parse(flightIDs.Substring(index2 + 1, flightIDs.Length - index2 - 1));
+                flightIDsList.Add(flightID1);
+                flightIDsList.Add(flightID2);
+                flightIDsList.Add(flightID3);
+                return flightIDsList;
+            }
+        }
         public static List<FlightModel> GetBoardingFlights(int rID, CustomerModel currCustomer)
         {
             List<int> flightIDs;
@@ -309,7 +342,6 @@ namespace ClassLibrary
                 startDate = newStartDate;
             }
         }
-
         public static void GenerateFlight(FlightModel masterFlight)
         {
             // New flight has been made in master so creating all available flights from the current date to 6 months out
