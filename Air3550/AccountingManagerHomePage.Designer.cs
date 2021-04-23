@@ -202,13 +202,15 @@ namespace Air3550
             this.accountPage.ReadOnly = true;
             this.accountPage.RowHeadersWidth = 51;
             this.accountPage.RowTemplate.Height = 24;
+            this.accountPage.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.accountPage.Size = new System.Drawing.Size(758, 344);
             this.accountPage.TabIndex = 13;
+            this.accountPage.SelectionChanged += new System.EventHandler(this.accountPage_SelectionChanged);
             // 
             // Label1
             // 
             this.Label1.AutoSize = true;
-            this.Label1.Location = new System.Drawing.Point(416, 177);
+            this.Label1.Location = new System.Drawing.Point(337, 165);
             this.Label1.Name = "Label1";
             this.Label1.Size = new System.Drawing.Size(29, 17);
             this.Label1.TabIndex = 19;

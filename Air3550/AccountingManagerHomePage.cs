@@ -63,7 +63,7 @@ namespace Air3550
 
                 capacityPercentage = 1 - Math.Round((double)(id.numberOfVacantSeats / SqliteDataAccess.GetPlaneCapacity(id.planeType) * 100));
             }
-            //    accountPage.Rows.Add();
+            Label1.Text = "Cap Percent: " + capacityPercentage;
 
 
 
@@ -79,17 +79,27 @@ namespace Air3550
 
             totalFlights.Text = "Total Flights Traveled: " + SqliteDataAccess.GetCompanyFlightCount(originName, destinationName, fromDate, toDate).ToString();
             totalRevenue.Text = "Total Company Income: $" + SqliteDataAccess.GetCompanyIncome(originName, destinationName, fromDate, toDate).ToString("0.00");
-           
+
             //  accountPage.Rows.Add(totalRevenue);
 
 
 
         }
-    
+
 
         private void CreateButton_Click(object sender, EventArgs e)
         {
             {
+                List<FlightModel> flightcap = new List<FlightModel>();
+                double capacityPercentage = 0;
+
+                foreach (FlightModel id in flightcap)
+                {
+                    // get the capacity percentage by dividing #of vacant by # plane cap *100
+
+                    capacityPercentage = 1 - Math.Round((double)(id.numberOfVacantSeats / SqliteDataAccess.GetPlaneCapacity(id.planeType) * 100));
+                }
+                Label1.Text = "Cap Percent: " + capacityPercentage;
                 // This method displays a list of the flights that have the values that the flight manager filtered on
                 BeforeFromDateError.Visible = false;
                 string origin = null;
@@ -98,9 +108,9 @@ namespace Air3550
                 DateTime fromDate = DateTimePicker.MinimumDateTime;
                 DateTime toDate = DateTimePicker.MinimumDateTime;
                 // if the depart city is not null, then get the origin airport code from the drop down
-       
+
                 // if the arrive city is not null, then get the arrive airport code from the drop down
-               
+
                 // if the from date picker is selected, then get that date
                 if (FromTimePicker.Value.TimeOfDay.Ticks == 0)
                 {
@@ -120,12 +130,12 @@ namespace Air3550
                         fromDate = DateTime.MinValue;
                     if (toDate == DateTimePicker.MinimumDateTime)
                         toDate = DateTime.MinValue;
-                   accountPage.DataSource =  SqliteDataAccess.GetFlights(origin, destination, fromDate, toDate); // get the flights that have the specified values
-                    
+                    accountPage.DataSource = SqliteDataAccess.GetFlights(origin, destination, fromDate, toDate); // get the flights that have the specified values
+
                     accountPage.Visible = true; // display the table
                     accountPage.ClearSelection();
 
-                  //  FormatGrid(); // format the grid
+                    FormatGrid(); // format the grid
                 }
             }
         }
@@ -136,19 +146,20 @@ namespace Air3550
             //removes information not need on page
             accountPage.Columns.Remove("masterFlightID_fk");
             accountPage.Columns.Remove("distance");
-            accountPage.Columns.Remove("planeType_fk");
+            //  accountPage.Columns.Remove("planeType_fk");
             accountPage.Columns.Remove("flightIncome");
 
 
             // renames the column to match correct info
-            accountPage.Columns[1].HeaderText = "Flight ID";
-            accountPage.Columns[2].HeaderText = "Origin Code";
-            accountPage.Columns[3].HeaderText = "Destination Code";
-            accountPage.Columns[4].HeaderText = "Departure Date";
-            accountPage.Columns[5].HeaderText = "Departure Time";
-            accountPage.Columns[6].HeaderText = "Duration";
+            accountPage.Columns[0].HeaderText = "Flight ID";
+            accountPage.Columns[1].HeaderText = "Origin Code";
+            accountPage.Columns[2].HeaderText = "Destination Code";
+            accountPage.Columns[3].HeaderText = "Departure Date";
+            accountPage.Columns[4].HeaderText = "Departure Time";
+            accountPage.Columns[5].HeaderText = "Duration";
+            accountPage.Columns[6].HeaderText = "Plane Type";
             accountPage.Columns[7].HeaderText = "Cost";
-            accountPage.Columns[8].HeaderText = "Number of Vaccant Seats";
+            accountPage.Columns[8].HeaderText = "Number of Vacant Seats";
             //  flightList.Columns.Add("Capacity Percentage", typeof(string));
 
 
@@ -158,18 +169,18 @@ namespace Air3550
 
 
         Bitmap bmp;
-     
+
 
         private void PrintButton_Click(object sender, EventArgs e)
         {
-         // get the page height and width to print the data view correctly
-                int height = accountPage.Height;
-                accountPage.Height = accountPage.RowCount * accountPage.RowTemplate.Height * 2;
-                bmp = new Bitmap(accountPage.Width, accountPage.Height);
-                accountPage.DrawToBitmap(bmp, new Rectangle(0, 0, accountPage.Width, accountPage.Height));
-                accountPage.Height = height;
-                printPreviewDialog1.ShowDialog();
-           
+            // get the page height and width to print the data view correctly
+            int height = accountPage.Height;
+            accountPage.Height = accountPage.RowCount * accountPage.RowTemplate.Height * 2;
+            bmp = new Bitmap(accountPage.Width, accountPage.Height);
+            accountPage.DrawToBitmap(bmp, new Rectangle(0, 0, accountPage.Width, accountPage.Height));
+            accountPage.Height = height;
+            printPreviewDialog1.ShowDialog();
+
         }
 
         private void printDocument1_PrintPage(object sender, System.Drawing.Printing.PrintPageEventArgs e)
@@ -207,6 +218,21 @@ namespace Air3550
                 if (delta2.TotalMinutes > 0) // if the to date is after today
                     ToDateAfterTodayError.Visible = true;
             }
+        }
+
+        private void accountPage_SelectionChanged(object sender, EventArgs e)
+        {
+            
+            double capacityPercentage = 0;
+             if (accountPage.SelectedRows.Count > 0)
+            {
+                // get the capacity percentage by dividing #of vacant by # plane cap *100
+                // add comments
+                capacityPercentage = Math.Round((1.0 - (double)((Convert.ToDouble(accountPage.SelectedRows[0].Cells["numOfVacantSeats"].Value.ToString())
+                                        / (double)SqliteDataAccess.GetPlaneCapacity(accountPage.SelectedRows[0].Cells["planeType_fk"].Value.ToString())))) * 100.0, 2);
+            }
+             //Change wording 
+            Label1.Text = "Cap Percent: " + capacityPercentage + " % ";
         }
     }
 }

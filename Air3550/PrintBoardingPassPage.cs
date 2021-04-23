@@ -153,7 +153,7 @@ namespace Air3550
                         printbuttonclicked = true;
 
                         // Boarding will be available to print 24 hours before a flight is scheduled to depart
-                        if (_time.TotalMinutes < 1440)
+                        if (_time.TotalMinutes > 1440)
                         {
                             PrintPreviewDialog ppd = new PrintPreviewDialog();
                             PrintDocument Pd = new PrintDocument();
