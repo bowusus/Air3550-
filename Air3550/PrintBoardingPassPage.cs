@@ -180,7 +180,7 @@ namespace Air3550
                         printbuttonclicked = true;
 
                         // Boarding will be available to print 24 hours before a flight is scheduled to depart
-                        if (_time.TotalMinutes > 1440)
+                        if (_time.TotalMinutes < 1440)
                         {
                             PrintPreviewDialog ppd = new PrintPreviewDialog();
                             PrintDocument Pd = new PrintDocument();
@@ -196,7 +196,7 @@ namespace Air3550
                         }
 
                         else
-                            MessageBox.Show("You are within 24 hours of your flight and can not print boaring pass", "Print Boarding Pass", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox.Show("You are not within 24 hours of your flight and can not print boaring pass", "Print Boarding Pass", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
 
             }
