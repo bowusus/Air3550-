@@ -218,7 +218,7 @@ namespace Air3550
             this.DepText.Location = new System.Drawing.Point(593, 179);
             this.DepText.Name = "DepText";
             this.DepText.ReadOnly = true;
-            this.DepText.Size = new System.Drawing.Size(222, 30);
+            this.DepText.Size = new System.Drawing.Size(232, 30);
             this.DepText.TabIndex = 60;
             // 
             // ArrivalText
@@ -226,7 +226,7 @@ namespace Air3550
             this.ArrivalText.Location = new System.Drawing.Point(593, 246);
             this.ArrivalText.Name = "ArrivalText";
             this.ArrivalText.ReadOnly = true;
-            this.ArrivalText.Size = new System.Drawing.Size(222, 30);
+            this.ArrivalText.Size = new System.Drawing.Size(232, 30);
             this.ArrivalText.TabIndex = 64;
             // 
             // FlightIDText
@@ -289,7 +289,7 @@ namespace Air3550
             this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox1.Location = new System.Drawing.Point(60, 91);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(821, 452);
+            this.groupBox1.Size = new System.Drawing.Size(831, 452);
             this.groupBox1.TabIndex = 69;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Boarding Pass";

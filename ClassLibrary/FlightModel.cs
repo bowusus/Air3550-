@@ -18,13 +18,14 @@ namespace ClassLibrary
 
 		// auto-implemented properties for trivial get and set
 		public int flightID { get; set; }
+		public int userid { get; set; }
+		public string firstName { get; set; }	
+		public string lastName { get; set; }
 		public double durDouble { get; set; }
 		public int masterFlightID { get; set; }
 		public string originCode { get; set; }
 		public string originName { get; set; }
-		public string firstName { get; set; }
-		public int userid { get; set; }
-		public string lastName { get; set; }
+		
 		public string destinationCode { get; set; }
 		public string destinationName { get; set; }
 		public int distance { get; set; }

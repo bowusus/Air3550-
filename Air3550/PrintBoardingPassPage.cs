@@ -129,33 +129,34 @@ namespace Air3550
         {
             // This method renames and removes some columns that do not get updated when the data in the datagridview gets updated
             // Remove some information that the employees need but not the customer
-          //  dataGridView1.Columns.Remove("planeType");
-          //  dataGridView1.Columns.Remove("dateCreated");
-        //    dataGridView1.Columns.Remove("numberOfVacantSeats");
-         //   dataGridView1.Columns.Remove("flightIncome");
-       //     dataGridView1.Columns.Remove("masterFlightID");
-       //     dataGridView1.Columns.Remove("originCode");
-      //      dataGridView1.Columns.Remove("destinationCode");
-      //      dataGridView1.Columns.Remove("distance");
-         //   dataGridView1.Columns.Remove("totalTime");
-       //     dataGridView1.Columns.Remove("cost");
-      //      dataGridView1.Columns.Remove("numOfPoints");
-        //    dataGridView1.Columns.Remove("amountOfPoints");
-      //      dataGridView1.Columns.Remove("durDouble");
+
+            dataGridView1.Columns["durDouble"].Visible = false;
+            dataGridView1.Columns["masterFlightID"].Visible = false;
+            dataGridView1.Columns["originCode"].Visible = false;
+            dataGridView1.Columns["destinationCode"].Visible = false;
+            dataGridView1.Columns["distance"].Visible = false;
+            dataGridView1.Columns["planeType"].Visible = false;
+            dataGridView1.Columns["cost"].Visible = false;
+            dataGridView1.Columns["numOfPoints"].Visible = false;
+            dataGridView1.Columns["numberOfVacantSeats"].Visible = false;
+            dataGridView1.Columns["flightIncome"].Visible = false;
+
+
+
+
 
 
 
             // change the name of the columns
-            //dataGridView1.Columns[0].HeaderText = "FlightID";
-            //dataGridView1.Columns[1].HeaderText = "Origin Name";
-            //dataGridView1.Columns[5].HeaderText = "Destination";
-            //dataGridView1.Columns[2].HeaderText = "First Name";
-            //dataGridView1.Columns[3].HeaderText = "UserID";
-            //dataGridView1.Columns[4].HeaderText = "Last Name";
-            //dataGridView1.Columns[6].HeaderText = "Arriaval Date and Time";
-            //dataGridView1.Columns[7].HeaderText = "Depature Date";
-            //dataGridView1.Columns[8].HeaderText = "Duration";
-
+            dataGridView1.Columns[0].HeaderText = "FlightID";
+            dataGridView1.Columns[1].HeaderText = "UserID";
+            dataGridView1.Columns[2].HeaderText = "First Name";
+            dataGridView1.Columns[3].HeaderText = "Last Name";
+            dataGridView1.Columns[7].HeaderText = "Origin Name";
+            dataGridView1.Columns[9].HeaderText = "Destination Name";
+            dataGridView1.Columns[11].HeaderText = "Depature Time and Date";
+            dataGridView1.Columns[12].HeaderText = "Arrival Time and Date";
+            dataGridView1.Columns[13].HeaderText = "Duration";
 
         }
 
@@ -179,7 +180,7 @@ namespace Air3550
                         printbuttonclicked = true;
 
                         // Boarding will be available to print 24 hours before a flight is scheduled to depart
-                        if (_time.TotalMinutes < 1440)
+                        if (_time.TotalMinutes > 1440)
                         {
                             PrintPreviewDialog ppd = new PrintPreviewDialog();
                             PrintDocument Pd = new PrintDocument();
@@ -221,17 +222,20 @@ namespace Air3550
 
         private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
         {
+            FormatDataGrid();
             if (e.RowIndex != -1)
             {
+               
                 // Populate to the boarding pass page the info needed for the boarding pass
                 DataGridViewRow row = dataGridView1.Rows[e.RowIndex];
                 FlightIDText.Text = row.Cells[0].Value.ToString();
-                OriginText.Text = row.Cells[1].Value.ToString();
+                OriginText.Text = row.Cells[7].Value.ToString();
                 FirstNameText.Text = row.Cells[2].Value.ToString();
-                UserIDText.Text = row.Cells[3].Value.ToString();
-                DesText.Text = row.Cells[5].Value.ToString();
-                DepText.Text = row.Cells[7].Value.ToString();
-                LastNameText.Text = row.Cells[4].Value.ToString();
+                UserIDText.Text = row.Cells[1].Value.ToString();
+                DesText.Text = row.Cells[9].Value.ToString();
+                DepText.Text = row.Cells[11].Value.ToString();
+                ArrivalText.Text = row.Cells[12].Value.ToString();
+                LastNameText.Text = row.Cells[3].Value.ToString();
 
 
             }

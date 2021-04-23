@@ -92,29 +92,33 @@ namespace Air3550
 
         private void FormatDataGrid()
         {
-        //    // removes the information not needed
-        //    dataGridView1.Columns.Remove("masterFlightID");
-        //    dataGridView1.Columns.Remove("firstName");
-        //    dataGridView1.Columns.Remove("userid");
-        //    dataGridView1.Columns.Remove("lastName");
-        //    dataGridView1.Columns.Remove("planeType");
-        //    dataGridView1.Columns.Remove("flightIncome");
-        //    dataGridView1.Columns.Remove("numberOfVacantSeats");
-        //    dataGridView1.Columns.Remove("numOfPoints");
-        //    dataGridView1.Columns.Remove("totalTime");
-        //    dataGridView1.Columns.Remove("distance");
-        //    dataGridView1.Columns.Remove("cost");
-        //    dataGridView1.Columns.Remove("durDouble");
+            // removes the information not needed
+           
+            dataGridView1.Columns.Remove("durDouble");
+            dataGridView1.Columns.Remove("masterFlightID");
+            dataGridView1.Columns.Remove("firstName");
+            dataGridView1.Columns.Remove("userid");
+            dataGridView1.Columns.Remove("lastName");
+            dataGridView1.Columns.Remove("planeType");
+            dataGridView1.Columns.Remove("numberOfVacantSeats");
+            dataGridView1.Columns.Remove("flightIncome");
 
-        //    //// Fix and rename header text
-        //    dataGridView1.Columns[0].HeaderText = "Flight ID";
-        //    dataGridView1.Columns[1].HeaderText = "Origin Code";
-        //    dataGridView1.Columns[2].HeaderText = "Origin Name";
-        //    dataGridView1.Columns[3].HeaderText = "Destination Code";
-        //    dataGridView1.Columns[4].HeaderText = "Destination Name";
-        //    dataGridView1.Columns[5].HeaderText = "Arriaval Time";
-        //    dataGridView1.Columns[6].HeaderText = "Departure Date and Time";
-        //    dataGridView1.Columns[7].HeaderText = "Duration";
+
+            // Fix and rename header text
+            dataGridView1.Columns[0].HeaderText = "FlightID";
+            dataGridView1.Columns[1].HeaderText = "Origin Code";
+            dataGridView1.Columns[2].HeaderText = "Origin Name";
+            dataGridView1.Columns[3].HeaderText = "Destination Code";
+            dataGridView1.Columns[4].HeaderText = "Destination Name";
+            dataGridView1.Columns[5].HeaderText = "Distance (in miles)";
+            dataGridView1.Columns[6].HeaderText = "Departure Date and Time";
+            dataGridView1.Columns[7].HeaderText = "Est. Arrival Date and Time";
+            dataGridView1.Columns[8].HeaderText = "Est. Duration (h:mm:ss)";
+            dataGridView1.Columns[9].HeaderText = "Cost (in dollars)";
+            dataGridView1.Columns[10].HeaderText = "Number of Points";
+            dataGridView1.ClearSelection();
+
+
         }
 
         private void FlightsCancelledButton_Click(object sender, EventArgs e)
