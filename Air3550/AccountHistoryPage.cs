@@ -18,7 +18,7 @@ namespace Air3550
         public static AccountHistoryPage instance;
         public static bool logOutButtonClicked = false;
         public static bool backButtonClicked = false;
-        public static List<FlightModel> bookedFlights;
+        public static List<FlightModel> bookedFlights =  new List<FlightModel>();
         public static List<FlightModel> takenFlights;
         public static List<FlightModel> cancelflight;
         private DataTable flightList = new DataTable();
@@ -47,49 +47,74 @@ namespace Air3550
         }
         private void FlightsBookedButton_Click(object sender, EventArgs e)
         {
-            
-            flightList.Rows.Clear(); // clears the data gridview
-            bookedFlights = new List<FlightModel>();
-            List<int> routeID = SqliteDataAccess.GetBookedFlightsRouteID(currCustomer.userID);
-            if (routeID.Count != 0)
+            List<int> routeIDs = SqliteDataAccess.GetBookedFlightsRouteID(currCustomer.userID); // get the route IDs from the booked flights table
+            List<int> flightIDs_Booked = SqliteDataAccess.GetBookedFlightIDs(currCustomer.userID);
+            int count = 0;
+            int index = 0;
+            int i = 0;
+            int j = 0;
+            if (bookedFlights.Count == 0)
             {
-                foreach (int rID in routeID)
+                if (flightIDs_Booked.Count != 0)
+                // as long as there is a flight currently booked with a route ID
+                // then check if each ID in the route is still booked and add it to the booked flights list
                 {
-                    List<FlightModel> flightsBooked = SystemAction.GetCurrentFlights(rID);
-                    foreach (FlightModel model in flightsBooked)
-                        bookedFlights.Add(model);
+                    foreach (int rID in routeIDs)
+                    {
+                        List<int> masterFlightIDsRoute = SqliteDataAccess.GetFlightIDsInRoute(rID);
+                        count = masterFlightIDsRoute.Count;
+                        while (i < count)
+                        {
+                            if (flightIDs_Booked.Contains(flightIDs_Booked[j]))
+                            {
+                                FlightModel flight;
+                                if (bookedFlights.Count % count == 0 && i != 0)
+                                {
+                                    flight = SystemAction.GetFlight(flightIDs_Booked[j], i);
+                                    i = 0;
+                                }
+                                else
+                                {
+                                    flight = SystemAction.GetFlight(flightIDs_Booked[j], i);
+                                    i += 1;
+                                }
+                                bookedFlights.Add(flight);
+                            }
+                            j += 1;
+                        }
+                        i = 0;
+                    }
                 }
-
-                dataGridView1.DataSource = bookedFlights;
-                FormatDataGrid();
             }
-        }
+            dataGridView1.DataSource = bookedFlights;
+             FormatDataGrid();
+            }
 
         private void FormatDataGrid()
         {
-            // removes the information not needed
-            dataGridView1.Columns.Remove("masterFlightID");
-            dataGridView1.Columns.Remove("firstName");
-            dataGridView1.Columns.Remove("userid");
-            dataGridView1.Columns.Remove("lastName");
-            dataGridView1.Columns.Remove("planeType");
-            dataGridView1.Columns.Remove("flightIncome");
-            dataGridView1.Columns.Remove("numberOfVacantSeats");
-            dataGridView1.Columns.Remove("numOfPoints");
-            dataGridView1.Columns.Remove("totalTime");
-            dataGridView1.Columns.Remove("distance");
-            dataGridView1.Columns.Remove("cost");
-            dataGridView1.Columns.Remove("durDouble");
+        //    // removes the information not needed
+        //    dataGridView1.Columns.Remove("masterFlightID");
+        //    dataGridView1.Columns.Remove("firstName");
+        //    dataGridView1.Columns.Remove("userid");
+        //    dataGridView1.Columns.Remove("lastName");
+        //    dataGridView1.Columns.Remove("planeType");
+        //    dataGridView1.Columns.Remove("flightIncome");
+        //    dataGridView1.Columns.Remove("numberOfVacantSeats");
+        //    dataGridView1.Columns.Remove("numOfPoints");
+        //    dataGridView1.Columns.Remove("totalTime");
+        //    dataGridView1.Columns.Remove("distance");
+        //    dataGridView1.Columns.Remove("cost");
+        //    dataGridView1.Columns.Remove("durDouble");
 
-            //// Fix and rename header text
-            dataGridView1.Columns[0].HeaderText = "Flight ID";
-            dataGridView1.Columns[1].HeaderText = "Origin Code";
-            dataGridView1.Columns[2].HeaderText = "Origin Name";
-            dataGridView1.Columns[3].HeaderText = "Destination Code";
-            dataGridView1.Columns[4].HeaderText = "Destination Name";
-            dataGridView1.Columns[5].HeaderText = "Arriaval Time";
-            dataGridView1.Columns[6].HeaderText = "Departure Date and Time";
-            dataGridView1.Columns[7].HeaderText = "Duration";
+        //    //// Fix and rename header text
+        //    dataGridView1.Columns[0].HeaderText = "Flight ID";
+        //    dataGridView1.Columns[1].HeaderText = "Origin Code";
+        //    dataGridView1.Columns[2].HeaderText = "Origin Name";
+        //    dataGridView1.Columns[3].HeaderText = "Destination Code";
+        //    dataGridView1.Columns[4].HeaderText = "Destination Name";
+        //    dataGridView1.Columns[5].HeaderText = "Arriaval Time";
+        //    dataGridView1.Columns[6].HeaderText = "Departure Date and Time";
+        //    dataGridView1.Columns[7].HeaderText = "Duration";
         }
 
         private void FlightsCancelledButton_Click(object sender, EventArgs e)

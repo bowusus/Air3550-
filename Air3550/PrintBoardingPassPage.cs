@@ -18,7 +18,7 @@ namespace Air3550
         public static CustomerModel currCustomer; // make a local object that can be read in the current context
         public static bool logOutButtonClicked = false; 
         public static bool backButtonClicked = false;
-        public static List<FlightModel> bookedFlights;
+        public static List<FlightModel> bookedFlights = new List<FlightModel>();
         public static FlightModel flight;
         public static List<CustomerModel> name;
         public static PrintBoardingPassPage instance;
@@ -82,55 +82,79 @@ namespace Air3550
         {
             // Loads all the customers booked flight onto a datagrid view 
             // and allow the customer to select which boarding pass to print
-            bookedFlights = new List<FlightModel>();
-            
-            List<int> routeID = SqliteDataAccess.GetBookedFlightsRouteID(currCustomer.userID);
-            if (routeID.Count != 0)
+            List<int> routeIDs = SqliteDataAccess.GetBookedFlightsRouteID(currCustomer.userID); // get the route IDs from the booked flights table
+            List<int> flightIDs_Booked = SqliteDataAccess.GetBookedFlightIDs(currCustomer.userID);
+            int count = 0;
+            int index = 0;
+            int i = 0;
+            int j = 0;
+            if (bookedFlights.Count == 0)
             {
-                foreach (int rID in routeID)
+                if (flightIDs_Booked.Count != 0)
+                // as long as there is a flight currently booked with a route ID
+                // then check if each ID in the route is still booked and add it to the booked flights list
                 {
-                    List<FlightModel> flights = SystemAction.GetBoardingFlights(rID, currCustomer);
-              
-                    foreach (FlightModel flight in flights)
-                        bookedFlights.Add(flight);
+                    foreach (int rID in routeIDs)
+                    {
+                        List<int> masterFlightIDsRoute = SqliteDataAccess.GetFlightIDsInRoute(rID);
+                        count = masterFlightIDsRoute.Count;
+                        while (i < count)
+                        {
+                            if (flightIDs_Booked.Contains(flightIDs_Booked[j]))
+                            {
+                                FlightModel flight;
+                                if (bookedFlights.Count % count == 0 && i != 0)
+                                {
+                                    flight = SystemAction.GetBoardingFlights(flightIDs_Booked[j], i, ref currCustomer);
+                                    i = 0;
+                                }
+                                else
+                                {
+                                    flight = SystemAction.GetBoardingFlights(flightIDs_Booked[j], i, ref currCustomer);
+                                    i += 1;
+                                }
+                                bookedFlights.Add(flight);
+                            }
+                            j += 1;
+                        }
+                        i = 0;
+                    }
                 }
-
-                dataGridView1.DataSource = bookedFlights;
-                
-                FormatDataGrid(); // remove and rename certain columns
             }
+            dataGridView1.DataSource = bookedFlights;
+            FormatDataGrid(); // remove and rename certain columns
         }
         // Used to rename and remove certain columns not needed in the boarding pass
         public void FormatDataGrid()
         {
             // This method renames and removes some columns that do not get updated when the data in the datagridview gets updated
             // Remove some information that the employees need but not the customer
-            dataGridView1.Columns.Remove("planeType");
-            dataGridView1.Columns.Remove("dateCreated");
-            dataGridView1.Columns.Remove("numberOfVacantSeats");
-            dataGridView1.Columns.Remove("flightIncome");
-            dataGridView1.Columns.Remove("masterFlightID");
-            dataGridView1.Columns.Remove("originCode");
-            dataGridView1.Columns.Remove("destinationCode");
-            dataGridView1.Columns.Remove("distance");
-            dataGridView1.Columns.Remove("totalTime");
-            dataGridView1.Columns.Remove("cost");
-            dataGridView1.Columns.Remove("numOfPoints");
-            dataGridView1.Columns.Remove("amountOfPoints");
-            dataGridView1.Columns.Remove("durDouble");
+          //  dataGridView1.Columns.Remove("planeType");
+          //  dataGridView1.Columns.Remove("dateCreated");
+        //    dataGridView1.Columns.Remove("numberOfVacantSeats");
+         //   dataGridView1.Columns.Remove("flightIncome");
+       //     dataGridView1.Columns.Remove("masterFlightID");
+       //     dataGridView1.Columns.Remove("originCode");
+      //      dataGridView1.Columns.Remove("destinationCode");
+      //      dataGridView1.Columns.Remove("distance");
+         //   dataGridView1.Columns.Remove("totalTime");
+       //     dataGridView1.Columns.Remove("cost");
+      //      dataGridView1.Columns.Remove("numOfPoints");
+        //    dataGridView1.Columns.Remove("amountOfPoints");
+      //      dataGridView1.Columns.Remove("durDouble");
 
 
 
             // change the name of the columns
-            dataGridView1.Columns[0].HeaderText = "FlightID";
-            dataGridView1.Columns[1].HeaderText = "Origin Name";
-            dataGridView1.Columns[5].HeaderText = "Destination";
-            dataGridView1.Columns[2].HeaderText = "First Name";
-            dataGridView1.Columns[3].HeaderText = "UserID";
-            dataGridView1.Columns[4].HeaderText = "Last Name";
-            dataGridView1.Columns[6].HeaderText = "Arriaval Date and Time";
-            dataGridView1.Columns[7].HeaderText = "Depature Date";
-            dataGridView1.Columns[8].HeaderText = "Duration";
+            //dataGridView1.Columns[0].HeaderText = "FlightID";
+            //dataGridView1.Columns[1].HeaderText = "Origin Name";
+            //dataGridView1.Columns[5].HeaderText = "Destination";
+            //dataGridView1.Columns[2].HeaderText = "First Name";
+            //dataGridView1.Columns[3].HeaderText = "UserID";
+            //dataGridView1.Columns[4].HeaderText = "Last Name";
+            //dataGridView1.Columns[6].HeaderText = "Arriaval Date and Time";
+            //dataGridView1.Columns[7].HeaderText = "Depature Date";
+            //dataGridView1.Columns[8].HeaderText = "Duration";
 
 
         }

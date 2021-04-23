@@ -274,39 +274,37 @@ namespace ClassLibrary
                 return flightIDsList;
             }
         }
-        public static List<FlightModel> GetBoardingFlights(int rID, CustomerModel currCustomer)
+        public static FlightModel GetBoardingFlights(int FID, int i, ref CustomerModel customer)
         {
-            List<int> flightIDs;
-            List<FlightModel> flights = new List<FlightModel>();
-            flightIDs = SqliteDataAccess.GetFlightIDsInRoute(rID);
-            // for each of these ids, get the flight information (origin, destination, etc.)
-            // Then get the name of the airports, depart times, arrival times
-            // Then also get the customer's name and userID 
-            // Finally create a FlightModel object with that information and add it to a list of booked flights to be displayed to the customer
+            // This method gets the specified flight's data. It calculates its cost, points, and duration,
+            // Then it makes it a flight object and returns the flight
+            List<string> flightsBookedData = SqliteDataAccess.GetFlightData(FID);
 
-            foreach (int id in flightIDs)
-            {
-                List<string> flightsBookedData = SqliteDataAccess.GetFlightData(id);
-                string originName = SqliteDataAccess.GetFlightNames(flightsBookedData[2]);
-                string destinationName = SqliteDataAccess.GetFlightNames(flightsBookedData[3]);
-                string firsname = SqliteDataAccess.GetUserData(currCustomer.userID).ElementAt(2); // get the user's info needed 
-                currCustomer.firstName = firsname;
+            string originName = SqliteDataAccess.GetFlightNames(flightsBookedData[2]);
+            string destinationName = SqliteDataAccess.GetFlightNames(flightsBookedData[3]);
 
-                DateTime departureDateTime = DateTime.Parse(flightsBookedData[4] + " " + flightsBookedData[5]);
-                DateTime arriveDateTime = departureDateTime.AddHours(Convert.ToDouble(flightsBookedData[7]));
+            DateTime departureDateTime = DateTime.Parse(flightsBookedData[4] + " " + flightsBookedData[5]);
+            DateTime arriveDateTime = departureDateTime.AddHours(Convert.ToDouble(flightsBookedData[7]));
+            int depHour = departureDateTime.Hour;
+            int arrHour = arriveDateTime.Hour;
 
-                int depHour = departureDateTime.Hour;
-                int arrHour = arriveDateTime.Hour;
+            double currCost;
+            if (i == 0)
+                currCost = CalculateCost(depHour, arrHour, Convert.ToDouble(flightsBookedData[9]) + 50);
+            else
+                currCost = CalculateCost(depHour, arrHour, Convert.ToDouble(flightsBookedData[9]) + 8);
+            int currPoints = Convert.ToInt32(currCost * 100);
 
-                var duration = arriveDateTime.Subtract(departureDateTime);
+            var duration = arriveDateTime.Subtract(departureDateTime);
+            duration = new TimeSpan(duration.Ticks / TimeSpan.TicksPerSecond * TimeSpan.TicksPerSecond);
 
-                departureDateTime = arriveDateTime.Subtract(duration);
+            departureDateTime = arriveDateTime.Subtract(duration);
 
-                FlightModel flight = new FlightModel(int.Parse(flightsBookedData[0]), DateTime.Parse(flightsBookedData[4] + " " + flightsBookedData[5]), duration, originName, destinationName, ref currCustomer);
+            FlightModel flight = new FlightModel(int.Parse(flightsBookedData[0]), departureDateTime, arriveDateTime,  duration, originName, destinationName, ref customer);
 
-                flights.Add(flight);
-            }
-            return flights;
+               
+            
+            return flight;
 
         }
 

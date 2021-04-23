@@ -97,14 +97,14 @@ namespace ClassLibrary
 		}
 
 
-		public FlightModel (int fID, DateTime depat, TimeSpan dur,  string origin, string destination, ref CustomerModel customer)
+		public FlightModel (int fID, DateTime departDate, DateTime arriveDate, TimeSpan dur,  string origin, string destination, ref CustomerModel customer)
         {
 			flightID = fID;
 			originName = origin;
 			destinationName = destination;
-			//arrivaltime = arrival;
 			duration = dur;
-			departureDateTime = depat;
+			departureDateTime = departDate;
+			arrivalDateTime = arriveDate;
 			firstName = customer.firstName;
 			lastName = customer.lastName;
 			userid = customer.userID;
