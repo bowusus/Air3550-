@@ -1472,7 +1472,7 @@ namespace ClassLibrary
             }
         }
 
-        /* Gets the masterFlightID of the last flight of table so that the next flight to be created can have the correct value */
+        /* Gets the masterFlightID from tracker table */
         public static int GetLastMasterFlightID()
         {
             int newID = 0;
@@ -1483,7 +1483,7 @@ namespace ClassLibrary
                 SQLiteCommand cmd = new SQLiteCommand();
                 cmd.CommandType = CommandType.Text;
 
-                cmd.CommandText = "SELECT masterFlightID FROM masterFlight WHERE masterFlightID=(SELECT max(masterFlightID) FROM masterFlight)";
+                cmd.CommandText = "SELECT lastMasterID FROM tracker";
                 cmd.Connection = con;
                 SQLiteDataReader rdr = cmd.ExecuteReader();
                 if (rdr.Read()) newID = rdr.GetInt32(0);
@@ -1492,6 +1492,22 @@ namespace ClassLibrary
                 con.Close();
             }
             return newID;
+        }
+
+        /* Update the last master flight ID value in tracker table */
+        public static void UpdateLastMasterID(int lastID)
+        {
+            using (SQLiteConnection con = new SQLiteConnection(LoadConnectionString()))
+            {
+                con.Open(); // open the connection
+                SQLiteCommand cmd = new SQLiteCommand();
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = "UPDATE tracker SET lastMasterID = @lastID";
+                cmd.Parameters.AddWithValue("@lastID", lastID);
+                cmd.Connection = con;
+                cmd.ExecuteNonQuery();
+                con.Close();
+            }
         }
 
         /* Gets the distance between two different airports by looking the distance up in the directFlight table */
@@ -1654,7 +1670,7 @@ namespace ClassLibrary
             }
         }
 
-        /* Gets the last routeID in the route table */
+        /* Gets the last routeID from the tracker table */
         public static int GetLastRouteID()
         {
             int newID = 0;
@@ -1665,7 +1681,7 @@ namespace ClassLibrary
                 SQLiteCommand cmd = new SQLiteCommand();
                 cmd.CommandType = CommandType.Text;
 
-                cmd.CommandText = "SELECT routeID FROM route WHERE routeID=(SELECT max(routeID) FROM route)";
+                cmd.CommandText = "SELECT lastRouteID FROM tracker";
                 cmd.Connection = con;
                 SQLiteDataReader rdr = cmd.ExecuteReader();
                 if (rdr.Read()) newID = rdr.GetInt32(0);
@@ -1674,6 +1690,22 @@ namespace ClassLibrary
                 con.Close();
             }
             return newID;
+        }
+
+        /* Updates the value of the last route id in the tracker table */
+        public static void UpdateLastRouteID(int lastID)
+        {
+            using (SQLiteConnection con = new SQLiteConnection(LoadConnectionString()))
+            {
+                con.Open(); // open the connection
+                SQLiteCommand cmd = new SQLiteCommand();
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = "UPDATE tracker SET lastRouteID = @lastID";
+                cmd.Parameters.AddWithValue("@lastID", lastID);
+                cmd.Connection = con;
+                cmd.ExecuteNonQuery();
+                con.Close();
+            }
         }
 
         /* Adds a brand new route to the route table based on all of the parameters passed into the method */

@@ -329,7 +329,7 @@ namespace ClassLibrary
                 {
                     DateTime newDepartureDateTime = startDate.Date + masterFlight.departureDateTime.TimeOfDay;
                     //create the new available flight based on the master flight templeate and add it to the available flights table
-                    decimal duration = (decimal)(masterFlight.distance / 500.0) + .5M + (40 / 60.0M);
+                    decimal duration = (decimal)(masterFlight.distance / 500.0) + .5M;
                     decimal cost = (decimal)(masterFlight.distance * .12);
                     FlightModel newAvaFlight = new FlightModel(currentFlightID, masterFlight.flightID, masterFlight.originCode,
                                                                 masterFlight.destinationCode, (int)masterFlight.distance,
@@ -358,7 +358,7 @@ namespace ClassLibrary
             {
                 DateTime newDepartureDateTime = startDate.Date + masterFlight.departureDateTime.TimeOfDay;
                 //create the new available flight based on the master flight templeate and add it to the available flights table
-                decimal duration = (decimal)(masterFlight.distance / 500.0) + .5M + (40 / 60.0M);
+                decimal duration = (decimal)(masterFlight.distance / 500.0) + .5M;
                 decimal cost = (decimal)(masterFlight.distance * .12);
                 FlightModel newAvaFlight = new FlightModel(currentFlightID, masterFlight.flightID, masterFlight.originCode,
                                                             masterFlight.destinationCode, (int)masterFlight.distance,
@@ -392,28 +392,21 @@ namespace ClassLibrary
          * On start up this method will take any flights from the customer's booked flight list 
          * and set them as being taken if the date and time is less than the current date and time
          */
-        public static void SetTakenFlights()
+        public static void SetTakenFlights(int custID)
         {
-            // Gets all of the customer ids
-            List<int> custIDs = SqliteDataAccess.GetAllCustomerIDs();
-            // Cycles through all customers
-            foreach (int custID in custIDs)
+            // Checks flights booked by the current custID
+            List<int> bookedFIDs = SqliteDataAccess.GetBookedFlightIDs(custID);
+            // Cycles through all booked flights by the current customer and 
+            // checks if they are old if they are then they get passed to the
+            // flights taken table and is removed from booked flights
+            foreach(int bookedFID in bookedFIDs)
             {
-                // Checks flights booked by the current custID
-                List<int> bookedFIDs = SqliteDataAccess.GetBookedFlightIDs(custID);
-                // Cycles through all booked flights by the current customer and 
-                // checks if they are old if they are then they get passed to the
-                // flights taken table and is removed from booked flights
-                foreach(int bookedFID in bookedFIDs)
+                if(SqliteDataAccess.CheckIfBookedOld(bookedFID))
                 {
-                    if(SqliteDataAccess.CheckIfBookedOld(bookedFID))
-                    {
-                        SqliteDataAccess.AddToFlightsTaken(custID, bookedFID);
-                        SqliteDataAccess.RemoveFromFlightsBooked(custID, bookedFID);
-                    }
+                    SqliteDataAccess.AddToFlightsTaken(custID, bookedFID);
+                    SqliteDataAccess.RemoveFromFlightsBooked(custID, bookedFID);
                 }
             }
         }
-
     }
 }
