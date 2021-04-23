@@ -24,10 +24,6 @@ namespace Air3550
         {
             // This method sets the default values of the datetimepickers and makes the table not visible
             InitializeComponent();
-            FromDatePicker.CustomFormat = " ";
-            FromDatePicker.Format = DateTimePickerFormat.Custom;
-            ToDatePicker.CustomFormat = " ";
-            ToDatePicker.Format = DateTimePickerFormat.Custom;
             FlightTable.Visible = false;
             departAirports = new List<string>(); // create the list of departing airports
             arriveAirports = new List<string>(); // create the list of arrival airports
@@ -136,13 +132,9 @@ namespace Air3550
             // This method clears all filters and resets them to their defaults
             DepartComboBox.SelectedIndex = -1; 
             ArriveComboBox.SelectedIndex = -1;
-            FromDatePicker.Value = DateTime.Now;
-            FromDatePicker.CustomFormat = " ";
-            FromDatePicker.Format = DateTimePickerFormat.Custom;
+            FromDatePicker.ResetText();
+            ToDatePicker.ResetText();
             fromTempVariable = DateTime.Now;
-            ToDatePicker.Value = DateTime.Now;
-            ToDatePicker.CustomFormat = " ";
-            ToDatePicker.Format = DateTimePickerFormat.Custom;
             toTempVariable = DateTime.Now;
         }
         private void ViewFlightManifestButton_Click(object sender, EventArgs e)
