@@ -68,7 +68,7 @@ namespace Air3550
         private void SearchButton_Click(object sender, EventArgs e)
         {
             // This method displays a list of the flights that have the values that the flight manager filtered on
-            BeforeFromDateError.Visible = false;
+            BeforeFromDateError.Visible = true;
             string origin = null;
             string destination = null;
             // set the dates to the default min value

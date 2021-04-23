@@ -46,6 +46,7 @@ namespace Air3550
             // 
             // LogOutButton
             // 
+            this.LogOutButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.LogOutButton.BackColor = System.Drawing.SystemColors.HotTrack;
             this.LogOutButton.Font = new System.Drawing.Font("Rockwell", 10F);
             this.LogOutButton.ForeColor = System.Drawing.SystemColors.ControlLightLight;
@@ -60,7 +61,7 @@ namespace Air3550
             // 
             // FlightsTakenButton
             // 
-            this.FlightsTakenButton.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.FlightsTakenButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.FlightsTakenButton.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.FlightsTakenButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.FlightsTakenButton.Font = new System.Drawing.Font("Rockwell", 10F);
@@ -75,7 +76,7 @@ namespace Air3550
             // 
             // FlightsCancelledButton
             // 
-            this.FlightsCancelledButton.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.FlightsCancelledButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.FlightsCancelledButton.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.FlightsCancelledButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.FlightsCancelledButton.Font = new System.Drawing.Font("Rockwell", 9F);
@@ -90,7 +91,7 @@ namespace Air3550
             // 
             // FlightsBookedButton
             // 
-            this.FlightsBookedButton.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.FlightsBookedButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.FlightsBookedButton.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.FlightsBookedButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.FlightsBookedButton.Font = new System.Drawing.Font("Rockwell", 10F);
@@ -172,6 +173,7 @@ namespace Air3550
             // 
             this.dataGridView1.AllowUserToAddRows = false;
             this.dataGridView1.AllowUserToDeleteRows = false;
+            this.dataGridView1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Location = new System.Drawing.Point(406, 155);
             this.dataGridView1.Name = "dataGridView1";

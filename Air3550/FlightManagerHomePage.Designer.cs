@@ -29,8 +29,8 @@ namespace Air3550
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             this.SearchButton = new System.Windows.Forms.Button();
             this.ToDateLabel = new System.Windows.Forms.Label();
             this.FromDateLabel = new System.Windows.Forms.Label();
@@ -57,9 +57,10 @@ namespace Air3550
             this.SearchButton.BackColor = System.Drawing.SystemColors.HotTrack;
             this.SearchButton.Font = new System.Drawing.Font("Rockwell", 10F);
             this.SearchButton.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.SearchButton.Location = new System.Drawing.Point(1981, 266);
+            this.SearchButton.Location = new System.Drawing.Point(1321, 170);
+            this.SearchButton.Margin = new System.Windows.Forms.Padding(2);
             this.SearchButton.Name = "SearchButton";
-            this.SearchButton.Size = new System.Drawing.Size(187, 84);
+            this.SearchButton.Size = new System.Drawing.Size(125, 54);
             this.SearchButton.TabIndex = 73;
             this.SearchButton.Text = "Search";
             this.SearchButton.UseVisualStyleBackColor = false;
@@ -69,9 +70,10 @@ namespace Air3550
             // 
             this.ToDateLabel.AutoSize = true;
             this.ToDateLabel.Font = new System.Drawing.Font("Rockwell", 10F);
-            this.ToDateLabel.Location = new System.Drawing.Point(1365, 242);
+            this.ToDateLabel.Location = new System.Drawing.Point(910, 155);
+            this.ToDateLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.ToDateLabel.Name = "ToDateLabel";
-            this.ToDateLabel.Size = new System.Drawing.Size(44, 31);
+            this.ToDateLabel.Size = new System.Drawing.Size(29, 20);
             this.ToDateLabel.TabIndex = 72;
             this.ToDateLabel.Text = "To";
             // 
@@ -79,27 +81,30 @@ namespace Air3550
             // 
             this.FromDateLabel.AutoSize = true;
             this.FromDateLabel.Font = new System.Drawing.Font("Rockwell", 10F);
-            this.FromDateLabel.Location = new System.Drawing.Point(755, 242);
+            this.FromDateLabel.Location = new System.Drawing.Point(503, 155);
+            this.FromDateLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.FromDateLabel.Name = "FromDateLabel";
-            this.FromDateLabel.Size = new System.Drawing.Size(78, 31);
+            this.FromDateLabel.Size = new System.Drawing.Size(50, 20);
             this.FromDateLabel.TabIndex = 71;
             this.FromDateLabel.Text = "From";
             // 
             // ToDatePicker
             // 
             this.ToDatePicker.Font = new System.Drawing.Font("Rockwell", 10F);
-            this.ToDatePicker.Location = new System.Drawing.Point(1371, 311);
+            this.ToDatePicker.Location = new System.Drawing.Point(914, 199);
+            this.ToDatePicker.Margin = new System.Windows.Forms.Padding(2);
             this.ToDatePicker.Name = "ToDatePicker";
-            this.ToDatePicker.Size = new System.Drawing.Size(539, 39);
+            this.ToDatePicker.Size = new System.Drawing.Size(361, 27);
             this.ToDatePicker.TabIndex = 70;
             this.ToDatePicker.ValueChanged += new System.EventHandler(this.ToDatePicker_ValueChanged);
             // 
             // FromDatePicker
             // 
             this.FromDatePicker.Font = new System.Drawing.Font("Rockwell", 10F);
-            this.FromDatePicker.Location = new System.Drawing.Point(761, 311);
+            this.FromDatePicker.Location = new System.Drawing.Point(507, 199);
+            this.FromDatePicker.Margin = new System.Windows.Forms.Padding(2);
             this.FromDatePicker.Name = "FromDatePicker";
-            this.FromDatePicker.Size = new System.Drawing.Size(539, 39);
+            this.FromDatePicker.Size = new System.Drawing.Size(361, 27);
             this.FromDatePicker.TabIndex = 69;
             this.FromDatePicker.ValueChanged += new System.EventHandler(this.FromDatePicker_ValueChanged);
             // 
@@ -107,18 +112,20 @@ namespace Air3550
             // 
             this.ArriveComboBox.Font = new System.Drawing.Font("Rockwell", 10F);
             this.ArriveComboBox.FormattingEnabled = true;
-            this.ArriveComboBox.Location = new System.Drawing.Point(414, 311);
+            this.ArriveComboBox.Location = new System.Drawing.Point(276, 199);
+            this.ArriveComboBox.Margin = new System.Windows.Forms.Padding(2);
             this.ArriveComboBox.Name = "ArriveComboBox";
-            this.ArriveComboBox.Size = new System.Drawing.Size(276, 39);
+            this.ArriveComboBox.Size = new System.Drawing.Size(185, 28);
             this.ArriveComboBox.TabIndex = 68;
             // 
             // ArriveLabel
             // 
             this.ArriveLabel.AutoSize = true;
             this.ArriveLabel.Font = new System.Drawing.Font("Rockwell", 10F);
-            this.ArriveLabel.Location = new System.Drawing.Point(408, 242);
+            this.ArriveLabel.Location = new System.Drawing.Point(272, 155);
+            this.ArriveLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.ArriveLabel.Name = "ArriveLabel";
-            this.ArriveLabel.Size = new System.Drawing.Size(159, 31);
+            this.ArriveLabel.Size = new System.Drawing.Size(100, 20);
             this.ArriveLabel.TabIndex = 67;
             this.ArriveLabel.Text = "Arrival City";
             // 
@@ -126,18 +133,20 @@ namespace Air3550
             // 
             this.DepartComboBox.Font = new System.Drawing.Font("Rockwell", 10F);
             this.DepartComboBox.FormattingEnabled = true;
-            this.DepartComboBox.Location = new System.Drawing.Point(67, 311);
+            this.DepartComboBox.Location = new System.Drawing.Point(45, 199);
+            this.DepartComboBox.Margin = new System.Windows.Forms.Padding(2);
             this.DepartComboBox.Name = "DepartComboBox";
-            this.DepartComboBox.Size = new System.Drawing.Size(276, 39);
+            this.DepartComboBox.Size = new System.Drawing.Size(185, 28);
             this.DepartComboBox.TabIndex = 66;
             // 
             // DepartLabel
             // 
             this.DepartLabel.AutoSize = true;
             this.DepartLabel.Font = new System.Drawing.Font("Rockwell", 10F);
-            this.DepartLabel.Location = new System.Drawing.Point(61, 242);
+            this.DepartLabel.Location = new System.Drawing.Point(41, 155);
+            this.DepartLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.DepartLabel.Name = "DepartLabel";
-            this.DepartLabel.Size = new System.Drawing.Size(199, 31);
+            this.DepartLabel.Size = new System.Drawing.Size(126, 20);
             this.DepartLabel.TabIndex = 65;
             this.DepartLabel.Text = "Departure City";
             // 
@@ -146,9 +155,10 @@ namespace Air3550
             this.LogOutButton.BackColor = System.Drawing.SystemColors.HotTrack;
             this.LogOutButton.Font = new System.Drawing.Font("Rockwell", 10F);
             this.LogOutButton.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.LogOutButton.Location = new System.Drawing.Point(1892, 98);
+            this.LogOutButton.Location = new System.Drawing.Point(1261, 63);
+            this.LogOutButton.Margin = new System.Windows.Forms.Padding(2);
             this.LogOutButton.Name = "LogOutButton";
-            this.LogOutButton.Size = new System.Drawing.Size(276, 72);
+            this.LogOutButton.Size = new System.Drawing.Size(184, 46);
             this.LogOutButton.TabIndex = 63;
             this.LogOutButton.Text = "Log Out";
             this.LogOutButton.UseVisualStyleBackColor = false;
@@ -162,31 +172,32 @@ namespace Air3550
             this.FlightTable.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.FlightTable.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.FlightTable.BackgroundColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Rockwell", 10F);
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.FlightTable.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Rockwell", 10F);
+            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.FlightTable.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
             this.FlightTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Rockwell", 10F);
-            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.FlightTable.DefaultCellStyle = dataGridViewCellStyle2;
-            this.FlightTable.Location = new System.Drawing.Point(67, 446);
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("Rockwell", 10F);
+            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.FlightTable.DefaultCellStyle = dataGridViewCellStyle4;
+            this.FlightTable.Location = new System.Drawing.Point(45, 278);
+            this.FlightTable.Margin = new System.Windows.Forms.Padding(2);
             this.FlightTable.MultiSelect = false;
             this.FlightTable.Name = "FlightTable";
             this.FlightTable.ReadOnly = true;
             this.FlightTable.RowHeadersWidth = 82;
             this.FlightTable.RowTemplate.Height = 33;
             this.FlightTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.FlightTable.Size = new System.Drawing.Size(2101, 509);
+            this.FlightTable.Size = new System.Drawing.Size(1401, 326);
             this.FlightTable.TabIndex = 74;
             this.FlightTable.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.FlightTable_CellClick);
             // 
@@ -194,9 +205,10 @@ namespace Air3550
             // 
             this.BeforeFromDateError.AutoSize = true;
             this.BeforeFromDateError.ForeColor = System.Drawing.Color.Red;
-            this.BeforeFromDateError.Location = new System.Drawing.Point(1366, 283);
+            this.BeforeFromDateError.Location = new System.Drawing.Point(911, 181);
+            this.BeforeFromDateError.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.BeforeFromDateError.Name = "BeforeFromDateError";
-            this.BeforeFromDateError.Size = new System.Drawing.Size(540, 25);
+            this.BeforeFromDateError.Size = new System.Drawing.Size(356, 17);
             this.BeforeFromDateError.TabIndex = 78;
             this.BeforeFromDateError.Text = "Please Select a Second Date that is after the First Date";
             this.BeforeFromDateError.Visible = false;
@@ -206,9 +218,10 @@ namespace Air3550
             this.ClearFiltersButton.BackColor = System.Drawing.SystemColors.HotTrack;
             this.ClearFiltersButton.Font = new System.Drawing.Font("Rockwell", 10F);
             this.ClearFiltersButton.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.ClearFiltersButton.Location = new System.Drawing.Point(67, 98);
+            this.ClearFiltersButton.Location = new System.Drawing.Point(45, 63);
+            this.ClearFiltersButton.Margin = new System.Windows.Forms.Padding(2);
             this.ClearFiltersButton.Name = "ClearFiltersButton";
-            this.ClearFiltersButton.Size = new System.Drawing.Size(276, 72);
+            this.ClearFiltersButton.Size = new System.Drawing.Size(184, 46);
             this.ClearFiltersButton.TabIndex = 79;
             this.ClearFiltersButton.Text = "Clear Filters";
             this.ClearFiltersButton.UseVisualStyleBackColor = false;
@@ -218,9 +231,10 @@ namespace Air3550
             // 
             this.FlightManagerLabel.AutoSize = true;
             this.FlightManagerLabel.Font = new System.Drawing.Font("Rockwell", 18F);
-            this.FlightManagerLabel.Location = new System.Drawing.Point(681, 376);
+            this.FlightManagerLabel.Location = new System.Drawing.Point(454, 241);
+            this.FlightManagerLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.FlightManagerLabel.Name = "FlightManagerLabel";
-            this.FlightManagerLabel.Size = new System.Drawing.Size(863, 54);
+            this.FlightManagerLabel.Size = new System.Drawing.Size(546, 35);
             this.FlightManagerLabel.TabIndex = 80;
             this.FlightManagerLabel.Text = "Select a flight to see its Flight Manifest";
             // 
@@ -229,9 +243,10 @@ namespace Air3550
             this.ViewFlightManifestButton.BackColor = System.Drawing.SystemColors.HotTrack;
             this.ViewFlightManifestButton.Font = new System.Drawing.Font("Rockwell", 10F);
             this.ViewFlightManifestButton.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.ViewFlightManifestButton.Location = new System.Drawing.Point(1892, 982);
+            this.ViewFlightManifestButton.Location = new System.Drawing.Point(1261, 628);
+            this.ViewFlightManifestButton.Margin = new System.Windows.Forms.Padding(2);
             this.ViewFlightManifestButton.Name = "ViewFlightManifestButton";
-            this.ViewFlightManifestButton.Size = new System.Drawing.Size(276, 84);
+            this.ViewFlightManifestButton.Size = new System.Drawing.Size(184, 54);
             this.ViewFlightManifestButton.TabIndex = 81;
             this.ViewFlightManifestButton.Text = "View Flight Manifest";
             this.ViewFlightManifestButton.UseVisualStyleBackColor = false;
@@ -241,9 +256,10 @@ namespace Air3550
             // 
             this.FromDateAfterTodayError.AutoSize = true;
             this.FromDateAfterTodayError.ForeColor = System.Drawing.Color.Red;
-            this.FromDateAfterTodayError.Location = new System.Drawing.Point(756, 283);
+            this.FromDateAfterTodayError.Location = new System.Drawing.Point(504, 181);
+            this.FromDateAfterTodayError.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.FromDateAfterTodayError.Name = "FromDateAfterTodayError";
-            this.FromDateAfterTodayError.Size = new System.Drawing.Size(348, 25);
+            this.FromDateAfterTodayError.Size = new System.Drawing.Size(230, 17);
             this.FromDateAfterTodayError.TabIndex = 82;
             this.FromDateAfterTodayError.Text = "Please Select a Date Before Today";
             this.FromDateAfterTodayError.Visible = false;
@@ -252,9 +268,10 @@ namespace Air3550
             // 
             this.ToDateAfterTodayError.AutoSize = true;
             this.ToDateAfterTodayError.ForeColor = System.Drawing.Color.Red;
-            this.ToDateAfterTodayError.Location = new System.Drawing.Point(1366, 283);
+            this.ToDateAfterTodayError.Location = new System.Drawing.Point(911, 181);
+            this.ToDateAfterTodayError.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.ToDateAfterTodayError.Name = "ToDateAfterTodayError";
-            this.ToDateAfterTodayError.Size = new System.Drawing.Size(348, 25);
+            this.ToDateAfterTodayError.Size = new System.Drawing.Size(230, 17);
             this.ToDateAfterTodayError.TabIndex = 83;
             this.ToDateAfterTodayError.Text = "Please Select a Date Before Today";
             this.ToDateAfterTodayError.Visible = false;
@@ -263,19 +280,20 @@ namespace Air3550
             // 
             this.FlightManagerHomeLabel.AutoSize = true;
             this.FlightManagerHomeLabel.Font = new System.Drawing.Font("Rockwell", 24F);
-            this.FlightManagerHomeLabel.Location = new System.Drawing.Point(776, 98);
+            this.FlightManagerHomeLabel.Location = new System.Drawing.Point(517, 63);
+            this.FlightManagerHomeLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.FlightManagerHomeLabel.Name = "FlightManagerHomeLabel";
-            this.FlightManagerHomeLabel.Size = new System.Drawing.Size(670, 72);
+            this.FlightManagerHomeLabel.Size = new System.Drawing.Size(420, 46);
             this.FlightManagerHomeLabel.TabIndex = 84;
             this.FlightManagerHomeLabel.Text = "Flight Manager Home";
             this.FlightManagerHomeLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // FlightManagerHomePage
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.HighlightText;
-            this.ClientSize = new System.Drawing.Size(2222, 1078);
+            this.ClientSize = new System.Drawing.Size(1487, 675);
             this.Controls.Add(this.FlightManagerHomeLabel);
             this.Controls.Add(this.ToDateAfterTodayError);
             this.Controls.Add(this.FromDateAfterTodayError);
@@ -294,7 +312,8 @@ namespace Air3550
             this.Controls.Add(this.DepartComboBox);
             this.Controls.Add(this.DepartLabel);
             this.Controls.Add(this.LogOutButton);
-            this.MaximumSize = new System.Drawing.Size(2248, 1149);
+            this.Margin = new System.Windows.Forms.Padding(2);
+            this.MaximumSize = new System.Drawing.Size(1505, 752);
             this.Name = "FlightManagerHomePage";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Air3550";

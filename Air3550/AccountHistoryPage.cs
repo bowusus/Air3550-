@@ -75,10 +75,8 @@ namespace Air3550
             dataGridView1.Columns.Remove("planeType");
             dataGridView1.Columns.Remove("flightIncome");
             dataGridView1.Columns.Remove("numberOfVacantSeats");
-        //    dataGridView1.Columns.Remove("amountOfPoints");
             dataGridView1.Columns.Remove("totalTime");
             dataGridView1.Columns.Remove("distance");
-      //      dataGridView1.Columns.Remove("dateCreated");
             dataGridView1.Columns.Remove("cost");
             dataGridView1.Columns.Remove("numOfPoints");
             dataGridView1.Columns.Remove("durDouble");
