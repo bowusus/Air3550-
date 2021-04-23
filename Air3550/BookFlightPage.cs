@@ -242,7 +242,7 @@ namespace Air3550
                 returningRoutes = new List<Route>();
                 // get all of the available flights for the specified origin and destination
                 AvailableFlightTable.DataSource = null;
-                returningRoutes = SystemAction.GetFlights_MasterID(DepartComboBox.Text.Substring(0, 3), ArriveComboBox.Text.Substring(0, 3), ReturnDatePicker.Value.Date, selectedRoutes[0].departTime);
+                returningRoutes = SystemAction.GetFlights_MasterID(ArriveComboBox.Text.Substring(0, 3), DepartComboBox.Text.Substring(0, 3), ReturnDatePicker.Value.Date, selectedRoutes[0].departTime);
                 AvailableFlightTable.DataSource = returningRoutes;
                 // clear the table's selection so no row is clicked
                 AvailableFlightTable.ClearSelection();
