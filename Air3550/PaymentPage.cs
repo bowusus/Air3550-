@@ -112,11 +112,7 @@ namespace Air3550
             // get all of the current flights in that chosen route
             foreach (int fID in departingFlightIDs)
             {
-                FlightModel flight;
-                if (i == 0)
-                    flight = SystemAction.GetFlight(fID, i);
-                else
-                    flight = SystemAction.GetFlight(fID, i);
+                FlightModel flight = SystemAction.GetFlight(fID, i);
                 i += 1;
                 departingFlights.Add(flight);
             }
@@ -126,17 +122,7 @@ namespace Air3550
                 // if there is a return flight chosen, then add the route ID for that flight and get all of the current flights in that chosen route
                 foreach (int fID in returningFlightIDs)
                 {
-                    FlightModel flight;
-                    if (i == 0)
-                    {
-                        flight = SystemAction.GetFlight(fID, i);
-                        i = 0;
-                    }
-                    else
-                    {
-                        flight = SystemAction.GetFlight(fID, i);
-                        i += 1;
-                    }
+                    FlightModel flight = SystemAction.GetFlight(fID, i);
                     returningFlights.Add(flight);
                     i += 1;
                 }
