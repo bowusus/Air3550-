@@ -148,6 +148,7 @@ namespace Air3550
                                                        selectedPath.Airports[i + 1].Code, distance,
                                                        departureTime, "Boeing 737 MAX 7"));
                         flightIDs.Add(currentFlightID);
+                        SqliteDataAccess.UpdateLastMasterID(currentFlightID);
                         currentFlightID++;
                     }
 
@@ -182,6 +183,7 @@ namespace Air3550
                     SqliteDataAccess.AddToRoute(routeID, selectedPath.Airports[0].Code,
                                                 selectedPath.Airports[selectedPath.NumberOfLayovers + 1].Code,
                                                 selectedPath.NumberOfLayovers, flightIDs[0].ToString());
+                    SqliteDataAccess.UpdateLastRouteID(routeID);
                     // Add any new flights to the flight master table
                     if (newFlights.Count != 0)
                     {
@@ -203,6 +205,7 @@ namespace Air3550
                                                 selectedPath.Airports[selectedPath.NumberOfLayovers + 1].Code,
                                                 selectedPath.NumberOfLayovers, flightIDs[0].ToString(),
                                                 flightIDs[1].ToString());
+                    SqliteDataAccess.UpdateLastRouteID(routeID);
                     // Add any new flights to the flight master table
                     if (newFlights.Count != 0)
                     {
@@ -224,6 +227,7 @@ namespace Air3550
                                                 selectedPath.Airports[selectedPath.NumberOfLayovers + 1].Code,
                                                 selectedPath.NumberOfLayovers, flightIDs[0].ToString(),
                                                 flightIDs[1].ToString(), flightIDs[2].ToString());
+                    SqliteDataAccess.UpdateLastRouteID(routeID);
                     // Add any new flights to the flight master table
                     if (newFlights.Count != 0)
                     {
