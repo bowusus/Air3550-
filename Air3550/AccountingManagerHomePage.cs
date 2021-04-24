@@ -63,7 +63,7 @@ namespace Air3550
 
                 capacityPercentage = 1 - Math.Round((double)(id.numberOfVacantSeats / SqliteDataAccess.GetPlaneCapacity(id.planeType) * 100));
             }
-            Label1.Text = "Cap Percent: " + capacityPercentage;
+           
 
 
 
@@ -99,7 +99,7 @@ namespace Air3550
 
                     capacityPercentage = 1 - Math.Round((double)(id.numberOfVacantSeats / SqliteDataAccess.GetPlaneCapacity(id.planeType) * 100));
                 }
-                Label1.Text = "Cap Percent: " + capacityPercentage;
+               
                 // This method displays a list of the flights that have the values that the flight manager filtered on
                 BeforeFromDateError.Visible = false;
                 string origin = null;
@@ -163,13 +163,9 @@ namespace Air3550
             //  flightList.Columns.Add("Capacity Percentage", typeof(string));
 
 
-
-
         }
 
-
         Bitmap bmp;
-
 
         private void PrintButton_Click(object sender, EventArgs e)
         {
@@ -182,7 +178,6 @@ namespace Air3550
             printPreviewDialog1.ShowDialog();
 
         }
-
         private void printDocument1_PrintPage(object sender, System.Drawing.Printing.PrintPageEventArgs e)
         {
             e.Graphics.DrawImage(bmp, 0, 0);
@@ -231,8 +226,33 @@ namespace Air3550
                 capacityPercentage = Math.Round((1.0 - (double)((Convert.ToDouble(accountPage.SelectedRows[0].Cells["numOfVacantSeats"].Value.ToString())
                                         / (double)SqliteDataAccess.GetPlaneCapacity(accountPage.SelectedRows[0].Cells["planeType_fk"].Value.ToString())))) * 100.0, 2);
             }
-             //Change wording 
-            Label1.Text = "Cap Percent: " + capacityPercentage + " % ";
+             // displays the plane capacity %
+            Label1.Text = "Plane Capacity Percentage: " + capacityPercentage + " % ";
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            // This method clears all filters and resets them to their defaults
+            FromTimePicker.Value = DateTimePicker.MinimumDateTime;
+            FromTimePicker.CustomFormat = " ";
+            FromTimePicker.Format = DateTimePickerFormat.Custom;
+            ToTimePicker.Value = DateTimePicker.MinimumDateTime;
+            ToTimePicker.CustomFormat = " ";
+            ToTimePicker.Format = DateTimePickerFormat.Custom;
+        }
+
+        private void LogOut_Click(object sender, EventArgs e)
+        {
+            // This method allows the user to return to the log in page
+            // All open forms will close
+            // The log in page will open
+            // A message asks if the customer has saved everything they desire
+            DialogResult result = MessageBox.Show("Are you sure that you want to log out?\nAny changes not saved will not be updated.", "Log Out", MessageBoxButtons.YesNo, MessageBoxIcon.None);
+            if (result == DialogResult.Yes)
+            {
+                LogInPage.GetInstance.Show();
+                this.Dispose();
+            }
         }
     }
 }
