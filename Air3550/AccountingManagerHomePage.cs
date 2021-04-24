@@ -48,12 +48,8 @@ namespace Air3550
         private void AccountingManagerHomePage_Load(object sender, EventArgs e)
         {
 
-
-
             bookedFlights = new List<FlightModel>();
             List<FlightModel> flightcap = new List<FlightModel>();
-
-
 
             double capacityPercentage = 0;
 
@@ -63,14 +59,6 @@ namespace Air3550
 
                 capacityPercentage = 1 - Math.Round((double)(id.numberOfVacantSeats / SqliteDataAccess.GetPlaneCapacity(id.planeType) * 100));
             }
-           
-
-
-
-
-
-            //   List<int> routeID = SqliteDataAccess.GetTakenFlightIDs(currCustomer.userID);
-
             string originName = null;
             string destinationName = null;
             // set the dates to the default min value
@@ -79,13 +67,7 @@ namespace Air3550
 
             totalFlights.Text = "Total Flights Traveled: " + SqliteDataAccess.GetCompanyFlightCount(originName, destinationName, fromDate, toDate).ToString();
             totalRevenue.Text = "Total Company Income: $" + SqliteDataAccess.GetCompanyIncome(originName, destinationName, fromDate, toDate).ToString("0.00");
-
-            //  accountPage.Rows.Add(totalRevenue);
-
-
-
         }
-
 
         private void CreateButton_Click(object sender, EventArgs e)
         {
@@ -160,7 +142,6 @@ namespace Air3550
             accountPage.Columns[6].HeaderText = "Plane Type";
             accountPage.Columns[7].HeaderText = "Cost";
             accountPage.Columns[8].HeaderText = "Number of Vacant Seats";
-            //  flightList.Columns.Add("Capacity Percentage", typeof(string));
 
 
         }
@@ -226,6 +207,7 @@ namespace Air3550
                 capacityPercentage = Math.Round((1.0 - (double)((Convert.ToDouble(accountPage.SelectedRows[0].Cells["numOfVacantSeats"].Value.ToString())
                                         / (double)SqliteDataAccess.GetPlaneCapacity(accountPage.SelectedRows[0].Cells["planeType_fk"].Value.ToString())))) * 100.0, 2);
             }
+
              // displays the plane capacity %
             Label1.Text = "Plane Capacity Percentage: " + capacityPercentage + " % ";
         }
