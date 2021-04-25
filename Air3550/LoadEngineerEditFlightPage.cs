@@ -45,12 +45,21 @@ namespace Air3550
          * and 1 day from now, the old flight is deleted and a new one is created with new time and new ID */
         private void saveButton_Click(object sender, EventArgs e)
         {
-            int newFlightID = SqliteDataAccess.GetLastMasterFlightID();
-            SqliteDataAccess.ChangeTimeMaster(LoadEngineerHomePage.GetInstance.FlightID, routeTimePicker.Value, newFlightID);
-            SqliteDataAccess.SetRemovalDateRoutes(LoadEngineerHomePage.GetInstance.FlightID);
-            SqliteDataAccess.RemoveMasterFlight(LoadEngineerHomePage.GetInstance.FlightID);
-            LoadEngineerHomePage.GetInstance.LoadFlightGrid();
-            this.Dispose();
+            if(SqliteDataAccess.MasterFlightExists(LoadEngineerHomePage.GetInstance.OriginCode, LoadEngineerHomePage.GetInstance.DestinationCode,
+                                                   routeTimePicker.Value.ToShortTimeString()))
+            {
+                MessageBox.Show("Cannot use this time as a flight with this time already exists.", "Error: Flight Exists", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            else
+            {
+                int newFlightID = SqliteDataAccess.GetLastMasterFlightID();
+                SqliteDataAccess.ChangeTimeMaster(LoadEngineerHomePage.GetInstance.FlightID, routeTimePicker.Value, newFlightID);
+                SqliteDataAccess.SetRemovalDateRoutes(LoadEngineerHomePage.GetInstance.FlightID);
+                SqliteDataAccess.RemoveMasterFlight(LoadEngineerHomePage.GetInstance.FlightID);
+                LoadEngineerHomePage.GetInstance.LoadFlightGrid();
+                this.Dispose();
+            }
         }
 
         /* Make it so that the time picker increments / decrements by 5 for minutes */
