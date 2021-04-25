@@ -234,9 +234,7 @@ namespace Air3550
         {
             // This method allows the user to select a flight for their return flight
             if (AvailableFlightTable.SelectedRows.Count == 0)
-            {
                 MessageBox.Show("No Departure Flight was Selected. Please Select a Departure Flight before continuing.", "Error: Choose a Departure Flight", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
             else
             {
                 // add the selected flight to the selected routes list

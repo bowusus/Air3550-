@@ -152,13 +152,12 @@ namespace ClassLibrary
             // A list of the available routes are returned
             List<Route> routes = new List<Route>();
             List<(int, int)> routeInfo = SqliteDataAccess.GetRouteInfo(origin, destination, departDate.Date, compareDateTime.Date);
-            int count = 0;
             // go through the route IDs that were found for the specified origin and destination
             // and get the flightIDs in that route, then get information to display to the customer
             foreach ((int, int) id in routeInfo)
             {
                 List<int> masterFlightIDs = SqliteDataAccess.GetFlightIDsInRoute(id.Item1);
-                List<int> flightIDs_MasterID = new List<int>();
+                List<(int, DateTime)> flightIDs_MasterID = new List<(int, DateTime)>();
                 List<FlightModel> flights = new List<FlightModel>();
                 // initialization/declaration of values to be returned in data grid view
                 string routeList = null;
@@ -170,22 +169,20 @@ namespace ClassLibrary
                 int points = 0;
                 int i = 0; // used for grabbing information from the availableRoutes list
                 int index = 0;
-                DateTime refDateTime = departDate;
 
                 foreach (int mID in masterFlightIDs)
                 {
-                    /*if (count == 0)
-                        refDateTime = departDate;
+                    if (flightIDs_MasterID.Count > 0 && flightIDs_MasterID[index-1].Item2.Date != departDate.Date)
+                        flightIDs_MasterID = SqliteDataAccess.GetFlightIDs_MasterID(mID, flightIDs_MasterID, departDate.AddDays(1), compareDateTime);
                     else
-                        refDateTime = flightIDs_MasterID[count-1].Item2;*/
-                    flightIDs_MasterID = SqliteDataAccess.GetFlightIDs_MasterID(mID, flightIDs_MasterID, departDate, compareDateTime);
-                    count += 1;
+                        flightIDs_MasterID = SqliteDataAccess.GetFlightIDs_MasterID(mID, flightIDs_MasterID, departDate, compareDateTime);
+                    index += 1;
                 }
                 if (flightIDs_MasterID.Count == masterFlightIDs.Count)
                 {
                     // go through each of these flight IDs, make a flight object, add it to the list to be returned
                     // add some formatting since this method is used to populate the datagridview tables in the bookFlight form
-                    foreach (int fID in flightIDs_MasterID)
+                    foreach ((int fID, DateTime date) in flightIDs_MasterID)
                     {
                         FlightModel flight = GetFlight(fID, i);
                         flights.Add(flight);

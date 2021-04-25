@@ -1349,7 +1349,7 @@ namespace ClassLibrary
             }
         }
 
-        public static List<int> GetFlightIDs_MasterID(int masterID, List<int> flights_MasterID, DateTime departDate, DateTime compareDateTime)
+        public static List<(int, DateTime)> GetFlightIDs_MasterID(int masterID, List<(int, DateTime)> flights_MasterID, DateTime departDate, DateTime compareDateTime)
         {
             // This method goes into the database, specifically the availableFlight table, 
             // and retrieves all of the flight ids according to the customer's inputs
@@ -1362,8 +1362,6 @@ namespace ClassLibrary
                 cmd.CommandText = "select availableFlight.flightID, availableFlight.departureDate, availableFlight.departureTime, availableFlight.duration from availableFlight where availableFlight.masterFlightID_fk = @masterFlightID_fk and availableFlight.numOfVacantSeats != 0";
                 // use the flight ID to get the information about the flight
                 cmd.Parameters.AddWithValue("@masterFlightID_fk", masterID);
-                //cmd.Parameters.AddWithValue("@departDate", departDate);
-                //cmd.Parameters.AddWithValue("@compareDateTime", compareDateTime);
                 cmd.Connection = con;
                 SQLiteDataReader rdr = cmd.ExecuteReader();
                 // execute the command with the reader, which only reads the database rather than updating it in anyway
@@ -1372,7 +1370,7 @@ namespace ClassLibrary
                     DateTime departureDateTime = Convert.ToDateTime(rdr.GetString(1)).Date + Convert.ToDateTime(rdr.GetString(2)).TimeOfDay;
                     DateTime arriveDateTime = departureDateTime.AddHours(rdr.GetDouble(3));
                     if (DateTime.Compare(departureDateTime.Date, departDate.Date) == 0 && DateTime.Compare(departureDateTime, compareDateTime) > 0)
-                        flights_MasterID.Add(rdr.GetInt32(0));
+                        flights_MasterID.Add((rdr.GetInt32(0), arriveDateTime));
                 }
                 rdr.Close();
                 con.Close();
