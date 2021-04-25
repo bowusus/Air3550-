@@ -137,8 +137,8 @@ namespace Air3550
             BoardingPassTable.Columns[3].HeaderText = "Last Name";
             BoardingPassTable.Columns[6].HeaderText = "Origin Name";
             BoardingPassTable.Columns[8].HeaderText = "Destination Name";
-            BoardingPassTable.Columns[11].HeaderText = "Depature Time and Date";
-            BoardingPassTable.Columns[12].HeaderText = "Arrival Time and Date";
+            BoardingPassTable.Columns[10].HeaderText = "Depature Time and Date";
+            BoardingPassTable.Columns[11].HeaderText = "Arrival Time and Date";
             BoardingPassTable.Columns[13].HeaderText = "Duration";
 
         }
