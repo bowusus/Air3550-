@@ -34,6 +34,7 @@ namespace ClassLibrary
 		public double cost { get; set; }
 		public int numOfPoints { get; set; }
 		public int numberOfVacantSeats { get; set; }
+		public double percentFull { get; set; }
 		public double flightIncome { get; set; }
 
 		// base flightModel constructor
@@ -55,7 +56,22 @@ namespace ClassLibrary
 			numberOfVacantSeats = seats;
 			flightIncome = income;
 		}
-
+		public FlightModel(int flightID, int masterFlightID, string originCode, string destinationCode, int distance, DateTime departureDateTime, double duration,
+						   string planeType, double cost, int numberOfVacantSeat, double flightIncome, double percentage)
+		{
+			this.flightID = flightID;
+			this.masterFlightID = masterFlightID;
+			this.originCode = originCode;
+			this.destinationCode = destinationCode;
+			this.distance = distance;
+			this.departureDateTime = departureDateTime;
+			this.durDouble = duration;
+			this.planeType = planeType;
+			this.cost = cost;
+			this.numberOfVacantSeats = numberOfVacantSeat;
+			this.percentFull = percentage;
+			this.flightIncome = flightIncome;
+		}
 		/* This overloading of the flight model is specific for the availableFlight table we have in the database */
 		public FlightModel(int flightID, int masterFlightID, string originCode, string destinationCode, int distance, DateTime departureDateTime, double duration,
 						   string planeType, double cost, int numberOfVacantSeat, double flightIncome)

@@ -16,16 +16,10 @@ namespace Air3550
     {
         // This form file is to document the actions done on the Print Boarding Pass Page specifically
         public static CustomerModel currCustomer; // make a local object that can be read in the current context
-        public static bool logOutButtonClicked = false; 
-        public static bool backButtonClicked = false;
         public static List<FlightModel> bookedFlights = new List<FlightModel>();
         public static FlightModel flight;
         public static List<CustomerModel> name;
         public static PrintBoardingPassPage instance;
-       private bool printbuttonclicked = false;
-
-
-
         public PrintBoardingPassPage()
         {
             InitializeComponent();
@@ -62,7 +56,6 @@ namespace Air3550
                 this.Dispose();
             }
         }
-
         private void LogOutButton_Click(object sender, EventArgs e)
         {
             // This method allows the user to return to the log in page
@@ -76,16 +69,17 @@ namespace Air3550
                 this.Dispose();
             }
         }
-
-
         private void PrintBoardingPassPage_Load(object sender, EventArgs e)
         {
             // Loads all the customers booked flight onto a datagrid view 
             // and allow the customer to select which boarding pass to print
+            // The main reason for this method is to fill the datagridview initially
+            // This method loads all current flights for the current customer
+            // These are the flights that the customer can cancel
+            // There can be multiple flights due to a round trip or if a flight has layovers
             List<int> routeIDs = SqliteDataAccess.GetBookedFlightsRouteID(currCustomer.userID); // get the route IDs from the booked flights table
             List<int> flightIDs_Booked = SqliteDataAccess.GetBookedFlightIDs(currCustomer.userID);
-            int count = 0;
-            int index = 0;
+            int count;
             int i = 0;
             int j = 0;
             if (bookedFlights.Count == 0)
@@ -100,28 +94,23 @@ namespace Air3550
                         count = masterFlightIDsRoute.Count;
                         while (i < count)
                         {
-                            if (flightIDs_Booked.Contains(flightIDs_Booked[j]))
-                            {
-                                FlightModel flight;
-                                if (bookedFlights.Count % count == 0 && i != 0)
-                                {
-                                    flight = SystemAction.GetBoardingFlights(flightIDs_Booked[j], i, ref currCustomer);
-                                    i = 0;
-                                }
-                                else
-                                {
-                                    flight = SystemAction.GetBoardingFlights(flightIDs_Booked[j], i, ref currCustomer);
-                                    i += 1;
-                                }
-                                bookedFlights.Add(flight);
-                            }
+                            FlightModel flight;
+                            flight = SystemAction.GetBoardingFlights(flightIDs_Booked[j], i, ref currCustomer);
+                            i += 1;
+                            bookedFlights.Add(flight);
                             j += 1;
                         }
                         i = 0;
                     }
                 }
             }
-            dataGridView1.DataSource = bookedFlights;
+            BoardingPassTable.DataSource = bookedFlights;
+            BoardingPassTable.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+            BoardingPassTable.ClearSelection();
+            if (bookedFlights.Count == 0)
+                NoFlightLabel.Visible = true;
+            else
+                NoFlightLabel.Visible = false;
             FormatDataGrid(); // remove and rename certain columns
         }
         // Used to rename and remove certain columns not needed in the boarding pass
@@ -130,55 +119,42 @@ namespace Air3550
             // This method renames and removes some columns that do not get updated when the data in the datagridview gets updated
             // Remove some information that the employees need but not the customer
 
-            dataGridView1.Columns["durDouble"].Visible = false;
-            dataGridView1.Columns["masterFlightID"].Visible = false;
-            dataGridView1.Columns["originCode"].Visible = false;
-            dataGridView1.Columns["destinationCode"].Visible = false;
-            dataGridView1.Columns["distance"].Visible = false;
-            dataGridView1.Columns["planeType"].Visible = false;
-            dataGridView1.Columns["cost"].Visible = false;
-            dataGridView1.Columns["numOfPoints"].Visible = false;
-            dataGridView1.Columns["numberOfVacantSeats"].Visible = false;
-            dataGridView1.Columns["flightIncome"].Visible = false;
-
-
-
-
-
-
-
+            BoardingPassTable.Columns["durDouble"].Visible = false;
+            BoardingPassTable.Columns["masterFlightID"].Visible = false;
+            BoardingPassTable.Columns["originCode"].Visible = false;
+            BoardingPassTable.Columns["destinationCode"].Visible = false;
+            BoardingPassTable.Columns["distance"].Visible = false;
+            BoardingPassTable.Columns["planeType"].Visible = false;
+            BoardingPassTable.Columns["cost"].Visible = false;
+            BoardingPassTable.Columns["numOfPoints"].Visible = false;
+            BoardingPassTable.Columns["numberOfVacantSeats"].Visible = false;
+            BoardingPassTable.Columns["flightIncome"].Visible = false;
+            BoardingPassTable.Columns["percentFull"].Visible = false;
             // change the name of the columns
-            dataGridView1.Columns[0].HeaderText = "FlightID";
-            dataGridView1.Columns[1].HeaderText = "UserID";
-            dataGridView1.Columns[2].HeaderText = "First Name";
-            dataGridView1.Columns[3].HeaderText = "Last Name";
-            dataGridView1.Columns[7].HeaderText = "Origin Name";
-            dataGridView1.Columns[9].HeaderText = "Destination Name";
-            dataGridView1.Columns[11].HeaderText = "Depature Time and Date";
-            dataGridView1.Columns[12].HeaderText = "Arrival Time and Date";
-            dataGridView1.Columns[13].HeaderText = "Duration";
+            BoardingPassTable.Columns[0].HeaderText = "FlightID";
+            BoardingPassTable.Columns[1].HeaderText = "UserID";
+            BoardingPassTable.Columns[2].HeaderText = "First Name";
+            BoardingPassTable.Columns[3].HeaderText = "Last Name";
+            BoardingPassTable.Columns[6].HeaderText = "Origin Name";
+            BoardingPassTable.Columns[8].HeaderText = "Destination Name";
+            BoardingPassTable.Columns[11].HeaderText = "Depature Time and Date";
+            BoardingPassTable.Columns[12].HeaderText = "Arrival Time and Date";
+            BoardingPassTable.Columns[13].HeaderText = "Duration";
 
         }
-
-
-        private void PrintButton_Click(object sender, EventArgs e)
+        private void PrintBoardingPassButton_Click(object sender, EventArgs e)
         {
-
             DateTime time = DateTime.Now;
 
             if (bookedFlights.Count == 0)
                 MessageBox.Show("You do not have any booked flights available", "", MessageBoxButtons.OK, MessageBoxIcon.Error);
             else
             {
-                DialogResult result = MessageBox.Show("Are you sure that you would like to print board pass?", "Print pass", MessageBoxButtons.YesNo, MessageBoxIcon.None);
+                DialogResult result = MessageBox.Show("Are you sure that you would like to print this boarding pass?", "Print Boarding Pass", MessageBoxButtons.YesNo, MessageBoxIcon.None);
                 if (result == DialogResult.Yes)
-
-
                     if (result == DialogResult.Yes)
                     {
                         var _time = bookedFlights[0].departureDateTime.Subtract(time);
-                        printbuttonclicked = true;
-
                         // Boarding will be available to print 24 hours before a flight is scheduled to depart
                         if (_time.TotalMinutes < 1440)
                         {
@@ -192,53 +168,51 @@ namespace Air3550
                             Pd.PrintPage += printDocument1_PrintPage;
                             ppd.Document = Pd;
                             printPreviewDialog1.ShowDialog();
-
                         }
-
                         else
                             MessageBox.Show("You are not within 24 hours of your flight and can not print boaring pass", "Print Boarding Pass", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
-
             }
         }
-
         // this method prints the groupbox object with all the information in it 
         private void printDocument1_PrintPage(object sender, System.Drawing.Printing.PrintPageEventArgs e)
         {
             var g = e.Graphics;
-            var srcRect = new Rectangle(0, 0, groupBox1.Width, groupBox1.Height);
+            var srcRect = new Rectangle(0, 0, BoardingPassGroupBox.Width, BoardingPassGroupBox.Height);
             var desRect = new Rectangle(e.PageBounds.X, e.PageBounds.Y, e.PageBounds.Width, srcRect.Height);
             //Or to draw within the margin
-           
-
             using (var bmp = new Bitmap(srcRect.Width, srcRect.Height))
             {
-                groupBox1.DrawToBitmap(bmp, srcRect);
+                BoardingPassGroupBox.DrawToBitmap(bmp, srcRect);
                 g.DrawImage(bmp, desRect, srcRect, GraphicsUnit.Pixel);
             }
         }
-
-
-
-        private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
+        private void BoardingPassTable_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            FormatDataGrid();
             if (e.RowIndex != -1)
             {
-               
                 // Populate to the boarding pass page the info needed for the boarding pass
-                DataGridViewRow row = dataGridView1.Rows[e.RowIndex];
+                DataGridViewRow row = BoardingPassTable.Rows[e.RowIndex];
                 FlightIDText.Text = row.Cells[0].Value.ToString();
-                OriginText.Text = row.Cells[7].Value.ToString();
+                OriginText.Text = row.Cells[6].Value.ToString();
                 FirstNameText.Text = row.Cells[2].Value.ToString();
                 UserIDText.Text = row.Cells[1].Value.ToString();
-                DesText.Text = row.Cells[9].Value.ToString();
-                DepText.Text = row.Cells[11].Value.ToString();
-                ArrivalText.Text = row.Cells[12].Value.ToString();
+                DesText.Text = row.Cells[8].Value.ToString();
+                DepText.Text = row.Cells[10].Value.ToString();
+                ArrivalText.Text = row.Cells[11].Value.ToString();
                 LastNameText.Text = row.Cells[3].Value.ToString();
-
-
             }
+        }
+        private void PrintBoardingPassPage_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            // This method allows the red X to be used to end the application
+            // If the red X is clicked, a message will make sure the customer wants to leave
+            // then the application ends or the customer cancels
+            DialogResult result = MessageBox.Show("Are you sure you would like to exit?\nAny changes not saved will not be updated.", "Close", MessageBoxButtons.YesNo, MessageBoxIcon.None);
+            if (result == DialogResult.Yes)
+                LogInPage.GetInstance.Close();
+            else
+                e.Cancel = true;
         }
     }
 }

@@ -69,8 +69,8 @@ namespace Air3550
             string origin = null;
             string destination = null;
             // set the dates to the default min value
-            DateTime fromDate = DateTime.Now;
-            DateTime toDate = DateTime.Now;
+            DateTime fromDate = FromDatePicker.Value.Date;
+            DateTime toDate = ToDatePicker.Value;
             // if the depart city is not null, then get the origin airport code from the drop down
             if (!String.IsNullOrEmpty(DepartComboBox.Text))
             {
@@ -123,7 +123,8 @@ namespace Air3550
             FlightTable.Columns[7].HeaderText = "Plane Type";
             FlightTable.Columns[8].HeaderText = "Cost (in dollars)";
             FlightTable.Columns[9].HeaderText = "Number of Vacant Seats";
-            FlightTable.Columns[10].HeaderText = "Flight Income (in dollars)";
+            FlightTable.Columns[10].HeaderText = "% Full Capacity";
+            FlightTable.Columns[11].HeaderText = "Flight Income (in dollars)";
             FlightTable.ClearSelection();
         }
         private void ClearFiltersButton_Click(object sender, EventArgs e)
@@ -161,7 +162,6 @@ namespace Air3550
         {
             // Once the fromDatePicker's value has changed, the values will be default formatted and the date of the selected date will be selected
             FromDatePicker.CustomFormat = "dddd, MMMM  dd,  yyyy";
-            FromDatePicker.Value = FromDatePicker.Value; // this sets the time to midnight, so ticks = 0
             FromDateAfterTodayError.Visible = false;
             var delta = FromDatePicker.Value.Date.Subtract(DateTime.Today.Date); // get the difference between the to date and today
             if (delta.TotalMinutes > 0) // if the from date is after today
@@ -172,7 +172,6 @@ namespace Air3550
             // Once the toDatePicker's value has changed, the values will be default formatted and the date of the selected date will be selected
             // This method also makes sure the selected date is the same or after the from date picker
             ToDatePicker.CustomFormat = "dddd, MMMM  dd,  yyyy";
-            ToDatePicker.Value = ToDatePicker.Value; // this sets the time to midnight, so ticks = 0
             BeforeFromDateError.Visible = false;
             ToDateAfterTodayError.Visible = false;
             var delta1 = ToDatePicker.Value.Date.Subtract(FromDatePicker.Value.Date); // get the difference between the from date and the to date

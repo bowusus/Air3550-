@@ -73,6 +73,7 @@ namespace Air3550
             }
             // This list of FlightModel objects will be the data source of the datagridview table
             CancelFlightTable.DataSource = bookedFlights;
+            CancelFlightTable.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
             FormatDataGrid();
             // as long as there are booked flights, then do not display the no flight label
             if (bookedFlights.Count == 0)
@@ -92,8 +93,9 @@ namespace Air3550
             CancelFlightTable.Columns.Remove("planeType");
             CancelFlightTable.Columns.Remove("numberOfVacantSeats");
             CancelFlightTable.Columns.Remove("flightIncome");
+            CancelFlightTable.Columns.Remove("percentFull");
             // change the name of the columns
-            
+
             CancelFlightTable.Columns[0].HeaderText = "FlightID";
             CancelFlightTable.Columns[1].HeaderText = "Origin Code";
             CancelFlightTable.Columns[2].HeaderText = "Origin Name";
@@ -165,6 +167,7 @@ namespace Air3550
                         if (bookedFlights.Count == 0)
                             NoFlightLabel.Visible = true;
                         CancelFlightTable.DataSource = bookedFlights;
+                        CancelFlightTable.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
                         FormatDataGrid(); // remove and rename certain columns
                     }
                     else
@@ -261,6 +264,7 @@ namespace Air3550
                             NoFlightLabel.Visible = true;
                         }
                         CancelFlightTable.DataSource = bookedFlights;
+                        CancelFlightTable.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
                         FormatDataGrid(); // remove and rename certain columns
                     }
                     else

@@ -110,7 +110,15 @@ namespace Air3550
         public void LoadFlightGrid()
         {
             flightGrid.DataSource = SqliteDataAccess.GetMasterFlightDT();
+            flightGrid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+            // change the name of the columns
+            flightGrid.Columns[0].HeaderText = "Master Flight ID";
+            flightGrid.Columns[1].HeaderText = "Origin Code";
+            flightGrid.Columns[2].HeaderText = "Destination Code";
+            flightGrid.Columns[3].HeaderText = "Distance (in miles)";
+            flightGrid.Columns[4].HeaderText = "Departure Time";
+            flightGrid.Columns[5].HeaderText = "Plane Type";
+            flightGrid.Columns[6].HeaderText = "Capacity";
         }
-
     }
 }

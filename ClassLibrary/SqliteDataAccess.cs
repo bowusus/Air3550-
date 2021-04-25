@@ -967,8 +967,11 @@ namespace ClassLibrary
                 while (rdr.Read())
                 {
                     DateTime dateTime = Convert.ToDateTime(rdr.GetString(4)).Date + Convert.ToDateTime(rdr.GetString(5)).TimeOfDay;
-                    if (DateTime.Compare(dateTime, from) > 0 && DateTime.Compare(dateTime, to) < 0)
-                        flights.Add(new FlightModel(rdr.GetInt32(0), rdr.GetInt32(1), rdr.GetString(2), rdr.GetString(3), rdr.GetInt32(6), dateTime, rdr.GetDouble(7), rdr.GetString(8), rdr.GetDouble(9), rdr.GetInt32(10), rdr.GetDouble(11)));
+                    if (DateTime.Compare(dateTime, from) >= 0 && DateTime.Compare(dateTime, to) <= 0)
+                    {
+                        double capacityPercentage = Math.Round((1.0 - (double)(Convert.ToDouble(rdr.GetInt32(10)) / (double)SqliteDataAccess.GetPlaneCapacity(rdr.GetString(8)))) * 100.0, 2);
+                        flights.Add(new FlightModel(rdr.GetInt32(0), rdr.GetInt32(1), rdr.GetString(2), rdr.GetString(3), rdr.GetInt32(6), dateTime, rdr.GetDouble(7), rdr.GetString(8), rdr.GetDouble(9), rdr.GetInt32(10), rdr.GetDouble(11), capacityPercentage));
+                    }
                 }
                 // DataTable dt = new DataTable();
                 // dt.Load(rdr); // fill a datatable with the sql query data
@@ -1018,24 +1021,24 @@ namespace ClassLibrary
                 if (String.IsNullOrEmpty(origin) && String.IsNullOrEmpty(destination))
                 {
                     // if only the dates are provided, then select all flights
-                    cmd.CommandText = "select count(*) from availableFlight";
+                    cmd.CommandText = "select * from availableFlight";
                 }
                 else if (!String.IsNullOrEmpty(origin) && String.IsNullOrEmpty(destination))
                 {
                     // if the origin is provided, then find all flights with that originCode
-                    cmd.CommandText = "select count(*) from availableFlight where availableFlight.originCode_fk = @originCode_fk";
+                    cmd.CommandText = "select * from availableFlight where availableFlight.originCode_fk = @originCode_fk";
                     cmd.Parameters.AddWithValue("@originCode_fk", origin);
                 }
                 else if (String.IsNullOrEmpty(origin) && !String.IsNullOrEmpty(destination))
                 {
                     // if the destination is provided, then find all flights with that destinationCpde
-                    cmd.CommandText = "select count(*) from availableFlight where availableFlight.originCode_fk = @destinationCode_fk";
+                    cmd.CommandText = "select * from availableFlight where availableFlight.originCode_fk = @destinationCode_fk";
                     cmd.Parameters.AddWithValue("@destinationCode_fk", origin);
                 }
                 else
                 {
                     // if the origin and destination are provided, then find all flights with that originCode and destinationCode
-                    cmd.CommandText = "select count(*) from availableFlight where availableFlight.originCode_fk = @originCode_fk and availableFlight.destinationCode_fk = @destinationCode_fk";
+                    cmd.CommandText = "select * from availableFlight where availableFlight.originCode_fk = @originCode_fk and availableFlight.destinationCode_fk = @destinationCode_fk";
                     cmd.Parameters.AddWithValue("@originCode_fk", origin);
                     cmd.Parameters.AddWithValue("@destinationCode_fk", destination);
                 }
@@ -1167,8 +1170,8 @@ namespace ClassLibrary
                 while (rdr.Read())
                 {
                     DateTime dateTime = Convert.ToDateTime(rdr.GetString(4)).Date + Convert.ToDateTime(rdr.GetString(5)).TimeOfDay;
-                    if (DateTime.Compare(dateTime, from) > 0 && DateTime.Compare(dateTime, to) < 0)
-                        flightCount = rdr.GetInt32(0);
+                    if (DateTime.Compare(dateTime, from) >= 0 && DateTime.Compare(dateTime, to) <= 0)
+                        flightCount += 1;
                 }
                 rdr.Close();
                 con.Close();
@@ -1190,24 +1193,24 @@ namespace ClassLibrary
                 if (String.IsNullOrEmpty(origin) && String.IsNullOrEmpty(destination))
                 {
                     // if only the dates are provided, then select all flights
-                    cmd.CommandText = "select availableFlight.flightIncome from availableFlight";
+                    cmd.CommandText = "select * from availableFlight";
                 }
                 else if (!String.IsNullOrEmpty(origin) && String.IsNullOrEmpty(destination))
                 {
                     // if the origin is provided, then find all flights with that originCode
-                    cmd.CommandText = "select availableFlight.flightIncome from availableFlight where availableFlight.originCode_fk = @originCode_fk";
+                    cmd.CommandText = "select * from availableFlight where availableFlight.originCode_fk = @originCode_fk";
                     cmd.Parameters.AddWithValue("@originCode_fk", origin);
                 }
                 else if (String.IsNullOrEmpty(origin) && !String.IsNullOrEmpty(destination))
                 {
                     // if the destination is provided, then find all flights with that destinationCpde
-                    cmd.CommandText = "select availableFlight.flightIncome from availableFlight where availableFlight.originCode_fk = @destinationCode_fk";
+                    cmd.CommandText = "select * from availableFlight where availableFlight.originCode_fk = @destinationCode_fk";
                     cmd.Parameters.AddWithValue("@destinationCode_fk", origin);
                 }
                 else
                 {
                     // if the origin and destination are provided, then find all flights with that originCode and destinationCode
-                    cmd.CommandText = "select availableFlight.flightIncome from availableFlight where availableFlight.originCode_fk = @originCode_fk and availableFlight.destinationCode_fk = @destinationCode_fk";
+                    cmd.CommandText = "select * from availableFlight where availableFlight.originCode_fk = @originCode_fk and availableFlight.destinationCode_fk = @destinationCode_fk";
                     cmd.Parameters.AddWithValue("@originCode_fk", origin);
                     cmd.Parameters.AddWithValue("@destinationCode_fk", destination);
                 }
@@ -1340,8 +1343,8 @@ namespace ClassLibrary
                 while (rdr.Read())
                 {
                     DateTime dateTime = Convert.ToDateTime(rdr.GetString(4)).Date + Convert.ToDateTime(rdr.GetString(5)).TimeOfDay;
-                    if (DateTime.Compare(dateTime, from) > 0 && DateTime.Compare(dateTime, to) < 0)
-                        income += rdr.GetDouble(0);
+                    if (DateTime.Compare(dateTime, from) >= 0 && DateTime.Compare(dateTime, to) <= 0)
+                        income += rdr.GetDouble(11);
                 }
                 rdr.Close();
                 con.Close();

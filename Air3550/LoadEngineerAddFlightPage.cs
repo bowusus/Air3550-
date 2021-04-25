@@ -54,7 +54,7 @@ namespace Air3550
             routeTimePicker.ShowUpDown = true;
             routeTimePicker.Visible = false;
             routeTimePicker.Value = Convert.ToDateTime("12:00 AM");
-            addButton.Visible = false;
+            AddFlightButton.Visible = false;
         }
 
         /* Searchs for all the paths between the selected origin and destination
@@ -97,7 +97,7 @@ namespace Air3550
         private void routesGridView_SelectionChanged(object sender, EventArgs e)
         {
             routeTimePicker.Visible = true;
-            addButton.Visible = true;
+            AddFlightButton.Visible = true;
         }
 
         /* Call the helper method to generate all the new master flights and route */

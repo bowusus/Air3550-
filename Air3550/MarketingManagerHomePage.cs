@@ -60,6 +60,14 @@ namespace Air3550
         private void MarketingManagerHomePage_Load(object sender, EventArgs e)
         {
             LoadFlightGrid();
+
+            flightGrid.Columns[0].HeaderText = "Master Flight ID";
+            flightGrid.Columns[1].HeaderText = "Origin Code";
+            flightGrid.Columns[2].HeaderText = "Destination Code";
+            flightGrid.Columns[3].HeaderText = "Distance (in miles)";
+            flightGrid.Columns[4].HeaderText = "Departure Time";
+            flightGrid.Columns[5].HeaderText = "Plane Type";
+            flightGrid.Columns[6].HeaderText = "Capacity";
         }
 
         /* Close the application */

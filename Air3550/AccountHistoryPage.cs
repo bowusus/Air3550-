@@ -16,14 +16,9 @@ namespace Air3550
         // This form file is to document the actions done on the Account History specifically
         public static CustomerModel currCustomer; // make a local object that can be read in the current context
         public static AccountHistoryPage instance;
-        public static bool logOutButtonClicked = false;
-        public static bool backButtonClicked = false;
         public static List<FlightModel> bookedFlights =  new List<FlightModel>();
         public static List<FlightModel> takenFlights;
         public static List<FlightModel> cancelflight;
-        private DataTable flightList = new DataTable();
-
-
         public AccountHistoryPage()
         {
             InitializeComponent();
@@ -43,14 +38,60 @@ namespace Air3550
             InitializeComponent();
             // get the current customer and pass that information to the textboxes
             currCustomer = customer;
-
+        }
+        // Loads all the points available, points used and credits
+        private void AccountHistoryPage_Load(object sender, EventArgs e)
+        {
+            // The main reason for this method is to load this page with default visibility and values of labels and the tables 
+            AccountHistoryTable.Visible = false;
+            NoBookedFlightLabel.Visible = false;
+            NoCancelledFlightLabel.Visible = false;
+            NoTakenFlightLabel.Visible = false;
+            int availablepoints = SqliteDataAccess.GetAvailablePoints(currCustomer.userID);
+            PointsAvailableText.Text = availablepoints.ToString(); // shows the available points 
+            int pointsused = SqliteDataAccess.GetUsedPoints(currCustomer.userID);
+            PointsText.Text = pointsused.ToString(); // shows amount of points of used
+            double credits = SqliteDataAccess.GetBalance(currCustomer.userID);
+            AvailableBalanceText.Text = credits.ToString(); // shows credit remaining
+        }
+        private void FormatDataGrid()
+        {
+            // removes the information not needed
+            AccountHistoryTable.Columns.Remove("durDouble");
+            AccountHistoryTable.Columns.Remove("masterFlightID");
+            AccountHistoryTable.Columns.Remove("firstName");
+            AccountHistoryTable.Columns.Remove("userid");
+            AccountHistoryTable.Columns.Remove("lastName");
+            AccountHistoryTable.Columns.Remove("planeType");
+            AccountHistoryTable.Columns.Remove("numberOfVacantSeats");
+            AccountHistoryTable.Columns.Remove("flightIncome");
+            AccountHistoryTable.Columns.Remove("percentFull");
+            // Fix and rename header text
+            AccountHistoryTable.Columns[0].HeaderText = "FlightID";
+            AccountHistoryTable.Columns[1].HeaderText = "Origin Code";
+            AccountHistoryTable.Columns[2].HeaderText = "Origin Name";
+            AccountHistoryTable.Columns[3].HeaderText = "Destination Code";
+            AccountHistoryTable.Columns[4].HeaderText = "Destination Name";
+            AccountHistoryTable.Columns[5].HeaderText = "Distance (in miles)";
+            AccountHistoryTable.Columns[6].HeaderText = "Departure Date and Time";
+            AccountHistoryTable.Columns[7].HeaderText = "Est. Arrival Date and Time";
+            AccountHistoryTable.Columns[8].HeaderText = "Est. Duration (h:mm:ss)";
+            AccountHistoryTable.Columns[9].HeaderText = "Cost (in dollars)";
+            AccountHistoryTable.Columns[10].HeaderText = "Number of Points";
+            AccountHistoryTable.ClearSelection();
         }
         private void FlightsBookedButton_Click(object sender, EventArgs e)
         {
+            // This method loads all current flights for the current customer
+            // These are the flights that the customer can cancel
+            // There can be multiple flights due to a round trip or if a flight has layovers
+            NoBookedFlightLabel.Visible = false;
+            NoCancelledFlightLabel.Visible = false;
+            NoTakenFlightLabel.Visible = false;
+
             List<int> routeIDs = SqliteDataAccess.GetBookedFlightsRouteID(currCustomer.userID); // get the route IDs from the booked flights table
             List<int> flightIDs_Booked = SqliteDataAccess.GetBookedFlightIDs(currCustomer.userID);
-            int count = 0;
-            int index = 0;
+            int count;
             int i = 0;
             int j = 0;
             if (bookedFlights.Count == 0)
@@ -65,63 +106,34 @@ namespace Air3550
                         count = masterFlightIDsRoute.Count;
                         while (i < count)
                         {
-                            if (flightIDs_Booked.Contains(flightIDs_Booked[j]))
-                            {
-                                FlightModel flight;
-                                if (bookedFlights.Count % count == 0 && i != 0)
-                                {
-                                    flight = SystemAction.GetFlight(flightIDs_Booked[j], i);
-                                    i = 0;
-                                }
-                                else
-                                {
-                                    flight = SystemAction.GetFlight(flightIDs_Booked[j], i);
-                                    i += 1;
-                                }
-                                bookedFlights.Add(flight);
-                            }
+                            FlightModel flight;
+                            flight = SystemAction.GetFlight(flightIDs_Booked[j], i);
+                            i += 1;
+                            bookedFlights.Add(flight);
                             j += 1;
                         }
                         i = 0;
                     }
                 }
             }
-            dataGridView1.DataSource = bookedFlights;
-             FormatDataGrid();
+            AccountHistoryTable.DataSource = bookedFlights;
+            AccountHistoryTable.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+            AccountHistoryTable.Visible = true;
+            if (bookedFlights.Count == 0)
+                NoBookedFlightLabel.Visible = true;
+            else
+                NoBookedFlightLabel.Visible = false;
+            FormatDataGrid();
         }
-
-        private void FormatDataGrid()
-        {
-            // removes the information not needed
-           
-            dataGridView1.Columns.Remove("durDouble");
-            dataGridView1.Columns.Remove("masterFlightID");
-            dataGridView1.Columns.Remove("firstName");
-            dataGridView1.Columns.Remove("userid");
-            dataGridView1.Columns.Remove("lastName");
-            dataGridView1.Columns.Remove("planeType");
-            dataGridView1.Columns.Remove("numberOfVacantSeats");
-            dataGridView1.Columns.Remove("flightIncome");
-
-
-            // Fix and rename header text
-            dataGridView1.Columns[0].HeaderText = "FlightID";
-            dataGridView1.Columns[1].HeaderText = "Origin Code";
-            dataGridView1.Columns[2].HeaderText = "Origin Name";
-            dataGridView1.Columns[3].HeaderText = "Destination Code";
-            dataGridView1.Columns[4].HeaderText = "Destination Name";
-            dataGridView1.Columns[5].HeaderText = "Distance (in miles)";
-            dataGridView1.Columns[6].HeaderText = "Departure Date and Time";
-            dataGridView1.Columns[7].HeaderText = "Est. Arrival Date and Time";
-            dataGridView1.Columns[8].HeaderText = "Est. Duration (h:mm:ss)";
-            dataGridView1.Columns[9].HeaderText = "Cost (in dollars)";
-            dataGridView1.Columns[10].HeaderText = "Number of Points";
-            dataGridView1.ClearSelection();
-        }
-
         private void FlightsCancelledButton_Click(object sender, EventArgs e)
         {
-            flightList.Rows.Clear(); // clears the data gridview
+            // This method loads all cancelled flights for the current customer
+            // These are the flights that the customer can cancel
+            // There can be multiple flights due to a round trip or if a flight has layovers
+            NoBookedFlightLabel.Visible = false;
+            NoCancelledFlightLabel.Visible = false;
+            NoTakenFlightLabel.Visible = false;
+
             cancelflight = new List<FlightModel>();
             int i = 0;
             List<int> flightID = SqliteDataAccess.GetCancelledFlightIDs(currCustomer.userID);
@@ -130,11 +142,8 @@ namespace Air3550
                 foreach (int rID in flightID)
                 {
                     List<string> flightData = SqliteDataAccess.GetFlightData(rID);
-                    //        List<string> flightsBookedData = SqliteDataAccess.GetFlightData(rID);
                     string originName = SqliteDataAccess.GetFlightNames(flightData[2]);
                     string destinationName = SqliteDataAccess.GetFlightNames(flightData[3]);
-                    // string firsname = SqliteDataAccess.GetUserData(currCustomer.userID).ElementAt(2);
-                    //  currCustomer.firstName = firsname;
 
                     DateTime departureDateTime = DateTime.Parse(flightData[4] + " " + flightData[5]);
                     DateTime arriveDateTime = departureDateTime.AddHours(Convert.ToDouble(flightData[7]));
@@ -161,13 +170,25 @@ namespace Air3550
                 }
 
             }
-            dataGridView1.DataSource = cancelflight;
+            AccountHistoryTable.DataSource = cancelflight;
+            AccountHistoryTable.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+            AccountHistoryTable.Visible = true;
+            if (cancelflight.Count == 0)
+                NoCancelledFlightLabel.Visible = true;
+            else
+                NoCancelledFlightLabel.Visible = false;
             FormatDataGrid();
         }
 
         private void FlightsTakenButton_Click(object sender, EventArgs e)
         {
-            flightList.Rows.Clear(); // clears the data gridview
+            // This method loads all taken flights for the current customer
+            // These are the flights that the customer can cancel
+            // There can be multiple flights due to a round trip or if a flight has layovers
+            NoBookedFlightLabel.Visible = false;
+            NoCancelledFlightLabel.Visible = false;
+            NoTakenFlightLabel.Visible = false;
+
             int i = 0;
             takenFlights = new List<FlightModel>();
 
@@ -205,10 +226,15 @@ namespace Air3550
                     i += 1;
                 }
             }
-            dataGridView1.DataSource = takenFlights;
+            AccountHistoryTable.DataSource = takenFlights;
+            AccountHistoryTable.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+            AccountHistoryTable.Visible = true;
+            if (takenFlights.Count == 0)
+                NoTakenFlightLabel.Visible = true;
+            else
+                NoTakenFlightLabel.Visible = false;
             FormatDataGrid();
         }
-
         private void BackButton_Click(object sender, EventArgs e)
         {
             // This methods allows the user to return to the Log In page
@@ -221,7 +247,6 @@ namespace Air3550
                 this.Dispose();
             }
         }
-
         private void LogOutButton_Click(object sender, EventArgs e)
         {
             // This method allows the user to return to the log in page
@@ -235,21 +260,16 @@ namespace Air3550
                 this.Dispose();
             }
         }
-
-        // Loads all the points available, points used and credits
-        private void AccountHistoryPage_Load(object sender, EventArgs e)
+        private void AccountHistoryPage_FormClosing(object sender, FormClosingEventArgs e)
         {
-            // FillFlightListColumns();
-            dataGridView1.DataSource = flightList;
-            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
-
-
-            int availablepoints = SqliteDataAccess.GetAvailablePoints(currCustomer.userID);
-            pointsAvailableText.Text = availablepoints.ToString(); // shows the available points 
-            int pointsused = SqliteDataAccess.GetUsedPoints(currCustomer.userID);
-            PointsText.Text = pointsused.ToString(); // shows amount of points of used
-            double credits = SqliteDataAccess.GetBalance(currCustomer.userID);
-            creditText.Text = credits.ToString(); // shows credit remaining
+            // This method allows the red X to be used to end the application
+            // If the red X is clicked, a message will make sure the customer wants to leave
+            // then the application ends or the customer cancels
+            DialogResult result = MessageBox.Show("Are you sure you would like to exit?\nAny changes not saved will not be updated.", "Close", MessageBoxButtons.YesNo, MessageBoxIcon.None);
+            if (result == DialogResult.Yes)
+                LogInPage.GetInstance.Close();
+            else
+                e.Cancel = true;
         }
     }
 }

@@ -116,7 +116,7 @@ namespace Air3550
             dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.CancelFlightTable.DefaultCellStyle = dataGridViewCellStyle2;
-            this.CancelFlightTable.Location = new System.Drawing.Point(58, 229);
+            this.CancelFlightTable.Location = new System.Drawing.Point(58, 234);
             this.CancelFlightTable.MultiSelect = false;
             this.CancelFlightTable.Name = "CancelFlightTable";
             this.CancelFlightTable.ReadOnly = true;
@@ -157,7 +157,7 @@ namespace Air3550
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.HighlightText;
-            this.ClientSize = new System.Drawing.Size(2218, 1055);
+            this.ClientSize = new System.Drawing.Size(2218, 1064);
             this.Controls.Add(this.CancelAllFlightsButton);
             this.Controls.Add(this.NoFlightLabel);
             this.Controls.Add(this.BackButton);

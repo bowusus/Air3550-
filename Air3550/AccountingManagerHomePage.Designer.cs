@@ -30,24 +30,37 @@ namespace Air3550
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AccountingManagerHomePage));
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.CreateButton = new System.Windows.Forms.Button();
-            this.PrintButton = new System.Windows.Forms.Button();
-            this.ToDateLabel = new System.Windows.Forms.Label();
-            this.FromDateLabel = new System.Windows.Forms.Label();
-            this.ToTimePicker = new System.Windows.Forms.DateTimePicker();
-            this.FromTimePicker = new System.Windows.Forms.DateTimePicker();
-            this.totalFlights = new System.Windows.Forms.Label();
-            this.totalRevenue = new System.Windows.Forms.Label();
-            this.BeforeFromDateError = new System.Windows.Forms.Label();
+            this.TotalFlightCountLabel = new System.Windows.Forms.Label();
+            this.TotalRevenueLabel = new System.Windows.Forms.Label();
             this.printPreviewDialog1 = new System.Windows.Forms.PrintPreviewDialog();
             this.printDocument1 = new System.Drawing.Printing.PrintDocument();
-            this.FromDateAfterTodayError = new System.Windows.Forms.Label();
-            this.ToDateAfterTodayError = new System.Windows.Forms.Label();
-            this.accountPage = new System.Windows.Forms.DataGridView();
             this.Label1 = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
-            this.LogOut = new System.Windows.Forms.Button();
+            this.DifferentLocationError = new System.Windows.Forms.Label();
+            this.FlightManagerHomeLabel = new System.Windows.Forms.Label();
+            this.ToDateAfterTodayError = new System.Windows.Forms.Label();
+            this.FromDateAfterTodayError = new System.Windows.Forms.Label();
+            this.FlightManagerLabel = new System.Windows.Forms.Label();
+            this.ClearFiltersButton = new System.Windows.Forms.Button();
+            this.BeforeFromDateError = new System.Windows.Forms.Label();
+            this.accountPage = new System.Windows.Forms.DataGridView();
+            this.SearchButton = new System.Windows.Forms.Button();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.ToDatePicker = new System.Windows.Forms.DateTimePicker();
+            this.FromDatePicker = new System.Windows.Forms.DateTimePicker();
+            this.ArriveComboBox = new System.Windows.Forms.ComboBox();
+            this.ArriveLabel = new System.Windows.Forms.Label();
+            this.DepartComboBox = new System.Windows.Forms.ComboBox();
+            this.DepartLabel = new System.Windows.Forms.Label();
+            this.LogOutButton = new System.Windows.Forms.Button();
+            this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
+            this.CompanyStatisticsGroupBox = new System.Windows.Forms.GroupBox();
+            this.PrintButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.accountPage)).BeginInit();
+            this.CompanyStatisticsGroupBox.SuspendLayout();
             this.SuspendLayout();
             // 
             // CreateButton
@@ -56,103 +69,35 @@ namespace Air3550
             this.CreateButton.BackColor = System.Drawing.SystemColors.HotTrack;
             this.CreateButton.Font = new System.Drawing.Font("Rockwell", 14F);
             this.CreateButton.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.CreateButton.Location = new System.Drawing.Point(890, 81);
-            this.CreateButton.Margin = new System.Windows.Forms.Padding(2);
+            this.CreateButton.Location = new System.Drawing.Point(2248, 1149);
             this.CreateButton.Name = "CreateButton";
-            this.CreateButton.Size = new System.Drawing.Size(123, 33);
+            this.CreateButton.Size = new System.Drawing.Size(2248, 1149);
             this.CreateButton.TabIndex = 11;
             this.CreateButton.Text = "Create";
             this.CreateButton.UseVisualStyleBackColor = false;
-            this.CreateButton.Click += new System.EventHandler(this.CreateButton_Click);
+            this.CreateButton.Click += new System.EventHandler(this.SearchButton_Click);
             // 
-            // PrintButton
+            // TotalFlightCountLabel
             // 
-            this.PrintButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.PrintButton.BackColor = System.Drawing.SystemColors.HotTrack;
-            this.PrintButton.Font = new System.Drawing.Font("Rockwell", 14F);
-            this.PrintButton.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.PrintButton.Location = new System.Drawing.Point(1031, 479);
-            this.PrintButton.Margin = new System.Windows.Forms.Padding(2);
-            this.PrintButton.Name = "PrintButton";
-            this.PrintButton.Size = new System.Drawing.Size(123, 33);
-            this.PrintButton.TabIndex = 12;
-            this.PrintButton.Text = "Print";
-            this.PrintButton.UseVisualStyleBackColor = false;
-            this.PrintButton.Click += new System.EventHandler(this.PrintButton_Click);
+            this.TotalFlightCountLabel.AutoSize = true;
+            this.TotalFlightCountLabel.Font = new System.Drawing.Font("Rockwell", 10F);
+            this.TotalFlightCountLabel.Location = new System.Drawing.Point(64, 46);
+            this.TotalFlightCountLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.TotalFlightCountLabel.Name = "TotalFlightCountLabel";
+            this.TotalFlightCountLabel.Size = new System.Drawing.Size(287, 31);
+            this.TotalFlightCountLabel.TabIndex = 14;
+            this.TotalFlightCountLabel.Text = "TotalFlightCountLabel";
             // 
-            // ToDateLabel
+            // TotalRevenueLabel
             // 
-            this.ToDateLabel.AutoSize = true;
-            this.ToDateLabel.Font = new System.Drawing.Font("Rockwell", 13.875F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ToDateLabel.Location = new System.Drawing.Point(286, 81);
-            this.ToDateLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.ToDateLabel.Name = "ToDateLabel";
-            this.ToDateLabel.Size = new System.Drawing.Size(47, 27);
-            this.ToDateLabel.TabIndex = 3;
-            this.ToDateLabel.Text = "To:";
-            // 
-            // FromDateLabel
-            // 
-            this.FromDateLabel.AutoSize = true;
-            this.FromDateLabel.Font = new System.Drawing.Font("Rockwell", 13.875F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.FromDateLabel.Location = new System.Drawing.Point(286, 31);
-            this.FromDateLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.FromDateLabel.Name = "FromDateLabel";
-            this.FromDateLabel.Size = new System.Drawing.Size(77, 27);
-            this.FromDateLabel.TabIndex = 2;
-            this.FromDateLabel.Text = "From:";
-            // 
-            // ToTimePicker
-            // 
-            this.ToTimePicker.CalendarFont = new System.Drawing.Font("Rockwell", 13.875F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ToTimePicker.Font = new System.Drawing.Font("Rockwell", 13.875F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ToTimePicker.Location = new System.Drawing.Point(376, 75);
-            this.ToTimePicker.Margin = new System.Windows.Forms.Padding(2);
-            this.ToTimePicker.Name = "ToTimePicker";
-            this.ToTimePicker.Size = new System.Drawing.Size(427, 35);
-            this.ToTimePicker.TabIndex = 1;
-            this.ToTimePicker.ValueChanged += new System.EventHandler(this.ToTimePicker_ValueChanged);
-            // 
-            // FromTimePicker
-            // 
-            this.FromTimePicker.CalendarFont = new System.Drawing.Font("Rockwell", 13.875F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.FromTimePicker.Font = new System.Drawing.Font("Rockwell", 13.875F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.FromTimePicker.Location = new System.Drawing.Point(376, 23);
-            this.FromTimePicker.Margin = new System.Windows.Forms.Padding(2);
-            this.FromTimePicker.Name = "FromTimePicker";
-            this.FromTimePicker.Size = new System.Drawing.Size(427, 35);
-            this.FromTimePicker.TabIndex = 0;
-            this.FromTimePicker.ValueChanged += new System.EventHandler(this.FromTimePicker_ValueChanged);
-            // 
-            // totalFlights
-            // 
-            this.totalFlights.AutoSize = true;
-            this.totalFlights.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.totalFlights.Location = new System.Drawing.Point(12, 153);
-            this.totalFlights.Name = "totalFlights";
-            this.totalFlights.Size = new System.Drawing.Size(79, 29);
-            this.totalFlights.TabIndex = 14;
-            this.totalFlights.Text = "label1";
-            // 
-            // totalRevenue
-            // 
-            this.totalRevenue.AutoSize = true;
-            this.totalRevenue.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.totalRevenue.Location = new System.Drawing.Point(12, 199);
-            this.totalRevenue.Name = "totalRevenue";
-            this.totalRevenue.Size = new System.Drawing.Size(79, 29);
-            this.totalRevenue.TabIndex = 15;
-            this.totalRevenue.Text = "label2";
-            // 
-            // BeforeFromDateError
-            // 
-            this.BeforeFromDateError.AutoSize = true;
-            this.BeforeFromDateError.Location = new System.Drawing.Point(696, 115);
-            this.BeforeFromDateError.Name = "BeforeFromDateError";
-            this.BeforeFromDateError.Size = new System.Drawing.Size(107, 17);
-            this.BeforeFromDateError.TabIndex = 16;
-            this.BeforeFromDateError.Text = "Select a to date";
-            this.BeforeFromDateError.Visible = false;
+            this.TotalRevenueLabel.AutoSize = true;
+            this.TotalRevenueLabel.Font = new System.Drawing.Font("Rockwell", 10.125F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.TotalRevenueLabel.Location = new System.Drawing.Point(615, 46);
+            this.TotalRevenueLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.TotalRevenueLabel.Name = "TotalRevenueLabel";
+            this.TotalRevenueLabel.Size = new System.Drawing.Size(248, 31);
+            this.TotalRevenueLabel.TabIndex = 15;
+            this.TotalRevenueLabel.Text = "TotalRevenueLabel";
             // 
             // printPreviewDialog1
             // 
@@ -169,113 +114,293 @@ namespace Air3550
             // 
             this.printDocument1.PrintPage += new System.Drawing.Printing.PrintPageEventHandler(this.printDocument1_PrintPage);
             // 
-            // FromDateAfterTodayError
+            // Label1
             // 
-            this.FromDateAfterTodayError.AutoSize = true;
-            this.FromDateAfterTodayError.ForeColor = System.Drawing.Color.Red;
-            this.FromDateAfterTodayError.Location = new System.Drawing.Point(373, 9);
-            this.FromDateAfterTodayError.Name = "FromDateAfterTodayError";
-            this.FromDateAfterTodayError.Size = new System.Drawing.Size(168, 17);
-            this.FromDateAfterTodayError.TabIndex = 17;
-            this.FromDateAfterTodayError.Text = "Please select a from date";
-            this.FromDateAfterTodayError.Visible = false;
+            this.Label1.AutoSize = true;
+            this.Label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label1.Location = new System.Drawing.Point(1143, 311);
+            this.Label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.Label1.Name = "Label1";
+            this.Label1.Size = new System.Drawing.Size(0, 37);
+            this.Label1.TabIndex = 19;
+            // 
+            // DifferentLocationError
+            // 
+            this.DifferentLocationError.AutoSize = true;
+            this.DifferentLocationError.ForeColor = System.Drawing.Color.Red;
+            this.DifferentLocationError.Location = new System.Drawing.Point(55, 234);
+            this.DifferentLocationError.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.DifferentLocationError.Name = "DifferentLocationError";
+            this.DifferentLocationError.Size = new System.Drawing.Size(376, 25);
+            this.DifferentLocationError.TabIndex = 104;
+            this.DifferentLocationError.Text = "Please Select Two Different Locations";
+            this.DifferentLocationError.Visible = false;
+            // 
+            // FlightManagerHomeLabel
+            // 
+            this.FlightManagerHomeLabel.AutoSize = true;
+            this.FlightManagerHomeLabel.Font = new System.Drawing.Font("Rockwell", 24F);
+            this.FlightManagerHomeLabel.Location = new System.Drawing.Point(691, 49);
+            this.FlightManagerHomeLabel.Name = "FlightManagerHomeLabel";
+            this.FlightManagerHomeLabel.Size = new System.Drawing.Size(837, 72);
+            this.FlightManagerHomeLabel.TabIndex = 103;
+            this.FlightManagerHomeLabel.Text = "Accounting Manager Home";
+            this.FlightManagerHomeLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // ToDateAfterTodayError
             // 
             this.ToDateAfterTodayError.AutoSize = true;
             this.ToDateAfterTodayError.ForeColor = System.Drawing.Color.Red;
-            this.ToDateAfterTodayError.Location = new System.Drawing.Point(373, 112);
+            this.ToDateAfterTodayError.Location = new System.Drawing.Point(1358, 234);
             this.ToDateAfterTodayError.Name = "ToDateAfterTodayError";
-            this.ToDateAfterTodayError.Size = new System.Drawing.Size(152, 17);
-            this.ToDateAfterTodayError.TabIndex = 18;
-            this.ToDateAfterTodayError.Text = "Please select a to date";
+            this.ToDateAfterTodayError.Size = new System.Drawing.Size(348, 25);
+            this.ToDateAfterTodayError.TabIndex = 102;
+            this.ToDateAfterTodayError.Text = "Please Select a Date Before Today";
             this.ToDateAfterTodayError.Visible = false;
+            // 
+            // FromDateAfterTodayError
+            // 
+            this.FromDateAfterTodayError.AutoSize = true;
+            this.FromDateAfterTodayError.ForeColor = System.Drawing.Color.Red;
+            this.FromDateAfterTodayError.Location = new System.Drawing.Point(747, 234);
+            this.FromDateAfterTodayError.Name = "FromDateAfterTodayError";
+            this.FromDateAfterTodayError.Size = new System.Drawing.Size(348, 25);
+            this.FromDateAfterTodayError.TabIndex = 101;
+            this.FromDateAfterTodayError.Text = "Please Select a Date Before Today";
+            this.FromDateAfterTodayError.Visible = false;
+            // 
+            // FlightManagerLabel
+            // 
+            this.FlightManagerLabel.AutoSize = true;
+            this.FlightManagerLabel.Font = new System.Drawing.Font("Rockwell", 14F);
+            this.FlightManagerLabel.Location = new System.Drawing.Point(779, 121);
+            this.FlightManagerLabel.Name = "FlightManagerLabel";
+            this.FlightManagerLabel.Size = new System.Drawing.Size(661, 42);
+            this.FlightManagerLabel.TabIndex = 99;
+            this.FlightManagerLabel.Text = "Select a Flight To Print their Statistics";
+            // 
+            // ClearFiltersButton
+            // 
+            this.ClearFiltersButton.BackColor = System.Drawing.SystemColors.HotTrack;
+            this.ClearFiltersButton.Font = new System.Drawing.Font("Rockwell", 10F);
+            this.ClearFiltersButton.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.ClearFiltersButton.Location = new System.Drawing.Point(60, 49);
+            this.ClearFiltersButton.Name = "ClearFiltersButton";
+            this.ClearFiltersButton.Size = new System.Drawing.Size(276, 72);
+            this.ClearFiltersButton.TabIndex = 98;
+            this.ClearFiltersButton.Text = "Clear Filters";
+            this.ClearFiltersButton.UseVisualStyleBackColor = false;
+            this.ClearFiltersButton.Click += new System.EventHandler(this.ClearFiltersButton_Click);
+            // 
+            // BeforeFromDateError
+            // 
+            this.BeforeFromDateError.AutoSize = true;
+            this.BeforeFromDateError.ForeColor = System.Drawing.Color.Red;
+            this.BeforeFromDateError.Location = new System.Drawing.Point(1358, 234);
+            this.BeforeFromDateError.Name = "BeforeFromDateError";
+            this.BeforeFromDateError.Size = new System.Drawing.Size(540, 25);
+            this.BeforeFromDateError.TabIndex = 97;
+            this.BeforeFromDateError.Text = "Please Select a Second Date that is after the First Date";
+            this.BeforeFromDateError.Visible = false;
             // 
             // accountPage
             // 
             this.accountPage.AllowUserToAddRows = false;
-            this.accountPage.AllowUserToDeleteRows = false;
-            this.accountPage.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.accountPage.AllowUserToOrderColumns = true;
+            this.accountPage.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.accountPage.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.accountPage.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
+            this.accountPage.BackgroundColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Rockwell", 10F);
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.accountPage.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.accountPage.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.accountPage.Location = new System.Drawing.Point(12, 244);
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Rockwell", 10F);
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.accountPage.DefaultCellStyle = dataGridViewCellStyle2;
+            this.accountPage.Location = new System.Drawing.Point(62, 449);
+            this.accountPage.MultiSelect = false;
             this.accountPage.Name = "accountPage";
             this.accountPage.ReadOnly = true;
-            this.accountPage.RowHeadersWidth = 51;
-            this.accountPage.RowTemplate.Height = 24;
+            this.accountPage.RowHeadersWidth = 82;
+            this.accountPage.RowTemplate.Height = 33;
             this.accountPage.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.accountPage.Size = new System.Drawing.Size(1142, 230);
-            this.accountPage.TabIndex = 13;
-            this.accountPage.SelectionChanged += new System.EventHandler(this.accountPage_SelectionChanged);
+            this.accountPage.Size = new System.Drawing.Size(2098, 509);
+            this.accountPage.TabIndex = 96;
             // 
-            // Label1
+            // SearchButton
             // 
-            this.Label1.AutoSize = true;
-            this.Label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Label1.Location = new System.Drawing.Point(762, 199);
-            this.Label1.Name = "Label1";
-            this.Label1.Size = new System.Drawing.Size(0, 25);
-            this.Label1.TabIndex = 19;
+            this.SearchButton.BackColor = System.Drawing.SystemColors.HotTrack;
+            this.SearchButton.Font = new System.Drawing.Font("Rockwell", 10F);
+            this.SearchButton.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.SearchButton.Location = new System.Drawing.Point(1974, 217);
+            this.SearchButton.Name = "SearchButton";
+            this.SearchButton.Size = new System.Drawing.Size(188, 84);
+            this.SearchButton.TabIndex = 95;
+            this.SearchButton.Text = "Search";
+            this.SearchButton.UseVisualStyleBackColor = false;
+            this.SearchButton.Click += new System.EventHandler(this.SearchButton_Click);
             // 
-            // button1
+            // label5
             // 
-            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button1.BackColor = System.Drawing.SystemColors.HotTrack;
-            this.button1.Font = new System.Drawing.Font("Rockwell", 14F);
-            this.button1.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.button1.Location = new System.Drawing.Point(864, 26);
-            this.button1.Margin = new System.Windows.Forms.Padding(2);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(149, 33);
-            this.button1.TabIndex = 20;
-            this.button1.Text = "Clear Date ";
-            this.button1.UseVisualStyleBackColor = false;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Rockwell", 10F);
+            this.label5.Location = new System.Drawing.Point(1357, 193);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(44, 31);
+            this.label5.TabIndex = 94;
+            this.label5.Text = "To";
             // 
-            // LogOut
+            // label6
             // 
-            this.LogOut.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.LogOut.BackColor = System.Drawing.SystemColors.HotTrack;
-            this.LogOut.Font = new System.Drawing.Font("Rockwell", 14F);
-            this.LogOut.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.LogOut.Location = new System.Drawing.Point(1032, 25);
-            this.LogOut.Margin = new System.Windows.Forms.Padding(2);
-            this.LogOut.Name = "LogOut";
-            this.LogOut.Size = new System.Drawing.Size(123, 33);
-            this.LogOut.TabIndex = 21;
-            this.LogOut.Text = "LogOut";
-            this.LogOut.UseVisualStyleBackColor = false;
-            this.LogOut.Click += new System.EventHandler(this.LogOut_Click);
-
+            this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("Rockwell", 10F);
+            this.label6.Location = new System.Drawing.Point(746, 193);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(78, 31);
+            this.label6.TabIndex = 93;
+            this.label6.Text = "From";
+            // 
+            // ToDatePicker
+            // 
+            this.ToDatePicker.Font = new System.Drawing.Font("Rockwell", 10F);
+            this.ToDatePicker.Location = new System.Drawing.Point(1363, 262);
+            this.ToDatePicker.Name = "ToDatePicker";
+            this.ToDatePicker.Size = new System.Drawing.Size(540, 39);
+            this.ToDatePicker.TabIndex = 92;
+            // 
+            // FromDatePicker
+            // 
+            this.FromDatePicker.Font = new System.Drawing.Font("Rockwell", 10F);
+            this.FromDatePicker.Location = new System.Drawing.Point(752, 262);
+            this.FromDatePicker.Name = "FromDatePicker";
+            this.FromDatePicker.Size = new System.Drawing.Size(540, 39);
+            this.FromDatePicker.TabIndex = 91;
+            // 
+            // ArriveComboBox
+            // 
+            this.ArriveComboBox.Font = new System.Drawing.Font("Rockwell", 10F);
+            this.ArriveComboBox.FormattingEnabled = true;
+            this.ArriveComboBox.Location = new System.Drawing.Point(406, 262);
+            this.ArriveComboBox.Name = "ArriveComboBox";
+            this.ArriveComboBox.Size = new System.Drawing.Size(276, 39);
+            this.ArriveComboBox.TabIndex = 90;
+            // 
+            // ArriveLabel
+            // 
+            this.ArriveLabel.AutoSize = true;
+            this.ArriveLabel.Font = new System.Drawing.Font("Rockwell", 10F);
+            this.ArriveLabel.Location = new System.Drawing.Point(400, 193);
+            this.ArriveLabel.Name = "ArriveLabel";
+            this.ArriveLabel.Size = new System.Drawing.Size(159, 31);
+            this.ArriveLabel.TabIndex = 89;
+            this.ArriveLabel.Text = "Arrival City";
+            // 
+            // DepartComboBox
+            // 
+            this.DepartComboBox.Font = new System.Drawing.Font("Rockwell", 10F);
+            this.DepartComboBox.FormattingEnabled = true;
+            this.DepartComboBox.Location = new System.Drawing.Point(60, 262);
+            this.DepartComboBox.Name = "DepartComboBox";
+            this.DepartComboBox.Size = new System.Drawing.Size(276, 39);
+            this.DepartComboBox.TabIndex = 88;
+            // 
+            // DepartLabel
+            // 
+            this.DepartLabel.AutoSize = true;
+            this.DepartLabel.Font = new System.Drawing.Font("Rockwell", 10F);
+            this.DepartLabel.Location = new System.Drawing.Point(54, 193);
+            this.DepartLabel.Name = "DepartLabel";
+            this.DepartLabel.Size = new System.Drawing.Size(199, 31);
+            this.DepartLabel.TabIndex = 87;
+            this.DepartLabel.Text = "Departure City";
+            // 
+            // LogOutButton
+            // 
+            this.LogOutButton.BackColor = System.Drawing.SystemColors.HotTrack;
+            this.LogOutButton.Font = new System.Drawing.Font("Rockwell", 10F);
+            this.LogOutButton.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.LogOutButton.Location = new System.Drawing.Point(1884, 49);
+            this.LogOutButton.Name = "LogOutButton";
+            this.LogOutButton.Size = new System.Drawing.Size(276, 72);
+            this.LogOutButton.TabIndex = 86;
+            this.LogOutButton.Text = "Log Out";
+            this.LogOutButton.UseVisualStyleBackColor = false;
+            this.LogOutButton.Click += new System.EventHandler(this.LogOutButton_Click);
+            // 
+            // CompanyStatisticsGroupBox
+            // 
+            this.CompanyStatisticsGroupBox.Controls.Add(this.TotalFlightCountLabel);
+            this.CompanyStatisticsGroupBox.Controls.Add(this.TotalRevenueLabel);
+            this.CompanyStatisticsGroupBox.Font = new System.Drawing.Font("Rockwell", 10F);
+            this.CompanyStatisticsGroupBox.Location = new System.Drawing.Point(60, 326);
+            this.CompanyStatisticsGroupBox.Name = "CompanyStatisticsGroupBox";
+            this.CompanyStatisticsGroupBox.Size = new System.Drawing.Size(1230, 100);
+            this.CompanyStatisticsGroupBox.TabIndex = 106;
+            this.CompanyStatisticsGroupBox.TabStop = false;
+            this.CompanyStatisticsGroupBox.Text = "Company Statistics";
+            // 
+            // PrintButton
+            // 
+            this.PrintButton.BackColor = System.Drawing.SystemColors.HotTrack;
+            this.PrintButton.Font = new System.Drawing.Font("Rockwell", 10F);
+            this.PrintButton.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.PrintButton.Location = new System.Drawing.Point(1884, 980);
+            this.PrintButton.Name = "PrintButton";
+            this.PrintButton.Size = new System.Drawing.Size(276, 72);
+            this.PrintButton.TabIndex = 107;
+            this.PrintButton.Text = "Print";
+            this.PrintButton.UseVisualStyleBackColor = false;
+            this.PrintButton.Click += new System.EventHandler(this.PrintButton_Click);
             // 
             // AccountingManagerHomePage
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.HighlightText;
-            this.ClientSize = new System.Drawing.Size(1166, 530);
-            this.Controls.Add(this.LogOut);
-            this.Controls.Add(this.button1);
-            this.Controls.Add(this.Label1);
+            this.ClientSize = new System.Drawing.Size(2218, 1064);
+            this.Controls.Add(this.PrintButton);
+            this.Controls.Add(this.CompanyStatisticsGroupBox);
+            this.Controls.Add(this.DifferentLocationError);
+            this.Controls.Add(this.FlightManagerHomeLabel);
             this.Controls.Add(this.ToDateAfterTodayError);
             this.Controls.Add(this.FromDateAfterTodayError);
+            this.Controls.Add(this.FlightManagerLabel);
+            this.Controls.Add(this.ClearFiltersButton);
             this.Controls.Add(this.BeforeFromDateError);
-            this.Controls.Add(this.totalRevenue);
-            this.Controls.Add(this.totalFlights);
             this.Controls.Add(this.accountPage);
-            this.Controls.Add(this.PrintButton);
+            this.Controls.Add(this.SearchButton);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.label6);
+            this.Controls.Add(this.ToDatePicker);
+            this.Controls.Add(this.FromDatePicker);
+            this.Controls.Add(this.ArriveComboBox);
+            this.Controls.Add(this.ArriveLabel);
+            this.Controls.Add(this.DepartComboBox);
+            this.Controls.Add(this.DepartLabel);
+            this.Controls.Add(this.LogOutButton);
+            this.Controls.Add(this.Label1);
             this.Controls.Add(this.CreateButton);
-            this.Controls.Add(this.ToDateLabel);
-            this.Controls.Add(this.FromDateLabel);
-            this.Controls.Add(this.ToTimePicker);
-            this.Controls.Add(this.FromTimePicker);
-            this.Margin = new System.Windows.Forms.Padding(2);
+            this.MaximumSize = new System.Drawing.Size(2244, 1135);
             this.Name = "AccountingManagerHomePage";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Air3550";
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.AccountingManagerHomePage_FormClosing);
             this.Load += new System.EventHandler(this.AccountingManagerHomePage_Load);
             ((System.ComponentModel.ISupportInitialize)(this.accountPage)).EndInit();
+            this.CompanyStatisticsGroupBox.ResumeLayout(false);
+            this.CompanyStatisticsGroupBox.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -284,22 +409,32 @@ namespace Air3550
         #endregion
 
         private System.Windows.Forms.Button CreateButton;
-        private System.Windows.Forms.Button PrintButton;
-        private System.Windows.Forms.Label ToDateLabel;
-        private System.Windows.Forms.Label FromDateLabel;
-        private System.Windows.Forms.DateTimePicker ToTimePicker;
-        private System.Windows.Forms.DateTimePicker FromTimePicker;
-        private System.Windows.Forms.Label totalFlights;
-        private System.Windows.Forms.Label totalRevenue;
-        private System.Windows.Forms.Label BeforeFromDateError;
+        private System.Windows.Forms.Label TotalFlightCountLabel;
+        private System.Windows.Forms.Label TotalRevenueLabel;
         private System.Windows.Forms.PrintPreviewDialog printPreviewDialog1;
         private System.Drawing.Printing.PrintDocument printDocument1;
-        private System.Windows.Forms.Label FromDateAfterTodayError;
-        private System.Windows.Forms.Label ToDateAfterTodayError;
-        private System.Windows.Forms.DataGridView accountPage;
         private System.Windows.Forms.Label Label1;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button LogOut;
+        private System.Windows.Forms.Label DifferentLocationError;
+        private System.Windows.Forms.Label FlightManagerHomeLabel;
+        private System.Windows.Forms.Label ToDateAfterTodayError;
+        private System.Windows.Forms.Label FromDateAfterTodayError;
+        private System.Windows.Forms.Label FlightManagerLabel;
+        private System.Windows.Forms.Button ClearFiltersButton;
+        private System.Windows.Forms.Label BeforeFromDateError;
+        private System.Windows.Forms.DataGridView accountPage;
+        private System.Windows.Forms.Button SearchButton;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.DateTimePicker ToDatePicker;
+        private System.Windows.Forms.DateTimePicker FromDatePicker;
+        private System.Windows.Forms.ComboBox ArriveComboBox;
+        private System.Windows.Forms.Label ArriveLabel;
+        private System.Windows.Forms.ComboBox DepartComboBox;
+        private System.Windows.Forms.Label DepartLabel;
+        private System.Windows.Forms.Button LogOutButton;
+        private System.ComponentModel.BackgroundWorker backgroundWorker1;
+        private System.Windows.Forms.GroupBox CompanyStatisticsGroupBox;
+        private System.Windows.Forms.Button PrintButton;
     }
 }
 

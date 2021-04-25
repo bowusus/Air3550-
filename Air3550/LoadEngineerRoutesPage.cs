@@ -38,6 +38,16 @@ namespace Air3550
         private void LoadEngineerRoutesPage_Load(object sender, EventArgs e)
         {
             routeGrid.DataSource = SqliteDataAccess.GetRouteDT();
+            routeGrid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+            // change the name of the columns
+            routeGrid.Columns[0].HeaderText = "Route ID";
+            routeGrid.Columns[1].HeaderText = "Origin Code";
+            routeGrid.Columns[2].HeaderText = "Destination Code";
+            routeGrid.Columns[3].HeaderText = "Number of Layovers";
+            routeGrid.Columns[4].HeaderText = "Master Flight ID #1";
+            routeGrid.Columns[5].HeaderText = "Master Flight ID #2";
+            routeGrid.Columns[6].HeaderText = "Master Flight ID #3";
+            routeGrid.Columns[7].HeaderText = "Last Flight Date";
         }
     }
 }

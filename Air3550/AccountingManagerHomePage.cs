@@ -16,6 +16,8 @@ namespace Air3550
         public static List<FlightModel> bookedFlights = new List<FlightModel>();
         public static CustomerModel currCustomer;
         public static int currFlightID;
+        public static List<string> departAirports; // list of depart airports
+        public static List<string> arriveAirports; // list of arrival airports
         private DataTable flightList = new DataTable();
 
 
@@ -23,13 +25,9 @@ namespace Air3550
         public AccountingManagerHomePage()
         {
             InitializeComponent();
-            FromTimePicker.CustomFormat = " ";
-            FromTimePicker.Format = DateTimePickerFormat.Custom;
-            ToTimePicker.CustomFormat = " ";
-            ToTimePicker.Format = DateTimePickerFormat.Custom;
             accountPage.Visible = false;
-
-
+            departAirports = new List<string>(); // create the list of departing airports
+            arriveAirports = new List<string>(); // create the list of arrival airport
         }
         public AccountingManagerHomePage(int flightID)
         {
@@ -43,107 +41,105 @@ namespace Air3550
             // get the current customer and pass that information to the textboxes
             currCustomer = customer;
         }
-
-
         private void AccountingManagerHomePage_Load(object sender, EventArgs e)
         {
-
             bookedFlights = new List<FlightModel>();
-            List<FlightModel> flightcap = new List<FlightModel>();
-
-            double capacityPercentage = 0;
-
-            foreach (FlightModel id in flightcap)
+            // This method adds the airports to the airport cities dropdowns
+            List<Airport> airportList;
+            airportList = SqliteDataAccess.GetAirports();
+            foreach (Airport airport in airportList)
             {
-                // get the capacity percentage by dividing #of vacant by # plane cap *100
-
-                capacityPercentage = 1 - Math.Round((double)(id.numberOfVacantSeats / SqliteDataAccess.GetPlaneCapacity(id.planeType) * 100));
+                string currAir = airport.Code + " (" + airport.Name + ")";
+                departAirports.Add(currAir);
+                arriveAirports.Add(currAir);
             }
-            string originName = null;
-            string destinationName = null;
-            // set the dates to the default min value
-            DateTime fromDate = DateTimePicker.MinimumDateTime;
-            DateTime toDate = DateTimePicker.MinimumDateTime;
-
-            totalFlights.Text = "Total Flights Traveled: " + SqliteDataAccess.GetCompanyFlightCount(originName, destinationName, fromDate, toDate).ToString();
-            totalRevenue.Text = "Total Company Income: $" + SqliteDataAccess.GetCompanyIncome(originName, destinationName, fromDate, toDate).ToString("0.00");
+            // add an empty row to allow the customer to "reset" the dropdown
+            departAirports.Add("");
+            arriveAirports.Add("");
+            // add the depart airports and default text
+            DepartComboBox.DataSource = departAirports;
+            DepartComboBox.SelectedItem = null;
+            DepartComboBox.SelectedText = "";
+            // add the arrive airports and default text
+            ArriveComboBox.DataSource = arriveAirports;
+            ArriveComboBox.SelectedItem = null;
+            ArriveComboBox.SelectedText = "";
+            accountPage.Visible = false;
+            FlightManagerLabel.Visible = false;
+            CompanyStatisticsGroupBox.Visible = false;
         }
 
-        private void CreateButton_Click(object sender, EventArgs e)
+        private void SearchButton_Click(object sender, EventArgs e)
         {
+            // This method displays a list of the flights that have the values that the flight manager filtered on
+            BeforeFromDateError.Visible = false;
+            DifferentLocationError.Visible = false;
+            string origin = null;
+            string destination = null;
+            // set the dates to the default min value
+            DateTime fromDate = FromDatePicker.Value.Date;
+            DateTime toDate = ToDatePicker.Value;
+            // if the depart city is not null, then get the origin airport code from the drop down
+            if (!String.IsNullOrEmpty(DepartComboBox.Text))
             {
-                List<FlightModel> flightcap = new List<FlightModel>();
-                double capacityPercentage = 0;
-
-                foreach (FlightModel id in flightcap)
-                {
-                    // get the capacity percentage by dividing #of vacant by # plane cap *100
-
-                    capacityPercentage = 1 - Math.Round((double)(id.numberOfVacantSeats / SqliteDataAccess.GetPlaneCapacity(id.planeType) * 100));
-                }
-               
-                // This method displays a list of the flights that have the values that the flight manager filtered on
-                BeforeFromDateError.Visible = false;
-                string origin = null;
-                string destination = null;
-                // set the dates to the default min value
-                DateTime fromDate = DateTimePicker.MinimumDateTime;
-                DateTime toDate = DateTimePicker.MinimumDateTime;
-                // if the depart city is not null, then get the origin airport code from the drop down
-
-                // if the arrive city is not null, then get the arrive airport code from the drop down
-
-                // if the from date picker is selected, then get that date
-                if (FromTimePicker.Value.TimeOfDay.Ticks == 0)
-                {
-                    fromDate = FromTimePicker.Value;
-                }
-                // if the to date picker is selected, then get that date
-                if (ToTimePicker.Value.TimeOfDay.Ticks == 0)
-                {
-                    toDate = ToTimePicker.Value;
-                }
-                if (fromDate != DateTimePicker.MinimumDateTime && toDate != DateTimePicker.MinimumDateTime && fromDate > toDate)
-                    BeforeFromDateError.Visible = true;
-                else
-                {
-                    // change the fromDate and toDate back to the minValue to send through the query
-                    if (fromDate == DateTimePicker.MinimumDateTime)
-                        fromDate = DateTime.MinValue;
-                    if (toDate == DateTimePicker.MinimumDateTime)
-                        toDate = DateTime.MinValue;
-                    accountPage.DataSource = SqliteDataAccess.GetFlights(origin, destination, fromDate, toDate); // get the flights that have the specified values
-
-                    accountPage.Visible = true; // display the table
-                    accountPage.ClearSelection();
-
-                    FormatGrid(); // format the grid
-                }
+                origin = DepartComboBox.Text.Substring(0, 3);
+            }
+            // if the arrive city is not null, then get the arrive airport code from the drop down
+            if (!String.IsNullOrEmpty(ArriveComboBox.Text))
+            {
+                destination = ArriveComboBox.Text.Substring(0, 3);
+            }
+            // if the fromDate and toDate are the same, set the fromDate to midnight of the same day to get all flights of that day
+            if (fromDate == toDate)
+            {
+                fromDate = fromDate.Date;
+            }
+            if (toDate.Date == DateTime.Now.Date)
+            {
+                toDate = DateTime.Now;
+            }
+            if (!String.IsNullOrEmpty(DepartComboBox.Text) && !String.IsNullOrEmpty(ArriveComboBox.Text) && DepartComboBox.Text == ArriveComboBox.Text)
+                DifferentLocationError.Visible = true;
+            if (fromDate.Date > toDate.Date)
+                BeforeFromDateError.Visible = true;
+            if (BeforeFromDateError.Visible == false && DifferentLocationError.Visible == false)
+            {
+                CompanyStatisticsGroupBox.Visible = true;
+                accountPage.DataSource = SqliteDataAccess.GetFlights(origin, destination, fromDate, toDate); // get the flights that have the specified values
+                accountPage.Visible = true; // display the table
+                accountPage.ClearSelection();
+                TotalFlightCountLabel.Text = "Total Flights Traveled: " + SqliteDataAccess.GetCompanyFlightCount(origin, destination, fromDate, toDate).ToString();
+                TotalRevenueLabel.Text = "Total Company Income: $" + SqliteDataAccess.GetCompanyIncome(origin, destination, fromDate, toDate).ToString("0.00");
+                FlightManagerLabel.Visible = true;
+                FormatGrid(); // format the grid
             }
         }
 
         // formats the datagrid to match right info
         private void FormatGrid()
         {
-            //removes information not need on page
-            accountPage.Columns.Remove("masterFlightID_fk");
-            accountPage.Columns.Remove("distance");
-            //  accountPage.Columns.Remove("planeType_fk");
-            accountPage.Columns.Remove("flightIncome");
-
-
-            // renames the column to match correct info
+            accountPage.Columns.Remove("userid");
+            accountPage.Columns.Remove("firstName");
+            accountPage.Columns.Remove("lastName");
+            accountPage.Columns.Remove("originName");
+            accountPage.Columns.Remove("destinationName");
+            accountPage.Columns.Remove("arrivalDateTime");
+            accountPage.Columns.Remove("duration");
+            accountPage.Columns.Remove("numOfPoints");
+            // change the name of the columns
             accountPage.Columns[0].HeaderText = "Flight ID";
-            accountPage.Columns[1].HeaderText = "Origin Code";
-            accountPage.Columns[2].HeaderText = "Destination Code";
-            accountPage.Columns[3].HeaderText = "Departure Date";
-            accountPage.Columns[4].HeaderText = "Departure Time";
-            accountPage.Columns[5].HeaderText = "Duration";
-            accountPage.Columns[6].HeaderText = "Plane Type";
-            accountPage.Columns[7].HeaderText = "Cost";
-            accountPage.Columns[8].HeaderText = "Number of Vacant Seats";
-
-
+            accountPage.Columns[1].HeaderText = "Master Flight ID";
+            accountPage.Columns[2].HeaderText = "Origin Code";
+            accountPage.Columns[3].HeaderText = "Destination Code";
+            accountPage.Columns[4].HeaderText = "Distance (in miles)";
+            accountPage.Columns[5].HeaderText = "Departure Date and Time";
+            accountPage.Columns[6].HeaderText = "Duration (in hours...ex: 1.5 = 1 hour 30 minutes)";
+            accountPage.Columns[7].HeaderText = "Plane Type";
+            accountPage.Columns[8].HeaderText = "Cost (in dollars)";
+            accountPage.Columns[9].HeaderText = "Number of Vacant Seats";
+            accountPage.Columns[10].HeaderText = "% Full Capacity";
+            accountPage.Columns[11].HeaderText = "Flight Income (in dollars)";
+            accountPage.ClearSelection();
         }
 
         Bitmap bmp;
@@ -157,46 +153,35 @@ namespace Air3550
             accountPage.DrawToBitmap(bmp, new Rectangle(0, 0, accountPage.Width, accountPage.Height));
             accountPage.Height = height;
             printPreviewDialog1.ShowDialog();
-
         }
         private void printDocument1_PrintPage(object sender, System.Drawing.Printing.PrintPageEventArgs e)
         {
             e.Graphics.DrawImage(bmp, 0, 0);
         }
-
-        private void FromTimePicker_ValueChanged(object sender, EventArgs e)
+        private void FromDatePicker_ValueChanged(object sender, EventArgs e)
         {
             // Once the fromDatePicker's value has changed, the values will be default formatted and the date of the selected date will be selected
-            FromTimePicker.CustomFormat = "dddd, MMMM  dd,  yyyy";
-            FromTimePicker.Value = FromTimePicker.Value.Date; // this sets the time to midnight, so ticks = 0
+            FromDatePicker.CustomFormat = "dddd, MMMM  dd,  yyyy";
             FromDateAfterTodayError.Visible = false;
-            var delta = FromTimePicker.Value.Subtract(DateTime.Today); // get the difference between the to date and today
+            var delta = FromDatePicker.Value.Date.Subtract(DateTime.Today.Date); // get the difference between the to date and today
             if (delta.TotalMinutes > 0) // if the from date is after today
                 FromDateAfterTodayError.Visible = true;
         }
-
-        private void ToTimePicker_ValueChanged(object sender, EventArgs e)
+        private void ToDatePicker_ValueChanged(object sender, EventArgs e)
         {
-            {
-                // Once the toDatePicker's value has changed, the values will be default formatted and the date of the selected date will be selected
-                // This method also makes sure the selected date is the same or after the from date picker
-                ToTimePicker.CustomFormat = "dddd, MMMM  dd,  yyyy";
-                ToTimePicker.Value = ToTimePicker.Value.Date; // this sets the time to midnight, so ticks = 0
-                BeforeFromDateError.Visible = false;
-                ToDateAfterTodayError.Visible = false;
-                if (FromTimePicker.Value.TimeOfDay.Ticks == 0)
-                {
-                    var delta1 = ToTimePicker.Value.Subtract(FromTimePicker.Value); // get the difference between the from date and the to date
-                    if (delta1.TotalMinutes < 0) // if the to date is before the from date
-                        BeforeFromDateError.Visible = true;
-                }
-                var delta2 = ToTimePicker.Value.Subtract(DateTime.Today); // get the difference between the to date and today
-                if (delta2.TotalMinutes > 0) // if the to date is after today
-                    ToDateAfterTodayError.Visible = true;
-            }
+            // Once the toDatePicker's value has changed, the values will be default formatted and the date of the selected date will be selected
+            // This method also makes sure the selected date is the same or after the from date picker
+            ToDatePicker.CustomFormat = "dddd, MMMM  dd,  yyyy";
+            BeforeFromDateError.Visible = false;
+            ToDateAfterTodayError.Visible = false;
+            var delta1 = ToDatePicker.Value.Date.Subtract(FromDatePicker.Value.Date); // get the difference between the from date and the to date
+            var delta2 = ToDatePicker.Value.Date.Subtract(DateTime.Today.Date); // get the difference between the to date and today
+            if (delta1.TotalMinutes < 0) // if the to date is before the from date
+                BeforeFromDateError.Visible = true;
+            else if (delta2.TotalMinutes > 0) // if the to date is after today
+                ToDateAfterTodayError.Visible = true;
         }
-
-        private void accountPage_SelectionChanged(object sender, EventArgs e)
+        private void accountPage_CellClick(object sender, EventArgs e)
         {
             
             double capacityPercentage = 0;
@@ -211,19 +196,20 @@ namespace Air3550
              // displays the plane capacity %
             Label1.Text = "Plane Capacity Percentage: " + capacityPercentage + " % ";
         }
-
-        private void button1_Click(object sender, EventArgs e)
+        private void ClearFiltersButton_Click(object sender, EventArgs e)
         {
             // This method clears all filters and resets them to their defaults
-            FromTimePicker.Value = DateTimePicker.MinimumDateTime;
-            FromTimePicker.CustomFormat = " ";
-            FromTimePicker.Format = DateTimePickerFormat.Custom;
-            ToTimePicker.Value = DateTimePicker.MinimumDateTime;
-            ToTimePicker.CustomFormat = " ";
-            ToTimePicker.Format = DateTimePickerFormat.Custom;
+            DepartComboBox.SelectedIndex = -1;
+            ArriveComboBox.SelectedIndex = -1;
+            FromDatePicker.ResetText();
+            ToDatePicker.ResetText();
+            FlightManagerLabel.Visible = false;
+            accountPage.Visible = false;
+            BeforeFromDateError.Visible = false;
+            DifferentLocationError.Visible = false;
+            CompanyStatisticsGroupBox.Visible = false;
         }
-
-        private void LogOut_Click(object sender, EventArgs e)
+        private void LogOutButton_Click(object sender, EventArgs e)
         {
             // This method allows the user to return to the log in page
             // All open forms will close
@@ -235,6 +221,17 @@ namespace Air3550
                 LogInPage.GetInstance.Show();
                 this.Dispose();
             }
+        }
+        private void AccountingManagerHomePage_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            // This method allows the red X to be used to end the application
+            // If the red X is clicked, a message will make sure the customer wants to leave
+            // then the application ends or the customer cancels
+            DialogResult result = MessageBox.Show("Are you sure you would like to exit?\nAny changes not saved will not be updated.", "Close", MessageBoxButtons.YesNo, MessageBoxIcon.None);
+            if (result == DialogResult.Yes)
+                LogInPage.GetInstance.Close();
+            else
+                e.Cancel = true;
         }
     }
 }

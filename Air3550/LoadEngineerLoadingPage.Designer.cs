@@ -36,19 +36,22 @@ namespace Air3550
             // 
             this.loadingLabel.AutoSize = true;
             this.loadingLabel.BackColor = System.Drawing.Color.Transparent;
-            this.loadingLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.loadingLabel.Location = new System.Drawing.Point(28, 36);
+            this.loadingLabel.Font = new System.Drawing.Font("Rockwell", 16.125F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.loadingLabel.Location = new System.Drawing.Point(51, 69);
+            this.loadingLabel.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.loadingLabel.Name = "loadingLabel";
-            this.loadingLabel.Size = new System.Drawing.Size(206, 25);
+            this.loadingLabel.Size = new System.Drawing.Size(432, 49);
             this.loadingLabel.TabIndex = 0;
             this.loadingLabel.Text = "Generating Flights...";
             // 
             // LoadEngineerLoadingPage
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(267, 97);
+            this.BackColor = System.Drawing.Color.White;
+            this.ClientSize = new System.Drawing.Size(534, 187);
             this.Controls.Add(this.loadingLabel);
+            this.Margin = new System.Windows.Forms.Padding(6);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "LoadEngineerLoadingPage";
