@@ -20,7 +20,6 @@ namespace ClassLibrary
 		public int userid { get; set; }
 		public string firstName { get; set; }	
 		public string lastName { get; set; }
-		public double durDouble { get; set; }
 		public int masterFlightID { get; set; }
 		public string originCode { get; set; }
 		public string originName { get; set; }
@@ -29,6 +28,7 @@ namespace ClassLibrary
 		public int distance { get; set; }
 		public DateTime departureDateTime { get; set; }
 		public DateTime arrivalDateTime { get; set; }
+		public double durDouble { get; set; }
 		public TimeSpan duration { get; set; }
 		public string planeType { get; set; }
 		public double cost { get; set; }

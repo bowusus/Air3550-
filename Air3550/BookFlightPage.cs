@@ -101,6 +101,12 @@ namespace Air3550
         {
             // This method checks if the one way button is clicked, then it makes the return date label
             // and picker and return flight button no longer visible to the customer
+            DepartDateError.Visible = false;
+            DepartDateAfterTodayError.Visible = false;
+            ReturnDateError.Visible = false;
+            ReturnBeforeDepartError.Visible = false;
+            DifferentLocationError.Visible = false;
+            EmptyError.Visible = false;
             ReturnDateLabel.Visible = false;
             ReturnDatePicker.Visible = false;
             // if the search has already been clicked, then if the one way button is clicked, the return flight button should not be visible and the book flight button should be visible
@@ -129,13 +135,14 @@ namespace Air3550
             // to the customer
             DepartDateError.Visible = false;
             DepartDateAfterTodayError.Visible = false;
-            DateTime date = DateTime.Today; // get the current time that the customer wants to depart
-            var delta1 = DepartDatePicker.Value.Subtract(date.AddMonths(6)); // get the difference in times between 6 months from now and the depart date
-            var delta2 = DepartDatePicker.Value.Subtract(date); // get the difference between now and the depart date
-            if (delta1.TotalMinutes > 0) // if the depart date is not within 6 months, then an error displays
+            ReturnDateError.Visible = false;
+            ReturnBeforeDepartError.Visible = false;
+            DifferentLocationError.Visible = false;
+            EmptyError.Visible = false;
+            if (DepartDatePicker.Value.Date < DateTime.Today.Date) // if the depart date is before today, display an error
+                DepartDateAfterTodayError.Visible = true; 
+            else if (DepartDatePicker.Value.Date > DateTime.Today.AddMonths(6))  // if the depart date is not within 6 months, display an error
                 DepartDateError.Visible = true;
-            else if (delta2.TotalMinutes < 0) // if the depart date is before today, then an error displays
-                DepartDateAfterTodayError.Visible = true;
         }
         private void ReturnDatePicker_ValueChanged(object sender, EventArgs e)
         {
@@ -145,15 +152,12 @@ namespace Air3550
             // to the customer
             ReturnDateError.Visible = false;
             ReturnBeforeDepartError.Visible = false;
-            DateTime date = DateTime.Today; // get the current datetime
-            var delta1 = ReturnDatePicker.Value.Subtract(date.AddMonths(6)); // get the difference in times between 6 months from now and the return date
-            var delta2 = ReturnDatePicker.Value.Subtract(DepartDatePicker.Value); // get the difference between the depart date and the return date
             if (!OneWayButton.Checked)
             {
-                if (delta1.TotalMinutes > 0) // if the return date is not within 6 months, then an error displays
-                    ReturnDateError.Visible = true;
-                else if (delta2.TotalMinutes < 1440) // if the return date is before today, then an error displays
+                if (ReturnDatePicker.Value.Date < DepartDatePicker.Value.Date) // if the return date is before the depart date, display an error
                     ReturnBeforeDepartError.Visible = true;
+                else if (ReturnDatePicker.Value.Date > DateTime.Today.AddMonths(6)) // if the return date is not within 6 months, display an error
+                    ReturnDateError.Visible = true;
             }
         }
         private void FormatGrid()
@@ -173,23 +177,29 @@ namespace Air3550
         {
             // This method first checks if the depart and arrive locations are the same or null and if the departure date is today or later and  return date is within 6 months and after the depart date.
             // if they are, then errors appear. Otherwise, this method allows the user to select a flight for their depart flight
-            var delta1 = ReturnDatePicker.Value.Subtract(DateTime.Today.AddMonths(6)); // get the difference in times between 6 months from now and the depart date
-            var delta2 = ReturnDatePicker.Value.Subtract(DepartDatePicker.Value); // get the difference between the return date and departure date
             // default set the different locations and empty errors to false
+            DepartDateError.Visible = false;
+            DepartDateAfterTodayError.Visible = false;
+            ReturnDateError.Visible = false;
+            ReturnBeforeDepartError.Visible = false;
             DifferentLocationError.Visible = false;
             EmptyError.Visible = false;
             // if origin, destination, or depart/return date times are invalid, then produce an error label
             if (!OneWayButton.Checked)
             {
-                if (delta1.TotalMinutes > 0)
-                    ReturnDateError.Visible = true;
-                else if (delta2.TotalMinutes < 0)
+                if (ReturnDatePicker.Value.Date < DepartDatePicker.Value.Date) // if the return date is before the depart date, display an error
                     ReturnBeforeDepartError.Visible = true;
+                else if (ReturnDatePicker.Value.Date > DateTime.Today.AddMonths(6)) // if the return date is not within 6 months, display an error
+                    ReturnDateError.Visible = true;
             }
-            if (DepartComboBox.SelectedValue == ArriveComboBox.SelectedValue)
-                DifferentLocationError.Visible = true;
-            else if (DepartComboBox.SelectedIndex == -1 || ArriveComboBox.SelectedIndex == -1)
+            if (DepartDatePicker.Value.Date < DateTime.Today.Date) // if the depart date is before today, display an error
+                DepartDateAfterTodayError.Visible = true;
+            else if (DepartDatePicker.Value.Date > DateTime.Today.AddMonths(6))  // if the depart date is not within 6 months, display an error
+                DepartDateError.Visible = true;
+            if (DepartComboBox.SelectedIndex == -1 || ArriveComboBox.SelectedIndex == -1)
                 EmptyError.Visible = true;
+            else if (DepartComboBox.SelectedValue == ArriveComboBox.SelectedValue)
+                DifferentLocationError.Visible = true;
             // if the origin, destination, and depart/return date times are correct, then show available flights
             if (ReturnDateError.Visible == false && ReturnBeforeDepartError.Visible == false && DifferentLocationError.Visible == false && EmptyError.Visible == false)
             {
@@ -213,7 +223,7 @@ namespace Air3550
                 }
                 departingRoutes = new List<Route>();
                 // get all of the available flights for the specified origin and destination
-                departingRoutes = SystemAction.GetFlights_MasterID(DepartComboBox.Text.Substring(0, 3), ArriveComboBox.Text.Substring(0, 3), DepartDatePicker.Value.Date, DateTime.Now);
+                departingRoutes = SystemAction.GetFlights_MasterID(DepartComboBox.Text.Substring(0, 3), ArriveComboBox.Text.Substring(0, 3), DepartDatePicker.Value, DateTime.Now);
                 AvailableFlightTable.DataSource = departingRoutes;
                 // clear the table's selection so no row is clicked
                 AvailableFlightTable.ClearSelection();
@@ -242,7 +252,7 @@ namespace Air3550
                 returningRoutes = new List<Route>();
                 // get all of the available flights for the specified origin and destination
                 AvailableFlightTable.DataSource = null;
-                returningRoutes = SystemAction.GetFlights_MasterID(ArriveComboBox.Text.Substring(0, 3), DepartComboBox.Text.Substring(0, 3), ReturnDatePicker.Value.Date, selectedRoutes[0].departTime);
+                returningRoutes = SystemAction.GetFlights_MasterID(ArriveComboBox.Text.Substring(0, 3), DepartComboBox.Text.Substring(0, 3), ReturnDatePicker.Value, selectedRoutes[0].departTime);
                 AvailableFlightTable.DataSource = returningRoutes;
                 // clear the table's selection so no row is clicked
                 AvailableFlightTable.ClearSelection();

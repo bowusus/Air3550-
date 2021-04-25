@@ -46,8 +46,7 @@ namespace Air3550
             // There can be multiple flights due to a round trip or if a flight has layovers
             List<int> routeIDs = SqliteDataAccess.GetBookedFlightsRouteID(currCustomer.userID); // get the route IDs from the booked flights table
             List<int> flightIDs_Booked = SqliteDataAccess.GetBookedFlightIDs(currCustomer.userID);
-            int count = 0;
-            int index = 0;
+            int count;
             int i = 0;
             int j = 0;
             if (bookedFlights.Count == 0)
@@ -62,21 +61,10 @@ namespace Air3550
                         count = masterFlightIDsRoute.Count;
                         while (i < count)
                         {
-                            if (flightIDs_Booked.Contains(flightIDs_Booked[j]))
-                            {
-                                FlightModel flight;
-                                if (bookedFlights.Count % count == 0 && i != 0)
-                                {
-                                    flight = SystemAction.GetFlight(flightIDs_Booked[j], i);
-                                    i = 0;
-                                }
-                                else
-                                {
-                                    flight = SystemAction.GetFlight(flightIDs_Booked[j], i);
-                                    i += 1;
-                                }
-                                bookedFlights.Add(flight);
-                            }
+                            FlightModel flight;
+                            flight = SystemAction.GetFlight(flightIDs_Booked[j], i);
+                            i += 1;
+                            bookedFlights.Add(flight);
                             j += 1;
                         }
                         i = 0;
@@ -125,7 +113,7 @@ namespace Air3550
             if (e.RowIndex != -1 && CancelFlightTable.Rows[e.RowIndex].Cells[0].Value != null)
                 tempFlightSelected = e.RowIndex;
         }
-        private void CancelSelectedFlightButton_Click(object sender, EventArgs e)
+        private void CancelSelectedButton_Click(object sender, EventArgs e)
         {
             // This method cancels the selected flight
             // Tables updated: bookedFlights, cancelledFlights, credits, and availableFlight
@@ -238,23 +226,40 @@ namespace Air3550
                         // clear data source, and add any still booked flights to the data grid view
                         // otherwise, show a no booked flights label and format the grid
                         CancelFlightTable.DataSource = null;
-                        List<int> routeIDs = SqliteDataAccess.GetBookedFlightsRouteID(currCustomer.userID);
                         // all of the flights should be taken out of the database, but if there are any, then they are displayed
                         // otherwise, bookedFlights is cleared and a no flights label is displayed
-                        /*if (routeIDs.Count != 0)
+                        List<int> routeIDs = SqliteDataAccess.GetBookedFlightsRouteID(currCustomer.userID); // get the route IDs from the booked flights table
+                        List<int> flightIDs_Booked = SqliteDataAccess.GetBookedFlightIDs(currCustomer.userID);
+                        int count;
+                        int i = 0;
+                        int j = 0;
+                        if (flightIDs_Booked.Count != 0)
                         {
-                            foreach (int rID in routeIDs)
+                            if (flightIDs_Booked.Count != 0)
+                            // as long as there is a flight currently booked with a route ID
+                            // then check if each ID in the route is still booked and add it to the booked flights list
                             {
-                                List<FlightModel> flights = SystemAction.GetCurrentFlights(rID);
-                                foreach (FlightModel flight in flights)
-                                    bookedFlights.Add(flight);
+                                foreach (int rID in routeIDs)
+                                {
+                                    List<int> masterFlightIDsRoute = SqliteDataAccess.GetFlightIDsInRoute(rID);
+                                    count = masterFlightIDsRoute.Count;
+                                    while (i < count)
+                                    {
+                                        FlightModel flight;
+                                        flight = SystemAction.GetFlight(flightIDs_Booked[j], i);
+                                        i += 1;
+                                        bookedFlights.Add(flight);
+                                        j += 1;
+                                    }
+                                    i = 0;
+                                }
                             }
                         }
                         else
                         {
                             bookedFlights.Clear();
                             NoFlightLabel.Visible = true;
-                        }*/
+                        }
                         CancelFlightTable.DataSource = bookedFlights;
                         FormatDataGrid(); // remove and rename certain columns
                     }

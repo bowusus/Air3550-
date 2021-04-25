@@ -248,7 +248,7 @@ namespace Air3550
             pointsAvailableText.Text = availablepoints.ToString(); // shows the available points 
             int pointsused = SqliteDataAccess.GetUsedPoints(currCustomer.userID);
             PointsText.Text = pointsused.ToString(); // shows amount of points of used
-            int credits = SqliteDataAccess.GetBalance(currCustomer.userID);
+            double credits = SqliteDataAccess.GetBalance(currCustomer.userID);
             creditText.Text = credits.ToString(); // shows credit remaining
         }
     }

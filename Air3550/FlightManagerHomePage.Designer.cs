@@ -49,6 +49,7 @@ namespace Air3550
             this.FromDateAfterTodayError = new System.Windows.Forms.Label();
             this.ToDateAfterTodayError = new System.Windows.Forms.Label();
             this.FlightManagerHomeLabel = new System.Windows.Forms.Label();
+            this.DifferentLocationError = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.FlightTable)).BeginInit();
             this.SuspendLayout();
             // 
@@ -288,12 +289,24 @@ namespace Air3550
             this.FlightManagerHomeLabel.Text = "Flight Manager Home";
             this.FlightManagerHomeLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // DifferentLocationError
+            // 
+            this.DifferentLocationError.AutoSize = true;
+            this.DifferentLocationError.ForeColor = System.Drawing.Color.Red;
+            this.DifferentLocationError.Location = new System.Drawing.Point(62, 283);
+            this.DifferentLocationError.Name = "DifferentLocationError";
+            this.DifferentLocationError.Size = new System.Drawing.Size(376, 25);
+            this.DifferentLocationError.TabIndex = 85;
+            this.DifferentLocationError.Text = "Please Select Two Different Locations";
+            this.DifferentLocationError.Visible = false;
+            // 
             // FlightManagerHomePage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.HighlightText;
-            this.ClientSize = new System.Drawing.Size(1487, 675);
+            this.ClientSize = new System.Drawing.Size(2222, 1078);
+            this.Controls.Add(this.DifferentLocationError);
             this.Controls.Add(this.FlightManagerHomeLabel);
             this.Controls.Add(this.ToDateAfterTodayError);
             this.Controls.Add(this.FromDateAfterTodayError);
@@ -346,6 +359,7 @@ namespace Air3550
         private System.Windows.Forms.Label FromDateAfterTodayError;
         private System.Windows.Forms.Label ToDateAfterTodayError;
         private System.Windows.Forms.Label FlightManagerHomeLabel;
+        private System.Windows.Forms.Label DifferentLocationError;
     }
 }
 

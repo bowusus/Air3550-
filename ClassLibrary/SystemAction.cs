@@ -152,6 +152,7 @@ namespace ClassLibrary
             // A list of the available routes are returned
             List<Route> routes = new List<Route>();
             List<(int, int)> routeInfo = SqliteDataAccess.GetRouteInfo(origin, destination, departDate.Date, compareDateTime.Date);
+            int count = 0;
             // go through the route IDs that were found for the specified origin and destination
             // and get the flightIDs in that route, then get information to display to the customer
             foreach ((int, int) id in routeInfo)
@@ -168,10 +169,17 @@ namespace ClassLibrary
                 double cost = 0;
                 int points = 0;
                 int i = 0; // used for grabbing information from the availableRoutes list
+                int index = 0;
+                DateTime refDateTime = departDate;
 
                 foreach (int mID in masterFlightIDs)
                 {
+                    /*if (count == 0)
+                        refDateTime = departDate;
+                    else
+                        refDateTime = flightIDs_MasterID[count-1].Item2;*/
                     flightIDs_MasterID = SqliteDataAccess.GetFlightIDs_MasterID(mID, flightIDs_MasterID, departDate, compareDateTime);
+                    count += 1;
                 }
                 if (flightIDs_MasterID.Count == masterFlightIDs.Count)
                 {
@@ -303,8 +311,6 @@ namespace ClassLibrary
             departureDateTime = arriveDateTime.Subtract(duration);
 
             FlightModel flight = new FlightModel(int.Parse(flightsBookedData[0]), departureDateTime, arriveDateTime,  duration, originName, destinationName, ref customer);
-
-               
             
             return flight;
 

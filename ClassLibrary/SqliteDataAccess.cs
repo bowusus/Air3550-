@@ -582,7 +582,7 @@ namespace ClassLibrary
                 return paymentMethod; // return payment method
             }
         }
-        public static int GetBalance(int userID)
+        public static double GetBalance(int userID)
         {
             // This method goes into the database, specifically the credits table,
             // and gets the current available balance of the customer
@@ -597,11 +597,11 @@ namespace ClassLibrary
                 cmd.Parameters.AddWithValue("@userID_fk", userID);
                 cmd.Connection = con;
                 SQLiteDataReader rdr = cmd.ExecuteReader();
-                int balance = 0; // used to return balance
+                double balance = 0; // used to return balance
 
                 while (rdr.Read())
                 {
-                    balance = rdr.GetInt32(0);
+                    balance = rdr.GetDouble(0);
                 }
                 rdr.Close();
                 con.Close();
@@ -802,7 +802,7 @@ namespace ClassLibrary
                 con.Close();
             }
         }
-        public static DataTable GetFlights(string origin, string destination, DateTime from, DateTime to)
+        public static List<FlightModel> GetFlights(string origin, string destination, DateTime from, DateTime to)
         {
             // This method goes into the database, specifically the availableFlights table, 
             // and gets all flights that have the specific information
@@ -814,6 +814,31 @@ namespace ClassLibrary
                 SQLiteCommand cmd = new SQLiteCommand();
                 cmd.CommandType = CommandType.Text;
 
+                if (String.IsNullOrEmpty(origin) && String.IsNullOrEmpty(destination))
+                {
+                    // if only the dates are provided, then select all flights
+                    cmd.CommandText = "select * from availableFlight";
+                }
+                else if (!String.IsNullOrEmpty(origin) && String.IsNullOrEmpty(destination))
+                {
+                    // if the origin is provided, then find all flights with that originCode
+                    cmd.CommandText = "select * from availableFlight where availableFlight.originCode_fk = @originCode_fk";
+                    cmd.Parameters.AddWithValue("@originCode_fk", origin);
+                }
+                else if (String.IsNullOrEmpty(origin) && !String.IsNullOrEmpty(destination))
+                {
+                    // if the destination is provided, then find all flights with that destinationCpde
+                    cmd.CommandText = "select * from availableFlight where availableFlight.originCode_fk = @destinationCode_fk";
+                    cmd.Parameters.AddWithValue("@destinationCode_fk", origin);
+                }
+                else
+                {
+                    // if the origin and destination are provided, then find all flights with that originCode and destinationCode
+                    cmd.CommandText = "select * from availableFlight where availableFlight.originCode_fk = @originCode_fk and availableFlight.destinationCode_fk = @destinationCode_fk";
+                    cmd.Parameters.AddWithValue("@originCode_fk", origin);
+                    cmd.Parameters.AddWithValue("@destinationCode_fk", destination);
+                }
+                /*
                 if (!String.IsNullOrEmpty(origin) && String.IsNullOrEmpty(destination) && from == DateTime.MinValue && to == DateTime.MinValue)
                 {
                     // if the origin is the only filter provided, then find all flights with that originCode
@@ -934,14 +959,22 @@ namespace ClassLibrary
                     cmd.CommandText = "select * from availableFlight where date(availableFlight.departureDate) <= date(@toDate)";
                     cmd.Parameters.AddWithValue("@toDate", DateTime.Now);
                 }
+                */
                 cmd.Connection = con;
                 SQLiteDataReader rdr = cmd.ExecuteReader();
+                List<FlightModel> flights = new List<FlightModel>();
 
-                DataTable dt = new DataTable();
-                dt.Load(rdr); // fill a datatable with the sql query data
+                while (rdr.Read())
+                {
+                    DateTime dateTime = Convert.ToDateTime(rdr.GetString(4)).Date + Convert.ToDateTime(rdr.GetString(5)).TimeOfDay;
+                    if (DateTime.Compare(dateTime, from) > 0 && DateTime.Compare(dateTime, to) < 0)
+                        flights.Add(new FlightModel(rdr.GetInt32(0), rdr.GetInt32(1), rdr.GetString(2), rdr.GetString(3), rdr.GetInt32(6), dateTime, rdr.GetDouble(7), rdr.GetString(8), rdr.GetDouble(9), rdr.GetInt32(10), rdr.GetDouble(11)));
+                }
+                // DataTable dt = new DataTable();
+                // dt.Load(rdr); // fill a datatable with the sql query data
                 rdr.Close(); // close the reader
                 con.Close(); // close the connection
-                return dt; // return the datatable
+                return flights; // return the list of flights
             }
         }
         public static List<int> GetFlightPassengers(int flightID)
@@ -982,6 +1015,31 @@ namespace ClassLibrary
                 SQLiteCommand cmd = new SQLiteCommand();
                 cmd.CommandType = CommandType.Text;
 
+                if (String.IsNullOrEmpty(origin) && String.IsNullOrEmpty(destination))
+                {
+                    // if only the dates are provided, then select all flights
+                    cmd.CommandText = "select count(*) from availableFlight";
+                }
+                else if (!String.IsNullOrEmpty(origin) && String.IsNullOrEmpty(destination))
+                {
+                    // if the origin is provided, then find all flights with that originCode
+                    cmd.CommandText = "select count(*) from availableFlight where availableFlight.originCode_fk = @originCode_fk";
+                    cmd.Parameters.AddWithValue("@originCode_fk", origin);
+                }
+                else if (String.IsNullOrEmpty(origin) && !String.IsNullOrEmpty(destination))
+                {
+                    // if the destination is provided, then find all flights with that destinationCpde
+                    cmd.CommandText = "select count(*) from availableFlight where availableFlight.originCode_fk = @destinationCode_fk";
+                    cmd.Parameters.AddWithValue("@destinationCode_fk", origin);
+                }
+                else
+                {
+                    // if the origin and destination are provided, then find all flights with that originCode and destinationCode
+                    cmd.CommandText = "select count(*) from availableFlight where availableFlight.originCode_fk = @originCode_fk and availableFlight.destinationCode_fk = @destinationCode_fk";
+                    cmd.Parameters.AddWithValue("@originCode_fk", origin);
+                    cmd.Parameters.AddWithValue("@destinationCode_fk", destination);
+                }
+                /*
                 if (!String.IsNullOrEmpty(origin) && String.IsNullOrEmpty(destination) && from == DateTime.MinValue && to == DateTime.MinValue)
                 {
                     // if the origin is the only filter provided, then find  the count of flights with that originCode
@@ -1101,14 +1159,16 @@ namespace ClassLibrary
                     // if nothing is provide, just find the count of flights in the availableFlight table before today
                     cmd.CommandText = "select count(*) from availableFlight where date(availableFlight.departureDate) <= @toDate";
                     cmd.Parameters.AddWithValue("@toDate", DateTime.Now);
-                }
+                }*/
                 cmd.Connection = con;
                 SQLiteDataReader rdr = cmd.ExecuteReader();
                 int flightCount = 0; // used to return the company flight count based on filters
 
                 while (rdr.Read())
                 {
-                    flightCount = rdr.GetInt32(0);
+                    DateTime dateTime = Convert.ToDateTime(rdr.GetString(4)).Date + Convert.ToDateTime(rdr.GetString(5)).TimeOfDay;
+                    if (DateTime.Compare(dateTime, from) > 0 && DateTime.Compare(dateTime, to) < 0)
+                        flightCount = rdr.GetInt32(0);
                 }
                 rdr.Close();
                 con.Close();
@@ -1127,6 +1187,31 @@ namespace ClassLibrary
                 SQLiteCommand cmd = new SQLiteCommand();
                 cmd.CommandType = CommandType.Text;
 
+                if (String.IsNullOrEmpty(origin) && String.IsNullOrEmpty(destination))
+                {
+                    // if only the dates are provided, then select all flights
+                    cmd.CommandText = "select availableFlight.flightIncome from availableFlight";
+                }
+                else if (!String.IsNullOrEmpty(origin) && String.IsNullOrEmpty(destination))
+                {
+                    // if the origin is provided, then find all flights with that originCode
+                    cmd.CommandText = "select availableFlight.flightIncome from availableFlight where availableFlight.originCode_fk = @originCode_fk";
+                    cmd.Parameters.AddWithValue("@originCode_fk", origin);
+                }
+                else if (String.IsNullOrEmpty(origin) && !String.IsNullOrEmpty(destination))
+                {
+                    // if the destination is provided, then find all flights with that destinationCpde
+                    cmd.CommandText = "select availableFlight.flightIncome from availableFlight where availableFlight.originCode_fk = @destinationCode_fk";
+                    cmd.Parameters.AddWithValue("@destinationCode_fk", origin);
+                }
+                else
+                {
+                    // if the origin and destination are provided, then find all flights with that originCode and destinationCode
+                    cmd.CommandText = "select availableFlight.flightIncome from availableFlight where availableFlight.originCode_fk = @originCode_fk and availableFlight.destinationCode_fk = @destinationCode_fk";
+                    cmd.Parameters.AddWithValue("@originCode_fk", origin);
+                    cmd.Parameters.AddWithValue("@destinationCode_fk", destination);
+                }
+                /*
                 if (!String.IsNullOrEmpty(origin) && String.IsNullOrEmpty(destination) && from == DateTime.MinValue && to == DateTime.MinValue)
                 {
                     // if the origin is the only filter provided, then find the income with that originCode
@@ -1247,13 +1332,16 @@ namespace ClassLibrary
                     cmd.CommandText = "select availableFlight.flightIncome from availableFlight where date(availableFlight.departureDate) <= @toDate";
                     cmd.Parameters.AddWithValue("@toDate", DateTime.Now);
                 }
+                */
                 cmd.Connection = con;
                 SQLiteDataReader rdr = cmd.ExecuteReader();
                 double income = 0; // used to return the company income count based on filters
 
                 while (rdr.Read())
                 {
-                    income += rdr.GetDouble(0);
+                    DateTime dateTime = Convert.ToDateTime(rdr.GetString(4)).Date + Convert.ToDateTime(rdr.GetString(5)).TimeOfDay;
+                    if (DateTime.Compare(dateTime, from) > 0 && DateTime.Compare(dateTime, to) < 0)
+                        income += rdr.GetDouble(0);
                 }
                 rdr.Close();
                 con.Close();
@@ -1271,17 +1359,20 @@ namespace ClassLibrary
                 con.Open(); // open the connection
                 SQLiteCommand cmd = new SQLiteCommand();
                 cmd.CommandType = CommandType.Text;
-                cmd.CommandText = "select availableFlight.flightID from availableFlight where availableFlight.masterFlightID_fk = @masterFlightID_fk and date(availableFlight.departureDate) = date(@departDate) and availableFlight.numOfVacantSeats != 0";
+                cmd.CommandText = "select availableFlight.flightID, availableFlight.departureDate, availableFlight.departureTime, availableFlight.duration from availableFlight where availableFlight.masterFlightID_fk = @masterFlightID_fk and availableFlight.numOfVacantSeats != 0";
                 // use the flight ID to get the information about the flight
                 cmd.Parameters.AddWithValue("@masterFlightID_fk", masterID);
-                cmd.Parameters.AddWithValue("@departDate", departDate);
-                cmd.Parameters.AddWithValue("@compareDateTime", compareDateTime);
+                //cmd.Parameters.AddWithValue("@departDate", departDate);
+                //cmd.Parameters.AddWithValue("@compareDateTime", compareDateTime);
                 cmd.Connection = con;
                 SQLiteDataReader rdr = cmd.ExecuteReader();
                 // execute the command with the reader, which only reads the database rather than updating it in anyway
                 while (rdr.Read())
                 {
-                    flights_MasterID.Add(rdr.GetInt32(0));
+                    DateTime departureDateTime = Convert.ToDateTime(rdr.GetString(1)).Date + Convert.ToDateTime(rdr.GetString(2)).TimeOfDay;
+                    DateTime arriveDateTime = departureDateTime.AddHours(rdr.GetDouble(3));
+                    if (DateTime.Compare(departureDateTime.Date, departDate.Date) == 0 && DateTime.Compare(departureDateTime, compareDateTime) > 0)
+                        flights_MasterID.Add(rdr.GetInt32(0));
                 }
                 rdr.Close();
                 con.Close();
@@ -1290,7 +1381,7 @@ namespace ClassLibrary
         }
 
         /* Gets all of the airports in the airports table */
-        public static List<Airport> GetAirports()
+                public static List<Airport> GetAirports()
         {
             using (SQLiteConnection con = new SQLiteConnection(LoadConnectionString()))
             // closes the connection when there is an error or it is done executing
