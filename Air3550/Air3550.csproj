@@ -85,6 +85,12 @@
     <Compile Include="LoadEngineerEditFlightPage.Designer.cs">
       <DependentUpon>LoadEngineerEditFlightPage.cs</DependentUpon>
     </Compile>
+    <Compile Include="LoadEngineerLoadingPage.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LoadEngineerLoadingPage.Designer.cs">
+      <DependentUpon>LoadEngineerLoadingPage.cs</DependentUpon>
+    </Compile>
     <Compile Include="LoadEngineerRoutesPage.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -179,6 +185,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="LoadEngineerEditFlightPage.resx">
       <DependentUpon>LoadEngineerEditFlightPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LoadEngineerLoadingPage.resx">
+      <DependentUpon>LoadEngineerLoadingPage.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="LoadEngineerRoutesPage.resx">
       <DependentUpon>LoadEngineerRoutesPage.cs</DependentUpon>

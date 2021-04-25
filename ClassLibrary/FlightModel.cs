@@ -32,6 +32,7 @@ namespace ClassLibrary
 		public TimeSpan duration { get; set; }
 		public string planeType { get; set; }
 		public double cost { get; set; }
+		public int numOfPoints { get; set; }
 		public int numberOfVacantSeats { get; set; }
 		public double flightIncome { get; set; }
 

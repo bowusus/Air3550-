@@ -19,9 +19,9 @@ namespace Air3550
             Application.SetCompatibleTextRenderingDefault(false);
 
             /* Just for testing LE home page uncomment it later */
-            // SystemAction.CleanAvailableFlights();
-           // SqliteDataAccess.CleanRoutes();
-            //SystemAction.GenerateFlights();
+            SystemAction.CleanAvailableFlights();
+            SqliteDataAccess.CleanRoutes();
+            SystemAction.GenerateFlights();
             Application.Run(LogInPage.GetInstance);
         }
     }

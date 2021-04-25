@@ -232,7 +232,11 @@ namespace Air3550
                     if (newFlights.Count != 0)
                     {
                         SqliteDataAccess.AddFlightToMaster(newFlights);
+                        LoadEngineerLoadingPage.GetInstance.Show();
+                        LoadEngineerLoadingPage.GetInstance.Refresh();
+                        LoadEngineerLoadingPage.GetInstance.Location = this.Location;
                         foreach (FlightModel flight in newFlights) SystemAction.GenerateFlight(flight);
+                        LoadEngineerLoadingPage.GetInstance.Dispose();
                     }
                 }
             }
