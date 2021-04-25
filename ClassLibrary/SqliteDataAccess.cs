@@ -283,6 +283,7 @@ namespace ClassLibrary
                 con.Close();
             }
         }
+        
         public static List<(int, int)> GetRouteInfo(string origin, string destination, DateTime departDate, DateTime returnDate)
         {
             // This method goes into the database, specifically the route table, 

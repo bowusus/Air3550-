@@ -88,7 +88,7 @@ namespace Air3550
             }
             dataGridView1.DataSource = bookedFlights;
              FormatDataGrid();
-            }
+        }
 
         private void FormatDataGrid()
         {
@@ -117,8 +117,6 @@ namespace Air3550
             dataGridView1.Columns[9].HeaderText = "Cost (in dollars)";
             dataGridView1.Columns[10].HeaderText = "Number of Points";
             dataGridView1.ClearSelection();
-
-
         }
 
         private void FlightsCancelledButton_Click(object sender, EventArgs e)
@@ -167,10 +165,8 @@ namespace Air3550
             FormatDataGrid();
         }
 
-
         private void FlightsTakenButton_Click(object sender, EventArgs e)
         {
-
             flightList.Rows.Clear(); // clears the data gridview
             int i = 0;
             takenFlights = new List<FlightModel>();

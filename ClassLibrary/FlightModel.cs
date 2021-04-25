@@ -9,7 +9,6 @@ namespace ClassLibrary
 	public class FlightModel
 	{
 		public CustomerModel currCustomer;
-		
 
 		// This class file is the FlightModel class. There are 
 		// the attributes associated with the Flight included, 
@@ -25,7 +24,6 @@ namespace ClassLibrary
 		public int masterFlightID { get; set; }
 		public string originCode { get; set; }
 		public string originName { get; set; }
-		
 		public string destinationCode { get; set; }
 		public string destinationName { get; set; }
 		public int distance { get; set; }
@@ -34,7 +32,6 @@ namespace ClassLibrary
 		public TimeSpan duration { get; set; }
 		public string planeType { get; set; }
 		public double cost { get; set; }
-		public int numOfPoints { get; set; }
 		public int numberOfVacantSeats { get; set; }
 		public double flightIncome { get; set; }
 

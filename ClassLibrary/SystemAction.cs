@@ -145,6 +145,7 @@ namespace ClassLibrary
 
             return flight;
         }
+
         public static List<Route> GetFlights_MasterID(string origin, string destination, DateTime departDate, DateTime compareDateTime)
         {
             // This method finds all available routes for the given origin and destination
@@ -274,6 +275,7 @@ namespace ClassLibrary
                 return flightIDsList;
             }
         }
+
         public static FlightModel GetBoardingFlights(int FID, int i, ref CustomerModel customer)
         {
             // This method gets the specified flight's data. It calculates its cost, points, and duration,

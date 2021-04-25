@@ -29,8 +29,8 @@ namespace Air3550
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.FlightManifestLabel = new System.Windows.Forms.Label();
             this.LogOutButton = new System.Windows.Forms.Button();
             this.FlightManifestTable = new System.Windows.Forms.DataGridView();
@@ -53,9 +53,10 @@ namespace Air3550
             // 
             this.FlightManifestLabel.AutoSize = true;
             this.FlightManifestLabel.Font = new System.Drawing.Font("Rockwell", 24F);
-            this.FlightManifestLabel.Location = new System.Drawing.Point(666, 98);
+            this.FlightManifestLabel.Location = new System.Drawing.Point(444, 63);
+            this.FlightManifestLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.FlightManifestLabel.Name = "FlightManifestLabel";
-            this.FlightManifestLabel.Size = new System.Drawing.Size(891, 72);
+            this.FlightManifestLabel.Size = new System.Drawing.Size(559, 46);
             this.FlightManifestLabel.TabIndex = 64;
             this.FlightManifestLabel.Text = "Flight Manifest for Flight ID #";
             this.FlightManifestLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -65,9 +66,10 @@ namespace Air3550
             this.LogOutButton.BackColor = System.Drawing.SystemColors.HotTrack;
             this.LogOutButton.Font = new System.Drawing.Font("Rockwell", 10F);
             this.LogOutButton.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.LogOutButton.Location = new System.Drawing.Point(1892, 98);
+            this.LogOutButton.Location = new System.Drawing.Point(1261, 63);
+            this.LogOutButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.LogOutButton.Name = "LogOutButton";
-            this.LogOutButton.Size = new System.Drawing.Size(276, 72);
+            this.LogOutButton.Size = new System.Drawing.Size(184, 46);
             this.LogOutButton.TabIndex = 63;
             this.LogOutButton.Text = "Log Out";
             this.LogOutButton.UseVisualStyleBackColor = false;
@@ -81,25 +83,26 @@ namespace Air3550
             this.FlightManifestTable.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.FlightManifestTable.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.FlightManifestTable.BackgroundColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle7.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle7.Font = new System.Drawing.Font("Rockwell", 10F);
-            dataGridViewCellStyle7.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle7.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle7.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.FlightManifestTable.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle7;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Rockwell", 10F);
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.FlightManifestTable.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.FlightManifestTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle8.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle8.Font = new System.Drawing.Font("Rockwell", 10F);
-            dataGridViewCellStyle8.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle8.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle8.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.FlightManifestTable.DefaultCellStyle = dataGridViewCellStyle8;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Rockwell", 10F);
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.FlightManifestTable.DefaultCellStyle = dataGridViewCellStyle2;
             this.FlightManifestTable.Enabled = false;
-            this.FlightManifestTable.Location = new System.Drawing.Point(67, 382);
+            this.FlightManifestTable.Location = new System.Drawing.Point(127, 244);
+            this.FlightManifestTable.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.FlightManifestTable.MultiSelect = false;
             this.FlightManifestTable.Name = "FlightManifestTable";
             this.FlightManifestTable.ReadOnly = true;
@@ -107,7 +110,7 @@ namespace Air3550
             this.FlightManifestTable.RowHeadersWidth = 82;
             this.FlightManifestTable.RowTemplate.Height = 33;
             this.FlightManifestTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.FlightManifestTable.Size = new System.Drawing.Size(2101, 630);
+            this.FlightManifestTable.Size = new System.Drawing.Size(1401, 403);
             this.FlightManifestTable.TabIndex = 74;
             // 
             // PrintButton
@@ -115,9 +118,10 @@ namespace Air3550
             this.PrintButton.BackColor = System.Drawing.SystemColors.HotTrack;
             this.PrintButton.Font = new System.Drawing.Font("Rockwell", 10F);
             this.PrintButton.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.PrintButton.Location = new System.Drawing.Point(1981, 266);
+            this.PrintButton.Location = new System.Drawing.Point(1321, 170);
+            this.PrintButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.PrintButton.Name = "PrintButton";
-            this.PrintButton.Size = new System.Drawing.Size(187, 84);
+            this.PrintButton.Size = new System.Drawing.Size(125, 54);
             this.PrintButton.TabIndex = 73;
             this.PrintButton.Text = "Print";
             this.PrintButton.UseVisualStyleBackColor = false;
@@ -128,9 +132,10 @@ namespace Air3550
             this.BackButton.BackColor = System.Drawing.SystemColors.HotTrack;
             this.BackButton.Font = new System.Drawing.Font("Rockwell", 10F);
             this.BackButton.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.BackButton.Location = new System.Drawing.Point(67, 98);
+            this.BackButton.Location = new System.Drawing.Point(45, 63);
+            this.BackButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.BackButton.Name = "BackButton";
-            this.BackButton.Size = new System.Drawing.Size(276, 72);
+            this.BackButton.Size = new System.Drawing.Size(184, 46);
             this.BackButton.TabIndex = 80;
             this.BackButton.Text = "Back";
             this.BackButton.UseVisualStyleBackColor = false;
@@ -237,7 +242,7 @@ namespace Air3550
             // 
             // FlightManifest
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.HighlightText;
             this.ClientSize = new System.Drawing.Size(2222, 1078);
@@ -256,7 +261,8 @@ namespace Air3550
             this.Controls.Add(this.PrintButton);
             this.Controls.Add(this.FlightManifestLabel);
             this.Controls.Add(this.LogOutButton);
-            this.MaximumSize = new System.Drawing.Size(2248, 1149);
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.MaximumSize = new System.Drawing.Size(1505, 752);
             this.Name = "FlightManifest";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Air3550";
