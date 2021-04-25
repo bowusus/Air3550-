@@ -150,13 +150,23 @@ namespace Air3550
             int height = accountPage.Height;
             accountPage.Height = accountPage.RowCount * accountPage.RowTemplate.Height * 2;
             bmp = new Bitmap(accountPage.Width, accountPage.Height);
-            accountPage.DrawToBitmap(bmp, new Rectangle(0, 0, accountPage.Width, accountPage.Height));
+            accountPage.DrawToBitmap(bmp, new Rectangle(0, 20, accountPage.Width, accountPage.Height));
             accountPage.Height = height;
             printPreviewDialog1.ShowDialog();
+
         }
         private void printDocument1_PrintPage(object sender, System.Drawing.Printing.PrintPageEventArgs e)
         {
-            e.Graphics.DrawImage(bmp, 0, 0);
+            e.Graphics.DrawImage(bmp, 0, 20);
+            var g = e.Graphics;
+            var srcRect = new Rectangle(0, 0, CompanyStatisticsGroupBox.Width, CompanyStatisticsGroupBox.Height);
+            var desRect = new Rectangle(e.PageBounds.X, e.PageBounds.Y, e.PageBounds.Width, srcRect.Height);
+            //Or to draw within the margin
+            using (var bmp = new Bitmap(srcRect.Width, srcRect.Height))
+            {
+                CompanyStatisticsGroupBox.DrawToBitmap(bmp, srcRect);
+                g.DrawImage(bmp, desRect, srcRect, GraphicsUnit.Pixel);
+            }
         }
         private void FromDatePicker_ValueChanged(object sender, EventArgs e)
         {
