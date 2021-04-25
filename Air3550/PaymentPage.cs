@@ -152,7 +152,7 @@ namespace Air3550
                     }
                 }
                 SqliteDataAccess.UpdateAvailablePoints(currCustomer.userID, available + points);
-                DialogResult result = MessageBox.Show("You are now scheduled for your flight(s)", "Success: Flight(s) Booked", MessageBoxButtons.OK, MessageBoxIcon.None);
+                MessageBox.Show("You are now scheduled for your flight(s)", "Success: Flight(s) Booked", MessageBoxButtons.OK, MessageBoxIcon.None);
                 CustomerHomePage.GetInstance(ref currCustomer).Show();
                 this.Dispose();
             }
@@ -179,12 +179,8 @@ namespace Air3550
                     }
                     SqliteDataAccess.UpdateAvailablePoints(currCustomer.userID, available - points);
                     SqliteDataAccess.UpdateUsedPoints(currCustomer.userID, used + points);
-                    DialogResult result = MessageBox.Show("You are now scheduled for your flight(s).\nWould you like to schedule any more flights?", "Success: Flight(s) Booked", MessageBoxButtons.YesNo, MessageBoxIcon.None);
-                    // check if they want to schedule anymore flights
-                    if (result == DialogResult.Yes)
-                        BookFlightPage.GetInstance(ref currCustomer).Show();
-                    else
-                        CustomerHomePage.GetInstance(ref currCustomer).Show();
+                    MessageBox.Show("You are now scheduled for your flight(s)", "Success: Flight(s) Booked", MessageBoxButtons.OK, MessageBoxIcon.None);
+                    CustomerHomePage.GetInstance(ref currCustomer).Show();
                     this.Dispose();
                 }
             }
@@ -212,12 +208,8 @@ namespace Air3550
                         }
                     }
                     SqliteDataAccess.UpdateBalance(currCustomer.userID, bal - total);
-                    DialogResult result = MessageBox.Show("You are now scheduled for your flight(s).\nWould you like to schedule any more flights?", "Success: Flight(s) Booked", MessageBoxButtons.YesNo, MessageBoxIcon.None);
-                    // check if they want to schedule anymore flights
-                    if (result == DialogResult.Yes)
-                        BookFlightPage.GetInstance(ref currCustomer).Show();
-                    else
-                        CustomerHomePage.GetInstance(ref currCustomer).Show();
+                    MessageBox.Show("You are now scheduled for your flight(s)", "Success: Flight(s) Booked", MessageBoxButtons.OK, MessageBoxIcon.None);
+                    CustomerHomePage.GetInstance(ref currCustomer).Show();
                     this.Dispose();
                 }
             }
