@@ -690,9 +690,9 @@ namespace Air3550
             this.CityError.ForeColor = System.Drawing.Color.Red;
             this.CityError.Location = new System.Drawing.Point(1436, 383);
             this.CityError.Name = "CityError";
-            this.CityError.Size = new System.Drawing.Size(131, 25);
+            this.CityError.Size = new System.Drawing.Size(117, 25);
             this.CityError.TabIndex = 64;
-            this.CityError.Text = "City is Blank";
+            this.CityError.Text = "City Invalid";
             this.CityError.Visible = false;
             // 
             // StreetError

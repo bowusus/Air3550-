@@ -29,11 +29,10 @@ namespace Air3550
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.FlightIncomeLabel = new System.Windows.Forms.Label();
             this.VacantSeatsLabel = new System.Windows.Forms.Label();
-            this.CostLabel = new System.Windows.Forms.Label();
             this.PlaneTypeLabel = new System.Windows.Forms.Label();
             this.DurationLabel = new System.Windows.Forms.Label();
             this.DistanceLabel = new System.Windows.Forms.Label();
@@ -68,16 +67,6 @@ namespace Air3550
             this.VacantSeatsLabel.TabIndex = 106;
             this.VacantSeatsLabel.Text = "# of Vacant Seats: ";
             // 
-            // CostLabel
-            // 
-            this.CostLabel.AutoSize = true;
-            this.CostLabel.Font = new System.Drawing.Font("Rockwell", 12F);
-            this.CostLabel.Location = new System.Drawing.Point(1084, 270);
-            this.CostLabel.Name = "CostLabel";
-            this.CostLabel.Size = new System.Drawing.Size(116, 36);
-            this.CostLabel.TabIndex = 105;
-            this.CostLabel.Text = "Cost: $";
-            // 
             // PlaneTypeLabel
             // 
             this.PlaneTypeLabel.AutoSize = true;
@@ -102,7 +91,7 @@ namespace Air3550
             // 
             this.DistanceLabel.AutoSize = true;
             this.DistanceLabel.Font = new System.Drawing.Font("Rockwell", 12F);
-            this.DistanceLabel.Location = new System.Drawing.Point(667, 270);
+            this.DistanceLabel.Location = new System.Drawing.Point(1084, 270);
             this.DistanceLabel.Name = "DistanceLabel";
             this.DistanceLabel.Size = new System.Drawing.Size(158, 36);
             this.DistanceLabel.TabIndex = 102;
@@ -159,23 +148,23 @@ namespace Air3550
             this.FlightManifestTable.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.FlightManifestTable.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.FlightManifestTable.BackgroundColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle5.Font = new System.Drawing.Font("Rockwell", 10F);
-            dataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.FlightManifestTable.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Rockwell", 10F);
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.FlightManifestTable.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.FlightManifestTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle6.Font = new System.Drawing.Font("Rockwell", 10F);
-            dataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.FlightManifestTable.DefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Rockwell", 10F);
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.FlightManifestTable.DefaultCellStyle = dataGridViewCellStyle2;
             this.FlightManifestTable.Enabled = false;
             this.FlightManifestTable.Location = new System.Drawing.Point(62, 359);
             this.FlightManifestTable.MultiSelect = false;
@@ -233,7 +222,6 @@ namespace Air3550
             this.ClientSize = new System.Drawing.Size(2218, 1064);
             this.Controls.Add(this.FlightIncomeLabel);
             this.Controls.Add(this.VacantSeatsLabel);
-            this.Controls.Add(this.CostLabel);
             this.Controls.Add(this.PlaneTypeLabel);
             this.Controls.Add(this.DurationLabel);
             this.Controls.Add(this.DistanceLabel);
@@ -262,7 +250,6 @@ namespace Air3550
 
         private System.Windows.Forms.Label FlightIncomeLabel;
         private System.Windows.Forms.Label VacantSeatsLabel;
-        private System.Windows.Forms.Label CostLabel;
         private System.Windows.Forms.Label PlaneTypeLabel;
         private System.Windows.Forms.Label DurationLabel;
         private System.Windows.Forms.Label DistanceLabel;

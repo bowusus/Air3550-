@@ -32,7 +32,6 @@ namespace Air3550
             DurationLabel.Text += flight.duration;
             DistanceLabel.Text += flight.distance;
             PlaneTypeLabel.Text += flight.planeType;
-            CostLabel.Text += flight.cost;
             FlightIncomeLabel.Text += flight.flightIncome;
             VacantSeatsLabel.Text += flight.numberOfVacantSeats;
         }
