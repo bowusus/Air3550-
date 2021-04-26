@@ -19,8 +19,8 @@ namespace Air3550
         public static List<FlightModel> bookedFlights;
         public static FlightModel flight;
         public static List<CustomerModel> name;
-        public static PrintBoardingPassPage instance;
-        public static int tempRow = -1;
+        public static PrintBoardingPassPage instance; // singleton instance
+        public static int tempRow = -1; // row instance set to -1 as default
         public PrintBoardingPassPage()
         {
             InitializeComponent();
@@ -81,7 +81,6 @@ namespace Air3550
         {
             // This method renames and removes some columns that do not get updated when the data in the datagridview gets updated
             // Remove some information that the employees need but not the customer
-
             BoardingPassTable.Columns["durDouble"].Visible = false;
             BoardingPassTable.Columns["masterFlightID"].Visible = false;
             BoardingPassTable.Columns["originCode"].Visible = false;
@@ -103,12 +102,22 @@ namespace Air3550
             BoardingPassTable.Columns[10].HeaderText = "Depature Time and Date";
             BoardingPassTable.Columns[11].HeaderText = "Arrival Time and Date";
             BoardingPassTable.Columns[13].HeaderText = "Duration";
-
+            // clear selection of table
+            BoardingPassTable.ClearSelection();
         }
         private void PrintBoardingPassButton_Click(object sender, EventArgs e)
         {
+            // This method prepares the printing information
             DateTime time = DateTime.Now;
-
+            // check that there are flights to print a boarding pass for
+            // if there are not, display an error
+            // else
+            //      check if the temp row is not the default aka no row selected
+            //      display an error if it is the default
+            //      else
+            //          check if the time is within 24 hours of the flight taking off
+            //          if it is, show a print preview
+            //          else, display an error to notify the user that they are not within 24 hours to print the boarding pass
             if (bookedFlights.Count == 0)
                 MessageBox.Show("You do not have any booked flights available", "", MessageBoxButtons.OK, MessageBoxIcon.Error);
             else
@@ -134,6 +143,7 @@ namespace Air3550
                                 Pd.PrintPage += printDocument1_PrintPage;
                                 ppd.Document = Pd;
                                 printPreviewDialog1.ShowDialog();
+                                tempRow = -1;
                             }
                             else
                                 MessageBox.Show("You are not within 24 hours of your flight and can not print boaring pass", "Print Boarding Pass", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -144,9 +154,9 @@ namespace Air3550
                     MessageBox.Show("You have not selected a flight for which to print your boarding pass?", "Error: Print Boarding Pass", MessageBoxButtons.OK, MessageBoxIcon.None);
             }
         }
-        // this method prints the groupbox object with all the information in it 
         private void printDocument1_PrintPage(object sender, System.Drawing.Printing.PrintPageEventArgs e)
         {
+            // this method prints the groupbox object with all the information in it 
             var g = e.Graphics;
             var srcRect = new Rectangle(0, 0, BoardingPassGroupBox.Width, BoardingPassGroupBox.Height);
             var desRect = new Rectangle(e.PageBounds.X, e.PageBounds.Y, e.PageBounds.Width, srcRect.Height);
@@ -159,6 +169,7 @@ namespace Air3550
         }
         private void BoardingPassTable_CellClick(object sender, DataGridViewCellEventArgs e)
         {
+            // This method fills in the boarding pass information if a row is selected that is not the header
             if (e.RowIndex != -1)
             {
                 // Populate to the boarding pass page the info needed for the boarding pass
@@ -171,14 +182,14 @@ namespace Air3550
                 DepText.Text = row.Cells[10].Value.ToString();
                 ArrivalText.Text = row.Cells[11].Value.ToString();
                 LastNameText.Text = row.Cells[3].Value.ToString();
-                tempRow = e.RowIndex;
+                tempRow = e.RowIndex; // keep this index to be able to print
             }
         }
         private void BackButton_Click(object sender, EventArgs e)
         {
-            // This methods allows the user to return to the Log In page
+            // This methods allows the user to return to the customer home page
             // The current form will close
-            // The Log In page will open
+            // The customer home page will open
             DialogResult result = MessageBox.Show("Are you sure that you want to return home?\nAny changes not saved will not be updated.", "Account Information", MessageBoxButtons.YesNo, MessageBoxIcon.None);
             if (result == DialogResult.Yes)
             {
@@ -201,8 +212,8 @@ namespace Air3550
         }
         private void PrintBoardingPassPage_FormClosing(object sender, FormClosingEventArgs e)
         {
-            // This method allows the red X to be used to end the application
-            // If the red X is clicked, a message will make sure the customer wants to leave
+            // This method allows the exit button to be used to end the application
+            // If the exit button is clicked, a message will make sure the customer wants to leave
             // then the application ends or the customer cancels
             DialogResult result = MessageBox.Show("Are you sure you would like to exit?\nAny changes not saved will not be updated.", "Close", MessageBoxButtons.YesNo, MessageBoxIcon.None);
             if (result == DialogResult.Yes)

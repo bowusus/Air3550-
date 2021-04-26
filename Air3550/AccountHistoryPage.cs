@@ -15,10 +15,10 @@ namespace Air3550
     {
         // This form file is to document the actions done on the Account History specifically
         public static CustomerModel currCustomer; // make a local object that can be read in the current context
-        public static AccountHistoryPage instance;
-        public static List<FlightModel> bookedFlights;
-        public static List<FlightModel> takenFlights;
-        public static List<FlightModel> cancelflight;
+        public static AccountHistoryPage instance; // singleton instance
+        public static List<FlightModel> bookedFlights; 
+        public static List<FlightModel> takenFlights; 
+        public static List<FlightModel> cancelflight; 
         public AccountHistoryPage()
         {
             InitializeComponent();
@@ -83,15 +83,17 @@ namespace Air3550
         private void FlightsBookedButton_Click(object sender, EventArgs e)
         {
             // This method loads all current flights for the current customer
-            // These are the flights that the customer can cancel
+            // These are the flights that the customer has currently booked
             // There can be multiple flights due to a round trip or if a flight has layovers
             NoBookedFlightLabel.Visible = false;
             NoCancelledFlightLabel.Visible = false;
             NoTakenFlightLabel.Visible = false;
-
             bookedFlights = new List<FlightModel>();
             int i = 0;
             List<int> flightID = SqliteDataAccess.GetBookedFlightIDs(currCustomer.userID);
+            // as long as there are currently booked flights, go through each flight that is currently booked
+            // get the flight data, origin and destination airport names, departure and arrival datetimes, costs, and duration
+            // add that to the booked flights list
             if (flightID.Count != 0)
             {
                 foreach (int fID in flightID)
@@ -124,9 +126,11 @@ namespace Air3550
                     i += 1;
                 }
             }
+            // set the booked flights list to be the data source of the table
             AccountHistoryTable.DataSource = bookedFlights;
             AccountHistoryTable.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
             AccountHistoryTable.Visible = true;
+            // if the count is 0, then display a label
             if (bookedFlights.Count == 0)
                 NoBookedFlightLabel.Visible = true;
             else
@@ -136,15 +140,17 @@ namespace Air3550
         private void FlightsCancelledButton_Click(object sender, EventArgs e)
         {
             // This method loads all cancelled flights for the current customer
-            // These are the flights that the customer can cancel
+            // These are the flights that the customer already cancelled
             // There can be multiple flights due to a round trip or if a flight has layovers
             NoBookedFlightLabel.Visible = false;
             NoCancelledFlightLabel.Visible = false;
             NoTakenFlightLabel.Visible = false;
-
             cancelflight = new List<FlightModel>();
             int i = 0;
             List<int> flightID = SqliteDataAccess.GetCancelledFlightIDs(currCustomer.userID);
+            // as long as there are currently cancelled flights, go through each flight that is currently cancelled
+            // get the flight data, origin and destination airport names, departure and arrival datetimes, costs, and duration
+            // add that to the cancelled flights list
             if (flightID.Count != 0)
             {
                 foreach (int fID in flightID)
@@ -177,9 +183,11 @@ namespace Air3550
                     i += 1;
                 }
             }
+            // set the cancelled flights list to be the data source of the table
             AccountHistoryTable.DataSource = cancelflight;
             AccountHistoryTable.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
             AccountHistoryTable.Visible = true;
+            // if the count is 0, then display a label
             if (cancelflight.Count == 0)
                 NoCancelledFlightLabel.Visible = true;
             else
@@ -189,17 +197,17 @@ namespace Air3550
         private void FlightsTakenButton_Click(object sender, EventArgs e)
         {
             // This method loads all taken flights for the current customer
-            // These are the flights that the customer can cancel
+            // These are the flights that the customer have taken
             // There can be multiple flights due to a round trip or if a flight has layovers
             NoBookedFlightLabel.Visible = false;
             NoCancelledFlightLabel.Visible = false;
             NoTakenFlightLabel.Visible = false;
-
             int i = 0;
             takenFlights = new List<FlightModel>();
-
             List<int> flightID = SqliteDataAccess.GetTakenFlightIDs(currCustomer.userID);
-
+            // as long as there are currently cancelled flights, go through each flight that has been previously taken
+            // get the flight data, origin and destination airport names, departure and arrival datetimes, costs, and duration
+            // add that to the taken flights list
             if (flightID.Count != 0)
             {
                 foreach (int fID in flightID)
@@ -232,9 +240,11 @@ namespace Air3550
                     i += 1;
                 }
             }
+            // set the taken flights list to be the data source of the table
             AccountHistoryTable.DataSource = takenFlights;
             AccountHistoryTable.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
             AccountHistoryTable.Visible = true;
+            // if the count is 0, then display a label
             if (takenFlights.Count == 0)
                 NoTakenFlightLabel.Visible = true;
             else
@@ -243,9 +253,9 @@ namespace Air3550
         }
         private void BackButton_Click(object sender, EventArgs e)
         {
-            // This methods allows the user to return to the Log In page
+            // This methods allows the user to return to the customer home page
             // The current form will close
-            // The Log In page will open
+            // The customer home page will open
             DialogResult result = MessageBox.Show("Are you sure that you want to return home?\nAny changes not saved will not be updated.", "Account Information", MessageBoxButtons.YesNo, MessageBoxIcon.None);
             if (result == DialogResult.Yes)
             {
@@ -268,8 +278,8 @@ namespace Air3550
         }
         private void AccountHistoryPage_FormClosing(object sender, FormClosingEventArgs e)
         {
-            // This method allows the red X to be used to end the application
-            // If the red X is clicked, a message will make sure the customer wants to leave
+            // This method allows the exit button to be used to end the application
+            // If the exit button is clicked, a message will make sure the customer wants to leave
             // then the application ends or the customer cancels
             DialogResult result = MessageBox.Show("Are you sure you would like to exit?\nAny changes not saved will not be updated.", "Close", MessageBoxButtons.YesNo, MessageBoxIcon.None);
             if (result == DialogResult.Yes)

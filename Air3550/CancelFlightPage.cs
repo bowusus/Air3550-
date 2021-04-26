@@ -14,7 +14,7 @@ namespace Air3550
     public partial class CancelFlightPage : Form
     {
         // This form file is to document the actions done on the Cancel Flight Page specifically
-        private static CancelFlightPage instance;
+        private static CancelFlightPage instance; // singleton instance
         public static CustomerModel currCustomer; // make a local object that can be read in the current context
         public static List<FlightModel> bookedFlights; // list of booked flights that gets updated throughout the form
         public static int tempFlightSelected; // route that the user temporarily selects
@@ -40,18 +40,26 @@ namespace Air3550
         }
         private void CancelFlightPage_Load(object sender, EventArgs e)
         {
+            // This method loads all current flights for the current customer
+            // These are the flights that the customer has currently booked
+            // There can be multiple flights due to a round trip or if a flight has layovers
             NoFlightLabel.Visible = false;
-
             bookedFlights = new List<FlightModel>();
             int i = 0;
             List<int> flightID = SqliteDataAccess.GetBookedFlightIDs(currCustomer.userID);
+            // as long as there are currently booked flights, go through each flight that is currently booked
+            // get the flight data, origin and destination airport names, departure and arrival datetimes, costs, and duration
+            // add that to the booked flights list
             if (flightID.Count != 0)
             {
                 foreach (int fID in flightID)
                 {
+                    // due to flights being part of a route, get that route id for the current flight
+                    // get the number of flight ids in that route
                     int routeID = SqliteDataAccess.GetBookedFlightsRouteID(fID);
                     List<int> flightIDs = SqliteDataAccess.GetFlightIDsInRoute(routeID);
                     int count = flightIDs.Count;
+
                     List<string> flightData = SqliteDataAccess.GetFlightData(fID);
                     string originName = SqliteDataAccess.GetFlightNames(flightData[2]);
                     string destinationName = SqliteDataAccess.GetFlightNames(flightData[3]);
@@ -78,19 +86,18 @@ namespace Air3550
 
                     bookedFlights.Add(flight);
                     
+                    // use the count of flight ids in the list to determine when to reset i
                     if (i == count - 1)
-                    {
                         i = 0;
-                    }
                     else
-                    {
                         i++;
-                    }
                 }
             }
+            // set the booked flights list to be the data source of the table
             CancelFlightTable.DataSource = bookedFlights;
             CancelFlightTable.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
             CancelFlightTable.Visible = true;
+            // if the count is 0, then display a label
             if (bookedFlights.Count == 0)
                 NoFlightLabel.Visible = true;
             else
@@ -111,7 +118,6 @@ namespace Air3550
             CancelFlightTable.Columns.Remove("flightIncome");
             CancelFlightTable.Columns.Remove("percentFull");
             // change the name of the columns
-
             CancelFlightTable.Columns[0].HeaderText = "FlightID";
             CancelFlightTable.Columns[1].HeaderText = "Origin Code";
             CancelFlightTable.Columns[2].HeaderText = "Origin Name";
@@ -245,7 +251,7 @@ namespace Air3550
                         // clear data source, and add any still booked flights to the data grid view
                         // otherwise, show a no booked flights label and format the grid
                         CancelFlightTable.DataSource = null;
-                        // all of the flights should be taken out of the database, but if there are any, then they are displayed
+                        // all of the flights should be taken out of the database, but if there are any, then they are displayed --> just like a catch all
                         // otherwise, bookedFlights is cleared and a no flights label is displayed
                         bookedFlights = new List<FlightModel>();
                         int i = 0;
@@ -254,9 +260,12 @@ namespace Air3550
                         {
                             foreach (int fID in flightID)
                             {
+                                // due to flights being part of a route, get that route id for the current flight
+                                // get the number of flight ids in that route
                                 int routeID = SqliteDataAccess.GetBookedFlightsRouteID(fID);
                                 List<int> flightIDs = SqliteDataAccess.GetFlightIDsInRoute(routeID);
                                 int count = flightIDs.Count;
+
                                 List<string> flightData = SqliteDataAccess.GetFlightData(fID);
                                 string originName = SqliteDataAccess.GetFlightNames(flightData[2]);
                                 string destinationName = SqliteDataAccess.GetFlightNames(flightData[3]);
@@ -282,19 +291,16 @@ namespace Air3550
                                 FlightModel flight = new FlightModel(int.Parse(flightData[0]), int.Parse(flightData[1]), flightData[2], originName, flightData[3], destinationName, int.Parse(flightData[6]), departureDateTime, arriveDateTime, duration, flightData[8], Math.Round(currCost, 2), currPoints, int.Parse(flightData[10]), Convert.ToDouble(flightData[11]));
 
                                 bookedFlights.Add(flight);
-
+                                // use the count of flight ids in the list to determine when to reset i
                                 if (i == count - 1)
-                                {
                                     i = 0;
-                                }
                                 else
-                                {
                                     i++;
-                                }
                             }
                         }
                         else
                         {
+                            // clear the list of flights booked and display no flights label
                             bookedFlights.Clear();
                             NoFlightLabel.Visible = true;
                         }
@@ -311,7 +317,7 @@ namespace Air3550
         {
             // This methods allows the user to return to the Log In page
             // The current form will close
-            // The Log In page will open
+            // The customer home page will open
             DialogResult result = MessageBox.Show("Are you sure that you want to return home?\nAny changes not saved will not be updated.", "Account Information", MessageBoxButtons.YesNo, MessageBoxIcon.None);
             if (result == DialogResult.Yes)
             {
@@ -334,8 +340,8 @@ namespace Air3550
         }
         private void CancelFlightPage_FormClosing(object sender, FormClosingEventArgs e)
         {
-            // This method allows the red X to be used to end the application
-            // If the red X is clicked, a message will make sure the customer wants to leave
+            // This method allows the exit button to be used to end the application
+            // If the exit button is clicked, a message will make sure the customer wants to leave
             // then the application ends or the customer cancels
             DialogResult result = MessageBox.Show("Are you sure you would like to exit?\nAny changes not saved will not be updated.", "Close", MessageBoxButtons.YesNo, MessageBoxIcon.None);
             if (result == DialogResult.Yes)

@@ -14,7 +14,7 @@ namespace Air3550
     public partial class PaymentPage : Form
     {
         // This form file is to document the actions done on the Payment Page specifically
-        private static PaymentPage instance;
+        private static PaymentPage instance; // singleton instance
         public static CustomerModel currCustomer; // make a local object that can be read in the current context
         public static List<Route> selectedRoutes; // make a local object that can be read in the current context
         public static double total;

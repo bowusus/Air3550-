@@ -15,7 +15,7 @@ namespace Air3550
     public partial class AccountInformationPage : Form
     {
         // This form file is to document the actions done on the Account Information Page specifically
-        public static AccountInformationPage instance; 
+        public static AccountInformationPage instance; // singleton instance
         public static CustomerModel currCustomer; // make a local object that can be read in the current context
         public AccountInformationPage()
         {
@@ -50,7 +50,7 @@ namespace Air3550
         private void SaveChangesButton_Click(object sender, EventArgs e)
         {
             // This method updates the database with any changes the customer makes to their account information 
-            // The password is allowed to be left blank
+            // The password and credit card number is allowed to be left blank
             // Everything else needs to be not blank and in the correct format
             // The fields get autopopulated with the information associated with the current customer
             // It produces a pop up at the end to notify the customer that their information was updated
@@ -139,9 +139,9 @@ namespace Air3550
         }
         private void BackButton_Click(object sender, EventArgs e)
         {
-            // This methods allows the user to return to the Log In page
+            // This methods allows the user to return to the customer home page
             // The current form will close
-            // The Log In page will open
+            // The customer home page will open
             DialogResult result = MessageBox.Show("Are you sure that you want to return home?\nAny changes not saved will not be updated.", "Account Information", MessageBoxButtons.YesNo, MessageBoxIcon.None);
             if (result == DialogResult.Yes)
             {
@@ -164,8 +164,8 @@ namespace Air3550
         }
         private void AccountInformationPage_FormClosing(object sender, FormClosingEventArgs e)
         {
-            // This method allows the red X to be used to end the application
-            // If the red X is clicked, a message will make sure the customer wants to leave
+            // This method allows the exit button to be used to end the application
+            // If the exit button is clicked, a message will make sure the customer wants to leave
             // then the application ends or the customer cancels
             DialogResult result = MessageBox.Show("Are you sure you would like to exit?\nAny changes not saved will not be updated.", "Close", MessageBoxButtons.YesNo, MessageBoxIcon.None);
             if (result == DialogResult.Yes)
@@ -187,7 +187,6 @@ namespace Air3550
                     PhoneText.SelectionStart = PhoneText.Text.Length;
             }
         }
-
         private void PhoneText_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             // This method was required to get the combo box cursor to start on the left side automatically

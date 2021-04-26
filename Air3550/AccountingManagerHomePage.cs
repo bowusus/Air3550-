@@ -13,40 +13,23 @@ namespace Air3550
 {
     public partial class AccountingManagerHomePage : Form
     {
-        public static List<FlightModel> bookedFlights = new List<FlightModel>();
-        public static CustomerModel currCustomer;
-        public static int currFlightID;
+        // This form file is to document the actions done on the Accounting Manager Home page specifically
         public static List<string> departAirports; // list of depart airports
         public static List<string> arriveAirports; // list of arrival airports
-        private DataTable flightList = new DataTable();
-
-
-        // This form file is to document the actions done on the Customer Home Page specifically
+        Bitmap bmp;
         public AccountingManagerHomePage()
         {
             InitializeComponent();
-            accountPage.Visible = false;
+            accountPage.Visible = false; // make the account manager table not visible
             departAirports = new List<string>(); // create the list of departing airports
             arriveAirports = new List<string>(); // create the list of arrival airport
         }
-        public AccountingManagerHomePage(int flightID)
-        {
-            InitializeComponent();
-            currFlightID = flightID;
-        }
-        public AccountingManagerHomePage(ref CustomerModel customer)
-        {
-            // This constructor allows for the object to be accessed in this form
-            InitializeComponent();
-            // get the current customer and pass that information to the textboxes
-            currCustomer = customer;
-        }
         private void AccountingManagerHomePage_Load(object sender, EventArgs e)
         {
-            bookedFlights = new List<FlightModel>();
-            // This method adds the airports to the airport cities dropdowns
-            List<Airport> airportList;
-            airportList = SqliteDataAccess.GetAirports();
+            // This method adds the airports to the airport cities dropdowns and sets the labels to their default visibility
+
+            // get the airports that are currently used
+            List<Airport> airportList = SqliteDataAccess.GetAirports();
             foreach (Airport airport in airportList)
             {
                 string currAir = airport.Code + " (" + airport.Name + ")";
@@ -64,21 +47,25 @@ namespace Air3550
             ArriveComboBox.DataSource = arriveAirports;
             ArriveComboBox.SelectedItem = null;
             ArriveComboBox.SelectedText = "";
-            accountPage.Visible = false;
-            CompanyStatisticsGroupBox.Visible = false;
-            NoFlightLabel.Visible = false;
+            accountPage.Visible = false; // make the accounting manager table not visible
+            CompanyStatisticsGroupBox.Visible = false; // make the company statistics group box not visible
+            NoFlightLabel.Visible = false; // make the no flight label not visible
         }
-
         private void SearchButton_Click(object sender, EventArgs e)
         {
-            // This method displays a list of the flights that have the values that the flight manager filtered on
-            BeforeFromDateError.Visible = false;
+            // This method displays a list of the flights that have the values that the accounting manager filtered on
+
+            // set the error labels to not be visible
+            BeforeFromDateError.Visible = false; 
             DifferentLocationError.Visible = false;
+
+            // set the default origin and destination to null
             string origin = null;
             string destination = null;
-            // set the dates to the default min value
+            // set the default dates to today
             DateTime fromDate = FromDatePicker.Value.Date;
             DateTime toDate = ToDatePicker.Value;
+
             // if the depart city is not null, then get the origin airport code from the drop down
             if (!String.IsNullOrEmpty(DepartComboBox.Text))
             {
@@ -94,34 +81,45 @@ namespace Air3550
             {
                 fromDate = fromDate.Date;
             }
+            // if the toDate is today, set the time to now to be able to check all flights before now
+            // else set the time to 11:59 of that day to allow for all flights in that date range to be seen
             if (toDate.Date == DateTime.Now.Date)
             {
                 toDate = DateTime.Now;
             }
+            else
+            {
+                toDate = toDate.Date.AddDays(1).AddSeconds(-1);
+            }
+            // if the origin and destination are provided and are the same, provide an error that says pick two different locations
             if (!String.IsNullOrEmpty(DepartComboBox.Text) && !String.IsNullOrEmpty(ArriveComboBox.Text) && DepartComboBox.Text == ArriveComboBox.Text)
                 DifferentLocationError.Visible = true;
+            // if the fromDate is after the toDate, provide an error that says pick a toDate that is after the fromDate
             if (fromDate.Date > toDate.Date)
                 BeforeFromDateError.Visible = true;
+            // if no errors are visible, then get the company statistics and fill the flights table
             if (BeforeFromDateError.Visible == false && DifferentLocationError.Visible == false)
             {
                 CompanyStatisticsGroupBox.Visible = true;
                 List<FlightModel> flights = SqliteDataAccess.GetFlights(origin, destination, fromDate, toDate); // get the flights that have the specified values
                 accountPage.DataSource = flights;
+                accountPage.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
                 accountPage.Visible = true; // display the table
-                accountPage.ClearSelection();
+                accountPage.ClearSelection(); 
+                // if there are no flights available in that date range with the provided information, display a no flights label
                 if (flights.Count == 0)
                     NoFlightLabel.Visible = true;
                 else
                     NoFlightLabel.Visible = false;
+                // show the total flights and total revenue
                 TotalFlightCountLabel.Text = "Total Flights Traveled: " + SqliteDataAccess.GetCompanyFlightCount(origin, destination, fromDate, toDate).ToString();
                 TotalRevenueLabel.Text = "Total Company Income: $" + SqliteDataAccess.GetCompanyIncome(origin, destination, fromDate, toDate).ToString("0.00");
                 FormatGrid(); // format the grid
             }
         }
-
-        // formats the datagrid to match right info
         private void FormatGrid()
         {
+            // This method formats the data grid view with different column names
             accountPage.Columns.Remove("userid");
             accountPage.Columns.Remove("firstName");
             accountPage.Columns.Remove("lastName");
@@ -143,13 +141,12 @@ namespace Air3550
             accountPage.Columns[9].HeaderText = "Number of Vacant Seats";
             accountPage.Columns[10].HeaderText = "% Full Capacity";
             accountPage.Columns[11].HeaderText = "Flight Income (in dollars)";
+            // clear the selection from the table
             accountPage.ClearSelection();
         }
-
-        Bitmap bmp;
-
         private void PrintButton_Click(object sender, EventArgs e)
         {
+            // This method is used for providing a print preview 
             // get the page height and width to print the data view correctly
             int height = accountPage.Height;
             accountPage.Height = accountPage.RowCount * accountPage.RowTemplate.Height * 2;
@@ -157,7 +154,6 @@ namespace Air3550
             accountPage.DrawToBitmap(bmp, new Rectangle(0, 20, accountPage.Width, accountPage.Height));
             accountPage.Height = height;
             printPreviewDialog1.ShowDialog();
-
         }
         private void printDocument1_PrintPage(object sender, System.Drawing.Printing.PrintPageEventArgs e)
         {
@@ -178,7 +174,7 @@ namespace Air3550
             FromDatePicker.CustomFormat = "dddd, MMMM  dd,  yyyy";
             FromDateAfterTodayError.Visible = false;
             var delta = FromDatePicker.Value.Date.Subtract(DateTime.Today.Date); // get the difference between the to date and today
-            if (delta.TotalMinutes > 0) // if the from date is after today
+            if (delta.TotalMinutes > 0) // if the from date is after today, display an error
                 FromDateAfterTodayError.Visible = true;
         }
         private void ToDatePicker_ValueChanged(object sender, EventArgs e)
@@ -192,23 +188,8 @@ namespace Air3550
             var delta2 = ToDatePicker.Value.Date.Subtract(DateTime.Today.Date); // get the difference between the to date and today
             if (delta1.TotalMinutes < 0) // if the to date is before the from date
                 BeforeFromDateError.Visible = true;
-            else if (delta2.TotalMinutes > 0) // if the to date is after today
+            else if (delta2.TotalMinutes > 0) // if the to date is after today, display an error
                 ToDateAfterTodayError.Visible = true;
-        }
-        private void accountPage_CellClick(object sender, EventArgs e)
-        {
-            
-            double capacityPercentage = 0;
-             if (accountPage.SelectedRows.Count > 0)
-            {
-                // get the capacity percentage by dividing #of vacant by # plane cap *100
-                // add comments
-                capacityPercentage = Math.Round((1.0 - (double)((Convert.ToDouble(accountPage.SelectedRows[0].Cells["numOfVacantSeats"].Value.ToString())
-                                        / (double)SqliteDataAccess.GetPlaneCapacity(accountPage.SelectedRows[0].Cells["planeType_fk"].Value.ToString())))) * 100.0, 2);
-            }
-
-             // displays the plane capacity %
-            Label1.Text = "Plane Capacity Percentage: " + capacityPercentage + " % ";
         }
         private void ClearFiltersButton_Click(object sender, EventArgs e)
         {
@@ -228,7 +209,7 @@ namespace Air3550
             // This method allows the user to return to the log in page
             // All open forms will close
             // The log in page will open
-            // A message asks if the customer has saved everything they desire
+            // A message asks if the user has saved everything they desire
             DialogResult result = MessageBox.Show("Are you sure that you want to log out?\nAny changes not saved will not be updated.", "Log Out", MessageBoxButtons.YesNo, MessageBoxIcon.None);
             if (result == DialogResult.Yes)
             {
@@ -238,9 +219,9 @@ namespace Air3550
         }
         private void AccountingManagerHomePage_FormClosing(object sender, FormClosingEventArgs e)
         {
-            // This method allows the red X to be used to end the application
-            // If the red X is clicked, a message will make sure the customer wants to leave
-            // then the application ends or the customer cancels
+            // This method allows the exit button to be used to end the application
+            // If the exit button is clicked, a message will make sure the user wants to leave
+            // then the application ends or the user cancels
             DialogResult result = MessageBox.Show("Are you sure you would like to exit?\nAny changes not saved will not be updated.", "Close", MessageBoxButtons.YesNo, MessageBoxIcon.None);
             if (result == DialogResult.Yes)
                 LogInPage.GetInstance.Close();

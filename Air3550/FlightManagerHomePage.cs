@@ -14,7 +14,7 @@ namespace Air3550
     public partial class FlightManagerHomePage : Form
     {
         // This form file is to document the actions done on the Customer Home Page specifically
-        public static FlightManagerHomePage instance;
+        public static FlightManagerHomePage instance; // singleton instance
         public static List<string> departAirports; // list of depart airports
         public static List<string> arriveAirports; // list of arrival airports
         public static int tempFlightSelected; // route that the user temporarily selects
@@ -37,7 +37,9 @@ namespace Air3550
         }
         private void FlightManagerHomePage_Load(object sender, EventArgs e)
         {
-            // This method adds the airports to the airport cities dropdowns
+            // This method sets the default values for the page
+
+            // get the airports that are currently used
             List<Airport> airportList;
             airportList = SqliteDataAccess.GetAirports();
             foreach (Airport airport in airportList)
@@ -65,13 +67,18 @@ namespace Air3550
         private void SearchButton_Click(object sender, EventArgs e)
         {
             // This method displays a list of the flights that have the values that the flight manager filtered on
+
+            // set the error labels to not be visible
             BeforeFromDateError.Visible = false;
             DifferentLocationError.Visible = false;
+
+            // set the default origin and destination to null
             string origin = null;
             string destination = null;
-            // set the dates to the default min value
+            // set the default dates to today
             DateTime fromDate = FromDatePicker.Value.Date;
             DateTime toDate = ToDatePicker.Value;
+
             // if the depart city is not null, then get the origin airport code from the drop down
             if (!String.IsNullOrEmpty(DepartComboBox.Text))
             {
@@ -87,10 +94,23 @@ namespace Air3550
             {
                 fromDate = fromDate.Date;
             }
+            // if the toDate is today, set the time to now to be able to check all flights before now
+            // else set the time to 11:59 of that day to allow for all flights in that date range to be seen
+            if (toDate.Date == DateTime.Now.Date)
+            {
+                toDate = DateTime.Now;
+            }
+            else
+            {
+                toDate = toDate.Date.AddDays(1).AddSeconds(-1);
+            }
+            // if the origin and destination are provided and are the same, provide an error that says pick two different locations
             if (!String.IsNullOrEmpty(DepartComboBox.Text) && !String.IsNullOrEmpty(ArriveComboBox.Text) && DepartComboBox.Text == ArriveComboBox.Text)
                 DifferentLocationError.Visible = true;
+            // if the fromDate is after the toDate, provide an error that says pick a toDate that is after the fromDate
             if (fromDate.Date > toDate.Date)
                 BeforeFromDateError.Visible = true;
+            // if no errors are visible, then get the company statistics and fill the flights table
             if (BeforeFromDateError.Visible == false && DifferentLocationError.Visible == false)
             {
                 List<FlightModel> flights = SqliteDataAccess.GetFlights(origin, destination, fromDate, toDate); // get the flights that have the specified values
@@ -99,6 +119,7 @@ namespace Air3550
                 FlightTable.ClearSelection();
                 ViewFlightManifestButton.Visible = true;
                 FlightManagerLabel.Visible = true;
+                // if there are no flights available in that date range with the provided information, display a no flights label
                 if (flights.Count == 0)
                     NoFlightLabel.Visible = true;
                 else
@@ -109,7 +130,6 @@ namespace Air3550
         private void FormatGrid()
         {
             // This method formats the data grid view with different column names
-            
             FlightTable.Columns.Remove("userid");
             FlightTable.Columns.Remove("firstName");
             FlightTable.Columns.Remove("lastName");
@@ -131,6 +151,7 @@ namespace Air3550
             FlightTable.Columns[9].HeaderText = "Number of Vacant Seats";
             FlightTable.Columns[10].HeaderText = "% Full Capacity";
             FlightTable.Columns[11].HeaderText = "Flight Income (in dollars)";
+            // clear the selection from the table
             FlightTable.ClearSelection();
         }
         private void ClearFiltersButton_Click(object sender, EventArgs e)
@@ -203,8 +224,8 @@ namespace Air3550
         }
         private void FlightManagerHomePage_FormClosing(object sender, FormClosingEventArgs e)
         {
-            // This method allows the red X to be used to end the application
-            // If the red X is clicked, a message will make sure the customer wants to leave
+            // This method allows the exit button to be used to end the application
+            // If the exit button is clicked, a message will make sure the customer wants to leave
             // then the application ends or the customer cancels
             DialogResult result = MessageBox.Show("Are you sure you would like to exit?\nAny changes not saved will not be updated.", "Close", MessageBoxButtons.YesNo, MessageBoxIcon.None);
             if (result == DialogResult.Yes)

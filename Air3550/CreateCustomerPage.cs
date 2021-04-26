@@ -15,7 +15,7 @@ namespace Air3550
     public partial class CreateCustomerPage : Form
     {
         // This form file is to document the actions done on the Create Customer Page specifically
-        private static CreateCustomerPage instance;
+        private static CreateCustomerPage instance; // singleton instance
         public CreateCustomerPage()
         {
             InitializeComponent();

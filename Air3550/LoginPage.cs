@@ -14,7 +14,7 @@ namespace Air3550
     public partial class LogInPage : Form
     {
         // This form file is to document the actions done on the Log In Page specifically
-        private static LogInPage instance;
+        private static LogInPage instance; // singleton instance
         public LogInPage()
         {
             InitializeComponent();
@@ -85,6 +85,7 @@ namespace Air3550
                 }
                 else
                 {
+                    // the user is a customer
                     int passCheck = SqliteDataAccess.CheckPassword(userID, currPass); // compare the provided userID and password with the database
                     if (passCheck == 0)
                         PasswordError.Visible = true;

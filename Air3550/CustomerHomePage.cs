@@ -14,7 +14,7 @@ namespace Air3550
     public partial class CustomerHomePage : Form
     {
         // This form file is to document the actions done on the Customer Home Page specifically
-        private static CustomerHomePage instance;
+        private static CustomerHomePage instance; // singleton instance
         private static CustomerModel currCustomer; // make a local object that can be read in the current context
         public CustomerHomePage()
         {
@@ -38,7 +38,7 @@ namespace Air3550
         private void BookFlightButton_Click(object sender, EventArgs e)
         {
             // This method transitions the displayed page from the customer home page to the 
-            // cancel flight page
+            // book flight page
             BookFlightPage.GetInstance(ref currCustomer).Show();
             this.Dispose();
         }
@@ -73,7 +73,7 @@ namespace Air3550
         private void LogOutButton_Click(object sender, EventArgs e)
         {
             // This method allows the user to return to the log in page
-            // All open forms will close
+            // This page will close
             // The log in page will open
             // A message asks if the customer has saved everything they desire
             DialogResult result = MessageBox.Show("Are you sure that you want to log out?\nAny changes not saved will not be updated.", "Log Out", MessageBoxButtons.YesNo, MessageBoxIcon.None);

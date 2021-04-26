@@ -472,6 +472,7 @@ namespace Air3550
             this.CreditCardNumText.Size = new System.Drawing.Size(482, 64);
             this.CreditCardNumText.TabIndex = 8;
             this.CreditCardNumText.MouseClick += new System.Windows.Forms.MouseEventHandler(this.CreditCardNumText_MouseClick);
+            this.CreditCardNumText.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.CreditCardNumText_MouseDoubleClick);
             // 
             // EmailText
             // 
