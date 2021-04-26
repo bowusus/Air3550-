@@ -119,13 +119,22 @@ namespace Air3550
             }
             else
             {
-                state = StateComboBox.Text.ToString(); // get the state
-                age = int.Parse(AgeComboBox.Text.ToString()); // get the age
-                if (!String.IsNullOrEmpty(password)) // encrypt the new password
-                    pass = SystemAction.EncryptPassword(password);
-                SqliteDataAccess.UpdateUser(currCustomer.userID, pass, first, last, street, city, state, zip, phone, creditCard, age, email); // update the database
-                currCustomer = new CustomerModel(currCustomer.userID, pass, first, last, street, city, state, zip, phone, creditCard, age, email);
-                MessageBox.Show("Your Information has been successfully updated and saved", "Account Information Updated and Saved", MessageBoxButtons.OK, MessageBoxIcon.None);
+                int existingCustomer = SqliteDataAccess.CheckIfNewCustomer(email); // check if this email exists in the database
+                // if the email exists, create a new account
+                // else an error will display to the customer
+                if (existingCustomer == 0 || email == currCustomer.email)
+                {
+                    state = StateComboBox.SelectedItem.ToString(); // get the value from the state combo box and turn it into a string
+                    age = int.Parse(AgeComboBox.Text.ToString()); // get the age
+                    if (!String.IsNullOrEmpty(password)) // encrypt the new password
+                        pass = SystemAction.EncryptPassword(password);
+                    SqliteDataAccess.UpdateUser(currCustomer.userID, pass, first, last, street, city, state, zip, phone, creditCard, age, email); // update the database
+                    currCustomer = new CustomerModel(currCustomer.userID, pass, first, last, street, city, state, zip, phone, creditCard, age, email);
+                    MessageBox.Show("Your Information has been successfully updated and saved", "Account Information Updated and Saved", MessageBoxButtons.OK, MessageBoxIcon.None);
+                }
+                else
+                    MessageBox.Show("This email already exists. Try another email.", "Error: Account Information Changes", MessageBoxButtons.OK, MessageBoxIcon.None);
+
             }
         }
         private void BackButton_Click(object sender, EventArgs e)
