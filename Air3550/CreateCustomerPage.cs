@@ -164,22 +164,58 @@ namespace Air3550
         private void PhoneText_MouseClick(object sender, MouseEventArgs e)
         {
             // This method was required to get the combo box cursor to start on the left side automatically
-            PhoneText.SelectionStart = 0;
+            int index = PhoneText.Text.IndexOf(" ");
+            if (PhoneText.Text.Equals("(   )   -"))
+                PhoneText.SelectionStart = 0;
+            else
+            {
+                if (index != -1)
+                    PhoneText.SelectionStart = index;
+                else
+                    PhoneText.SelectionStart = PhoneText.Text.Length;
+            }
         }
         private void PhoneText_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             // This method was required to get the combo box cursor to start on the left side automatically
-            PhoneText.SelectionStart = 0;
+            int index = PhoneText.Text.IndexOf(" ");
+            if (PhoneText.Text.Equals("(   )   -"))
+                PhoneText.SelectionStart = 0;
+            else
+            {
+                if (index != -1)
+                    PhoneText.SelectionStart = index;
+                else
+                    PhoneText.SelectionStart = PhoneText.Text.Length;
+            }
         }
         private void CreditCardNumText_MouseClick(object sender, MouseEventArgs e)
         {
             // This method was required to get the combo box cursor to start on the left side automatically
-            CreditCardNumText.SelectionStart = 0;
+            int index = CreditCardNumText.Text.IndexOf(" ");
+            if (CreditCardNumText.Text.Equals("    -    -    -"))
+                CreditCardNumText.SelectionStart = 0;
+            else
+            {
+                if (index != -1)
+                    CreditCardNumText.SelectionStart = index;
+                else
+                    CreditCardNumText.SelectionStart = CreditCardNumText.Text.Length;
+            }
         }
         private void CreditCardNumText_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             // This method was required to get the combo box cursor to start on the left side automatically
-            CreditCardNumText.SelectionStart = 0;
+            int index = CreditCardNumText.Text.IndexOf(" ");
+            if (CreditCardNumText.Text.Equals("    -    -    -"))
+                CreditCardNumText.SelectionStart = 0;
+            else
+            {
+                if (index != -1)
+                    CreditCardNumText.SelectionStart = index;
+                else
+                    CreditCardNumText.SelectionStart = CreditCardNumText.Text.Length;
+            }
         }
     }
 }

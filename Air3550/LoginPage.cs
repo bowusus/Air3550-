@@ -115,12 +115,30 @@ namespace Air3550
         private void UserIDText_MouseClick(object sender, MouseEventArgs e)
         {
             // This method was required to get the combo box cursor to start on the left side automatically
-            UserIDText.SelectionStart = 0;
+            int index = UserIDText.Text.IndexOf(" ");
+            if (UserIDText.Text.Equals("      "))
+                UserIDText.SelectionStart = 0;
+            else
+            {
+                if (index != -1)
+                    UserIDText.SelectionStart = index;
+                else
+                    UserIDText.SelectionStart = UserIDText.Text.Length;
+            }
         }
         private void UserIDText_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             // This method was required to get the combo box cursor to start on the left side automatically
-            UserIDText.SelectionStart = 0;
+            int index = UserIDText.Text.IndexOf(" ");
+            if (UserIDText.Text.Equals("      "))
+                UserIDText.SelectionStart = 0;
+            else
+            {
+                if (index != -1)
+                    UserIDText.SelectionStart = index;
+                else
+                    UserIDText.SelectionStart = UserIDText.Text.Length;
+            }
         }
     }
 }
