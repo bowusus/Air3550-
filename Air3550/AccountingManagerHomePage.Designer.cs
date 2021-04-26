@@ -153,9 +153,9 @@ namespace Air3550
             this.ToDateAfterTodayError.ForeColor = System.Drawing.Color.Red;
             this.ToDateAfterTodayError.Location = new System.Drawing.Point(1358, 234);
             this.ToDateAfterTodayError.Name = "ToDateAfterTodayError";
-            this.ToDateAfterTodayError.Size = new System.Drawing.Size(348, 25);
+            this.ToDateAfterTodayError.Size = new System.Drawing.Size(370, 25);
             this.ToDateAfterTodayError.TabIndex = 102;
-            this.ToDateAfterTodayError.Text = "Please Select a Date Before Today";
+            this.ToDateAfterTodayError.Text = "Please Select Today or Before Today";
             this.ToDateAfterTodayError.Visible = false;
             // 
             // FromDateAfterTodayError

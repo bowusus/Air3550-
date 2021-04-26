@@ -29,8 +29,8 @@ namespace Air3550
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.SearchButton = new System.Windows.Forms.Button();
             this.ToDateLabel = new System.Windows.Forms.Label();
             this.FromDateLabel = new System.Windows.Forms.Label();
@@ -164,23 +164,23 @@ namespace Air3550
             this.FlightTable.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.FlightTable.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.FlightTable.BackgroundColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle5.Font = new System.Drawing.Font("Rockwell", 10F);
-            dataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.FlightTable.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Rockwell", 10F);
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.FlightTable.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.FlightTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle6.Font = new System.Drawing.Font("Rockwell", 10F);
-            dataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.FlightTable.DefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Rockwell", 10F);
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.FlightTable.DefaultCellStyle = dataGridViewCellStyle2;
             this.FlightTable.Location = new System.Drawing.Point(70, 441);
             this.FlightTable.MultiSelect = false;
             this.FlightTable.Name = "FlightTable";
@@ -196,7 +196,7 @@ namespace Air3550
             // 
             this.BeforeFromDateError.AutoSize = true;
             this.BeforeFromDateError.ForeColor = System.Drawing.Color.Red;
-            this.BeforeFromDateError.Location = new System.Drawing.Point(1366, 283);
+            this.BeforeFromDateError.Location = new System.Drawing.Point(1371, 283);
             this.BeforeFromDateError.Name = "BeforeFromDateError";
             this.BeforeFromDateError.Size = new System.Drawing.Size(540, 25);
             this.BeforeFromDateError.TabIndex = 78;
@@ -256,9 +256,9 @@ namespace Air3550
             this.ToDateAfterTodayError.ForeColor = System.Drawing.Color.Red;
             this.ToDateAfterTodayError.Location = new System.Drawing.Point(1366, 283);
             this.ToDateAfterTodayError.Name = "ToDateAfterTodayError";
-            this.ToDateAfterTodayError.Size = new System.Drawing.Size(348, 25);
+            this.ToDateAfterTodayError.Size = new System.Drawing.Size(370, 25);
             this.ToDateAfterTodayError.TabIndex = 83;
-            this.ToDateAfterTodayError.Text = "Please Select a Date Before Today";
+            this.ToDateAfterTodayError.Text = "Please Select Today or Before Today";
             this.ToDateAfterTodayError.Visible = false;
             // 
             // FlightManagerHomeLabel
