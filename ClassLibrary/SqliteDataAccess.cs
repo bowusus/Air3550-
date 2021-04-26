@@ -98,6 +98,24 @@ namespace ClassLibrary
                 return currUserID; // return user id
             }
         }
+        public static void RemoveFromUserIDTable(int userID)
+        {
+            // This method goes into the database, specifically the userID table, 
+            // and removes the userID so no other user has it as well
+            using (SQLiteConnection con = new SQLiteConnection(LoadConnectionString()))
+            // closes the connection when there is an error or it is done executing
+            {
+                con.Open(); // open the connection
+                SQLiteCommand cmd = new SQLiteCommand();
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = "DELETE FROM userIDTable WHERE userID = @userID";
+                // use the provided information to add to the flightsBooked table
+                cmd.Parameters.AddWithValue("@userID", userID);
+                cmd.Connection = con;
+                cmd.ExecuteNonQuery();
+                con.Close();
+            }
+        }
         public static void CreateAccount(int tempUserID, string pass, string first, string last, string street1, string city1, string state1, string zip, string phone, string creditCardNumber1, int age1, string email1)
         {
             // This method goes into the database, specifically the customer table, 

@@ -29,8 +29,8 @@ namespace Air3550
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
             this.SearchButton = new System.Windows.Forms.Button();
             this.ToDateLabel = new System.Windows.Forms.Label();
             this.FromDateLabel = new System.Windows.Forms.Label();
@@ -50,6 +50,7 @@ namespace Air3550
             this.ToDateAfterTodayError = new System.Windows.Forms.Label();
             this.FlightManagerHomeLabel = new System.Windows.Forms.Label();
             this.DifferentLocationError = new System.Windows.Forms.Label();
+            this.NoFlightLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.FlightTable)).BeginInit();
             this.SuspendLayout();
             // 
@@ -163,23 +164,23 @@ namespace Air3550
             this.FlightTable.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.FlightTable.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.FlightTable.BackgroundColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Rockwell", 10F);
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.FlightTable.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle5.Font = new System.Drawing.Font("Rockwell", 10F);
+            dataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.FlightTable.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle5;
             this.FlightTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Rockwell", 10F);
-            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.FlightTable.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle6.Font = new System.Drawing.Font("Rockwell", 10F);
+            dataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.FlightTable.DefaultCellStyle = dataGridViewCellStyle6;
             this.FlightTable.Location = new System.Drawing.Point(70, 441);
             this.FlightTable.MultiSelect = false;
             this.FlightTable.Name = "FlightTable";
@@ -283,12 +284,24 @@ namespace Air3550
             this.DifferentLocationError.Text = "Please Select Two Different Locations";
             this.DifferentLocationError.Visible = false;
             // 
+            // NoFlightLabel
+            // 
+            this.NoFlightLabel.AutoSize = true;
+            this.NoFlightLabel.Font = new System.Drawing.Font("Rockwell", 24F);
+            this.NoFlightLabel.Location = new System.Drawing.Point(535, 768);
+            this.NoFlightLabel.Name = "NoFlightLabel";
+            this.NoFlightLabel.Size = new System.Drawing.Size(1162, 72);
+            this.NoFlightLabel.TabIndex = 86;
+            this.NoFlightLabel.Text = "There are no flights that have taken off";
+            this.NoFlightLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // FlightManagerHomePage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.HighlightText;
             this.ClientSize = new System.Drawing.Size(2222, 1078);
+            this.Controls.Add(this.NoFlightLabel);
             this.Controls.Add(this.DifferentLocationError);
             this.Controls.Add(this.FlightManagerHomeLabel);
             this.Controls.Add(this.ToDateAfterTodayError);
@@ -342,6 +355,7 @@ namespace Air3550
         private System.Windows.Forms.Label ToDateAfterTodayError;
         private System.Windows.Forms.Label FlightManagerHomeLabel;
         private System.Windows.Forms.Label DifferentLocationError;
+        private System.Windows.Forms.Label NoFlightLabel;
     }
 }
 

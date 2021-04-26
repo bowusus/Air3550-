@@ -20,6 +20,7 @@ namespace Air3550
         public static FlightModel flight;
         public static List<CustomerModel> name;
         public static PrintBoardingPassPage instance;
+        public static int tempRow = -1;
         public PrintBoardingPassPage()
         {
             InitializeComponent();
@@ -42,32 +43,6 @@ namespace Air3550
                 instance = new PrintBoardingPassPage(ref customer);
             }
             return instance;
-        }
-
-        private void BackButton_Click(object sender, EventArgs e)
-        {
-            // This methods allows the user to return to the Log In page
-            // The current form will close
-            // The Log In page will open
-            DialogResult result = MessageBox.Show("Are you sure that you want to return home?\nAny changes not saved will not be updated.", "Account Information", MessageBoxButtons.YesNo, MessageBoxIcon.None);
-            if (result == DialogResult.Yes)
-            {
-                CustomerHomePage.GetInstance(ref currCustomer).Show();
-                this.Dispose();
-            }
-        }
-        private void LogOutButton_Click(object sender, EventArgs e)
-        {
-            // This method allows the user to return to the log in page
-            // All open forms will close
-            // The log in page will open
-            // A message asks if the customer has saved everything they desire
-            DialogResult result = MessageBox.Show("Are you sure that you want to log out?\nAny changes not saved will not be updated.", "Log Out", MessageBoxButtons.YesNo, MessageBoxIcon.None);
-            if (result == DialogResult.Yes)
-            {
-                LogInPage.GetInstance.Show();
-                this.Dispose();
-            }
         }
         private void PrintBoardingPassPage_Load(object sender, EventArgs e)
         {
@@ -150,28 +125,35 @@ namespace Air3550
                 MessageBox.Show("You do not have any booked flights available", "", MessageBoxButtons.OK, MessageBoxIcon.Error);
             else
             {
-                DialogResult result = MessageBox.Show("Are you sure that you would like to print this boarding pass?", "Print Boarding Pass", MessageBoxButtons.YesNo, MessageBoxIcon.None);
-                if (result == DialogResult.Yes)
+                if (tempRow != -1)
+                {
+                    DialogResult result = MessageBox.Show("Are you sure that you would like to print this boarding pass?", "Print Boarding Pass", MessageBoxButtons.YesNo, MessageBoxIcon.None);
                     if (result == DialogResult.Yes)
                     {
-                        var _time = bookedFlights[0].departureDateTime.Subtract(time);
-                        // Boarding will be available to print 24 hours before a flight is scheduled to depart
-                        if (_time.TotalMinutes < 1440)
+                        if (result == DialogResult.Yes)
                         {
-                            PrintPreviewDialog ppd = new PrintPreviewDialog();
-                            PrintDocument Pd = new PrintDocument();
-                            PrinterSettings PrinterSetting = new PrinterSettings();
-                          //  Pd.PrinterSettings.PrinterName = "Eltron P310 Card Printer";
-                            Pd.PrinterSettings.Copies = 1;
-                            Pd.PrinterSettings.DefaultPageSettings.Landscape = true;
+                            var _time = bookedFlights[0].departureDateTime.Subtract(time);
+                            // Boarding will be available to print 24 hours before a flight is scheduled to depart
+                            if (_time.TotalMinutes < 1440)
+                            {
+                                PrintPreviewDialog ppd = new PrintPreviewDialog();
+                                PrintDocument Pd = new PrintDocument();
+                                PrinterSettings PrinterSetting = new PrinterSettings();
+                                //  Pd.PrinterSettings.PrinterName = "Eltron P310 Card Printer";
+                                Pd.PrinterSettings.Copies = 1;
+                                Pd.PrinterSettings.DefaultPageSettings.Landscape = true;
 
-                            Pd.PrintPage += printDocument1_PrintPage;
-                            ppd.Document = Pd;
-                            printPreviewDialog1.ShowDialog();
+                                Pd.PrintPage += printDocument1_PrintPage;
+                                ppd.Document = Pd;
+                                printPreviewDialog1.ShowDialog();
+                            }
+                            else
+                                MessageBox.Show("You are not within 24 hours of your flight and can not print boaring pass", "Print Boarding Pass", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
-                        else
-                            MessageBox.Show("You are not within 24 hours of your flight and can not print boaring pass", "Print Boarding Pass", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
+                }
+                else
+                    MessageBox.Show("You have not selected a flight for which to print your boarding pass?", "Error: Print Boarding Pass", MessageBoxButtons.OK, MessageBoxIcon.None);
             }
         }
         // this method prints the groupbox object with all the information in it 
@@ -201,6 +183,32 @@ namespace Air3550
                 DepText.Text = row.Cells[10].Value.ToString();
                 ArrivalText.Text = row.Cells[11].Value.ToString();
                 LastNameText.Text = row.Cells[3].Value.ToString();
+                tempRow = e.RowIndex;
+            }
+        }
+        private void BackButton_Click(object sender, EventArgs e)
+        {
+            // This methods allows the user to return to the Log In page
+            // The current form will close
+            // The Log In page will open
+            DialogResult result = MessageBox.Show("Are you sure that you want to return home?\nAny changes not saved will not be updated.", "Account Information", MessageBoxButtons.YesNo, MessageBoxIcon.None);
+            if (result == DialogResult.Yes)
+            {
+                CustomerHomePage.GetInstance(ref currCustomer).Show();
+                this.Dispose();
+            }
+        }
+        private void LogOutButton_Click(object sender, EventArgs e)
+        {
+            // This method allows the user to return to the log in page
+            // All open forms will close
+            // The log in page will open
+            // A message asks if the customer has saved everything they desire
+            DialogResult result = MessageBox.Show("Are you sure that you want to log out?\nAny changes not saved will not be updated.", "Log Out", MessageBoxButtons.YesNo, MessageBoxIcon.None);
+            if (result == DialogResult.Yes)
+            {
+                LogInPage.GetInstance.Show();
+                this.Dispose();
             }
         }
         private void PrintBoardingPassPage_FormClosing(object sender, FormClosingEventArgs e)

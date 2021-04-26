@@ -109,6 +109,8 @@ namespace Air3550
                 {
                     // get random id
                     int userID = SqliteDataAccess.GetRandUserID();
+                    // remove that id from the database
+                    SqliteDataAccess.RemoveFromUserIDTable(userID);
                     // encrypt the password
                     string pass = SystemAction.EncryptPassword(password);
 

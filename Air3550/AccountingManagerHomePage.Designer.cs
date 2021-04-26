@@ -42,7 +42,6 @@ namespace Air3550
             this.FlightManagerHomeLabel = new System.Windows.Forms.Label();
             this.ToDateAfterTodayError = new System.Windows.Forms.Label();
             this.FromDateAfterTodayError = new System.Windows.Forms.Label();
-            this.FlightManagerLabel = new System.Windows.Forms.Label();
             this.ClearFiltersButton = new System.Windows.Forms.Button();
             this.BeforeFromDateError = new System.Windows.Forms.Label();
             this.accountPage = new System.Windows.Forms.DataGridView();
@@ -59,6 +58,7 @@ namespace Air3550
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.CompanyStatisticsGroupBox = new System.Windows.Forms.GroupBox();
             this.PrintButton = new System.Windows.Forms.Button();
+            this.NoFlightLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.accountPage)).BeginInit();
             this.CompanyStatisticsGroupBox.SuspendLayout();
             this.SuspendLayout();
@@ -168,16 +168,6 @@ namespace Air3550
             this.FromDateAfterTodayError.TabIndex = 101;
             this.FromDateAfterTodayError.Text = "Please Select a Date Before Today";
             this.FromDateAfterTodayError.Visible = false;
-            // 
-            // FlightManagerLabel
-            // 
-            this.FlightManagerLabel.AutoSize = true;
-            this.FlightManagerLabel.Font = new System.Drawing.Font("Rockwell", 14F);
-            this.FlightManagerLabel.Location = new System.Drawing.Point(779, 121);
-            this.FlightManagerLabel.Name = "FlightManagerLabel";
-            this.FlightManagerLabel.Size = new System.Drawing.Size(661, 42);
-            this.FlightManagerLabel.TabIndex = 99;
-            this.FlightManagerLabel.Text = "Select a Flight To Print their Statistics";
             // 
             // ClearFiltersButton
             // 
@@ -363,19 +353,30 @@ namespace Air3550
             this.PrintButton.UseVisualStyleBackColor = false;
             this.PrintButton.Click += new System.EventHandler(this.PrintButton_Click);
             // 
+            // NoFlightLabel
+            // 
+            this.NoFlightLabel.AutoSize = true;
+            this.NoFlightLabel.Font = new System.Drawing.Font("Rockwell", 24F);
+            this.NoFlightLabel.Location = new System.Drawing.Point(522, 794);
+            this.NoFlightLabel.Name = "NoFlightLabel";
+            this.NoFlightLabel.Size = new System.Drawing.Size(1162, 72);
+            this.NoFlightLabel.TabIndex = 108;
+            this.NoFlightLabel.Text = "There are no flights that have taken off";
+            this.NoFlightLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // AccountingManagerHomePage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.HighlightText;
             this.ClientSize = new System.Drawing.Size(2218, 1064);
+            this.Controls.Add(this.NoFlightLabel);
             this.Controls.Add(this.PrintButton);
             this.Controls.Add(this.CompanyStatisticsGroupBox);
             this.Controls.Add(this.DifferentLocationError);
             this.Controls.Add(this.FlightManagerHomeLabel);
             this.Controls.Add(this.ToDateAfterTodayError);
             this.Controls.Add(this.FromDateAfterTodayError);
-            this.Controls.Add(this.FlightManagerLabel);
             this.Controls.Add(this.ClearFiltersButton);
             this.Controls.Add(this.BeforeFromDateError);
             this.Controls.Add(this.accountPage);
@@ -418,7 +419,6 @@ namespace Air3550
         private System.Windows.Forms.Label FlightManagerHomeLabel;
         private System.Windows.Forms.Label ToDateAfterTodayError;
         private System.Windows.Forms.Label FromDateAfterTodayError;
-        private System.Windows.Forms.Label FlightManagerLabel;
         private System.Windows.Forms.Button ClearFiltersButton;
         private System.Windows.Forms.Label BeforeFromDateError;
         private System.Windows.Forms.DataGridView accountPage;
@@ -435,6 +435,7 @@ namespace Air3550
         private System.ComponentModel.BackgroundWorker backgroundWorker1;
         private System.Windows.Forms.GroupBox CompanyStatisticsGroupBox;
         private System.Windows.Forms.Button PrintButton;
+        private System.Windows.Forms.Label NoFlightLabel;
     }
 }
 

@@ -65,8 +65,8 @@ namespace Air3550
             ArriveComboBox.SelectedItem = null;
             ArriveComboBox.SelectedText = "";
             accountPage.Visible = false;
-            FlightManagerLabel.Visible = false;
             CompanyStatisticsGroupBox.Visible = false;
+            NoFlightLabel.Visible = false;
         }
 
         private void SearchButton_Click(object sender, EventArgs e)
@@ -105,12 +105,16 @@ namespace Air3550
             if (BeforeFromDateError.Visible == false && DifferentLocationError.Visible == false)
             {
                 CompanyStatisticsGroupBox.Visible = true;
-                accountPage.DataSource = SqliteDataAccess.GetFlights(origin, destination, fromDate, toDate); // get the flights that have the specified values
+                List<FlightModel> flights = SqliteDataAccess.GetFlights(origin, destination, fromDate, toDate); // get the flights that have the specified values
+                accountPage.DataSource = flights;
                 accountPage.Visible = true; // display the table
                 accountPage.ClearSelection();
+                if (flights.Count == 0)
+                    NoFlightLabel.Visible = true;
+                else
+                    NoFlightLabel.Visible = false;
                 TotalFlightCountLabel.Text = "Total Flights Traveled: " + SqliteDataAccess.GetCompanyFlightCount(origin, destination, fromDate, toDate).ToString();
                 TotalRevenueLabel.Text = "Total Company Income: $" + SqliteDataAccess.GetCompanyIncome(origin, destination, fromDate, toDate).ToString("0.00");
-                FlightManagerLabel.Visible = true;
                 FormatGrid(); // format the grid
             }
         }
@@ -133,7 +137,7 @@ namespace Air3550
             accountPage.Columns[3].HeaderText = "Destination Code";
             accountPage.Columns[4].HeaderText = "Distance (in miles)";
             accountPage.Columns[5].HeaderText = "Departure Date and Time";
-            accountPage.Columns[6].HeaderText = "Duration (in hours...ex: 1.5 = 1 hour 30 minutes)";
+            accountPage.Columns[6].HeaderText = "Duration (in hours)";
             accountPage.Columns[7].HeaderText = "Plane Type";
             accountPage.Columns[8].HeaderText = "Cost (in dollars)";
             accountPage.Columns[9].HeaderText = "Number of Vacant Seats";
@@ -213,11 +217,11 @@ namespace Air3550
             ArriveComboBox.SelectedIndex = -1;
             FromDatePicker.ResetText();
             ToDatePicker.ResetText();
-            FlightManagerLabel.Visible = false;
             accountPage.Visible = false;
             BeforeFromDateError.Visible = false;
             DifferentLocationError.Visible = false;
             CompanyStatisticsGroupBox.Visible = false;
+            NoFlightLabel.Visible = false;
         }
         private void LogOutButton_Click(object sender, EventArgs e)
         {

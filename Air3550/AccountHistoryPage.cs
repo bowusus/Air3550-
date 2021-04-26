@@ -168,7 +168,6 @@ namespace Air3550
                     cancelflight.Add(flight);
                     i += 1;
                 }
-
             }
             AccountHistoryTable.DataSource = cancelflight;
             AccountHistoryTable.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
@@ -179,7 +178,6 @@ namespace Air3550
                 NoCancelledFlightLabel.Visible = false;
             FormatDataGrid();
         }
-
         private void FlightsTakenButton_Click(object sender, EventArgs e)
         {
             // This method loads all taken flights for the current customer

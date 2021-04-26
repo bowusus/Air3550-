@@ -83,6 +83,7 @@ namespace Air3550
             DepartintFlightsLabel.Visible = false;
             ReturningFlightsLabel.Visible = false;
             ChangeDepartingFlightButton.Visible = false;
+            NoFlightLabel.Visible = false;
         }
         private void RoundTripButton_Click(object sender, EventArgs e)
         {
@@ -90,6 +91,7 @@ namespace Air3550
             // then it makes the return date label and picker and return flight button visible to the customer
             ReturnDateLabel.Visible = true;
             ReturnDatePicker.Visible = true;
+            NoFlightLabel.Visible = false;
             // if the search has already been clicked, then if the round trip button is clicked, the return flight button should be visible and the book flight button should not be visible
             if (AvailableFlightTable.Visible)
             {
@@ -109,6 +111,7 @@ namespace Air3550
             EmptyError.Visible = false;
             ReturnDateLabel.Visible = false;
             ReturnDatePicker.Visible = false;
+            NoFlightLabel.Visible = false;
             // if the search has already been clicked, then if the one way button is clicked, the return flight button should not be visible and the book flight button should be visible
             if (AvailableFlightTable.Visible)
             {
@@ -166,7 +169,7 @@ namespace Air3550
             AvailableFlightTable.Columns[0].HeaderText = "Overall Route ID";
             AvailableFlightTable.Columns[1].HeaderText = "Departure Date and Time";
             AvailableFlightTable.Columns[2].HeaderText = "Est. Arrival Date and Time";
-            AvailableFlightTable.Columns[3].HeaderText = "Est. Duration";
+            AvailableFlightTable.Columns[3].HeaderText = "Est. Duration (h:mm:ss)";
             AvailableFlightTable.Columns[4].HeaderText = "Number of Layovers";
             AvailableFlightTable.Columns[5].HeaderText = "Layover Flight IDs";
             AvailableFlightTable.Columns[6].HeaderText = "Change Plane";
@@ -225,6 +228,11 @@ namespace Air3550
                 // get all of the available flights for the specified origin and destination
                 departingRoutes = SystemAction.GetFlights_MasterID(DepartComboBox.Text.Substring(0, 3), ArriveComboBox.Text.Substring(0, 3), DepartDatePicker.Value, DateTime.Now);
                 AvailableFlightTable.DataSource = departingRoutes;
+                AvailableFlightTable.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+                if (departingRoutes.Count == 0)
+                    NoFlightLabel.Visible = true;
+                else
+                    NoFlightLabel.Visible = false;
                 // clear the table's selection so no row is clicked
                 AvailableFlightTable.ClearSelection();
                 FormatGrid();
@@ -237,24 +245,54 @@ namespace Air3550
                 MessageBox.Show("No Departure Flight was Selected. Please Select a Departure Flight before continuing.", "Error: Choose a Departure Flight", MessageBoxButtons.OK, MessageBoxIcon.Error);
             else
             {
-                // add the selected flight to the selected routes list
-                selectedRoutes.Add(departingRoutes[tempRouteSelected]);
-                // set some of the buttons, labels, and the table visibility
-                AvailableFlightTable.Visible = true;
-                ReturnFlightButton.Visible = false;
-                BookFlightButton.Visible = true;
-                ChangeDepartingFlightButton.Visible = true;
-                DepartintFlightsLabel.Visible = false;
-                ReturningFlightsLabel.Visible = true;
+                List<int> flightIDsAlreadyBooked = SqliteDataAccess.GetBookedFlightIDs(currCustomer.userID);
+                List<int> flightIDsToBeBooked = SystemAction.DeriveFlightIDs_SelectedRoute(departingRoutes[tempRouteSelected].flightIDs);
+                int alreadyBooked = 0;
+                DialogResult Result;
+                foreach (int id in flightIDsToBeBooked)
+                {
+                    if (flightIDsAlreadyBooked.Contains(id))
+                        alreadyBooked += 1;
+                }
+                if (alreadyBooked != 0 && alreadyBooked != flightIDsToBeBooked.Count)
+                {
+                    Result = MessageBox.Show(alreadyBooked + " flight(s) that you selected in your desired route is already booked.\nWould you like to continue, or do you want to go look at your currently booked flights?", "Error: Choose a Departure Flight", MessageBoxButtons.YesNo, MessageBoxIcon.Error);
+                    if (Result == DialogResult.No)
+                    {
+                        CustomerHomePage.GetInstance(ref currCustomer).Show();
+                        this.Dispose();
+                    }
+                }
+                else if (alreadyBooked != 0 && alreadyBooked == flightIDsToBeBooked.Count)
+                {
+                    MessageBox.Show("You are already booked for the flight(s)/route that you chose", "Error: Choose a Departure Flight", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                if (alreadyBooked != flightIDsToBeBooked.Count && !this.IsDisposed)
+                {
+                    // add the selected flight to the selected routes list
+                    selectedRoutes.Add(departingRoutes[tempRouteSelected]);
+                    // set some of the buttons, labels, and the table visibility
+                    AvailableFlightTable.Visible = true;
+                    ReturnFlightButton.Visible = false;
+                    BookFlightButton.Visible = true;
+                    ChangeDepartingFlightButton.Visible = true;
+                    DepartintFlightsLabel.Visible = false;
+                    ReturningFlightsLabel.Visible = true;
 
-                returningRoutes = new List<Route>();
-                // get all of the available flights for the specified origin and destination
-                AvailableFlightTable.DataSource = null;
-                returningRoutes = SystemAction.GetFlights_MasterID(ArriveComboBox.Text.Substring(0, 3), DepartComboBox.Text.Substring(0, 3), ReturnDatePicker.Value, selectedRoutes[0].departTime);
-                AvailableFlightTable.DataSource = returningRoutes;
-                // clear the table's selection so no row is clicked
-                AvailableFlightTable.ClearSelection();
-                FormatGrid();
+                    returningRoutes = new List<Route>();
+                    // get all of the available flights for the specified origin and destination
+                    AvailableFlightTable.DataSource = null;
+                    returningRoutes = SystemAction.GetFlights_MasterID(ArriveComboBox.Text.Substring(0, 3), DepartComboBox.Text.Substring(0, 3), ReturnDatePicker.Value, selectedRoutes[0].departTime);
+                    AvailableFlightTable.DataSource = returningRoutes;
+                    AvailableFlightTable.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+                    if (returningRoutes.Count == 0)
+                        NoFlightLabel.Visible = true;
+                    else
+                        NoFlightLabel.Visible = false;
+                    // clear the table's selection so no row is clicked
+                    AvailableFlightTable.ClearSelection();
+                    FormatGrid();
+                }
             }
         }
         private void ChangeDepartingFlightButton_Click(object sender, EventArgs e)
@@ -288,17 +326,64 @@ namespace Air3550
             {
                 // if the one way button was clicked, then add the selected flight, make the book flight button still visible, and make the return flight button not visible
                 // if the round trip button was clicked, then add the selected return flight, make the book flight button not visible, and make the return flight button visible
+                List<int> flightIDsAlreadyBooked = SqliteDataAccess.GetBookedFlightIDs(currCustomer.userID);
+                int alreadyBooked = 0;
+                DialogResult Result;
                 if (OneWayButton.Checked)
                 {
-                    selectedRoutes.Add(departingRoutes[tempRouteSelected]); 
-                    ReturnFlightButton.Visible = false;
-                    BookFlightButton.Visible = true;
+                    List<int> flightIDsToBeBooked = SystemAction.DeriveFlightIDs_SelectedRoute(departingRoutes[tempRouteSelected].flightIDs);
+                    foreach (int id in flightIDsToBeBooked)
+                    {
+                        if (flightIDsAlreadyBooked.Contains(id))
+                            alreadyBooked += 1;
+                    }
+                    if (alreadyBooked != 0 && alreadyBooked != flightIDsToBeBooked.Count)
+                    {
+                        Result = MessageBox.Show(alreadyBooked + " flight(s) that you selected in your desired route is already booked.\nWould you like to continue, or do you want to go look at your currently booked flights?", "Error: Choose a Departure Flight", MessageBoxButtons.YesNo, MessageBoxIcon.Error);
+                        if (Result == DialogResult.No)
+                        {
+                            CustomerHomePage.GetInstance(ref currCustomer).Show();
+                            this.Dispose();
+                        }
+                    }
+                    else if (alreadyBooked != 0 && alreadyBooked == flightIDsToBeBooked.Count)
+                    {
+                        MessageBox.Show("You are already booked for the flight(s)/route that you chose", "Error: Choose a Departure Flight", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    if (alreadyBooked != flightIDsToBeBooked.Count && !this.IsDisposed)
+                    {
+                        selectedRoutes.Add(departingRoutes[tempRouteSelected]);
+                        ReturnFlightButton.Visible = false;
+                        BookFlightButton.Visible = true;
+                    }
                 }
                 else
                 {
-                    selectedRoutes.Add(returningRoutes[tempRouteSelected]);
-                    ReturnFlightButton.Visible = true;
-                    BookFlightButton.Visible = false;
+                    List<int> flightIDsToBeBooked = SystemAction.DeriveFlightIDs_SelectedRoute(returningRoutes[tempRouteSelected].flightIDs);
+                    foreach (int id in flightIDsToBeBooked)
+                    {
+                        if (flightIDsAlreadyBooked.Contains(id))
+                            alreadyBooked += 1;
+                    }
+                    if (alreadyBooked != 0 && alreadyBooked != flightIDsToBeBooked.Count)
+                    {
+                        Result = MessageBox.Show(alreadyBooked + " flight(s) that you selected in your desired route is already booked.\nWould you like to continue, or do you want to go look at your currently booked flights?", "Error: Choose a Departure Flight", MessageBoxButtons.YesNo, MessageBoxIcon.Error);
+                        if (Result == DialogResult.No)
+                        {
+                            CustomerHomePage.GetInstance(ref currCustomer).Show();
+                            this.Dispose();
+                        }
+                    }
+                    else if (alreadyBooked != 0 && alreadyBooked == flightIDsToBeBooked.Count)
+                    {
+                        MessageBox.Show("You are already booked for the flight(s)/route that you chose", "Error: Choose a Departure Flight", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    if (alreadyBooked != flightIDsToBeBooked.Count && !this.IsDisposed)
+                    {
+                        selectedRoutes.Add(returningRoutes[tempRouteSelected]);
+                        ReturnFlightButton.Visible = true;
+                        BookFlightButton.Visible = false;
+                    }
                 }
                 // Get the payment page and send the required information
                 PaymentPage.GetInstance(ref currCustomer, selectedRoutes, DepartDatePicker.Value, ReturnDatePicker.Value, DepartComboBox.SelectedValue.ToString(), ArriveComboBox.SelectedValue.ToString()).Show();

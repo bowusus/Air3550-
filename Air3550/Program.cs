@@ -17,8 +17,6 @@ namespace Air3550
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-
-            /* Just for testing LE home page uncomment it later */
             SystemAction.CleanAvailableFlights();
             SqliteDataAccess.CleanRoutes();
             SystemAction.GenerateFlights();

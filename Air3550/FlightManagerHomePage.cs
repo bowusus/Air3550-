@@ -60,6 +60,7 @@ namespace Air3550
             FlightTable.Visible = false;
             ViewFlightManifestButton.Visible = false;
             FlightManagerLabel.Visible = false;
+            NoFlightLabel.Visible = false;
         }
         private void SearchButton_Click(object sender, EventArgs e)
         {
@@ -92,11 +93,16 @@ namespace Air3550
                 BeforeFromDateError.Visible = true;
             if (BeforeFromDateError.Visible == false && DifferentLocationError.Visible == false)
             {
-                FlightTable.DataSource = SqliteDataAccess.GetFlights(origin, destination, fromDate, toDate); // get the flights that have the specified values
+                List<FlightModel> flights = SqliteDataAccess.GetFlights(origin, destination, fromDate, toDate); // get the flights that have the specified values
+                FlightTable.DataSource = flights;
                 FlightTable.Visible = true; // display the table
                 FlightTable.ClearSelection();
                 ViewFlightManifestButton.Visible = true;
                 FlightManagerLabel.Visible = true;
+                if (flights.Count == 0)
+                    NoFlightLabel.Visible = true;
+                else
+                    NoFlightLabel.Visible = false;
                 FormatGrid(); // format the grid
             }
         }
@@ -119,7 +125,7 @@ namespace Air3550
             FlightTable.Columns[3].HeaderText = "Destination Code"; 
             FlightTable.Columns[4].HeaderText = "Distance (in miles)";
             FlightTable.Columns[5].HeaderText = "Departure Date and Time";
-            FlightTable.Columns[6].HeaderText = "Duration (in hours...ex: 1.5 = 1 hour 30 minutes)";
+            FlightTable.Columns[6].HeaderText = "Duration (in hours)";
             FlightTable.Columns[7].HeaderText = "Plane Type";
             FlightTable.Columns[8].HeaderText = "Cost (in dollars)";
             FlightTable.Columns[9].HeaderText = "Number of Vacant Seats";
@@ -138,6 +144,7 @@ namespace Air3550
             FlightTable.Visible = false;
             BeforeFromDateError.Visible = false;
             DifferentLocationError.Visible = false;
+            NoFlightLabel.Visible = false;
         }
         private void ViewFlightManifestButton_Click(object sender, EventArgs e)
         {
