@@ -160,7 +160,7 @@ namespace Air3550
                         }
                     }
                 }
-                SqliteDataAccess.UpdateAvailablePoints(currCustomer.userID, available + points);
+                SqliteDataAccess.UpdateAvailablePoints(currCustomer.userID, available + (points / 10));
                 MessageBox.Show("You are now scheduled for your flight(s)", "Success: Flight(s) Booked", MessageBoxButtons.OK, MessageBoxIcon.None);
                 CustomerHomePage.GetInstance(ref currCustomer).Show();
                 this.Dispose();
