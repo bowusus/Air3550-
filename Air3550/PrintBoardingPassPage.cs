@@ -16,7 +16,7 @@ namespace Air3550
     {
         // This form file is to document the actions done on the Print Boarding Pass Page specifically
         public static CustomerModel currCustomer; // make a local object that can be read in the current context
-        public static List<FlightModel> bookedFlights = new List<FlightModel>();
+        public static List<FlightModel> bookedFlights;
         public static FlightModel flight;
         public static List<CustomerModel> name;
         public static PrintBoardingPassPage instance;
@@ -52,41 +52,29 @@ namespace Air3550
             // This method loads all current flights for the current customer
             // These are the flights that the customer can cancel
             // There can be multiple flights due to a round trip or if a flight has layovers
-            List<int> routeIDs = SqliteDataAccess.GetBookedFlightsRouteID(currCustomer.userID); // get the route IDs from the booked flights table
-            List<int> flightIDs_Booked = SqliteDataAccess.GetBookedFlightIDs(currCustomer.userID);
-            int count;
+            NoFlightLabel.Visible = false;
+
+            bookedFlights = new List<FlightModel>();
             int i = 0;
-            int j = 0;
-            if (bookedFlights.Count == 0)
+            List<int> flightID = SqliteDataAccess.GetBookedFlightIDs(currCustomer.userID);
+            if (flightID.Count != 0)
             {
-                if (flightIDs_Booked.Count != 0)
-                // as long as there is a flight currently booked with a route ID
-                // then check if each ID in the route is still booked and add it to the booked flights list
+                foreach (int fID in flightID)
                 {
-                    foreach (int rID in routeIDs)
-                    {
-                        List<int> masterFlightIDsRoute = SqliteDataAccess.GetFlightIDsInRoute(rID);
-                        count = masterFlightIDsRoute.Count;
-                        while (i < count)
-                        {
-                            FlightModel flight;
-                            flight = SystemAction.GetBoardingFlights(flightIDs_Booked[j], i, ref currCustomer);
-                            i += 1;
-                            bookedFlights.Add(flight);
-                            j += 1;
-                        }
-                        i = 0;
-                    }
+                    FlightModel flight = SystemAction.GetBoardingFlights(fID, i, ref currCustomer);
+
+                    bookedFlights.Add(flight);
+                    i += 1;
                 }
             }
             BoardingPassTable.DataSource = bookedFlights;
             BoardingPassTable.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
-            BoardingPassTable.ClearSelection();
+            BoardingPassTable.Visible = true;
             if (bookedFlights.Count == 0)
                 NoFlightLabel.Visible = true;
             else
                 NoFlightLabel.Visible = false;
-            FormatDataGrid(); // remove and rename certain columns
+            FormatDataGrid();
         }
         // Used to rename and remove certain columns not needed in the boarding pass
         public void FormatDataGrid()
@@ -132,7 +120,7 @@ namespace Air3550
                     {
                         if (result == DialogResult.Yes)
                         {
-                            var _time = bookedFlights[0].departureDateTime.Subtract(time);
+                            var _time = bookedFlights[tempRow].departureDateTime.Subtract(time);
                             // Boarding will be available to print 24 hours before a flight is scheduled to depart
                             if (_time.TotalMinutes < 1440)
                             {

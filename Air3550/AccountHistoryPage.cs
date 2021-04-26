@@ -16,7 +16,7 @@ namespace Air3550
         // This form file is to document the actions done on the Account History specifically
         public static CustomerModel currCustomer; // make a local object that can be read in the current context
         public static AccountHistoryPage instance;
-        public static List<FlightModel> bookedFlights =  new List<FlightModel>();
+        public static List<FlightModel> bookedFlights;
         public static List<FlightModel> takenFlights;
         public static List<FlightModel> cancelflight;
         public AccountHistoryPage()
@@ -89,31 +89,39 @@ namespace Air3550
             NoCancelledFlightLabel.Visible = false;
             NoTakenFlightLabel.Visible = false;
 
-            List<int> routeIDs = SqliteDataAccess.GetBookedFlightsRouteID(currCustomer.userID); // get the route IDs from the booked flights table
-            List<int> flightIDs_Booked = SqliteDataAccess.GetBookedFlightIDs(currCustomer.userID);
-            int count;
+            bookedFlights = new List<FlightModel>();
             int i = 0;
-            int j = 0;
-            if (bookedFlights.Count == 0)
+            List<int> flightID = SqliteDataAccess.GetBookedFlightIDs(currCustomer.userID);
+            if (flightID.Count != 0)
             {
-                if (flightIDs_Booked.Count != 0)
-                // as long as there is a flight currently booked with a route ID
-                // then check if each ID in the route is still booked and add it to the booked flights list
+                foreach (int rID in flightID)
                 {
-                    foreach (int rID in routeIDs)
-                    {
-                        List<int> masterFlightIDsRoute = SqliteDataAccess.GetFlightIDsInRoute(rID);
-                        count = masterFlightIDsRoute.Count;
-                        while (i < count)
-                        {
-                            FlightModel flight;
-                            flight = SystemAction.GetFlight(flightIDs_Booked[j], i);
-                            i += 1;
-                            bookedFlights.Add(flight);
-                            j += 1;
-                        }
-                        i = 0;
-                    }
+                    List<string> flightData = SqliteDataAccess.GetFlightData(rID);
+                    string originName = SqliteDataAccess.GetFlightNames(flightData[2]);
+                    string destinationName = SqliteDataAccess.GetFlightNames(flightData[3]);
+
+                    DateTime departureDateTime = DateTime.Parse(flightData[4] + " " + flightData[5]);
+                    DateTime arriveDateTime = departureDateTime.AddHours(Convert.ToDouble(flightData[7]));
+
+                    int depHour = departureDateTime.Hour;
+                    int arrHour = arriveDateTime.Hour;
+
+                    double currCost;
+                    if (i == 0)
+                        currCost = SystemAction.CalculateCost(depHour, arrHour, Convert.ToDouble(flightData[9]) + 50);
+                    else
+                        currCost = SystemAction.CalculateCost(depHour, arrHour, Convert.ToDouble(flightData[9]) + 8);
+                    int currPoints = Convert.ToInt32(currCost * 100);
+
+                    var duration = arriveDateTime.Subtract(departureDateTime);
+                    duration = new TimeSpan(duration.Ticks / TimeSpan.TicksPerSecond * TimeSpan.TicksPerSecond);
+
+                    departureDateTime = arriveDateTime.Subtract(duration);
+
+                    FlightModel flight = new FlightModel(int.Parse(flightData[0]), int.Parse(flightData[1]), flightData[2], originName, flightData[3], destinationName, int.Parse(flightData[6]), departureDateTime, arriveDateTime, duration, flightData[8], Math.Round(currCost, 2), currPoints, int.Parse(flightData[10]), Convert.ToDouble(flightData[11]));
+
+                    bookedFlights.Add(flight);
+                    i += 1;
                 }
             }
             AccountHistoryTable.DataSource = bookedFlights;

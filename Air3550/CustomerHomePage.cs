@@ -15,7 +15,7 @@ namespace Air3550
     {
         // This form file is to document the actions done on the Customer Home Page specifically
         private static CustomerHomePage instance;
-        public static CustomerModel currCustomer; // make a local object that can be read in the current context
+        private static CustomerModel currCustomer; // make a local object that can be read in the current context
         public CustomerHomePage()
         {
             InitializeComponent();

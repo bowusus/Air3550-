@@ -16,7 +16,7 @@ namespace Air3550
         // This form file is to document the actions done on the Cancel Flight Page specifically
         private static CancelFlightPage instance;
         public static CustomerModel currCustomer; // make a local object that can be read in the current context
-        public static List<FlightModel> bookedFlights = new List<FlightModel>(); // list of booked flights that gets updated throughout the form
+        public static List<FlightModel> bookedFlights; // list of booked flights that gets updated throughout the form
         public static int tempFlightSelected; // route that the user temporarily selects
         public CancelFlightPage()
         {
@@ -40,46 +40,51 @@ namespace Air3550
         }
         private void CancelFlightPage_Load(object sender, EventArgs e)
         {
-            // The main reason for this method is to fill the datagridview initially
-            // This method loads all current flights for the current customer
-            // These are the flights that the customer can cancel
-            // There can be multiple flights due to a round trip or if a flight has layovers
-            List<int> routeIDs = SqliteDataAccess.GetBookedFlightsRouteID(currCustomer.userID); // get the route IDs from the booked flights table
-            List<int> flightIDs_Booked = SqliteDataAccess.GetBookedFlightIDs(currCustomer.userID);
-            int count;
+            NoFlightLabel.Visible = false;
+
+            bookedFlights = new List<FlightModel>();
             int i = 0;
-            int j = 0;
-            if (bookedFlights.Count == 0)
+            List<int> flightID = SqliteDataAccess.GetBookedFlightIDs(currCustomer.userID);
+            if (flightID.Count != 0)
             {
-                if (flightIDs_Booked.Count != 0 ) 
-                // as long as there is a flight currently booked with a route ID
-                // then check if each ID in the route is still booked and add it to the booked flights list
+                foreach (int rID in flightID)
                 {
-                    foreach (int rID in routeIDs)
-                    {
-                        List<int> masterFlightIDsRoute = SqliteDataAccess.GetFlightIDsInRoute(rID);
-                        count = masterFlightIDsRoute.Count;
-                        while (i < count)
-                        {
-                            FlightModel flight;
-                            flight = SystemAction.GetFlight(flightIDs_Booked[j], i);
-                            i += 1;
-                            bookedFlights.Add(flight);
-                            j += 1;
-                        }
-                        i = 0;
-                    }
+                    List<string> flightData = SqliteDataAccess.GetFlightData(rID);
+                    string originName = SqliteDataAccess.GetFlightNames(flightData[2]);
+                    string destinationName = SqliteDataAccess.GetFlightNames(flightData[3]);
+
+                    DateTime departureDateTime = DateTime.Parse(flightData[4] + " " + flightData[5]);
+                    DateTime arriveDateTime = departureDateTime.AddHours(Convert.ToDouble(flightData[7]));
+
+                    int depHour = departureDateTime.Hour;
+                    int arrHour = arriveDateTime.Hour;
+
+                    double currCost;
+                    if (i == 0)
+                        currCost = SystemAction.CalculateCost(depHour, arrHour, Convert.ToDouble(flightData[9]) + 50);
+                    else
+                        currCost = SystemAction.CalculateCost(depHour, arrHour, Convert.ToDouble(flightData[9]) + 8);
+                    int currPoints = Convert.ToInt32(currCost * 100);
+
+                    var duration = arriveDateTime.Subtract(departureDateTime);
+                    duration = new TimeSpan(duration.Ticks / TimeSpan.TicksPerSecond * TimeSpan.TicksPerSecond);
+
+                    departureDateTime = arriveDateTime.Subtract(duration);
+
+                    FlightModel flight = new FlightModel(int.Parse(flightData[0]), int.Parse(flightData[1]), flightData[2], originName, flightData[3], destinationName, int.Parse(flightData[6]), departureDateTime, arriveDateTime, duration, flightData[8], Math.Round(currCost, 2), currPoints, int.Parse(flightData[10]), Convert.ToDouble(flightData[11]));
+
+                    bookedFlights.Add(flight);
+                    i += 1;
                 }
             }
-            // This list of FlightModel objects will be the data source of the datagridview table
             CancelFlightTable.DataSource = bookedFlights;
             CancelFlightTable.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
-            FormatDataGrid();
-            // as long as there are booked flights, then do not display the no flight label
+            CancelFlightTable.Visible = true;
             if (bookedFlights.Count == 0)
                 NoFlightLabel.Visible = true;
             else
                 NoFlightLabel.Visible = false;
+            FormatDataGrid();
         }
         public void FormatDataGrid()
         {
@@ -231,31 +236,39 @@ namespace Air3550
                         CancelFlightTable.DataSource = null;
                         // all of the flights should be taken out of the database, but if there are any, then they are displayed
                         // otherwise, bookedFlights is cleared and a no flights label is displayed
-                        List<int> routeIDs = SqliteDataAccess.GetBookedFlightsRouteID(currCustomer.userID); // get the route IDs from the booked flights table
-                        List<int> flightIDs_Booked = SqliteDataAccess.GetBookedFlightIDs(currCustomer.userID);
-                        int count;
+                        bookedFlights = new List<FlightModel>();
                         int i = 0;
-                        int j = 0;
-                        if (flightIDs_Booked.Count != 0)
+                        List<int> flightID = SqliteDataAccess.GetBookedFlightIDs(currCustomer.userID);
+                        if (flightID.Count != 0)
                         {
-                            if (flightIDs_Booked.Count != 0)
-                            // as long as there is a flight currently booked with a route ID
-                            // then check if each ID in the route is still booked and add it to the booked flights list
+                            foreach (int rID in flightID)
                             {
-                                foreach (int rID in routeIDs)
-                                {
-                                    List<int> masterFlightIDsRoute = SqliteDataAccess.GetFlightIDsInRoute(rID);
-                                    count = masterFlightIDsRoute.Count;
-                                    while (i < count)
-                                    {
-                                        FlightModel flight;
-                                        flight = SystemAction.GetFlight(flightIDs_Booked[j], i);
-                                        i += 1;
-                                        bookedFlights.Add(flight);
-                                        j += 1;
-                                    }
-                                    i = 0;
-                                }
+                                List<string> flightData = SqliteDataAccess.GetFlightData(rID);
+                                string originName = SqliteDataAccess.GetFlightNames(flightData[2]);
+                                string destinationName = SqliteDataAccess.GetFlightNames(flightData[3]);
+
+                                DateTime departureDateTime = DateTime.Parse(flightData[4] + " " + flightData[5]);
+                                DateTime arriveDateTime = departureDateTime.AddHours(Convert.ToDouble(flightData[7]));
+
+                                int depHour = departureDateTime.Hour;
+                                int arrHour = arriveDateTime.Hour;
+
+                                double currCost;
+                                if (i == 0)
+                                    currCost = SystemAction.CalculateCost(depHour, arrHour, Convert.ToDouble(flightData[9]) + 50);
+                                else
+                                    currCost = SystemAction.CalculateCost(depHour, arrHour, Convert.ToDouble(flightData[9]) + 8);
+                                int currPoints = Convert.ToInt32(currCost * 100);
+
+                                var duration = arriveDateTime.Subtract(departureDateTime);
+                                duration = new TimeSpan(duration.Ticks / TimeSpan.TicksPerSecond * TimeSpan.TicksPerSecond);
+
+                                departureDateTime = arriveDateTime.Subtract(duration);
+
+                                FlightModel flight = new FlightModel(int.Parse(flightData[0]), int.Parse(flightData[1]), flightData[2], originName, flightData[3], destinationName, int.Parse(flightData[6]), departureDateTime, arriveDateTime, duration, flightData[8], Math.Round(currCost, 2), currPoints, int.Parse(flightData[10]), Convert.ToDouble(flightData[11]));
+
+                                bookedFlights.Add(flight);
+                                i += 1;
                             }
                         }
                         else
