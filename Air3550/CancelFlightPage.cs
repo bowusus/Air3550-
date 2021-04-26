@@ -47,9 +47,12 @@ namespace Air3550
             List<int> flightID = SqliteDataAccess.GetBookedFlightIDs(currCustomer.userID);
             if (flightID.Count != 0)
             {
-                foreach (int rID in flightID)
+                foreach (int fID in flightID)
                 {
-                    List<string> flightData = SqliteDataAccess.GetFlightData(rID);
+                    int routeID = SqliteDataAccess.GetBookedFlightsRouteID(fID);
+                    List<int> flightIDs = SqliteDataAccess.GetFlightIDsInRoute(routeID);
+                    int count = flightIDs.Count;
+                    List<string> flightData = SqliteDataAccess.GetFlightData(fID);
                     string originName = SqliteDataAccess.GetFlightNames(flightData[2]);
                     string destinationName = SqliteDataAccess.GetFlightNames(flightData[3]);
 
@@ -74,7 +77,15 @@ namespace Air3550
                     FlightModel flight = new FlightModel(int.Parse(flightData[0]), int.Parse(flightData[1]), flightData[2], originName, flightData[3], destinationName, int.Parse(flightData[6]), departureDateTime, arriveDateTime, duration, flightData[8], Math.Round(currCost, 2), currPoints, int.Parse(flightData[10]), Convert.ToDouble(flightData[11]));
 
                     bookedFlights.Add(flight);
-                    i += 1;
+                    
+                    if (i == count - 1)
+                    {
+                        i = 0;
+                    }
+                    else
+                    {
+                        i++;
+                    }
                 }
             }
             CancelFlightTable.DataSource = bookedFlights;
@@ -241,9 +252,12 @@ namespace Air3550
                         List<int> flightID = SqliteDataAccess.GetBookedFlightIDs(currCustomer.userID);
                         if (flightID.Count != 0)
                         {
-                            foreach (int rID in flightID)
+                            foreach (int fID in flightID)
                             {
-                                List<string> flightData = SqliteDataAccess.GetFlightData(rID);
+                                int routeID = SqliteDataAccess.GetBookedFlightsRouteID(fID);
+                                List<int> flightIDs = SqliteDataAccess.GetFlightIDsInRoute(routeID);
+                                int count = flightIDs.Count;
+                                List<string> flightData = SqliteDataAccess.GetFlightData(fID);
                                 string originName = SqliteDataAccess.GetFlightNames(flightData[2]);
                                 string destinationName = SqliteDataAccess.GetFlightNames(flightData[3]);
 
@@ -268,7 +282,15 @@ namespace Air3550
                                 FlightModel flight = new FlightModel(int.Parse(flightData[0]), int.Parse(flightData[1]), flightData[2], originName, flightData[3], destinationName, int.Parse(flightData[6]), departureDateTime, arriveDateTime, duration, flightData[8], Math.Round(currCost, 2), currPoints, int.Parse(flightData[10]), Convert.ToDouble(flightData[11]));
 
                                 bookedFlights.Add(flight);
-                                i += 1;
+
+                                if (i == count - 1)
+                                {
+                                    i = 0;
+                                }
+                                else
+                                {
+                                    i++;
+                                }
                             }
                         }
                         else

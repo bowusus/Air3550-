@@ -337,7 +337,7 @@ namespace ClassLibrary
                 return routeIDs; // return the information
             }
         }
-        public static List<int> GetBookedFlightsRouteID(int userID)
+        public static int GetBookedFlightsRouteID(int flightID)
         {
             // This method goes into the database, specifically the flightsBooked table, 
             // and retrieves all of the route IDs of the customer's booked flights and returns this list
@@ -347,16 +347,16 @@ namespace ClassLibrary
                 con.Open(); // open the connection
                 SQLiteCommand cmd = new SQLiteCommand();
                 cmd.CommandType = CommandType.Text;
-                cmd.CommandText = "select distinct flightsBooked.routeID_fk from flightsBooked where flightsBooked.userID_fk = @userID_fk";
+                cmd.CommandText = "select flightsBooked.routeID_fk from flightsBooked where flightsBooked.flightID_fk = @flightID";
                 // use the userID to get the correct routeIDs
-                cmd.Parameters.AddWithValue("@userID_fk", userID);
+                cmd.Parameters.AddWithValue("@flightID", flightID);
                 cmd.Connection = con;
                 SQLiteDataReader rdr = cmd.ExecuteReader();
-                List<int> routeID = new List<int>();
+                int routeID = 0;
                 // execute the command with the reader, which only reads the database rather than updating it in anyway
                 while (rdr.Read())
                 {
-                    routeID.Add(rdr.GetInt32(0));
+                    routeID = rdr.GetInt32(0);
                 }
                 rdr.Close();
                 con.Close();

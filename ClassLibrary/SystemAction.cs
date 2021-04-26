@@ -292,15 +292,6 @@ namespace ClassLibrary
 
             DateTime departureDateTime = DateTime.Parse(flightsBookedData[4] + " " + flightsBookedData[5]);
             DateTime arriveDateTime = departureDateTime.AddHours(Convert.ToDouble(flightsBookedData[7]));
-            int depHour = departureDateTime.Hour;
-            int arrHour = arriveDateTime.Hour;
-
-            double currCost;
-            if (i == 0)
-                currCost = CalculateCost(depHour, arrHour, Convert.ToDouble(flightsBookedData[9]) + 50);
-            else
-                currCost = CalculateCost(depHour, arrHour, Convert.ToDouble(flightsBookedData[9]) + 8);
-            int currPoints = Convert.ToInt32(currCost * 100);
 
             var duration = arriveDateTime.Subtract(departureDateTime);
             duration = new TimeSpan(duration.Ticks / TimeSpan.TicksPerSecond * TimeSpan.TicksPerSecond);

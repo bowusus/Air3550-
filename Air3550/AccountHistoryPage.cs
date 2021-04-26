@@ -66,6 +66,8 @@ namespace Air3550
             AccountHistoryTable.Columns.Remove("numberOfVacantSeats");
             AccountHistoryTable.Columns.Remove("flightIncome");
             AccountHistoryTable.Columns.Remove("percentFull");
+            AccountHistoryTable.Columns.Remove("cost");
+            AccountHistoryTable.Columns.Remove("numOfPoints");
             // Fix and rename header text
             AccountHistoryTable.Columns[0].HeaderText = "FlightID";
             AccountHistoryTable.Columns[1].HeaderText = "Origin Code";
@@ -76,8 +78,6 @@ namespace Air3550
             AccountHistoryTable.Columns[6].HeaderText = "Departure Date and Time";
             AccountHistoryTable.Columns[7].HeaderText = "Est. Arrival Date and Time";
             AccountHistoryTable.Columns[8].HeaderText = "Est. Duration (h:mm:ss)";
-            AccountHistoryTable.Columns[9].HeaderText = "Cost (in dollars)";
-            AccountHistoryTable.Columns[10].HeaderText = "Number of Points";
             AccountHistoryTable.ClearSelection();
         }
         private void FlightsBookedButton_Click(object sender, EventArgs e)
@@ -94,9 +94,9 @@ namespace Air3550
             List<int> flightID = SqliteDataAccess.GetBookedFlightIDs(currCustomer.userID);
             if (flightID.Count != 0)
             {
-                foreach (int rID in flightID)
+                foreach (int fID in flightID)
                 {
-                    List<string> flightData = SqliteDataAccess.GetFlightData(rID);
+                    List<string> flightData = SqliteDataAccess.GetFlightData(fID);
                     string originName = SqliteDataAccess.GetFlightNames(flightData[2]);
                     string destinationName = SqliteDataAccess.GetFlightNames(flightData[3]);
 
@@ -147,9 +147,9 @@ namespace Air3550
             List<int> flightID = SqliteDataAccess.GetCancelledFlightIDs(currCustomer.userID);
             if (flightID.Count != 0)
             {
-                foreach (int rID in flightID)
+                foreach (int fID in flightID)
                 {
-                    List<string> flightData = SqliteDataAccess.GetFlightData(rID);
+                    List<string> flightData = SqliteDataAccess.GetFlightData(fID);
                     string originName = SqliteDataAccess.GetFlightNames(flightData[2]);
                     string destinationName = SqliteDataAccess.GetFlightNames(flightData[3]);
 
