@@ -355,6 +355,19 @@ namespace Air3550
                         selectedRoutes.Add(departingRoutes[tempRouteSelected]);
                         ReturnFlightButton.Visible = false;
                         BookFlightButton.Visible = true;
+                        // Get the payment page and send the required information
+                        PaymentPage.GetInstance(ref currCustomer, selectedRoutes, DepartDatePicker.Value, ReturnDatePicker.Value, DepartComboBox.SelectedValue.ToString(), ArriveComboBox.SelectedValue.ToString()).Show();
+                        // reset the page to what the user saw when they first started booking a flight plus the table 
+                        selectedRoutes.Clear();
+                        AvailableFlightTable.Visible = true;
+                        ChangeDepartingFlightButton.Visible = false;
+                        DepartintFlightsLabel.Visible = true;
+                        ReturningFlightsLabel.Visible = false;
+                        AvailableFlightTable.DataSource = null;
+                        AvailableFlightTable.DataSource = departingRoutes;
+                        AvailableFlightTable.ClearSelection();
+                        FormatGrid();
+                        this.Dispose();
                     }
                 }
                 else
@@ -383,21 +396,22 @@ namespace Air3550
                         selectedRoutes.Add(returningRoutes[tempRouteSelected]);
                         ReturnFlightButton.Visible = true;
                         BookFlightButton.Visible = false;
+
+                        // Get the payment page and send the required information
+                        PaymentPage.GetInstance(ref currCustomer, selectedRoutes, DepartDatePicker.Value, ReturnDatePicker.Value, DepartComboBox.SelectedValue.ToString(), ArriveComboBox.SelectedValue.ToString()).Show();
+                        // reset the page to what the user saw when they first started booking a flight plus the table 
+                        selectedRoutes.Clear();
+                        AvailableFlightTable.Visible = true;
+                        ChangeDepartingFlightButton.Visible = false;
+                        DepartintFlightsLabel.Visible = true;
+                        ReturningFlightsLabel.Visible = false;
+                        AvailableFlightTable.DataSource = null;
+                        AvailableFlightTable.DataSource = departingRoutes;
+                        AvailableFlightTable.ClearSelection();
+                        FormatGrid();
+                        this.Dispose();
                     }
                 }
-                // Get the payment page and send the required information
-                PaymentPage.GetInstance(ref currCustomer, selectedRoutes, DepartDatePicker.Value, ReturnDatePicker.Value, DepartComboBox.SelectedValue.ToString(), ArriveComboBox.SelectedValue.ToString()).Show();
-                // reset the page to what the user saw when they first started booking a flight plus the table 
-                selectedRoutes.Clear();
-                AvailableFlightTable.Visible = true;
-                ChangeDepartingFlightButton.Visible = false;
-                DepartintFlightsLabel.Visible = true;
-                ReturningFlightsLabel.Visible = false;
-                AvailableFlightTable.DataSource = null;
-                AvailableFlightTable.DataSource = departingRoutes;
-                AvailableFlightTable.ClearSelection();
-                FormatGrid();
-                this.Dispose();
             }
         }
         private void AvailableFlightTable_CellClick(object sender, DataGridViewCellEventArgs e)

@@ -17,8 +17,8 @@ namespace Air3550
         private static PaymentPage instance;
         public static CustomerModel currCustomer; // make a local object that can be read in the current context
         public static List<Route> selectedRoutes; // make a local object that can be read in the current context
-        public static double total = 0;
-        public static int points = 0;
+        public static double total;
+        public static int points;
         public PaymentPage()
         {
             InitializeComponent();
@@ -52,6 +52,8 @@ namespace Air3550
             // otherwise, only show the departure flight
             int indexOfSpace;
             int indexOfPoints;
+            total = 0;
+            points = 0;
             if (selectedRoutes.Count == 1)
             {
                 // if there is only one flight, then the return information will not be shown

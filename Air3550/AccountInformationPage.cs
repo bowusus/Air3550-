@@ -124,6 +124,7 @@ namespace Air3550
                 if (!String.IsNullOrEmpty(password)) // encrypt the new password
                     pass = SystemAction.EncryptPassword(password);
                 SqliteDataAccess.UpdateUser(currCustomer.userID, pass, first, last, street, city, state, zip, phone, creditCard, age, email); // update the database
+                currCustomer = new CustomerModel(currCustomer.userID, pass, first, last, street, city, state, zip, phone, creditCard, age, email);
                 MessageBox.Show("Your Information has been successfully updated and saved", "Account Information Updated and Saved", MessageBoxButtons.OK, MessageBoxIcon.None);
             }
         }
