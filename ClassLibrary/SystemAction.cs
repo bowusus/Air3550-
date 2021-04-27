@@ -77,45 +77,6 @@ namespace ClassLibrary
                 cost *= 0.80;
             return cost;
         }
-        public static List<FlightModel> GetCurrentFlights(int routeID)
-        {
-            // This method creates a list of Flights that allows this page to access that flights details without going back to the database
-            // It gets all of the currently booked flights and their details then returns a list of these flight objects
-            List<int> flightIDs;
-            List<FlightModel> flights = new List<FlightModel>();
-            flightIDs = SqliteDataAccess.GetFlightIDsInRoute(routeID);
-            int i = 0;
-            // for each of these ids, get the flight information (origin, destination, etc.)
-            // Then get the name of the airports, depart times, arrival times, any discounts to the base cost, and calculate the points
-            // Finally create a FlightModel object with that information and add it to a list of booked flights to be displayed to the customer
-            foreach (int id in flightIDs)
-            {
-                List<string> flightsBookedData = SqliteDataAccess.GetFlightData(id);
-                string originName = SqliteDataAccess.GetFlightNames(flightsBookedData[2]);
-                string destinationName = SqliteDataAccess.GetFlightNames(flightsBookedData[3]);
-
-                DateTime departureDateTime = DateTime.Parse(flightsBookedData[4] + " " + flightsBookedData[5]);
-                DateTime arriveDateTime = departureDateTime.AddHours(Convert.ToDouble(flightsBookedData[7]));
-                int depHour = departureDateTime.Hour;
-                int arrHour = arriveDateTime.Hour;
-
-                double currCost;
-                if (i == 0)
-                    currCost = SystemAction.CalculateCost(depHour, arrHour, Convert.ToDouble(flightsBookedData[9]) + 50);
-                else
-                    currCost = SystemAction.CalculateCost(depHour, arrHour, Convert.ToDouble(flightsBookedData[9]) + 8);
-                int currPoints = Convert.ToInt32(currCost * 100);
-
-                var duration = arriveDateTime.Subtract(departureDateTime);
-
-                departureDateTime = arriveDateTime.Subtract(duration);
-                FlightModel flight = new FlightModel(int.Parse(flightsBookedData[0]), int.Parse(flightsBookedData[1]), flightsBookedData[2], originName, flightsBookedData[3], destinationName, int.Parse(flightsBookedData[6]), departureDateTime, arriveDateTime, duration, flightsBookedData[8], Math.Round(currCost, 2), currPoints, int.Parse(flightsBookedData[10]), Convert.ToDouble(flightsBookedData[11]));
-
-                flights.Add(flight);
-                i += 1;
-            }
-            return flights;
-        }
         public static FlightModel GetFlight(int flightID, int i)
         {
             // This method gets the specified flight's data. It calculates its cost, points, and duration,
@@ -145,7 +106,6 @@ namespace ClassLibrary
 
             return flight;
         }
-
         public static List<Route> GetFlights_MasterID(string origin, string destination, DateTime departDate, DateTime compareDateTime)
         {
             // This method finds all available routes for the given origin and destination
@@ -280,11 +240,11 @@ namespace ClassLibrary
                 return flightIDsList;
             }
         }
-
         public static FlightModel GetBoardingFlights(int FID, int i, ref CustomerModel customer)
         {
             // This method gets the specified flight's data. It calculates its cost, points, and duration,
             // Then it makes it a flight object and returns the flight
+            // specific to the boarding pass (aka includes name)
             List<string> flightsBookedData = SqliteDataAccess.GetFlightData(FID);
 
             string originName = SqliteDataAccess.GetFlightNames(flightsBookedData[2]);
@@ -303,7 +263,6 @@ namespace ClassLibrary
             return flight;
 
         }
-
         /* Generates all available flights for each master flight from the last generated date in the 
          * available flights table to 6 months from the current date */
         public static void GenerateFlights()
@@ -339,7 +298,6 @@ namespace ClassLibrary
                 startDate = newStartDate;
             }
         }
-
         /* Generates all the available flights for the newly created masterFlight based on
          * the next days date to 6 months out */
         public static void GenerateFlight(FlightModel masterFlight)
@@ -367,23 +325,6 @@ namespace ClassLibrary
                 startDate = newStartDate;
             }
         }
-        
-        public static void CleanAvailableFlights()
-        {
-            // Get the oldest date in the available flights data base
-            if (SqliteDataAccess.GetOldestAvailable().Equals("")) return;
-            DateTime oldestDate = Convert.ToDateTime(SqliteDataAccess.GetOldestAvailable());
-            DateTime endDate = DateTime.Now;
-
-            // Clean from oldest date till the current date is reached
-            while (oldestDate.ToShortDateString() != endDate.ToShortDateString())
-            {
-                SqliteDataAccess.RemoveOldAvailable(oldestDate.ToShortDateString());
-                DateTime newOldestDate = oldestDate.AddDays(1);
-                oldestDate = newOldestDate;
-            }
-        }
-
         /*
          * On start up this method will take any flights from the customer's booked flight list 
          * and set them as being taken if the date and time is less than the current date and time

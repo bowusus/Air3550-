@@ -17,7 +17,6 @@ namespace Air3550
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            //SystemAction.CleanAvailableFlights();
             // clean the routes that have a last date today or before
             SqliteDataAccess.CleanRoutes();
             // generate flights based on the master flight list for dates between now and 6 months from now

@@ -21,7 +21,7 @@ namespace ClassLibrary
 		public string planeChange { get; set; }
 		public string availableSeats { get; set; }
 		public string credits { get; set; }
-		// route constructor
+		/* This overloading of the route object is used to return information about the flight when the customer is searching for flights to book */
 		public Route(int rID, DateTime depart, DateTime arrival, TimeSpan dur, int num, string fID, string changeName, string seats, string cred)
 		{
 			routeID = rID;

@@ -14,7 +14,6 @@ namespace ClassLibrary
 		// the attributes associated with the Flight included, 
 		// the constructor to create an instance of the FlightModel,
 		// and methods to describe the actions the flight does.
-
 		// auto-implemented properties for trivial get and set
 		public int flightID { get; set; }
 		public int userid { get; set; }
@@ -37,7 +36,8 @@ namespace ClassLibrary
 		public double percentFull { get; set; }
 		public double flightIncome { get; set; }
 
-		// base flightModel constructor
+		/* This overloading of the flight model is used mainly to display the flight's details that are important to the customer. 
+		 * Used in Booking, Cancelling, and Account History */
 		public FlightModel(int fID, int mID, string origin, string oName, string destination, string dName, int dist, DateTime departDate, DateTime arriveDate, TimeSpan dur, string plane, double baseCost, int points, int seats, double income)
 		{
 			flightID = fID;
@@ -56,6 +56,8 @@ namespace ClassLibrary
 			numberOfVacantSeats = seats;
 			flightIncome = income;
 		}
+		/* This overloading of the flight model is specifically used to get the important details to display on the Flight Manager and 
+		 * Account Manager pages (with % capacity) */
 		public FlightModel(int flightID, int masterFlightID, string originCode, string destinationCode, int distance, DateTime departureDateTime, double duration,
 						   string planeType, double cost, int numberOfVacantSeat, double flightIncome, double percentage)
 		{
@@ -88,7 +90,6 @@ namespace ClassLibrary
 			this.numberOfVacantSeats = numberOfVacantSeat;
 			this.flightIncome = flightIncome;
 		}
-
 		/* This overloading of the flight model is specific for the masterFlight table we have in the database it is basically a
 		 * template for the creation of all available flights*/
 		public FlightModel(int flightID, string originCode, string destinationCode, int distance, DateTime departureDateTime, string planeType)
@@ -101,7 +102,6 @@ namespace ClassLibrary
 			this.planeType = planeType;
 			this.numberOfVacantSeats = SqliteDataAccess.GetPlaneCapacity(this.planeType);
 		}
-		
 		/* This overloading of the flight model is specific for the direct flight the edges of the graph
 		 * Connecting all of the airports (vectors) in the graph */
 		public FlightModel(string originCode, string destinationCode, int distance)
@@ -110,8 +110,7 @@ namespace ClassLibrary
 			this.destinationCode = destinationCode;
 			this.distance = distance;
 		}
-
-
+		/* This overloading of the flight model is specific to the boarding pass page */
 		public FlightModel (int fID, DateTime departDate, DateTime arriveDate, TimeSpan dur,  string origin, string destination, ref CustomerModel customer)
         {
 			flightID = fID;

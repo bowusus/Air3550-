@@ -13,13 +13,12 @@ namespace Air3550
 {
     public partial class LoadEngineerRoutesPage : Form
     {
+        // This file is specifically used for the load engineer routes page
         private static LoadEngineerRoutesPage instance; //Singleton-Pattern Instance
-
         public LoadEngineerRoutesPage()
         {
             InitializeComponent();
         }
-
         /* Get an already existing instance of this form if it does not exist
          * create it */
         public static LoadEngineerRoutesPage GetInstance
@@ -33,7 +32,6 @@ namespace Air3550
                 return instance;
             }
         }
-
         /* On load of this page set the data source to the route data grid to the route SQL table */
         private void LoadEngineerRoutesPage_Load(object sender, EventArgs e)
         {

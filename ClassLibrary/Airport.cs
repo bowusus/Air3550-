@@ -8,8 +8,11 @@ namespace ClassLibrary
 {
     public class Airport
     {
+        // This class file is the Airport class. There are 
+        // the attributes associated with the Airport included and 
+        // the constructor to create an instance of the Airport
+        // auto-implemented properties for trivial get and set
         string code, name;
-
         public Airport(string code, string name)
         {
             this.code = code;

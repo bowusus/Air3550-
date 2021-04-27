@@ -13,13 +13,13 @@ namespace Air3550
 {
     public partial class LoadEngineerAddFlightPage : Form
     {
+        // This file is specifically used for the load engineer add page
         private List<Path> paths;
         private static LoadEngineerAddFlightPage instance; //Singleton Pattern Instance
         public LoadEngineerAddFlightPage()
         {
             InitializeComponent();
         }
-
         /*Method to get the forms instance if one does not exist then
          * create a new form and return the form
          */
@@ -34,7 +34,6 @@ namespace Air3550
                 return instance;
             }
         }
-
         /* On loading the page it gets all of the origin and destination
          * codes for the drop down boxes, and sets the routeTimePicker to the
          * correct format while hidding both the time picker and the add flgiht button 
@@ -56,7 +55,6 @@ namespace Air3550
             routeTimePicker.Value = Convert.ToDateTime("12:00 AM");
             AddFlightButton.Visible = false;
         }
-
         /* Searchs for all the paths between the selected origin and destination
          */
         private void searchButton_Click(object sender, EventArgs e)
@@ -91,7 +89,6 @@ namespace Air3550
                         path.Airports[1].Code, path.Airports[2].Code, path.Airports[3].Code);
             }
         }
-
         /* When a selection for the route is made change the visibility of the time picker and the
          * add button to true */
         private void routesGridView_SelectionChanged(object sender, EventArgs e)
@@ -99,13 +96,11 @@ namespace Air3550
             routeTimePicker.Visible = true;
             AddFlightButton.Visible = true;
         }
-
         /* Call the helper method to generate all the new master flights and route */
         private void addButton_Click(object sender, EventArgs e)
         {
             generateFlightsAndRoute();
         }
-
         /*
          * Helper method to generate all new Flights and the Route for the selected path
          * 
@@ -253,7 +248,6 @@ namespace Air3550
             LoadEngineerHomePage.GetInstance.Show();
             this.Dispose();
         }
-
         /* Change the destination codes given if the origin code was changed so that 
          * it is impossible to choose the same origin and destination */
         private void originDropDown_SelectedIndexChanged(object sender, EventArgs e)
@@ -266,7 +260,6 @@ namespace Air3550
             
             if(originDropDown.Text != currentDestination) destinationDropDown.Text = currentDestination;
         }
-
         /* Returns to home page and disposes of the current page when back button
          * is selected */
         private void backButton_Click(object sender, EventArgs e)
@@ -275,7 +268,6 @@ namespace Air3550
             LoadEngineerHomePage.GetInstance.Show();
             this.Dispose();
         }
-
         /* Make it so that the route time picker only increments in 5 for minutes */
         private void routeTimePicker_ValueChanged(object sender, EventArgs e)
         {
@@ -286,14 +278,13 @@ namespace Air3550
             else if (this.routeTimePicker.Value.Minute % 5 == 4)
                 this.routeTimePicker.Value = this.routeTimePicker.Value.AddMinutes(-4);
         }
-
         /* Ask user if they are sure they want to exit the application then close if the program if they confirm 
          * yes */
         private void LoadEngineerAddFlightPage_FormClosing(object sender, FormClosingEventArgs e)
         {
-            //Add message box to ask user if they want to exit program
-            //yes than close LogInPage
-            //no cancel form close
+            // Add message box to ask user if they want to exit program
+            // yes than close LogInPage
+            // no cancel form close
             DialogResult result = MessageBox.Show("Are you sure you would like to exit?\nAny changes not saved will not be updated.", "Close", MessageBoxButtons.YesNo, MessageBoxIcon.None);
             if (result == DialogResult.Yes)
                 LogInPage.GetInstance.Close();

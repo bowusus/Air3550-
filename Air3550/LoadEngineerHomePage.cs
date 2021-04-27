@@ -13,6 +13,7 @@ namespace Air3550
 {
     public partial class LoadEngineerHomePage : Form
     {
+        // This file is specifically used for the load engineer home page
         private static LoadEngineerHomePage instance; // Singleton-Pattern Instance
         private string originCode, destinationCode, time;
         private int flightID;
@@ -20,7 +21,6 @@ namespace Air3550
         {
             InitializeComponent();
         }
-
         /* Get an already existing instance of this page if it does not exist then create it */
         public static LoadEngineerHomePage GetInstance
         {
@@ -33,17 +33,14 @@ namespace Air3550
                 return instance;
             }
         }
-
         public string OriginCode { get => originCode; set => originCode = value; }
         public string DestinationCode { get => destinationCode; set => destinationCode = value; }
         public string Time { get => time; set => time = value; }
         public int FlightID { get => flightID; set => flightID = value; }
-
         private void LoadEngineerHomePage_Load(object sender, EventArgs e)
         {
             LoadFlightGrid();
         }
-
         /* Create and show the add flight form when add flight is clicked */
         private void AddFlight_Click(object sender, EventArgs e)
         {
@@ -51,7 +48,6 @@ namespace Air3550
             LoadEngineerAddFlightPage.GetInstance.Location = this.Location;
             this.Hide();
         }
-
         /* Remove the selected flight from the masterFlight table when remove flight is clicked */
         private void removeFlight_Click(object sender, EventArgs e)
         {
@@ -63,13 +59,11 @@ namespace Air3550
                 LoadFlightGrid();
             }
         }
-
         /* Close the application when the X is hit */
         private void LoadEngineerHomePage_FormClosing(object sender, FormClosingEventArgs e)
         {
             LogInPage.GetInstance.Close();
         }
-
         /* Log out to the login page and dispose of the page */
         private void logOutButton_Click(object sender, EventArgs e)
         {
@@ -84,14 +78,12 @@ namespace Air3550
                 this.Dispose();
             }
         }
-
         /* Show all routes currently being offered */
         private void routeButton_Click(object sender, EventArgs e)
         {
             LoadEngineerRoutesPage.GetInstance.Show();
             LoadEngineerRoutesPage.GetInstance.Location = this.Location;
         }
-
         /* Create a new edit flight form pop up */
         private void editFlight_Click(object sender, EventArgs e)
         {
@@ -105,7 +97,6 @@ namespace Air3550
                 LoadEngineerEditFlightPage.GetInstance.Location = this.Location;
             }
         }
-
         /* Load in the masterFlight SQL table and set it to the flightGrid's datasource */
         public void LoadFlightGrid()
         {

@@ -25,7 +25,7 @@ namespace Air3550
         }
         public PaymentPage(ref CustomerModel customer, List<Route> routes, DateTime depart, DateTime returnDate, string origin, string destination)
         {
-            // This constructor allows for the object to be accessed in this form
+            // This constructor allows for the object, list of routes, depart time, return date, origin, and destination to be accessed in this form
             InitializeComponent();
             // get the current customer and pass that information to the textboxes
             currCustomer = customer;
@@ -52,8 +52,8 @@ namespace Air3550
             // otherwise, only show the departure flight
             int indexOfSpace;
             int indexOfPoints;
-            total = 0;
-            points = 0;
+            total = 0; // resets total
+            points = 0; // resets points
             if (selectedRoutes.Count == 1)
             {
                 // if there is only one flight, then the return information will not be shown
@@ -239,7 +239,7 @@ namespace Air3550
         {
             // This methods allows the user to return to the Log In page
             // The current form will close
-            // The Log In page will open
+            // The customer home page will open
             DialogResult result = MessageBox.Show("Are you sure that you want to return to the booking flights home page?\nAny changes not saved will not be updated.", "Payment", MessageBoxButtons.YesNo, MessageBoxIcon.None);
             if (result == DialogResult.Yes)
             {
@@ -263,8 +263,8 @@ namespace Air3550
 
         private void PaymentPage_FormClosing(object sender, FormClosingEventArgs e)
         {
-            // This method allows the red X to be used to end the application
-            // If the red X is clicked, a message will make sure the customer wants to leave
+            // This method allows the exit button to be used to end the application
+            // If the exit button is clicked, a message will make sure the customer wants to leave
             // then the application ends or the customer cancels
             DialogResult result = MessageBox.Show("Are you sure you would like to exit?\nAny changes not saved will not be updated.", "Close", MessageBoxButtons.YesNo, MessageBoxIcon.None);
             if (result == DialogResult.Yes)

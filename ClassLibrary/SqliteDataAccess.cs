@@ -108,7 +108,7 @@ namespace ClassLibrary
                 con.Open(); // open the connection
                 SQLiteCommand cmd = new SQLiteCommand();
                 cmd.CommandType = CommandType.Text;
-                cmd.CommandText = "DELETE FROM userIDTable WHERE userID = @userID";
+                cmd.CommandText = "DELETE FROM userIDTable WHERE userIDTable.userID = @userID";
                 // use the provided information to add to the flightsBooked table
                 cmd.Parameters.AddWithValue("@userID", userID);
                 cmd.Connection = con;
@@ -301,7 +301,6 @@ namespace ClassLibrary
                 con.Close();
             }
         }
-        
         public static List<(int, int)> GetRouteInfo(string origin, string destination, DateTime departDate, DateTime returnDate)
         {
             // This method goes into the database, specifically the route table, 
@@ -340,7 +339,7 @@ namespace ClassLibrary
         public static int GetBookedFlightsRouteID(int flightID)
         {
             // This method goes into the database, specifically the flightsBooked table, 
-            // and retrieves all of the route IDs of the customer's booked flights and returns this list
+            // and retrieves the route ID of the specified flight
             using (SQLiteConnection con = new SQLiteConnection(LoadConnectionString()))
             // closes the connection when there is an error or it is done executing
             {
@@ -391,7 +390,7 @@ namespace ClassLibrary
         }
         public static List<int> GetCancelledFlightIDs(int userID)
         {
-            // This method goes into the database, specifically the flightsBooked table, 
+            // This method goes into the database, specifically the flightsCancelled table, 
             // and retrieves all of the flight IDs of the customer's cancelled flights and returns this list
             using (SQLiteConnection con = new SQLiteConnection(LoadConnectionString()))
             // closes the connection when there is an error or it is done executing
@@ -417,7 +416,7 @@ namespace ClassLibrary
         }
         public static List<int> GetTakenFlightIDs(int userID)
         {
-            // This method goes into the database, specifically the flightsBooked table, 
+            // This method goes into the database, specifically the flightsTaken table, 
             // and retrieves all of the flight IDs of the customer's taken flights and returns this list
             using (SQLiteConnection con = new SQLiteConnection(LoadConnectionString()))
             // closes the connection when there is an error or it is done executing
@@ -444,7 +443,7 @@ namespace ClassLibrary
         public static List<int> GetFlightIDsInRoute(int routeID)
         {
             // This method goes into the database, specifically the route table, 
-            // and retrieves all of the flightIDs in this route
+            // and retrieves all of the master flightIDs in this route
             using (SQLiteConnection con = new SQLiteConnection(LoadConnectionString()))
             // closes the connection when there is an error or it is done executing
             {
@@ -537,7 +536,7 @@ namespace ClassLibrary
         public static void RemoveFromFlightsBooked(int userID, int flightID)
         {
             // This method goes into the database, specifically the flightsBooked table, 
-            // and adds the booked flight
+            // and removes the booked flight for the specific user and flight
             using (SQLiteConnection con = new SQLiteConnection(LoadConnectionString()))
             // closes the connection when there is an error or it is done executing
             {
@@ -1001,7 +1000,7 @@ namespace ClassLibrary
         public static List<int> GetFlightPassengers(int flightID)
         {
             // This method goes into the database, specifically the flightsBooked table, 
-            // and retrieves all of the route IDs of the customer's booked flights and returns this list
+            // and retrieves all of the userIDs that are connected with the specific flightID aka passengers
             using (SQLiteConnection con = new SQLiteConnection(LoadConnectionString()))
             // closes the connection when there is an error or it is done executing
             {
@@ -1369,7 +1368,6 @@ namespace ClassLibrary
                 return income; // return company income
             }
         }
-
         public static List<(int, DateTime)> GetFlightIDs_MasterID(int masterID, List<(int, DateTime)> flights_MasterID, DateTime departDate, DateTime compareDateTime)
         {
             // This method goes into the database, specifically the availableFlight table, 
@@ -1398,9 +1396,8 @@ namespace ClassLibrary
                 return flights_MasterID; // return flight data
             }
         }
-
         /* Gets all of the airports in the airports table */
-                public static List<Airport> GetAirports()
+        public static List<Airport> GetAirports()
         {
             using (SQLiteConnection con = new SQLiteConnection(LoadConnectionString()))
             // closes the connection when there is an error or it is done executing
@@ -1424,7 +1421,6 @@ namespace ClassLibrary
                 return airports;
             }
         }
-
         /* Gets all of the flights in the direct flights table */
         public static List<FlightModel> GetDirectFlights()
         {
@@ -1451,7 +1447,6 @@ namespace ClassLibrary
                 return directFlights;
             }
         }
-
         /* Get all of the flights in masterFlight table and loads them into a data table to be used
          * by a data grid view object in form */
         public static DataTable GetMasterFlightDT()
@@ -1473,7 +1468,6 @@ namespace ClassLibrary
                 return dt;
             }
         }
-
         /* Get all of the current airport codes from the airport table */
         public static List<String> GetAirportCodes()
         {
@@ -1498,7 +1492,6 @@ namespace ClassLibrary
                 return airportCodes;
             }
         }
-
         /* Add all flights in the flightModels list to the masterFlight table */
         public static void AddFlightToMaster(List<FlightModel> flightModels)
         {
@@ -1582,7 +1575,6 @@ namespace ClassLibrary
                 con.Close();
             }
         }
-
         /* Gets the masterFlightID from tracker table */
         public static int GetLastMasterFlightID()
         {
@@ -1604,7 +1596,6 @@ namespace ClassLibrary
             }
             return newID;
         }
-
         /* Update the last master flight ID value in tracker table */
         public static void UpdateLastMasterID(int lastID)
         {
@@ -1620,7 +1611,6 @@ namespace ClassLibrary
                 con.Close();
             }
         }
-
         /* Gets the distance between two different airports by looking the distance up in the directFlight table */
         public static int GetDirectFlightDistance(string originCode, string destinationCode)
         {
@@ -1643,7 +1633,6 @@ namespace ClassLibrary
                 return distance;
             }
         }
-
         /* Remove a flight from the masterFlight table based on the passed in flightID */
         public static void RemoveMasterFlight(int flightID)
         {
@@ -1659,7 +1648,6 @@ namespace ClassLibrary
                 con.Close();
             }
         }
-
         /* Checks if the masterFlight table is empty by returning the number of rows found */
         public static int CheckMasterFlightEmpty()
         {
@@ -1678,7 +1666,6 @@ namespace ClassLibrary
             }
             return numOfRows;
         }
-
         /* Changes the time of a flight in master based on the passed in parameters of the old flight's flightID, the new time, and
          * the flightID that is going to be used */
         public static void ChangeTimeMaster(int flightID, DateTime departureTime, int newFlightID)
@@ -1697,7 +1684,6 @@ namespace ClassLibrary
                 con.Close();
             }
         }
-
         /* Gets all of the flights in the masterFlight table and adds them to a list
          * then returns that list */
         public static List<FlightModel> GetAllMasterFlights()
@@ -1723,7 +1709,6 @@ namespace ClassLibrary
             }
             return masterFlights;
         }
-
         /* Checks to see if the flight already exists in master based on the origin code, destination code, and departure time 
          * if it does exist it returns true if not then false */
         public static Boolean MasterFlightExists(string originCode, string destinationCode, string departureTime)
@@ -1758,7 +1743,6 @@ namespace ClassLibrary
                 }
             }
         }
-
         /* Gets the capacity of the passed in planeType and returns it */
         public static int GetPlaneCapacity(string planeType)
         {
@@ -1780,7 +1764,6 @@ namespace ClassLibrary
                 return capacity;
             }
         }
-
         /* Gets the last routeID from the tracker table */
         public static int GetLastRouteID()
         {
@@ -1802,7 +1785,6 @@ namespace ClassLibrary
             }
             return newID;
         }
-
         /* Updates the value of the last route id in the tracker table */
         public static void UpdateLastRouteID(int lastID)
         {
@@ -1818,7 +1800,6 @@ namespace ClassLibrary
                 con.Close();
             }
         }
-
         /* Adds a brand new route to the route table based on all of the parameters passed into the method */
         public static void AddToRoute(int routeID, string originCode, string destinationCode, int numOfLayovers, string flightID1, string flightID2 = null, string flightID3 = null)
         {
@@ -1866,7 +1847,6 @@ namespace ClassLibrary
                 con.Close();
             }
         }
-
         /* Gets the flight id from the master table based on the passed in origin code, destination code, and departure time */
         public static int GetFlightIDFromMaster(string originCode, string destinationCode, string departureTime)
         {
@@ -1894,7 +1874,6 @@ namespace ClassLibrary
             }
             return flightID;
         }
-
         /* Sets the last date that the route is going to be used by the system */
         public static void SetRemovalDateRoutes(int flightID)
         {
@@ -1913,7 +1892,6 @@ namespace ClassLibrary
                 con.Close();
             }
         }
-
         /* Checks to see if a route with the same flightID1, flightID2, and flightID3 already exists if it does return true
          * if not then returns false */
         public static Boolean RouteExists(string flightID1, string flightID2 = null, string flightID3 = null)
@@ -1953,7 +1931,6 @@ namespace ClassLibrary
                 }
             }
         }
-
         /* Checks if the available flight table is completely empty if it is returns true
          * if not then it returns false */
         public static Boolean CheckAvailableFlightEmpty()
@@ -1986,7 +1963,6 @@ namespace ClassLibrary
                 return true; // should never reach here
             }
         }
-
         /* Gets the last date recorded in the availableFlight table and returns it */
         public static string GetLatestAvailableFlight()
         {
@@ -2007,7 +1983,6 @@ namespace ClassLibrary
             }
             return lastDate;
         }
-
         /* Gets the flightID held by the last entry in the availableFlight table */
         public static int GetLastAvailableFlightID()
         {
@@ -2029,7 +2004,6 @@ namespace ClassLibrary
             }
             return newID;
         }
-
         /* Adds a flight to the availableFlight table based on the flightModel passed into the method */
         public static void AddFlightToAvailable(FlightModel newFlight)
         {
@@ -2057,7 +2031,6 @@ namespace ClassLibrary
                 con.Close();
             }
         }
-
         /* Gets the oldest available flight from the available flight table */
         public static string GetOldestAvailable()
         {
@@ -2092,7 +2065,6 @@ namespace ClassLibrary
                 con.Close();
             }
         }
-
         /* Cleans any routes from the route table whose removal date matches the current date */
         public static void CleanRoutes()
         {
@@ -2108,7 +2080,6 @@ namespace ClassLibrary
                 con.Close();
             }
         }
-        
         /* Gets all routes ids from routes that contain the flight ID passed in */
         public static List<int> GetRoutesWithFlightID(int flightID)
         {
@@ -2130,7 +2101,6 @@ namespace ClassLibrary
                 return routeIDs;
             }
         }
-
         /* Gets all plane types from the plane table and returns them as a list of strings */
         public static List<String> GetPlaneTypes()
         {
@@ -2154,7 +2124,6 @@ namespace ClassLibrary
                 return planeTypes;
             }
         }
-
         /* Updates the master flight with the passed in flight id to have a new planeType based on the
          * passed in string value for planeType */
         public static void UpdateMasterNewPlane(int flightID, string planeType)
@@ -2173,7 +2142,6 @@ namespace ClassLibrary
                 con.Close();
             }
         }
-
         /* Get all of the routes in route table and loads them into a data table to be used
          * by a data grid view object in form */
         public static DataTable GetRouteDT()
@@ -2195,8 +2163,6 @@ namespace ClassLibrary
                 return dt;
             }
         }
-
-
          /* This method will get all customer ids in the database and return them as a list */
         public static List<int> GetAllCustomerIDs()
         {
@@ -2221,7 +2187,6 @@ namespace ClassLibrary
             }
             return custIDs;
         }
-
         /* Check and see if the flight for the flight ID passed in is older than the current date and time */
         public static Boolean CheckIfBookedOld(int flightID)
         {
@@ -2252,7 +2217,6 @@ namespace ClassLibrary
                 return false;
             }
         }
-
         /* This method adds a flight to the flight taken table in the database based on the passed in
          * customer id and flight id
          */
@@ -2275,7 +2239,6 @@ namespace ClassLibrary
                 con.Close();
             }
         }
-        
         private static string LoadConnectionString(string id = "Default")
         {
             // This method helps connect to the database

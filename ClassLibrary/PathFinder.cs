@@ -19,7 +19,6 @@ namespace ClassLibrary
             this.airports = airports;
             this.directFlights = directFlights;
         }
-
         /*  
             Explores all paths between two vertices in the graph
         */
