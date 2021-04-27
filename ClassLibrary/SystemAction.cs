@@ -132,11 +132,14 @@ namespace ClassLibrary
 
                 foreach (int mID in masterFlightIDs)
                 {
-                    if (flightIDs_MasterID.Count > 0 && flightIDs_MasterID[index-1].Item2.Date != departDate.Date)
-                        flightIDs_MasterID = SqliteDataAccess.GetFlightIDs_MasterID(mID, flightIDs_MasterID, departDate.AddDays(1), compareDateTime);
-                    else
-                        flightIDs_MasterID = SqliteDataAccess.GetFlightIDs_MasterID(mID, flightIDs_MasterID, departDate, compareDateTime);
-                    index += 1;
+                    if (index == flightIDs_MasterID.Count)
+                    {
+                        if (flightIDs_MasterID.Count > 0 && flightIDs_MasterID[index - 1].Item2.Date != departDate.Date)
+                            flightIDs_MasterID = SqliteDataAccess.GetFlightIDs_MasterID(mID, flightIDs_MasterID, departDate.AddDays(1), compareDateTime);
+                        else
+                            flightIDs_MasterID = SqliteDataAccess.GetFlightIDs_MasterID(mID, flightIDs_MasterID, departDate, compareDateTime);
+                        index += 1;
+                    }
                 }
                 if (flightIDs_MasterID.Count == masterFlightIDs.Count)
                 {

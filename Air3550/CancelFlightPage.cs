@@ -217,15 +217,17 @@ namespace Air3550
                 if (result == DialogResult.Yes)
                 {
                     DateTime time = DateTime.Now; // get the current time that the customer is trying to cancel the flight
-                    var delta = bookedFlights[0].departureDateTime.Subtract(time); // get the difference in times between now and departure time
-                    // if the difference in time between now and departure time is great than 60 minutes then the cancellation can proceed
-                    // otherwise, a message appears notifying the customer that they can no longer cancel the flight
-                    if (delta.TotalMinutes > 60)
+                    int totalPoints = 0;
+                    double totalCredit = 0;
+                    int withinHour = 0;
+                    int flightCount = bookedFlights.Count;
+                    // since all of the flights are to deleted, go through each flight, and delete the flight and transaction and credit the customer's account
+                    foreach (FlightModel flight in bookedFlights)
                     {
-                        int totalPoints = 0;
-                        double totalCredit = 0;
-                        // since all of the flights are to deleted, go through each flight, and delete the flight and transaction and credit the customer's account
-                        foreach (FlightModel flight in bookedFlights)
+                        // if the difference in time between now and departure time is great than 60 minutes then the cancellation can proceed
+                        // otherwise, increment a counter, to then show to the customer than some of their flights cannot be cancelled
+                        var delta = flight.departureDateTime.Subtract(time); // get the difference in times between now and departure time
+                        if (delta.TotalMinutes > 60)
                         {
                             string paymentMethod = SqliteDataAccess.GetPaymentMethod(currCustomer.userID, flight.flightID); // get the current flight's payment method
                             if (paymentMethod == "Dollars" || paymentMethod == "AirlineCredit")
@@ -241,75 +243,79 @@ namespace Air3550
                                 SqliteDataAccess.DeleteTransaction(currCustomer.userID, flight.flightID);
                             }
                         }
-                        // since bookedFlights stores the current flights, those flights need to be updated
-                        // the data grid view also needs updating, so set the datasource to null and repopulate it with the bookedFlights list
+                        else
+                            withinHour += 1;
+                    }
+                    if (withinHour != 0)
+                        MessageBox.Show(withinHour + " of your flights is/are within an hour of your flight and can no longer be cancelled", "Error: Cannot Cancel Flight", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    // since bookedFlights stores the current flights, those flights need to be updated
+                    // the data grid view also needs updating, so set the datasource to null and repopulate it with the bookedFlights list
+                    if (withinHour != flightCount)
+                    {
                         if (totalCredit != 0)
                             MessageBox.Show("Your Flights have been successfully cancelled.\nYour account will now reflect that cancellation.\nYou are receiving " + totalCredit + " dollars credited back to your account.", "Cancel Flight", MessageBoxButtons.OK, MessageBoxIcon.None);
                         else
                             MessageBox.Show("Your Flights have been successfully cancelled.\nYour account will now reflect that cancellation.\nYou are receiving " + totalPoints + " points credited back to your account.", "Cancel Flight", MessageBoxButtons.OK, MessageBoxIcon.None);
-
-                        // clear data source, and add any still booked flights to the data grid view
-                        // otherwise, show a no booked flights label and format the grid
-                        CancelFlightTable.DataSource = null;
-                        // all of the flights should be taken out of the database, but if there are any, then they are displayed --> just like a catch all
-                        // otherwise, bookedFlights is cleared and a no flights label is displayed
-                        bookedFlights = new List<FlightModel>();
-                        int i = 0;
-                        List<int> flightID = SqliteDataAccess.GetBookedFlightIDs(currCustomer.userID);
-                        if (flightID.Count != 0)
+                    }
+                    // clear data source, and add any still booked flights to the data grid view
+                    // otherwise, show a no booked flights label and format the grid
+                    CancelFlightTable.DataSource = null;
+                    // all of the flights should be taken out of the database, but if there are any, then they are displayed --> just like a catch all
+                    // otherwise, bookedFlights is cleared and a no flights label is displayed
+                    bookedFlights = new List<FlightModel>();
+                    int i = 0;
+                    List<int> flightID = SqliteDataAccess.GetBookedFlightIDs(currCustomer.userID);
+                    if (flightID.Count != 0)
+                    {
+                        foreach (int fID in flightID)
                         {
-                            foreach (int fID in flightID)
-                            {
-                                // due to flights being part of a route, get that route id for the current flight
-                                // get the number of flight ids in that route
-                                int routeID = SqliteDataAccess.GetBookedFlightsRouteID(fID);
-                                List<int> flightIDs = SqliteDataAccess.GetFlightIDsInRoute(routeID);
-                                int count = flightIDs.Count;
+                            // due to flights being part of a route, get that route id for the current flight
+                            // get the number of flight ids in that route
+                            int routeID = SqliteDataAccess.GetBookedFlightsRouteID(fID);
+                            List<int> flightIDs = SqliteDataAccess.GetFlightIDsInRoute(routeID);
+                            int count = flightIDs.Count;
 
-                                List<string> flightData = SqliteDataAccess.GetFlightData(fID);
-                                string originName = SqliteDataAccess.GetFlightNames(flightData[2]);
-                                string destinationName = SqliteDataAccess.GetFlightNames(flightData[3]);
+                            List<string> flightData = SqliteDataAccess.GetFlightData(fID);
+                            string originName = SqliteDataAccess.GetFlightNames(flightData[2]);
+                            string destinationName = SqliteDataAccess.GetFlightNames(flightData[3]);
 
-                                DateTime departureDateTime = DateTime.Parse(flightData[4] + " " + flightData[5]);
-                                DateTime arriveDateTime = departureDateTime.AddHours(Convert.ToDouble(flightData[7]));
+                            DateTime departureDateTime = DateTime.Parse(flightData[4] + " " + flightData[5]);
+                            DateTime arriveDateTime = departureDateTime.AddHours(Convert.ToDouble(flightData[7]));
 
-                                int depHour = departureDateTime.Hour;
-                                int arrHour = arriveDateTime.Hour;
+                            int depHour = departureDateTime.Hour;
+                            int arrHour = arriveDateTime.Hour;
 
-                                double currCost;
-                                if (i == 0)
-                                    currCost = SystemAction.CalculateCost(depHour, arrHour, Convert.ToDouble(flightData[9]) + 50);
-                                else
-                                    currCost = SystemAction.CalculateCost(depHour, arrHour, Convert.ToDouble(flightData[9]) + 8);
-                                int currPoints = Convert.ToInt32(currCost * 100);
+                            double currCost;
+                            if (i == 0)
+                                currCost = SystemAction.CalculateCost(depHour, arrHour, Convert.ToDouble(flightData[9]) + 50);
+                            else
+                                currCost = SystemAction.CalculateCost(depHour, arrHour, Convert.ToDouble(flightData[9]) + 8);
+                            int currPoints = Convert.ToInt32(currCost * 100);
 
-                                var duration = arriveDateTime.Subtract(departureDateTime);
-                                duration = new TimeSpan(duration.Ticks / TimeSpan.TicksPerSecond * TimeSpan.TicksPerSecond);
+                            var duration = arriveDateTime.Subtract(departureDateTime);
+                            duration = new TimeSpan(duration.Ticks / TimeSpan.TicksPerSecond * TimeSpan.TicksPerSecond);
 
-                                departureDateTime = arriveDateTime.Subtract(duration);
+                            departureDateTime = arriveDateTime.Subtract(duration);
 
-                                FlightModel flight = new FlightModel(int.Parse(flightData[0]), int.Parse(flightData[1]), flightData[2], originName, flightData[3], destinationName, int.Parse(flightData[6]), departureDateTime, arriveDateTime, duration, flightData[8], Math.Round(currCost, 2), currPoints, int.Parse(flightData[10]), Convert.ToDouble(flightData[11]));
+                            FlightModel flight = new FlightModel(int.Parse(flightData[0]), int.Parse(flightData[1]), flightData[2], originName, flightData[3], destinationName, int.Parse(flightData[6]), departureDateTime, arriveDateTime, duration, flightData[8], Math.Round(currCost, 2), currPoints, int.Parse(flightData[10]), Convert.ToDouble(flightData[11]));
 
-                                bookedFlights.Add(flight);
-                                // use the count of flight ids in the list to determine when to reset i
-                                if (i == count - 1)
-                                    i = 0;
-                                else
-                                    i++;
-                            }
+                            bookedFlights.Add(flight);
+                            // use the count of flight ids in the list to determine when to reset i
+                            if (i == count - 1)
+                                i = 0;
+                            else
+                                i++;
                         }
-                        else
-                        {
-                            // clear the list of flights booked and display no flights label
-                            bookedFlights.Clear();
-                            NoFlightLabel.Visible = true;
-                        }
-                        CancelFlightTable.DataSource = bookedFlights;
-                        CancelFlightTable.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
-                        FormatDataGrid(); // remove and rename certain columns
                     }
                     else
-                        MessageBox.Show("You are within an hour of your flight and can no longer cancel it", "Error: Cannot Cancel Flight", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    {
+                        // clear the list of flights booked and display no flights label
+                        bookedFlights.Clear();
+                        NoFlightLabel.Visible = true;
+                    }
+                    CancelFlightTable.DataSource = bookedFlights;
+                    CancelFlightTable.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+                    FormatDataGrid(); // remove and rename certain columns
                 }
             }
         }
