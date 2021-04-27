@@ -44,6 +44,7 @@ namespace Air3550
             this.PrintButton = new System.Windows.Forms.Button();
             this.FlightManifestLabel = new System.Windows.Forms.Label();
             this.LogOutButton = new System.Windows.Forms.Button();
+            this.NoPassengersLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.FlightManifestTable)).BeginInit();
             this.SuspendLayout();
             // 
@@ -214,12 +215,24 @@ namespace Air3550
             this.LogOutButton.UseVisualStyleBackColor = false;
             this.LogOutButton.Click += new System.EventHandler(this.LogOutButton_Click);
             // 
+            // NoPassengersLabel
+            // 
+            this.NoPassengersLabel.AutoSize = true;
+            this.NoPassengersLabel.Font = new System.Drawing.Font("Rockwell", 24F);
+            this.NoPassengersLabel.Location = new System.Drawing.Point(584, 702);
+            this.NoPassengersLabel.Name = "NoPassengersLabel";
+            this.NoPassengersLabel.Size = new System.Drawing.Size(1143, 72);
+            this.NoPassengersLabel.TabIndex = 108;
+            this.NoPassengersLabel.Text = "There are no passengers on this flight";
+            this.NoPassengersLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // FlightManifest
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.HighlightText;
             this.ClientSize = new System.Drawing.Size(2218, 1064);
+            this.Controls.Add(this.NoPassengersLabel);
             this.Controls.Add(this.FlightIncomeLabel);
             this.Controls.Add(this.VacantSeatsLabel);
             this.Controls.Add(this.PlaneTypeLabel);
@@ -261,6 +274,7 @@ namespace Air3550
         private System.Windows.Forms.Button PrintButton;
         private System.Windows.Forms.Label FlightManifestLabel;
         private System.Windows.Forms.Button LogOutButton;
+        private System.Windows.Forms.Label NoPassengersLabel;
     }
 }
 

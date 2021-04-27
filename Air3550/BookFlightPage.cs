@@ -324,6 +324,7 @@ namespace Air3550
             ChangeDepartingFlightButton.Visible = false;
             DepartintFlightsLabel.Visible = true;
             ReturningFlightsLabel.Visible = false;
+            NoFlightLabel.Visible = false;
             // change the data source the departing filtered routes
             AvailableFlightTable.DataSource = null;
             AvailableFlightTable.DataSource = departingRoutes;

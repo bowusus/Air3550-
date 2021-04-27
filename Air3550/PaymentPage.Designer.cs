@@ -245,7 +245,7 @@ namespace Air3550
             this.DepartureFlightDetailsTable.MultiSelect = false;
             this.DepartureFlightDetailsTable.Name = "DepartureFlightDetailsTable";
             this.DepartureFlightDetailsTable.ReadOnly = true;
-            this.DepartureFlightDetailsTable.RowHeadersWidth = 82;
+            this.DepartureFlightDetailsTable.RowHeadersWidth = 50;
             this.DepartureFlightDetailsTable.RowTemplate.Height = 33;
             this.DepartureFlightDetailsTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.DepartureFlightDetailsTable.Size = new System.Drawing.Size(2101, 254);
@@ -378,7 +378,7 @@ namespace Air3550
             this.ReturnFlightDetailsTable.MultiSelect = false;
             this.ReturnFlightDetailsTable.Name = "ReturnFlightDetailsTable";
             this.ReturnFlightDetailsTable.ReadOnly = true;
-            this.ReturnFlightDetailsTable.RowHeadersWidth = 82;
+            this.ReturnFlightDetailsTable.RowHeadersWidth = 50;
             this.ReturnFlightDetailsTable.RowTemplate.Height = 33;
             this.ReturnFlightDetailsTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.ReturnFlightDetailsTable.Size = new System.Drawing.Size(2101, 254);
