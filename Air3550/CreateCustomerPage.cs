@@ -143,7 +143,7 @@ namespace Air3550
             // This methods allows the user to return to the Log In page
             // The current form will close
             // The Log In page will open
-            DialogResult result = MessageBox.Show("Are you sure that you want to return home?\nAny changes not saved will not be updated.", "Account Information", MessageBoxButtons.YesNo, MessageBoxIcon.None);
+            DialogResult result = MessageBox.Show("Are you sure that you want to return to the log in screen?\nAny changes not saved will not be updated.", "Account Information", MessageBoxButtons.YesNo, MessageBoxIcon.None);
             if (result == DialogResult.Yes)
             {
                 LogInPage.GetInstance.Show();
