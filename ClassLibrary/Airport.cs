@@ -10,14 +10,12 @@ namespace ClassLibrary
     {
         string code, name, timezone;
 
-        public Airport(string code, string name, string timezone)
+        public Airport(string code, string name)
         {
             this.code = code;
             this.name = name;
-            this.timezone = timezone;
         }
         public string Code { get => code; set => code = value; }
         public string Name { get => name; set => name = value; }
-        public string Timezone { get => timezone; set => timezone = value; }
     }
 }

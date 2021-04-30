@@ -970,13 +970,13 @@ namespace ClassLibrary
                 con.Open(); // open the connection
                 SQLiteCommand cmd = new SQLiteCommand();
                 cmd.CommandType = CommandType.Text;
-                cmd.CommandText = "SELECT airportCode, airportName, timeZone FROM airport";
+                cmd.CommandText = "SELECT airportCode, airportName FROM airport";
                 cmd.Connection = con;
                 SQLiteDataReader rdr = cmd.ExecuteReader();
 
                 while (rdr.Read())
                 {
-                    airports.Add(new Airport(rdr.GetString(0), rdr.GetString(1), rdr.GetString(2)));
+                    airports.Add(new Airport(rdr.GetString(0), rdr.GetString(1)));
                 }
                 rdr.Close();
                 con.Close();
@@ -1403,7 +1403,7 @@ namespace ClassLibrary
                 cmd.Parameters.AddWithValue("@flightID", flightID);
 
                 DateTime currentDate = DateTime.Now.AddMonths(6).AddDays(1);
-                cmd.Parameters.AddWithValue("@currentDate", currentDate.ToShortDateString());
+                cmd.Parameters.AddWithValue("@currentDate", currentDate.ToString("yyyy-MM-dd"));
                 cmd.Connection = con;
                 cmd.ExecuteNonQuery();
                 con.Close();
@@ -1533,7 +1533,7 @@ namespace ClassLibrary
                 cmd.Parameters.AddWithValue("@departureDate", newFlight.departureDateTime.ToString("yyyy-MM-dd"));
                 cmd.Parameters.AddWithValue("@departureTime", newFlight.departureDateTime.ToShortTimeString());
                 cmd.Parameters.AddWithValue("@distance", newFlight.distance);
-                cmd.Parameters.AddWithValue("@duration", newFlight.duration);
+                cmd.Parameters.AddWithValue("@duration", newFlight.durDouble);
                 cmd.Parameters.AddWithValue("@planeType_fk", newFlight.planeType);
                 cmd.Parameters.AddWithValue("@cost", newFlight.cost);
                 cmd.Parameters.AddWithValue("@numOfVacantSeats", newFlight.numberOfVacantSeats);

@@ -150,7 +150,7 @@ namespace ClassLibrary
                     int depHour = departureDateTime.Hour;
                     int arrHour = arriveDateTime.Hour;
 
-                    double currCost = SystemAction.CalculateCost(depHour, arrHour, int.Parse(flightsBookedData[9]));
+                    double currCost = SystemAction.CalculateCost(depHour, arrHour, double.Parse(flightsBookedData[9]));
                     cost += currCost;
                     if (i == 0)
                     {
@@ -321,12 +321,13 @@ namespace ClassLibrary
             // keep making flights from now to 6 months out
             while (DateTime.Compare(startDate, endDate) < 0)
             {
+                DateTime newDepartureDateTime = startDate.Date + masterFlight.departureDateTime.TimeOfDay;
                 //create the new available flight based on the master flight templeate and add it to the available flights table
                 decimal duration = (decimal)(masterFlight.distance / 500.0) + .5M + (40 / 60.0M);
                 decimal cost = (decimal)(masterFlight.distance * .12);
                 FlightModel newAvaFlight = new FlightModel(currentFlightID, masterFlight.flightID, masterFlight.originCode,
                                                             masterFlight.destinationCode, (int)masterFlight.distance,
-                                                            startDate, (double)duration, masterFlight.planeType,
+                                                            newDepartureDateTime, (double)duration, masterFlight.planeType,
                                                             (double)cost, SqliteDataAccess.GetPlaneCapacity(masterFlight.planeType), 0);
                 SqliteDataAccess.AddFlightToAvailable(newAvaFlight);
                 currentFlightID++;

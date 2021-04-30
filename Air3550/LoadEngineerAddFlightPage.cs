@@ -240,7 +240,11 @@ namespace Air3550
             //Add message box to ask user if they want to exit program
             //yes than close LogInPage
             //no cancel form close
-            LoadEngineerHomePage.GetInstance.Close();
+            DialogResult result = MessageBox.Show("Are you sure you would like to exit?\nAny changes not saved will not be updated.", "Close", MessageBoxButtons.YesNo, MessageBoxIcon.None);
+            if (result == DialogResult.Yes)
+                LogInPage.GetInstance.Close();
+            else
+                e.Cancel = true;
         }
 
         private void routesGridView_CellContentClick(object sender, DataGridViewCellEventArgs e)

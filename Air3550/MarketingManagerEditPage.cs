@@ -44,5 +44,10 @@ namespace Air3550
             planeTypeDropDown.DataSource = SqliteDataAccess.GetPlaneTypes();
             planeTypeDropDown.Text = MarketingManagerHomePage.GetInstance.PlaneType;
         }
+
+        private void MarketingManagerEditPage_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            this.Dispose();
+        }
     }
 }

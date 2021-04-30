@@ -33,6 +33,7 @@ namespace Air3550
             this.addFlight = new System.Windows.Forms.Button();
             this.removeFlight = new System.Windows.Forms.Button();
             this.editFlight = new System.Windows.Forms.Button();
+            this.logOutButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.flightGrid)).BeginInit();
             this.SuspendLayout();
             // 
@@ -50,7 +51,7 @@ namespace Air3550
             // 
             // addFlight
             // 
-            this.addFlight.Location = new System.Drawing.Point(551, 44);
+            this.addFlight.Location = new System.Drawing.Point(551, 115);
             this.addFlight.Name = "addFlight";
             this.addFlight.Size = new System.Drawing.Size(133, 47);
             this.addFlight.TabIndex = 1;
@@ -60,7 +61,7 @@ namespace Air3550
             // 
             // removeFlight
             // 
-            this.removeFlight.Location = new System.Drawing.Point(551, 97);
+            this.removeFlight.Location = new System.Drawing.Point(551, 168);
             this.removeFlight.Name = "removeFlight";
             this.removeFlight.Size = new System.Drawing.Size(133, 47);
             this.removeFlight.TabIndex = 2;
@@ -70,7 +71,7 @@ namespace Air3550
             // 
             // editFlight
             // 
-            this.editFlight.Location = new System.Drawing.Point(551, 150);
+            this.editFlight.Location = new System.Drawing.Point(551, 221);
             this.editFlight.Name = "editFlight";
             this.editFlight.Size = new System.Drawing.Size(133, 47);
             this.editFlight.TabIndex = 3;
@@ -78,12 +79,23 @@ namespace Air3550
             this.editFlight.UseVisualStyleBackColor = true;
             this.editFlight.Click += new System.EventHandler(this.editFlight_Click);
             // 
+            // logOutButton
+            // 
+            this.logOutButton.Location = new System.Drawing.Point(551, 12);
+            this.logOutButton.Name = "logOutButton";
+            this.logOutButton.Size = new System.Drawing.Size(133, 47);
+            this.logOutButton.TabIndex = 4;
+            this.logOutButton.Text = "Log Out";
+            this.logOutButton.UseVisualStyleBackColor = true;
+            this.logOutButton.Click += new System.EventHandler(this.logOutButton_Click);
+            // 
             // LoadEngineerHomePage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.HighlightText;
             this.ClientSize = new System.Drawing.Size(696, 517);
+            this.Controls.Add(this.logOutButton);
             this.Controls.Add(this.editFlight);
             this.Controls.Add(this.removeFlight);
             this.Controls.Add(this.addFlight);
@@ -92,6 +104,7 @@ namespace Air3550
             this.Name = "LoadEngineerHomePage";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Air3550";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.LoadEngineerHomePage_FormClosing);
             this.Load += new System.EventHandler(this.LoadEngineerHomePage_Load);
             ((System.ComponentModel.ISupportInitialize)(this.flightGrid)).EndInit();
             this.ResumeLayout(false);
@@ -104,6 +117,7 @@ namespace Air3550
         private System.Windows.Forms.Button addFlight;
         private System.Windows.Forms.Button removeFlight;
         private System.Windows.Forms.Button editFlight;
+        private System.Windows.Forms.Button logOutButton;
     }
 }
 

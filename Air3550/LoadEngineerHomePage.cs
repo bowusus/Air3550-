@@ -61,6 +61,25 @@ namespace Air3550
             }
         }
 
+        private void LoadEngineerHomePage_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            LogInPage.GetInstance.Close();
+        }
+
+        private void logOutButton_Click(object sender, EventArgs e)
+        {
+            // This method allows the user to return to the log in page
+            // All open forms will close
+            // The log in page will open
+            // A message asks if the customer has saved everything they desire
+            DialogResult result = MessageBox.Show("Are you sure that you want to log out?\nAny changes not saved will not be updated.", "Log Out", MessageBoxButtons.YesNo, MessageBoxIcon.None);
+            if (result == DialogResult.Yes)
+            {
+                LogInPage.GetInstance.Show();
+                this.Dispose();
+            }
+        }
+
         private void editFlight_Click(object sender, EventArgs e)
         {
             if (flightGrid.SelectedRows.Count > 0)

@@ -81,6 +81,8 @@ namespace Air3550
             CancelFlightTable.Columns.Remove("distance");
             CancelFlightTable.Columns.Remove("numberOfVacantSeats");
             CancelFlightTable.Columns.Remove("flightIncome");
+            CancelFlightTable.Columns.Remove("cost");
+            CancelFlightTable.Columns.Remove("numOfPoints");
             // change the name of the columns
             CancelFlightTable.Columns[0].HeaderText = "FlightID";
             CancelFlightTable.Columns[1].HeaderText = "Origin Code";

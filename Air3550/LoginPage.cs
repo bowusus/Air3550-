@@ -71,8 +71,7 @@ namespace Air3550
                     UserIDText.Text = null;
                     PasswordText.Text = null;
                     UserIDText.Select(); // used to put cursor back in userID box
-                    LoadEngineerHomePage loadEngineerHome = new LoadEngineerHomePage();
-                    loadEngineerHome.Show(); // show the next form
+                    LoadEngineerHomePage.GetInstance.Show();
                     this.Hide(); // close log in form
                 }
                 else if (SqliteDataAccess.CheckIfEmployee(userID, currPass).Equals("MarketingManager"))
@@ -81,8 +80,7 @@ namespace Air3550
                     UserIDText.Text = null;
                     PasswordText.Text = null;
                     UserIDText.Select(); // used to put cursor back in userID box
-                    MarketingManagerHomePage marketingHome = new MarketingManagerHomePage();
-                    marketingHome.Show(); // show the next form
+                    MarketingManagerHomePage.GetInstance.Show(); // show the next form
                     this.Hide(); // close log in form
                 }
                 else

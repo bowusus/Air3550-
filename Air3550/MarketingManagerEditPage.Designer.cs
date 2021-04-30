@@ -62,6 +62,7 @@ namespace Air3550
             this.MinimizeBox = false;
             this.Name = "MarketingManagerEditPage";
             this.Text = "MarketingManagerEditPage";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MarketingManagerEditPage_FormClosing);
             this.Load += new System.EventHandler(this.MarketingManagerEditPage_Load);
             this.ResumeLayout(false);
 

@@ -23,7 +23,7 @@ namespace Air3550
             // SystemAction.CleanAvailableFlights();
             SqliteDataAccess.CleanRoutes();
             SystemAction.GenerateFlights();
-            Application.Run(MarketingManagerHomePage.GetInstance);
+            Application.Run(LogInPage.GetInstance);
             //Application.Run(LoadEngineerHomePage.GetInstance);
 
             //LogInPage login2 = new LogInPage();
