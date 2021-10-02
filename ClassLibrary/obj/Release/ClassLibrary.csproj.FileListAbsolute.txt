@@ -1,0 +1,11 @@
+C:\Users\berna\Documents\GitHub\Air3550\ClassLibrary\bin\Release\ClassLibrary.dll
+C:\Users\berna\Documents\GitHub\Air3550\ClassLibrary\bin\Release\ClassLibrary.pdb
+C:\Users\berna\Documents\GitHub\Air3550\ClassLibrary\bin\Release\Dapper.dll
+C:\Users\berna\Documents\GitHub\Air3550\ClassLibrary\bin\Release\System.Data.SQLite.dll
+C:\Users\berna\Documents\GitHub\Air3550\ClassLibrary\bin\Release\Dapper.xml
+C:\Users\berna\Documents\GitHub\Air3550\ClassLibrary\bin\Release\System.Data.SQLite.xml
+C:\Users\berna\Documents\GitHub\Air3550\ClassLibrary\obj\Release\ClassLibrary.csprojAssemblyReference.cache
+C:\Users\berna\Documents\GitHub\Air3550\ClassLibrary\obj\Release\ClassLibrary.csproj.CoreCompileInputs.cache
+C:\Users\berna\Documents\GitHub\Air3550\ClassLibrary\obj\Release\ClassLibrary.csproj.CopyComplete
+C:\Users\berna\Documents\GitHub\Air3550\ClassLibrary\obj\Release\ClassLibrary.dll
+C:\Users\berna\Documents\GitHub\Air3550\ClassLibrary\obj\Release\ClassLibrary.pdb
